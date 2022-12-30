@@ -1,0 +1,158 @@
+#!/usr/bin/env bash
+
+## Objective:
+## This first-release is to test the script's capabilities to identify if a
+## package is installed or not. All these packages were manually installed.
+## After this initial test, the target Virtual Machine will be reset to its
+## baseline and the script will start installing all these packages.
+
+## Notes: These are target (pending) tools with custom installations
+## [configuration]:   ansible, pulumi
+## [desktop editors]: atom, code, pycharm-community
+## [programming];     go, node, powershell
+## [cloud tools]:     aws-iam-authenticator, awscli, saml2aws
+## [hashicorp]:       boundary, consul, nomad, packer, terraform, vagrant, vault, waypoint
+
+declare -a listing=(
+    ansible
+    atom
+    aws-iam-authenticator
+    awscli
+    boundary
+    code
+    consul
+    go
+    node
+    nomad
+    packer
+    powershell
+    pulumi
+    pycharm-community
+    saml2aws
+    terraform
+    vagrant
+    vault
+    waypoint
+  );
+
+## Inpsecting these already installed devnetops tools
+declare -a updating=(
+    apt-file
+    aptitude
+    arp-scan
+    autoconf
+    bat
+    bmon
+    bwctl-client
+    bwctl-server
+    cloc
+    coreutils
+    curl
+    dos2unix
+    ethtool
+    fping
+    gh
+    git
+    gnupg
+    grepcidr
+    hping3
+    htop
+    htop
+    ifstat
+    iftop
+    ipcalc
+    iperf3
+    iproute2
+    iptraf-ng
+    jq
+    lynx
+    mc
+    mtr
+    netcat
+    net-tools
+    ngrep
+    nikto
+    nload
+    nmap
+    nmap
+    openssh-server
+    parallel
+    pgpdump
+    procps
+    psmisc
+    screen
+    sipcalc
+    socat
+    speedometer
+    speedtest-cli
+    stress
+    sysvinit-utils
+    telnet
+    tftpd-hpa
+    tree
+    unzip
+    vim
+    virtualenv
+    wget
+    wireshark
+    zenity
+    zip
+  );
+
+## Configuring Package Instation Reports path
+installer="${HOME}/packages";
+rm -rf ${installer} && mkdir -p ${installer};
+
+## Identifying the installed-packages report file.
+installed="${installer}/installed.list";
+rm ${installed} 2>/dev/null;
+
+## Identifying the installed-packages report file.
+missing="${installer}/missing.list";
+rm ${missing} 2>/dev/null;
+
+## These are just iteration counters.
+counter=0;
+count_miss=0;
+count_inst=0;
+
+## Aggregating both target groups
+declare -a packages=( ${listing[@]} ${updating[@]} );
+for package in ${packages[@]}; do
+
+  ## Identifying if package is already installed.
+  apt list --installed | egrep -w "^${package}"; result=$?;
+
+  ## Evaluating APT Installed output
+  if [[ $result -ne 0 ]]; then
+          ## Package is not installed.
+	        echo -e "\n${result} = $(( counter++ )) -> $(( count_miss++ )) =========================";
+          echo -e "Warning: ${package} package is not installed! ";
+          echo -e "${package}" >> ${missing};
+
+          ## Constructing package's folder (container)
+          xpath="${installer}/missing/${package}";
+          mkdir -p "${xpath}";
+
+    else  ## Inspecting installed package.
+          echo -e "\n${result} = $(( counter++ )) -> $(( count_inst++ )) -------------------------";
+      	  echo -e "Querying Package: ${package}\n";
+      	  echo -e "${package}" >> ${installed};
+
+          ## Constructing package's folder (container)
+          xpath="${installer}/installed/${package}";
+      	  mkdir -p "${xpath}";
+
+          ## Upgrading package only if it's already installed.
+          sudo apt-get --only-upgrade install ${package} --yes | tee "${xpath}/${package}.upgrade";
+
+          ## Collecting Package Information.
+      	  apropos --exact ${package} | tee "${xpath}/${package}.apropos";
+      	  apt search ${package} | tee "${xpath}/${package}.search";
+      	  apt list ${package} | tee "${xpath}/${package}.list";
+      	  apt depends ${package} | tee "${xpath}/${package}.depends";
+      	  apt show ${package} | tee "${xpath}/${package}.show";
+
+  fi;
+
+done;
