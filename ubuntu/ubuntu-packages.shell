@@ -120,9 +120,9 @@ missing="${installer}/missing.list";
 rm ${missing} 2>/dev/null;
 
 ## These are just iteration counters.
-counter=0;
-count_miss=0;
-count_inst=0;
+counter=1;
+count_miss=1;
+count_inst=1;
 
 ## Aggregating both target groups
 declare -a packages=( ${installing[@]} );
