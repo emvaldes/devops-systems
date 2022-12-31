@@ -29,82 +29,79 @@ declare -a hashicorp=(
     waypoint
   );
 
-declare -a snapsets=(
-    atom
-    pycharm-community
-    postman
-    powershell
-  );
-
 ## Inpsecting these already installed devnetops tools
 declare -a installing=(
-    ansible
-    apt-file
-    aptitude
-    arp-scan
-    autoconf
-    bat
-    bmon
-    build-essential
-    bwctl-client
-    bwctl-server
-    cloc
-    code
-    coreutils
-    curl
-    dos2unix
-    ethtool
-    fping
-    gh
-    git
-    gnupg
-    golang
-    grepcidr
-    hping3
-    htop
-    htop
-    ifstat
-    iftop
-    ipcalc
-    iperf3
-    iproute2
-    iptraf-ng
-    jq
-    libssl-dev
-    lynx
-    mc
-    mtr
-    netcat
-    net-tools
-    ngrep
-    nikto
-    nodejs
-    nload
-    nmap
-    npm
-    openssh-server
-    parallel
-    pgpdump
-    procps
-    psmisc
-    python3-venv
-    screen
-    sipcalc
-    socat
-    speedometer
-    speedtest-cli
-    stress
-    sysvinit-utils
-    telnet
-    tftpd-hpa
-    tree
-    unzip
-    vim
-    virtualenv
-    wget
-    wireshark
-    zenity
-    zip
+    snap:atom
+    snap:pycharm-community
+    snap:postman
+    snap:powershell
+    apt:ansible
+    apt:apt-file
+    apt:aptitude
+    apt:arp-scan
+    apt:autoconf
+    apt:bat
+    apt:bmon
+    apt:build-essential
+    apt:bwctl-client
+    apt:bwctl-server
+    apt:cloc
+    apt:code
+    apt:coreutils
+    apt:curl
+    apt:dos2unix
+    apt:ethtool
+    apt:fping
+    apt:gh
+    apt:git
+    apt:gnupg
+    apt:golang
+    apt:grepcidr
+    apt:hping3
+    apt:htop
+    apt:htop
+    apt:ifstat
+    apt:iftop
+    apt:ipcalc
+    apt:iperf3
+    apt:iproute2
+    apt:iptraf-ng
+    apt:jq
+    apt:libssl-dev
+    apt:lynx
+    apt:mc
+    apt:mtr
+    apt:netcat
+    apt:net-tools
+    apt:ngrep
+    apt:nikto
+    apt:nodejs
+    apt:nload
+    apt:nmap
+    apt:npm
+    apt:openssh-server
+    apt:parallel
+    apt:pgpdump
+    apt:procps
+    apt:psmisc
+    apt:python3-venv
+    apt:screen
+    apt:sipcalc
+    apt:socat
+    apt:speedometer
+    apt:speedtest-cli
+    apt:stress
+    apt:sysvinit-utils
+    apt:telnet
+    apt:tftpd-hpa
+    apt:tree
+    apt:unzip
+    apt:vim
+    apt:virtualenv
+    apt:wget
+    apt:wireshark
+    apt:zenity
+    apt:zip
   );
 
 ## Configuring Package Instation Reports path
@@ -126,7 +123,10 @@ count_inst=1;
 
 ## Aggregating both target groups
 declare -a packages=( ${installing[@]} );
-for package in ${packages[@]}; do
+for xitem in ${packages[@]}; do
+
+  installer="${xitem%%\:*}";
+  package="${xitem##*\:}";
 
   ## Identifying if package is already installed.
   apt list --installed | egrep -w "^${package}"; result=$?;
@@ -146,7 +146,11 @@ for package in ${packages[@]}; do
           mkdir -p "${xpath}";
 
           ## Installing package via APT
-          sudo apt install ${packages} --yes ;
+          case "${installer}" in
+             apt ) sudo apt  install ${package} --yes ;
+            snap ) sudo snap install ${package} --yes ;
+          esac;
+
 
     else  ## Inspecting installed package.
           echo -e "\n\n-------------------------";
@@ -164,9 +168,9 @@ for package in ${packages[@]}; do
 
           ## Collecting Package Information.
       	  apropos --exact ${package} | tee "${xpath}/${package}.apropos";
-      	  apt search ${package} | tee "${xpath}/${package}.search";
-      	  apt list ${package} | tee "${xpath}/${package}.list";
-      	  apt depends ${package} | tee "${xpath}/${package}.depends";
+      	  apt search ${package} | egrep "^${package}.*" | tee "${xpath}/${package}.search";
+      	  apt list ${package} | egrep "^${package}.*" | tee "${xpath}/${package}.list";
+      	  # apt depends ${package} | tee "${xpath}/${package}.depends";
       	  apt show ${package} | tee "${xpath}/${package}.show";
 
   fi;
