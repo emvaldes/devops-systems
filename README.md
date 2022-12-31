@@ -4,9 +4,24 @@ DevOps Tools - Systems Auto-Configuration
 Note: For all the mor*n python-lovers, there is always another way to do something.
 Enjoy the power and beature if regular expressions. This is no longer a dirty hack:
 ```shell
+declare -a headers=();
+
+headers+=("^Package: ");
+headers+=("^Version: ");
+headers+=("^Priority: ");
+headers+=("^Section: ");
+headers+=("^Origin: ");
+headers+=("^Original-Maintainer: ");
+headers+=("^Installed-Size: ");
+headers+=("^Depends: ");
+headers+=("^Homepage: ");
+headers+=("^Download-Size: ");
+headers+=("^APT-Manual-Installed: ");
+headers+=("^APT-Sources: ");
+
 packages="$(
     sed -e 's|"||g' ./packages.log \
-    | egrep "^Package: |^Version: |^Priority: |^Section: |^Origin: |^Original-Maintainer: |^Installed-Size: |^Depends: |^Homepage: |^Download-Size: |^APT-Manual-Installed: |^APT-Sources: " \
+    | egrep "$(echo -n ${headers[@]} | tr ' ' '|')" \
     | sed -e 's|^\(Package\)\(: \)\(.*\)$|____ "\1"\2"\3" |g' \
           -e 's|^\(Version\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
           -e 's|^\(Priority\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
