@@ -8,7 +8,6 @@
 
 ## Notes: These are target (pending) tools with custom installations
 ## [configuration]:   ansible, pulumi
-## [desktop editors]: atom, code, pycharm-community
 ## [programming];     go, node, powershell
 ## [cloud tools]:     aws-iam-authenticator, awscli, saml2aws
 ## [hashicorp]:       boundary, consul, nomad, packer, terraform, vagrant, vault, waypoint
@@ -35,7 +34,6 @@ declare -a awscloud=(
 declare -a hashicorp=(
     boundary
     consul
-    node
     nomad
     packer
     terraform
