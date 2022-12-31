@@ -1,0 +1,398 @@
+[
+  {
+    "Package": "fping",
+    "Version": "5.1-1",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "stress",
+    "Version": "1.0.5-1",
+    "Priority": "optional",
+    "Section": "universe/devel"
+  },
+  {
+    "Package": "iftop",
+    "Version": "1.0~pre4-7",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "bat",
+    "Version": "0.19.0-1ubuntu0.1",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "gnupg",
+    "Version": "2.2.27-3ubuntu2.1",
+    "Priority": "optional",
+    "Section": "utils"
+  },
+  {
+    "Package": "net-tools",
+    "Version": "1.60+git20181103.0eebece-1ubuntu5",
+    "Priority": "optional",
+    "Section": "net"
+  },
+  {
+    "Package": "golang",
+    "Version": "2:1.18~0ubuntu2",
+    "Priority": "optional",
+    "Section": "devel"
+  },
+  {
+    "Package": "libssl-dev",
+    "Version": "3.0.2-0ubuntu1.7",
+    "Priority": "optional",
+    "Section": "libdevel"
+  },
+  {
+    "Package": "cloc",
+    "Version": "1.90-1",
+    "Priority": "optional",
+    "Section": "universe/devel"
+  },
+  {
+    "Package": "parallel",
+    "Version": "20210822+ds-2",
+    "Priority": "extra",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "bmon",
+    "Version": "1:4.0-8",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "iperf3",
+    "Version": "3.9-1build1",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "openssh-server",
+    "Version": "1:8.9p1-3",
+    "Priority": "optional",
+    "Section": "net"
+  },
+  {
+    "Package": "iptraf-ng",
+    "Version": "1:1.2.1-1build2",
+    "Priority": "optional",
+    "Section": "net"
+  },
+  {
+    "Package": "pgpdump",
+    "Version": "0.34-1",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "iproute2",
+    "Version": "5.15.0-1ubuntu2",
+    "Priority": "important",
+    "Section": "net"
+  },
+  {
+    "Package": "wireshark",
+    "Version": "3.6.2-2",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "speedometer",
+    "Version": "2.8-3",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "jq",
+    "Version": "1.6-2.1ubuntu3",
+    "Priority": "optional",
+    "Section": "utils"
+  },
+  {
+    "Package": "socat",
+    "Version": "1.7.4.1-3ubuntu4",
+    "Priority": "extra",
+    "Section": "net"
+  },
+  {
+    "Package": "autoconf",
+    "Version": "2.71-2",
+    "Priority": "optional",
+    "Section": "devel"
+  },
+  {
+    "Package": "nikto",
+    "Version": "1:2.1.5-3.1",
+    "Priority": "extra",
+    "Section": "multiverse/net"
+  },
+  {
+    "Package": "zenity",
+    "Version": "3.42.1-0ubuntu1",
+    "Priority": "optional",
+    "Section": "gnome"
+  },
+  {
+    "Package": "unzip",
+    "Version": "6.0-26ubuntu3.1",
+    "Priority": "optional",
+    "Section": "utils"
+  },
+  {
+    "Package": "python3-venv",
+    "Version": "3.10.6-1~22.04",
+    "Priority": "optional",
+    "Section": "universe/python"
+  },
+  {
+    "Package": "npm",
+    "Version": "8.5.1~ds-1",
+    "Priority": "extra",
+    "Section": "universe/web"
+  },
+  {
+    "Package": "sipcalc",
+    "Version": "1.1.6-1",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "ngrep",
+    "Version": "1.47+ds1-5",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "dos2unix",
+    "Version": "7.4.2-2",
+    "Priority": "extra",
+    "Section": "universe/text"
+  },
+  {
+    "Package": "procps",
+    "Version": "2:3.3.17-6ubuntu2",
+    "Priority": "required",
+    "Section": "admin"
+  },
+  {
+    "Package": "tree",
+    "Version": "2.0.2-1",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "zip",
+    "Version": "3.0-12build2",
+    "Priority": "optional",
+    "Section": "utils"
+  },
+  {
+    "Package": "grepcidr",
+    "Version": "2.0-2",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "lynx",
+    "Version": "2.9.0dev.10-1",
+    "Priority": "extra",
+    "Section": "universe/web"
+  },
+  {
+    "Package": "psmisc",
+    "Version": "23.4-2build3",
+    "Priority": "standard",
+    "Section": "admin"
+  },
+  {
+    "Package": "nload",
+    "Version": "0.7.4-2build3",
+    "Priority": "extra",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "telnet",
+    "Version": "0.17-44build1",
+    "Priority": "standard",
+    "Section": "net"
+  },
+  {
+    "Package": "ethtool",
+    "Version": "1:5.16-1",
+    "Priority": "optional",
+    "Section": "utils"
+  },
+  {
+    "Package": "virtualenv",
+    "Version": "20.13.0+ds-2",
+    "Priority": "optional",
+    "Section": "universe/python"
+  },
+  {
+    "Package": "screen",
+    "Version": "4.9.0-1",
+    "Priority": "optional",
+    "Section": "misc"
+  },
+  {
+    "Package": "arp-scan",
+    "Version": "1.9.7-2",
+    "Priority": "extra",
+    "Section": "universe/admin"
+  },
+  {
+    "Package": "mtr",
+    "Version": "0.95-1",
+    "Priority": "extra",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "sysvinit-utils",
+    "Version": "3.01-1ubuntu1",
+    "Priority": "required",
+    "Section": "admin"
+  },
+  {
+    "Package": "hping3",
+    "Version": "3.a2.ds2-10",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "wget",
+    "Version": "1.21.2-2ubuntu1",
+    "Priority": "standard",
+    "Section": "web"
+  },
+  {
+    "Package": "code",
+    "Version": "1.74.2-1671533413",
+    "Priority": "optional",
+    "Section": "devel"
+  },
+  {
+    "Package": "mc",
+    "Version": "3:4.8.27-1",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "ifstat",
+    "Version": "1.1-8.2",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "build-essential",
+    "Version": "12.9ubuntu3",
+    "Priority": "optional",
+    "Section": "devel"
+  },
+  {
+    "Package": "apt-file",
+    "Version": "3.2.2",
+    "Priority": "optional",
+    "Section": "universe/admin"
+  },
+  {
+    "Package": "gh",
+    "Version": "2.4.0+dfsg1-2",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "tftpd-hpa",
+    "Version": "5.2+20150808-1.2build2",
+    "Priority": "extra",
+    "Section": "net"
+  },
+  {
+    "Package": "bwctl-server",
+    "Version": "1.5.4+dfsg1-1build1",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "curl",
+    "Version": "7.81.0-1ubuntu1.6",
+    "Priority": "optional",
+    "Section": "web"
+  },
+  {
+    "Package": "nodejs",
+    "Version": "12.22.9~dfsg-1ubuntu3",
+    "Priority": "extra",
+    "Section": "universe/web"
+  },
+  {
+    "Package": "ansible",
+    "Version": "2.10.7+merged+base+2.10.8+dfsg-1",
+    "Priority": "optional",
+    "Section": "universe/admin"
+  },
+  {
+    "Package": "vim",
+    "Version": "2:8.2.3995-1ubuntu2.1",
+    "Priority": "optional",
+    "Section": "editors"
+  },
+  {
+    "Package": "htop",
+    "Version": "3.0.5-7build2",
+    "Priority": "optional",
+    "Section": "utils"
+  },
+  {
+    "Package": "aptitude",
+    "Version": "0.8.13-3ubuntu1",
+    "Priority": "optional",
+    "Section": "universe/admin"
+  },
+  {
+    "Package": "nmap",
+    "Version": "7.91+dfsg1+really7.80+dfsg1-2build1",
+    "Priority": "extra",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "ipcalc",
+    "Version": "0.42-2",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "netcat",
+    "Version": "1.218-4ubuntu1",
+    "Priority": "optional",
+    "Section": "universe/net"
+  },
+  {
+    "Package": "speedtest-cli",
+    "Version": "2.1.3-2",
+    "Priority": "optional",
+    "Section": "universe/utils"
+  },
+  {
+    "Package": "coreutils",
+    "Version": "8.32-4.1ubuntu1",
+    "Priority": "required",
+    "Section": "utils"
+  },
+  {
+    "Package": "git",
+    "Version": "1:2.34.1-1ubuntu1.5",
+    "Priority": "optional",
+    "Section": "vcs"
+  },
+  {
+    "Package": "bwctl-client",
+    "Version": "1.5.4+dfsg1-1build1",
+    "Priority": "optional",
+    "Section": "universe/net"
+  }
+]
