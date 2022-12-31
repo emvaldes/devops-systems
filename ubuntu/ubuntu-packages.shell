@@ -15,11 +15,9 @@
 
 declare -a listing=(
     ansible
-    atom
     aws-iam-authenticator
     awscli
     boundary
-    code
     consul
     go
     node
@@ -27,7 +25,6 @@ declare -a listing=(
     packer
     powershell
     pulumi
-    pycharm-community
     saml2aws
     terraform
     vagrant
@@ -43,9 +40,11 @@ declare -a updating=(
     autoconf
     bat
     bmon
+    build-essential
     bwctl-client
     bwctl-server
     cloc
+    code
     coreutils
     curl
     dos2unix
@@ -65,6 +64,7 @@ declare -a updating=(
     iproute2
     iptraf-ng
     jq
+    libssl-dev
     lynx
     mc
     mtr
@@ -72,14 +72,17 @@ declare -a updating=(
     net-tools
     ngrep
     nikto
+    nodejs
     nload
     nmap
-    nmap
+    npm
     openssh-server
     parallel
     pgpdump
     procps
     psmisc
+    pycharm-community
+    python3-venv
     screen
     sipcalc
     socat
@@ -97,6 +100,12 @@ declare -a updating=(
     wireshark
     zenity
     zip
+  );
+
+declare -a snapsets=(
+    atom
+    pycharm-community
+    postman
   );
 
 ## Configuring Package Instation Reports path
@@ -117,7 +126,7 @@ count_miss=0;
 count_inst=0;
 
 ## Aggregating both target groups
-declare -a packages=( ${listing[@]} ${updating[@]} );
+declare -a packages=( ${listing[@]} ${updating[@]} ${snapsets[@]} );
 for package in ${packages[@]}; do
 
   ## Identifying if package is already installed.
