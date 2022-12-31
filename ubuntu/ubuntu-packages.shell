@@ -17,15 +17,24 @@ declare -a listing=(
     ansible
     aws-iam-authenticator
     awscli
-    boundary
-    consul
     go
-    node
-    nomad
-    packer
     powershell
     pulumi
     saml2aws
+  );
+
+declare -a snapsets=(
+    atom
+    pycharm-community
+    postman
+  );
+
+declare -a hashicorp=(
+    boundary
+    consul
+    node
+    nomad
+    packer
     terraform
     vagrant
     vault
@@ -102,12 +111,6 @@ declare -a updating=(
     zip
   );
 
-declare -a snapsets=(
-    atom
-    pycharm-community
-    postman
-  );
-
 ## Configuring Package Instation Reports path
 installer="${HOME}/packages";
 rm -rf ${installer} && mkdir -p ${installer};
@@ -126,7 +129,7 @@ count_miss=0;
 count_inst=0;
 
 ## Aggregating both target groups
-declare -a packages=( ${listing[@]} ${updating[@]} ${snapsets[@]} );
+declare -a packages=( ${listing[@]} ${snapsets[@]} ${updating[@]} );
 for package in ${packages[@]}; do
 
   ## Identifying if package is already installed.
