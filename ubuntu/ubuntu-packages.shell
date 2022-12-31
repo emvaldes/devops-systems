@@ -8,22 +8,9 @@
 
 ## Notes: These are target (pending) tools with custom installations
 ## [configuration]:   ansible, pulumi
-## [programming];     go, node, powershell
+## [programming];     go
 ## [cloud tools]:     aws-iam-authenticator, awscli, saml2aws
 ## [hashicorp]:       boundary, consul, nomad, packer, terraform, vagrant, vault, waypoint
-
-declare -a listing=(
-    ansible
-    go
-    powershell
-    pulumi
-  );
-
-declare -a snapsets=(
-    atom
-    pycharm-community
-    postman
-  );
 
 declare -a awscloud=(
     awscli
@@ -42,8 +29,16 @@ declare -a hashicorp=(
     waypoint
   );
 
+declare -a snapsets=(
+    atom
+    pycharm-community
+    postman
+    powershell
+  );
+
 ## Inpsecting these already installed devnetops tools
-declare -a updating=(
+declare -a installing=(
+    ansible
     apt-file
     aptitude
     arp-scan
@@ -63,6 +58,7 @@ declare -a updating=(
     gh
     git
     gnupg
+    golang
     grepcidr
     hping3
     htop
@@ -130,7 +126,7 @@ count_miss=0;
 count_inst=0;
 
 ## Aggregating both target groups
-declare -a packages=( ${listing[@]} ${snapsets[@]} ${updating[@]} );
+declare -a packages=( ${installing[@]} );
 for package in ${packages[@]}; do
 
   ## Identifying if package is already installed.
