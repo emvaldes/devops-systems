@@ -145,6 +145,9 @@ for package in ${packages[@]}; do
           xpath="${installer}/missing/${package}";
           mkdir -p "${xpath}";
 
+          ## Installing package via APT
+          sudo apt install ${packages} --yes ;
+
     else  ## Inspecting installed package.
           echo -e "\n\n-------------------------";
           echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
