@@ -87,7 +87,6 @@ declare -a installing=(
     pgpdump
     procps
     psmisc
-    pycharm-community
     python3-venv
     screen
     sipcalc
