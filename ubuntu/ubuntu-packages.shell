@@ -15,18 +15,21 @@
 
 declare -a listing=(
     ansible
-    aws-iam-authenticator
-    awscli
     go
     powershell
     pulumi
-    saml2aws
   );
 
 declare -a snapsets=(
     atom
     pycharm-community
     postman
+  );
+
+declare -a awscloud=(
+    awscli
+    aws-iam-authenticator
+    saml2aws
   );
 
 declare -a hashicorp=(
