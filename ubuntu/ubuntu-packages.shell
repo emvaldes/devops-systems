@@ -136,7 +136,7 @@ for package in ${packages[@]}; do
           ## Package is not installed.
           echo -e "\n\n-------------------------";
 	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-          echo -e "   Package: ${package}\n";
+          echo -e "   Package: ${package}";
           echo -e "-------------------------\n";
           echo -e "Warning: ${package} package is not installed! ";
           echo -e "${package}" >> ${missing};
@@ -148,7 +148,7 @@ for package in ${packages[@]}; do
     else  ## Inspecting installed package.
           echo -e "\n\n-------------------------";
           echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-          echo -e "   Package: ${package}\n";
+          echo -e "   Package: ${package}";
           echo -e "-------------------------\n";
       	  echo -e "${package}" >> ${installed};
 
