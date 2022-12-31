@@ -1,7 +1,8 @@
 # devops-systems
 DevOps Tools - Systems Auto-Configuration
 
-Note: This is a very dirty hack:
+Note: For all the mor*n python-lovers, there is always another way to do something.
+Enjoy the power and beature if regular expressions. This is no longer a dirty hack:
 ```shell
 packages="$(
     sed -e 's|"||g' ./packages.log \
