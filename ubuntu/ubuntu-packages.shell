@@ -134,7 +134,8 @@ for package in ${packages[@]}; do
   ## Evaluating APT Installed output
   if [[ $result -ne 0 ]]; then
           ## Package is not installed.
-	        echo -e "\n${result} = $(( counter++ )) -> $(( count_miss++ )) =========================";
+          echo -e "\n\n -------------------------";
+	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
           echo -e "Warning: ${package} package is not installed! ";
           echo -e "${package}" >> ${missing};
 
@@ -143,7 +144,8 @@ for package in ${packages[@]}; do
           mkdir -p "${xpath}";
 
     else  ## Inspecting installed package.
-          echo -e "\n${result} = $(( counter++ )) -> $(( count_inst++ )) -------------------------";
+          echo -e "\n\n -------------------------";
+          echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
       	  echo -e "Querying Package: ${package}\n";
       	  echo -e "${package}" >> ${installed};
 
