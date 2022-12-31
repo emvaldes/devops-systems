@@ -1,11 +1,8 @@
-# devops-systems -> ubuntu
+# devops-systems : ubuntu
 DevOps Tools - Systems Auto-Configuration : Ubuntu
 
-**Note**: For all the mor*n python-lovers, there is always another way to do something.
-Enjoy the power and beature if regular expressions. This is no longer a dirty hack:
-
-**Data Source**: A log file is generated that contains the output of all the "apt show $package" command.
-**Data Output**: The objective is to convert this line-based output into a JSON Object.
+**Data Source**: A log file is generated that contains the output of all the ***apt show $package*** command.
+</br>
 
 ```shell
 Package: git
@@ -30,6 +27,8 @@ APT-Sources: http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packag
 Description: fast, scalable, distributed revision control system
 ...
 ```
+
+**Description**: The objective is to convert this **Line-based** output into a ***JSON Object***.
 
 ```shell
 
@@ -99,6 +98,59 @@ function export2json() {
     echo -e "\n${packages}" | python -m json.tool | tee ${output_file} ;
     return 0;
   };
+```
 
+**Description**: Executing the function with the ***packages.log*** as an input parameter.
+
+```shell
 $ export2json --input-file=./packages.log ;
+```
+
+**Description**: This generates the following JSON output:
+
+```json
+[
+    {
+        "Package": "ansible",
+        "Version": "2.10.7+merged+base+2.10.8+dfsg-1",
+        "Priority": "optional",
+        "Section": "universe/admin",
+        "Origin": "Ubuntu",
+        "Original-Maintainer": "Lee Garrett <debian@rocketjump.eu>",
+        "Installed-Size": "204 MB",
+        "Depends": [
+            "python3-cryptography",
+            "python3-jinja2",
+            "python3-packaging",
+            "python3-yaml",
+            "python3:any",
+            "openssh-client | python3-paramiko (>= 2.6.0)",
+            "python3-pycryptodome",
+            "python3-distutils",
+            "python3-dnspython",
+            "python3-httplib2",
+            "python3-netaddr"
+        ],
+        "Recommends": [
+            "python3-argcomplete",
+            "python3-jmespath",
+            "python3-kerberos",
+            "python3-libcloud",
+            "python3-selinux",
+            "python3-winrm",
+            "python3-xmltodict"
+        ],
+        "Suggests": [
+            "cowsay",
+            "sshpass"
+        ],
+        "Breaks": [
+            "ansible-base (<= 2.10.5+dfsg-2)"
+        ],
+        "Homepage": "https://www.ansible.com",
+        "Download-Size": "17.5 MB",
+        "APT-Manual-Installed": "yes",
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+    }
+]
 ```
