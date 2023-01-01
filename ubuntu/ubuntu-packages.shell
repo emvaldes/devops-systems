@@ -113,7 +113,7 @@ rm -rf ${location} && mkdir -p ${location};
 
 ## Identifying the installed-packages report file.
 installed="${location}/installed.list";
-rm ${installed} 2>/dev/null;
+# rm ${installed} 2>/dev/null;
 
 ## Identifying the installed-packages report file.
 missing="${location}/missing.list";
@@ -171,7 +171,7 @@ for xitem in ${packages[@]}; do
           echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
           echo -e "   Package: ${available}";
           echo -e "--------------------------------------------------------------------------------\n";
-      	  echo -e "${package}" >> ${installed};
+      	  # echo -e "${package}" >> ${installed};
 
           ## Constructing package's folder (container)
           xpath="${location}/installed";
@@ -298,7 +298,8 @@ for xitem in ${packages[@]}; do
 done;
 
 ## Exporting Installed Packages JSON file.
-find ${location} -type f -name '*.json' | xargs -I {} cat {} | jq -s > $(pwd)/packages.json;
+find ${location} -type f -name '*.json' \
+     | sort -n | xargs -I {} cat {} | jq -s | python -m json.tool > $(pwd)/packages.json;
 
 ## Exporting Installed Packages (name, version) ino LIST file.
 jq '.[] | "\(.Package) -> \(.Version)"' --raw-output $(pwd)/packages.json > $(pwd)/packages.list;
