@@ -33,11 +33,11 @@ declare -a hashicorp=(
 
 ## Inpsecting these already installed devnetops tools
 declare -a packages=(
+    apt:ansible
     "snap --classic:atom"
     "snap --classic:pycharm-community"
     "snap:postman"
     "snap --classic:powershell"
-    apt:ansible
     apt:apt-file
     apt:aptitude
     apt:arp-scan
@@ -87,6 +87,7 @@ declare -a packages=(
     apt:procps
     apt:psmisc
     apt:python3-venv
+    apt:python-is-python3
     apt:screen
     apt:sipcalc
     apt:socat
@@ -126,15 +127,16 @@ count_inst=1;
 for xitem in ${packages[@]}; do
 
   installer="${xitem%%\:*}";
-  echo -e "Installer: ${installer}";
+  # echo -e "Installer: ${installer}";
 
   package="${xitem##*\:}";
-  echo -e "Package: ${package}";
+  # echo -e "Package: ${package}";
 
   ## Identifying if package is already installed.
+  available='';
   case "${installer}" in
-      apt ) apt list --installed | egrep -w "^${package}";
-            result=$?; ;;
+      apt ) available="$(apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*")";
+            status=$?; ;;
     snap* ) snap list ${package};
             result=$?; ;;
   esac;
@@ -146,10 +148,10 @@ for xitem in ${packages[@]}; do
   if [[ $result == 'absent' ]]; then
 
           ## Package is not installed.
-          echo -e "\n\n-------------------------";
+          echo -e "\n--------------------------------------------------------------------------------";
 	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-          echo -e "   Package: ${package}";
-          echo -e "-------------------------\n";
+          echo -e "   Package: ${available}";
+          echo -e "--------------------------------------------------------------------------------n";
           echo -e "Warning: ${package} package is not installed! ";
           echo -e "${package}" >> ${missing};
 
@@ -157,7 +159,7 @@ for xitem in ${packages[@]}; do
           xpath="${location}/missing/${package}";
           mkdir -p "${xpath}";
 
-          ## Installing package via APT or SNAP
+          ## Installing package depending on its manager (APT, SNAP)
           case "${installer}" in
               apt ) sudo apt  install ${package} --yes; ;;
             snap* ) sudo snap install ${package} ${installer/snap /}; ;;
@@ -165,10 +167,10 @@ for xitem in ${packages[@]}; do
 
     else  ## Inspecting installed package.
 
-          echo -e "\n\n-------------------------";
+          echo -e "\n--------------------------------------------------------------------------------";
           echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-          echo -e "   Package: ${package}";
-          echo -e "-------------------------\n";
+          echo -e "   Package: ${available}";
+          echo -e "--------------------------------------------------------------------------------n";
       	  echo -e "${package}" >> ${installed};
 
           ## Constructing package's folder (container)
@@ -176,17 +178,115 @@ for xitem in ${packages[@]}; do
       	  mkdir -p "${xpath}";
 
           ## Upgrading package only if it's already installed.
-          sudo apt-get --only-upgrade install ${package} --yes | tee "${xpath}/${package}.upgrade";
+          sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null | tee "${xpath}/${package}.upgrade";
 
-          ## Collecting Package Information.
-      	  apropos --exact ${package} | tee "${xpath}/${package}.apropos";
-      	  apt search ${package} | egrep "^${package}.*" | tee "${xpath}/${package}.search";
-      	  apt list ${package} | egrep "^${package}.*" | tee "${xpath}/${package}.list";
-      	  # apt depends ${package} | tee "${xpath}/${package}.depends";
-      	  apt show ${package} | tee "${xpath}/${package}.show";
+          declare -a apropos=();
+          for record in $(
+            apropos --exact ${package} 2>/dev/null | sed -e "s|\('\)\{1,\}|\'|g" -e 's|\("\)\{1,\}||g' 
+          ); do apropos+=("\"${record}\"@");
+          done;
+
+          declare -a listing=();
+          for record in $(
+            apt list ${package} 2>/dev/null | egrep -v "^Listing....*$" \
+                                | sed -e "s|\('\)\{1,\}|\'|g" -e 's|\("\)\{1,\}||g'
+          ); do listing+=("\"${record}\"@");
+          done;
+
+          ## Inspecting package based on its installer (APT, SNAP)
+          case "${installer}" in
+
+              apt ) declare -a headers=();
+                    headers+=("^Package: ");
+                    headers+=("^Version: ");
+                    headers+=("^Built-Using: ");
+                    headers+=("^Priority: ");
+                    headers+=("^Build-Essential: ");
+                    headers+=("^Section: ");
+                    headers+=("^Source: ");
+                    headers+=("^Origin: ");
+                    headers+=("^Original-Maintainer: ");
+                    headers+=("^Installed-Size: ");
+                    headers+=("^Provides: ");
+                    headers+=("^Depends: ");
+                    headers+=("^Enhances: ");
+                    headers+=("^Recommends: ");
+                    headers+=("^Conflicts: ");
+                    headers+=("^Suggests: ");
+                    headers+=("^Breaks: ");
+                    headers+=("^Replaces: ");
+                    headers+=("^Homepage: ");
+                    headers+=("^X-Cargo-Built-Using: ");
+                    headers+=("^Task: ");
+                    headers+=("^Download-Size: ");
+                    headers+=("^APT-Manual-Installed: ");
+                    headers+=("^APT-Sources: ");
+                    packages="$(
+                        for line in $( apt show ${package} 2>/dev/null ); do
+                          [[ ${line} =~ "Description: " ]] && { break; } || { echo ${line}; };
+                        done \
+                        | sed -e 's|"||g' \
+                        | egrep "$(echo -n ${headers[@]} | tr ' ' '|')" \
+                        | egrep -v "^Maintainer: |^Bugs: " \
+                        | sed -e 's|^\(Package\)\(: \)\(.*\)$|* "\1"\2"\3" |g' \
+                              -e 's|^\(Version\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Priority\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Build-Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Section\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Source\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Origin\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Original-Maintainer\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Installed-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Provides\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Enhances\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Recommends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Conflicts\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Suggests\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Breaks\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Replaces\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Homepage\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(X-Cargo-Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Task\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Download-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(APT-Manual-Installed\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(APT-Sources\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|, |", "|g' \
+                        | tr '\n' ',' \
+                        | tr '*' '\n' \
+                        | sort -n \
+                        | tr '\n' '*' \
+                        | sed -e 's|" ,\* "Package": "|" }, { "Package": "|g' \
+                              -e 's|* "Package": |{ "Package": |' \
+                              -e 's|^\(.*"\)\( ,\*\)$|\1|' \
+                        | sed -e 's|^\(.*\)$|\1, "Apropos": [ '$(
+                                echo -e ${apropos[@]} | sed -e 's|@$||' -e 's|@|,|g'
+                              )' ]|' \
+                        | sed -e 's|^\(.*\)$|\1, "Listing": [ '$(
+                                echo -e ${listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
+                              )' ]|' \
+                        | sed -e 's|^\(.*\)$|\1 }|'
+                      )"; \
+                    ## Processing and formatting the collected output into a JSON file.
+                    # echo -e "${packages}";
+                    echo -e "${packages}" | python -m json.tool | tee "${xpath}/${package}.json";
+                    ;;
+
+            snap* ) snap info ${package} | tee "${xpath}/${package}.info";
+                    ;;
+
+          esac;
 
   fi;
 
 done;
 
 IFS="${oIFS}";
+
+# | tr '\n' ',' | tr '*' '\n' \
+# | sort -n \
+# | tr '\n' '{' \
+# | sed -e 's|^\(.*\),{$|\1 ]|' \
+#       -e 's|\({ "Package": .*\)$|[ \1|' \
+# | sed -e 's|^\(.*\)\(,Description:.*\)$|\1} ]|' \
