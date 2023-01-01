@@ -39,7 +39,10 @@
         "Homepage": "https://www.ansible.com",
         "Download-Size": "17.5 MB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "apt-file",
@@ -63,7 +66,10 @@
         ],
         "Download-Size": "27.6 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "aptitude",
@@ -104,7 +110,10 @@
         ],
         "Download-Size": "1,100 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "arp-scan",
@@ -125,7 +134,10 @@
         "Homepage": "https://github.com/royhills/arp-scan",
         "Download-Size": "338 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "autoconf",
@@ -157,7 +169,10 @@
         "Homepage": "https://www.gnu.org/software/autoconf/",
         "Download-Size": "338 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "bat",
@@ -175,7 +190,10 @@
         "Homepage": "https://github.com/sharkdp/bat",
         "Download-Size": "1,951 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "bmon",
@@ -196,7 +214,10 @@
         "Homepage": "http://www.infradead.org/~tgr/bmon/",
         "Download-Size": "48.1 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "build-essential",
@@ -220,7 +241,10 @@
         ],
         "Download-Size": "4,744 B",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "bwctl-client",
@@ -239,7 +263,10 @@
         "Homepage": "http://www.internet2.edu/performance/bwctl/",
         "Download-Size": "98.3 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "bwctl-server",
@@ -262,7 +289,10 @@
         "Homepage": "http://www.internet2.edu/performance/bwctl/",
         "Download-Size": "119 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "cloc",
@@ -281,7 +311,10 @@
         "Homepage": "https://github.com/AlDanial/cloc",
         "Download-Size": "106 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "code",
@@ -335,7 +368,10 @@
         "Homepage": "https://code.visualstudio.com/",
         "Download-Size": "98.0 MB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://packages.microsoft.com/repos/code stable/main amd64 Packages"
+        "APT-Sources": "http://packages.microsoft.com/repos/code stable/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "coreutils",
@@ -352,7 +388,10 @@
         ],
         "Download-Size": "1,438 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "curl",
@@ -380,7 +419,10 @@
         ],
         "Download-Size": "194 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "dos2unix",
@@ -396,7 +438,10 @@
         "Homepage": "https://waterlan.home.xs4all.nl/dos2unix.html",
         "Download-Size": "384 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "ethtool",
@@ -421,7 +466,10 @@
         ],
         "Download-Size": "208 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "fping",
@@ -439,7 +487,10 @@
         "Homepage": "https://www.fping.org/",
         "Download-Size": "32.0 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "gh",
@@ -455,7 +506,10 @@
         "Homepage": "https://cli.github.com/",
         "Download-Size": "6,242 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "git",
@@ -524,7 +578,10 @@
         ],
         "Download-Size": "3,132 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "gnupg",
@@ -595,7 +652,10 @@
         ],
         "Download-Size": "315 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "golang",
@@ -614,7 +674,10 @@
         "Homepage": "https://golang.org",
         "Download-Size": "2,732 B",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "grepcidr",
@@ -630,7 +693,10 @@
         "Homepage": "http://www.pc-tools.net/unix/grepcidr/",
         "Download-Size": "13.8 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "hping3",
@@ -648,7 +714,10 @@
         "Homepage": "http://www.hping.org/",
         "Download-Size": "106 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "htop",
@@ -684,7 +753,10 @@
         ],
         "Download-Size": "128 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "ifstat",
@@ -700,7 +772,10 @@
         ],
         "Download-Size": "22.4 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "iftop",
@@ -719,7 +794,10 @@
         "Homepage": "http://www.ex-parrot.com/~pdw/iftop/",
         "Download-Size": "35.6 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "ipcalc",
@@ -735,7 +813,10 @@
         "Homepage": "http://jodies.de/ipcalc",
         "Download-Size": "25.4 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "iperf3",
@@ -752,7 +833,10 @@
         "Homepage": "http://software.es.net/iperf/",
         "Download-Size": "14.6 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "iproute2",
@@ -791,7 +875,10 @@
         ],
         "Download-Size": "1,070 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "iptraf-ng",
@@ -812,7 +899,10 @@
         "Homepage": "https://github.com/iptraf-ng/iptraf-ng",
         "Download-Size": "240 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "jq",
@@ -829,7 +919,10 @@
         "Homepage": "https://github.com/stedolan/jq",
         "Download-Size": "52.5 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "libssl-dev",
@@ -848,7 +941,10 @@
         "Homepage": "https://www.openssl.org/",
         "Download-Size": "2,372 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "lynx",
@@ -883,7 +979,10 @@
         "Homepage": "https://lynx.invisible-island.net/",
         "Download-Size": "719 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "mc",
@@ -937,7 +1036,10 @@
         "Homepage": "https://www.midnight-commander.org",
         "Download-Size": "547 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "mtr",
@@ -962,7 +1064,10 @@
         ],
         "Homepage": "https://www.bitwizard.nl/mtr/",
         "Download-Size": "75.1 kB",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "net-tools",
@@ -982,7 +1087,10 @@
         ],
         "Download-Size": "204 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "netcat",
@@ -996,7 +1104,10 @@
             "netcat-openbsd"
         ],
         "Download-Size": "2,044 B",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "ngrep",
@@ -1015,7 +1126,10 @@
         "Homepage": "https://github.com/jpr5/ngrep",
         "Download-Size": "33.1 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "nikto",
@@ -1037,7 +1151,10 @@
         "Homepage": "http://cirt.net/nikto2",
         "Download-Size": "246 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "nload",
@@ -1057,7 +1174,10 @@
         "Homepage": "http://www.roland-riegel.de/nload/",
         "Download-Size": "55.1 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "nmap",
@@ -1088,7 +1208,10 @@
         "Homepage": "https://nmap.org/",
         "Download-Size": "1,731 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "nodejs",
@@ -1119,7 +1242,10 @@
         "Homepage": "https://nodejs.org/",
         "Download-Size": "122 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "npm",
@@ -1223,7 +1349,10 @@
         "Homepage": "https://docs.npmjs.com/",
         "Download-Size": "894 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "openssh-server",
@@ -1279,7 +1408,10 @@
         ],
         "Download-Size": "434 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "parallel",
@@ -1305,7 +1437,10 @@
         "Homepage": "https://www.gnu.org/software/parallel/",
         "Download-Size": "1,947 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "pgpdump",
@@ -1323,7 +1458,10 @@
         "Homepage": "https://www.mew.org/~kazu/proj/pgpdump/en/",
         "Download-Size": "21.9 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "procps",
@@ -1363,7 +1501,10 @@
         ],
         "Download-Size": "377 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "psmisc",
@@ -1386,7 +1527,10 @@
         ],
         "Download-Size": "119 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "python3-venv",
@@ -1404,7 +1548,10 @@
         "Homepage": "https://www.python.org/",
         "Download-Size": "1,038 B",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "screen",
@@ -1434,7 +1581,10 @@
         ],
         "Download-Size": "672 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "sipcalc",
@@ -1450,7 +1600,10 @@
         "Homepage": "http://www.routemeister.net/projects/sipcalc/",
         "Download-Size": "30.2 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "socat",
@@ -1473,7 +1626,10 @@
         ],
         "Download-Size": "349 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "speedometer",
@@ -1493,7 +1649,10 @@
         "Homepage": "http://excess.org/speedometer",
         "Download-Size": "14.6 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "speedtest-cli",
@@ -1511,7 +1670,10 @@
         "Homepage": "https://github.com/sivel/speedtest-cli/",
         "Download-Size": "24.1 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "stress",
@@ -1527,7 +1689,10 @@
         "Homepage": "https://github.com/resurrecting-open-source-projects/stress",
         "Download-Size": "18.4 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "sysvinit-utils",
@@ -1547,7 +1712,10 @@
         ],
         "Download-Size": "20.6 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "telnet",
@@ -1571,7 +1739,10 @@
         ],
         "Download-Size": "66.9 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "tftpd-hpa",
@@ -1596,7 +1767,10 @@
         "Homepage": "http://git.kernel.org/cgit/network/tftp/tftp-hpa.git",
         "Download-Size": "40.7 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "tree",
@@ -1620,7 +1794,10 @@
         ],
         "Download-Size": "47.9 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "unzip",
@@ -1656,7 +1833,10 @@
         ],
         "Download-Size": "174 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "vim",
@@ -1695,7 +1875,10 @@
         ],
         "Download-Size": "1,727 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "virtualenv",
@@ -1711,7 +1894,10 @@
         "Homepage": "https://virtualenv.pypa.io/",
         "Download-Size": "1,968 B",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "wget",
@@ -1740,7 +1926,10 @@
         ],
         "Download-Size": "367 kB",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "wireshark",
@@ -1756,7 +1945,10 @@
         "Homepage": "https://www.wireshark.org/",
         "Download-Size": "4,992 B",
         "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "zenity",
@@ -1791,7 +1983,10 @@
         ],
         "Download-Size": "67.3 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     },
     {
         "Package": "zip",
@@ -1827,6 +2022,9 @@
         ],
         "Download-Size": "176 kB",
         "APT-Manual-Installed": "no",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages"
+        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+        "Apropos": [],
+        "Listing": [],
+        "Search": []
     }
 ]
