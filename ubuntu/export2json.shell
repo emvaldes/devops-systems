@@ -32,6 +32,7 @@ function export2json() {
     headers+=("^Download-Size: ");
     headers+=("^APT-Manual-Installed: ");
     headers+=("^APT-Sources: ");
+    headers+=("^Description: ");
     ## Store output into 'packages' string.
     packages="$(
         sed -e 's|"||g' ${input_file} \
@@ -54,13 +55,12 @@ function export2json() {
               -e 's|^\(APT-Manual-Installed\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
               -e 's|^\(APT-Sources\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
               -e 's|, |", "|g' \
-        | tr '\n' ',' \
-        | tr '*' '\n' \
+              -e 's|^\(Description\)\(: \)\(.*\)$| "Apropos": [], "Listing": [], "Search": [] }|g' \
+        | tr '\n' ',' | tr '*' '\n' \
         | sort -n \
-        | tr '\n' '*' \
-        | sed -e 's|" ,\* "Package": "|" }, { "Package": "|g' \
-              -e 's|* "Package": |[ { "Package": |' \
-              -e 's|^\(.*"\)\( ,\*\)$|\1 } ]|' \
+        | tr '\n' '{' \
+        | sed -e 's|^\(.*\),{$|\1 ]|' \
+              -e 's|\({ "Package": .*\)$|[ \1|' \
       )"; \
     ## Processing and formatting the collected output into a JSON file.
     echo -e "\n${packages}" | python -m json.tool | tee ${output_file} ;
