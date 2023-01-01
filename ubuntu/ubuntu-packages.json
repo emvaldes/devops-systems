@@ -186,7 +186,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "nload (1)            - displays the current network usage"
+      "nload (1) - displays the current network usage"
     ],
     "Listing": [
       "nload/jammy,now 0.7.4-2build3 amd64 [installed]"
@@ -294,7 +294,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "wget (1)             - The non-interactive network downloader."
+      "wget (1) - The non-interactive network downloader."
     ],
     "Listing": [
       "wget/jammy,now 1.21.2-2ubuntu1 amd64 [installed]",
@@ -317,7 +317,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "dos2unix (1)         - DOS/Mac to Unix and vice versa text file format converter"
+      "dos2unix (1) - DOS/Mac to Unix and vice versa text file format converter"
     ],
     "Listing": [
       "dos2unix/jammy,now 7.4.2-2 amd64 [installed]"
@@ -340,7 +340,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "virtualenv (1)       - Python virtual environment creator"
+      "virtualenv (1) - Python virtual environment creator"
     ],
     "Listing": [
       "virtualenv/jammy,jammy,now 20.13.0+ds-2 all [installed]"
@@ -377,7 +377,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "nodejs (1)           - server-side JavaScript runtime"
+      "nodejs (1) - server-side JavaScript runtime"
     ],
     "Listing": [
       "nodejs/jammy,now 12.22.9~dfsg-1ubuntu3 amd64 [installed]"
@@ -431,7 +431,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "hping3 (8)           - send (almost) arbitrary TCP/IP packets to network hosts"
+      "hping3 (8) - send (almost) arbitrary TCP/IP packets to network hosts"
     ],
     "Listing": [
       "hping3/jammy,now 3.a2.ds2-10 amd64 [installed]"
@@ -473,7 +473,7 @@
     "APT-Manual-Installed": "no",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
     "Apropos": [
-      "unzip (1)            - list, test and extract compressed files in a ZIP archive"
+      "unzip (1) - list, test and extract compressed files in a ZIP archive"
     ],
     "Listing": [
       "unzip/jammy-updates,jammy-security,now 6.0-26ubuntu3.1 amd64 [installed,automatic]",
@@ -545,7 +545,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "grepcidr (1)         - Filter IPv4 and IPv6 addresses matching CIDR patterns"
+      "grepcidr (1) - Filter IPv4 and IPv6 addresses matching CIDR patterns"
     ],
     "Listing": [
       "grepcidr/jammy,now 2.0-2 amd64 [installed]"
@@ -605,7 +605,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "pgpdump (1)          - A PGP packet visualizer"
+      "pgpdump (1) - A PGP packet visualizer"
     ],
     "Listing": [
       "pgpdump/jammy,now 0.34-1 amd64 [installed]"
@@ -634,7 +634,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "socat (1)            - Multipurpose relay (SOcket CAT)"
+      "socat (1) - Multipurpose relay (SOcket CAT)"
     ],
     "Listing": [
       "socat/jammy,now 1.7.4.1-3ubuntu4 amd64 [installed]",
@@ -693,7 +693,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
     "Apropos": [
-      "curl (1)             - transfer a URL"
+      "curl (1) - transfer a URL"
     ],
     "Listing": [
       "curl/jammy-updates,jammy-security,now 7.81.0-1ubuntu1.6 amd64 [installed]",
@@ -932,7 +932,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "sipcalc (1)          - IP subnet calculator"
+      "sipcalc (1) - IP subnet calculator"
     ],
     "Listing": [
       "sipcalc/jammy,now 1.1.6-1 amd64 [installed]"
@@ -989,7 +989,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "bmon (8)             - bandwidth monitor and rate estimator"
+      "bmon (8) - bandwidth monitor and rate estimator"
     ],
     "Listing": [
       "bmon/jammy,now 1:4.0-8 amd64 [installed]"
@@ -1026,7 +1026,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "nmap (1)             - Network exploration tool and security / port scanner"
+      "nmap (1) - Network exploration tool and security / port scanner"
     ],
     "Listing": [
       "nmap/jammy,now 7.91+dfsg1+really7.80+dfsg1-2build1 amd64 [installed]"
@@ -1049,7 +1049,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "jq (1)               - Command-line JSON processor"
+      "jq (1) - Command-line JSON processor"
     ],
     "Listing": [
       "jq/jammy,now 1.6-2.1ubuntu3 amd64 [installed]",
@@ -1312,7 +1312,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "ethtool (8)          - query or control network driver and hardware settings"
+      "ethtool (8) - query or control network driver and hardware settings"
     ],
     "Listing": [
       "ethtool/jammy,now 1:5.16-1 amd64 [installed]"
@@ -1400,7 +1400,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "mc (1)               - Visual shell for Unix-like systems."
+      "mc (1) - Visual shell for Unix-like systems."
     ],
     "Listing": [
       "mc/jammy,now 3:4.8.27-1 amd64 [installed]"
@@ -1425,7 +1425,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "ngrep (8)            - network grep"
+      "ngrep (8) - network grep"
     ],
     "Listing": [
       "ngrep/jammy,now 1.47+ds1-5 amd64 [installed]"
@@ -1453,7 +1453,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages",
     "Apropos": [
-      "nikto (1)            - Scan web server for known vulnerabilities"
+      "nikto (1) - Scan web server for known vulnerabilities"
     ],
     "Listing": [
       "nikto/jammy,jammy,now 1:2.1.5-3.1 all [installed]"
@@ -1475,7 +1475,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "ifstat (1)           - Report InterFace STATistics"
+      "ifstat (1) - Report InterFace STATistics"
     ],
     "Listing": [
       "ifstat/jammy,now 1.1-8.2 amd64 [installed]"
@@ -1528,7 +1528,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "netcat (1)           - arbitrary TCP and UDP connections and listens"
+      "netcat (1) - arbitrary TCP and UDP connections and listens"
     ],
     "Listing": [
       "netcat/jammy,jammy,now 1.218-4ubuntu1 all [installed]"
@@ -1553,7 +1553,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "cloc (1)             - Count, or compute differences of, lines of source code and comments."
+      "cloc (1) - Count, or compute differences of, lines of source code and comments."
     ],
     "Listing": [
       "cloc/jammy,jammy,now 1.90-1 all [installed]"
@@ -1602,7 +1602,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "stress (1)           - tool to impose load on and stress test a computer system"
+      "stress (1) - tool to impose load on and stress test a computer system"
     ],
     "Listing": [
       "stress/jammy,now 1.0.5-1 amd64 [installed]"
@@ -1875,7 +1875,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "speedometer (1)      - measure and display the rate of data across a network connection"
+      "speedometer (1) - measure and display the rate of data across a network connection"
     ],
     "Listing": [
       "speedometer/jammy,jammy,now 2.8-3 all [installed]"
@@ -1900,7 +1900,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "iftop (8)            - display bandwidth usage on an interface by host"
+      "iftop (8) - display bandwidth usage on an interface by host"
     ],
     "Listing": [
       "iftop/jammy,now 1.0~pre4-7 amd64 [installed]"
@@ -1942,7 +1942,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "htop (1)             - interactive process viewer"
+      "htop (1) - interactive process viewer"
     ],
     "Listing": [
       "htop/jammy,now 3.0.5-7build2 amd64 [installed]"
@@ -2307,7 +2307,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "iptraf-ng (8)        - Interactive Colorful IP LAN Monitor"
+      "iptraf-ng (8) - Interactive Colorful IP LAN Monitor"
     ],
     "Listing": [
       "iptraf-ng/jammy,now 1:1.2.1-1build2 amd64 [installed]"
@@ -2342,7 +2342,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "mtr (8)              - a network diagnostic tool"
+      "mtr (8) - a network diagnostic tool"
     ],
     "Listing": [
       "mtr/jammy,now 0.95-1 amd64 [installed]"
@@ -2435,7 +2435,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "lynx (1)             - a general purpose distributed information browser for the World Wide Web"
+      "lynx (1) - a general purpose distributed information browser for the World Wide Web"
     ],
     "Listing": [
       "lynx/jammy,now 2.9.0dev.10-1 amd64 [installed]",
@@ -2459,7 +2459,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "iperf3 (1)           - perform network throughput tests"
+      "iperf3 (1) - perform network throughput tests"
     ],
     "Listing": [
       "iperf3/jammy,now 3.9-1build1 amd64 [installed]"
@@ -2483,7 +2483,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "speedtest-cli (1)    - Command line interface for testing internet bandwidth using speedtest.net"
+      "speedtest-cli (1) - Command line interface for testing internet bandwidth using speedtest.net"
     ],
     "Listing": [
       "speedtest-cli/jammy,jammy,now 2.1.3-2 all [installed]"
@@ -2529,7 +2529,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "ipcalc (1)           - An IPv4 Netmask/broadcast/etc calculator"
+      "ipcalc (1) - An IPv4 Netmask/broadcast/etc calculator"
     ],
     "Listing": [
       "ipcalc/jammy,jammy,now 0.42-2 all [installed]"
@@ -2581,7 +2581,7 @@
     "APT-Manual-Installed": "no",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
     "Apropos": [
-      "procps (1)           - report a snapshot of the current processes."
+      "procps (1) - report a snapshot of the current processes."
     ],
     "Listing": [
       "procps/jammy,now 2:3.3.17-6ubuntu2 amd64 [installed,automatic]",
@@ -2612,7 +2612,7 @@
     "APT-Manual-Installed": "yes",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
     "Apropos": [
-      "apt-file (1)         - - APT package searching utility -- command-line interface"
+      "apt-file (1) - - APT package searching utility -- command-line interface"
     ],
     "Listing": [
       "apt-file/jammy,jammy,now 3.2.2 all [installed]"
@@ -2653,7 +2653,7 @@
     "APT-Manual-Installed": "no",
     "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
     "Apropos": [
-      "zenity (1)           - display GTK+ dialogs"
+      "zenity (1) - display GTK+ dialogs"
     ],
     "Listing": [
       "zenity/jammy-updates,now 3.42.1-0ubuntu1 amd64 [installed,automatic]"
