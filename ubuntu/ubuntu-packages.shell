@@ -297,8 +297,12 @@ for xitem in ${packages[@]}; do
 
 done;
 
-## Exporting Installed Packages JSON
+## Exporting Installed Packages JSON file.
 find ${location} -type f -name '*.json' | xargs -I {} cat {} | jq -s > ${0%\.*}.json;
+
+## Exporting Installed Packages (name, version) ino LIST file.
+jq '.[] | "\(.Package) -> \(.Version)"' --raw-output ${0%\.*}.json > ${0%\.*}.installed;
+
 echo -e "\nDone.\n";
 
 IFS="${oIFS}";
