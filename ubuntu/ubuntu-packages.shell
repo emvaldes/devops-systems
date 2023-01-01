@@ -144,6 +144,7 @@ for xitem in ${packages[@]}; do
 
   ## Evaluating APT Installed output
   if [[ $result == 'absent' ]]; then
+
           ## Package is not installed.
           echo -e "\n\n-------------------------";
 	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
