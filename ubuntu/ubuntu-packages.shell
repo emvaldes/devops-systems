@@ -7,10 +7,12 @@
 ## baseline and the script will start installing all these packages.
 
 ## Notes: These are target (pending) tools with custom installations
-## [configuration]:   ansible, pulumi
-## [programming];     go
+## [configuration]:   pulumi
 ## [cloud tools]:     aws-iam-authenticator, awscli, saml2aws
 ## [hashicorp]:       boundary, consul, nomad, packer, terraform, vagrant, vault, waypoint
+
+oIFS="${IFS}";
+IFS=$'\n';
 
 declare -a awscloud=(
     awscli
@@ -30,11 +32,11 @@ declare -a hashicorp=(
   );
 
 ## Inpsecting these already installed devnetops tools
-declare -a installing=(
-    snap:atom
-    snap:pycharm-community
-    snap:postman
-    snap:powershell
+declare -a packages=(
+    "snap --classic:atom"
+    "snap --classic:pycharm-community"
+    "snap:postman"
+    "snap --classic:powershell"
     apt:ansible
     apt:apt-file
     apt:aptitude
@@ -105,15 +107,15 @@ declare -a installing=(
   );
 
 ## Configuring Package Instation Reports path
-installer="${HOME}/packages";
-rm -rf ${installer} && mkdir -p ${installer};
+location="$(pwd)/packages";
+rm -rf ${location} && mkdir -p ${location};
 
 ## Identifying the installed-packages report file.
-installed="${installer}/installed.list";
+installed="${location}/installed.list";
 rm ${installed} 2>/dev/null;
 
 ## Identifying the installed-packages report file.
-missing="${installer}/missing.list";
+missing="${location}/missing.list";
 rm ${missing} 2>/dev/null;
 
 ## These are just iteration counters.
@@ -121,18 +123,27 @@ counter=1;
 count_miss=1;
 count_inst=1;
 
-## Aggregating both target groups
-declare -a packages=( ${installing[@]} );
 for xitem in ${packages[@]}; do
 
   installer="${xitem%%\:*}";
+  echo -e "Installer: ${installer}";
+
   package="${xitem##*\:}";
+  echo -e "Package: ${package}";
 
   ## Identifying if package is already installed.
-  apt list --installed | egrep -w "^${package}"; result=$?;
+  case "${installer}" in
+      apt ) apt list --installed | egrep -w "^${package}";
+            result=$?; ;;
+    snap* ) snap list ${package};
+            result=$?; ;;
+  esac;
+
+  ## Configuring package status flag:
+  [[ ${result} -eq 0 ]] && { result="present"; } || { result="absent"; }
 
   ## Evaluating APT Installed output
-  if [[ $result -ne 0 ]]; then
+  if [[ $result == 'absent' ]]; then
           ## Package is not installed.
           echo -e "\n\n-------------------------";
 	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
@@ -142,17 +153,17 @@ for xitem in ${packages[@]}; do
           echo -e "${package}" >> ${missing};
 
           ## Constructing package's folder (container)
-          xpath="${installer}/missing/${package}";
+          xpath="${location}/missing/${package}";
           mkdir -p "${xpath}";
 
-          ## Installing package via APT
+          ## Installing package via APT or SNAP
           case "${installer}" in
-             apt ) sudo apt  install ${package} --yes ;
-            snap ) sudo snap install ${package} --yes ;
+              apt ) sudo apt  install ${package} --yes; ;;
+            snap* ) sudo snap install ${package} ${installer/snap /}; ;;
           esac;
 
-
     else  ## Inspecting installed package.
+
           echo -e "\n\n-------------------------";
           echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
           echo -e "   Package: ${package}";
@@ -160,7 +171,7 @@ for xitem in ${packages[@]}; do
       	  echo -e "${package}" >> ${installed};
 
           ## Constructing package's folder (container)
-          xpath="${installer}/installed/${package}";
+          xpath="${location}/installed/${package}";
       	  mkdir -p "${xpath}";
 
           ## Upgrading package only if it's already installed.
@@ -176,3 +187,5 @@ for xitem in ${packages[@]}; do
   fi;
 
 done;
+
+IFS="${oIFS}";
