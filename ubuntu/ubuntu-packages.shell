@@ -33,11 +33,11 @@ declare -a hashicorp=(
 
 ## Inpsecting these already installed devnetops tools
 declare -a packages=(
-    apt:ansible
     "snap --classic:atom"
     "snap --classic:pycharm-community"
     "snap:postman"
     "snap --classic:powershell"
+    apt:ansible
     apt:apt-file
     apt:aptitude
     apt:arp-scan
@@ -151,7 +151,7 @@ for xitem in ${packages[@]}; do
           echo -e "\n--------------------------------------------------------------------------------";
 	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
           echo -e "   Package: ${available}";
-          echo -e "--------------------------------------------------------------------------------n";
+          echo -e "--------------------------------------------------------------------------------\n";
           echo -e "Warning: ${package} package is not installed! ";
           echo -e "${package}" >> ${missing};
 
@@ -170,21 +170,28 @@ for xitem in ${packages[@]}; do
           echo -e "\n--------------------------------------------------------------------------------";
           echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
           echo -e "   Package: ${available}";
-          echo -e "--------------------------------------------------------------------------------n";
+          echo -e "--------------------------------------------------------------------------------\n";
       	  echo -e "${package}" >> ${installed};
 
           ## Constructing package's folder (container)
-          xpath="${location}/installed/${package}";
+          xpath="${location}/installed";
       	  mkdir -p "${xpath}";
 
           ## Upgrading package only if it's already installed.
-          sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null | tee "${xpath}/${package}.upgrade";
+          sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
+          ## | tee "${xpath}/${package}.upgrade";
 
           declare -a apropos=();
-          for record in $(
-            apropos --exact ${package} 2>/dev/null | sed -e "s|\('\)\{1,\}|\'|g" -e 's|\("\)\{1,\}||g' 
-          ); do apropos+=("\"${record}\"@");
-          done;
+          if [[ $( apropos ${package} 2>/dev/null | wc -l ) -eq 0 ]]; then
+                  block_apropos='';
+            else  for record in $(
+                    apropos --exact ${package} 2>/dev/null | sed -e "s|\('\)\{1,\}|\'|g" -e 's|\("\)\{1,\}||g' 
+                  ); do apropos+=("\"${record}\"@");
+                  done;
+                  block_apropos="$(
+                      echo -e ${apropos[@]} | sed -e 's|@$||' -e 's|@|,|g' 
+                    )";
+          fi;
 
           declare -a listing=();
           for record in $(
@@ -197,30 +204,32 @@ for xitem in ${packages[@]}; do
           case "${installer}" in
 
               apt ) declare -a headers=();
-                    headers+=("^Package: ");
-                    headers+=("^Version: ");
-                    headers+=("^Built-Using: ");
-                    headers+=("^Priority: ");
-                    headers+=("^Build-Essential: ");
-                    headers+=("^Section: ");
-                    headers+=("^Source: ");
-                    headers+=("^Origin: ");
-                    headers+=("^Original-Maintainer: ");
-                    headers+=("^Installed-Size: ");
-                    headers+=("^Provides: ");
-                    headers+=("^Depends: ");
-                    headers+=("^Enhances: ");
-                    headers+=("^Recommends: ");
-                    headers+=("^Conflicts: ");
-                    headers+=("^Suggests: ");
-                    headers+=("^Breaks: ");
-                    headers+=("^Replaces: ");
-                    headers+=("^Homepage: ");
-                    headers+=("^X-Cargo-Built-Using: ");
-                    headers+=("^Task: ");
-                    headers+=("^Download-Size: ");
                     headers+=("^APT-Manual-Installed: ");
                     headers+=("^APT-Sources: ");
+                    headers+=("^Breaks: ");
+                    headers+=("^Build-Essential: ");
+                    headers+=("^Built-Using: ");
+                    headers+=("^Conflicts: ");
+                    headers+=("^Depends: ");
+                    headers+=("^Download-Size: ");
+                    headers+=("^Enhances: ");
+                    headers+=("^Essential: ");
+                    headers+=("^Homepage: ");
+                    headers+=("^Installed-Size: ");
+                    headers+=("^Origin: ");
+                    headers+=("^Original-Maintainer: ");
+                    headers+=("^Package: ");
+                    headers+=("^Pre-Depends: ");
+                    headers+=("^Priority: ");
+                    headers+=("^Provides: ");
+                    headers+=("^Recommends: ");
+                    headers+=("^Replaces: ");
+                    headers+=("^Section: ");
+                    headers+=("^Source: ");
+                    headers+=("^Suggests: ");
+                    headers+=("^Task: ");
+                    headers+=("^Version: ");
+                    headers+=("^X-Cargo-Built-Using: ");
                     packages="$(
                         for line in $( apt show ${package} 2>/dev/null ); do
                           [[ ${line} =~ "Description: " ]] && { break; } || { echo ${line}; };
@@ -228,48 +237,48 @@ for xitem in ${packages[@]}; do
                         | sed -e 's|"||g' \
                         | egrep "$(echo -n ${headers[@]} | tr ' ' '|')" \
                         | egrep -v "^Maintainer: |^Bugs: " \
-                        | sed -e 's|^\(Package\)\(: \)\(.*\)$|* "\1"\2"\3" |g' \
-                              -e 's|^\(Version\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Priority\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Build-Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Section\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Source\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Origin\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Original-Maintainer\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Installed-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Provides\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Enhances\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Recommends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Conflicts\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Suggests\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Breaks\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Replaces\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(Homepage\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
-                              -e 's|^\(X-Cargo-Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Task\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
-                              -e 's|^\(Download-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                        | sed \
                               -e 's|^\(APT-Manual-Installed\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
                               -e 's|^\(APT-Sources\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Breaks\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Build-Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Conflicts\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Download-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Enhances\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Homepage\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Installed-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Origin\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Original-Maintainer\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Package\)\(: \)\(.*\)$|* "\1"\2"\3" |g' \
+                              -e 's|^\(Pre-Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Priority\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Provides\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Recommends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Replaces\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Section\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Source\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(Suggests\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Task\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+                              -e 's|^\(Version\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+                              -e 's|^\(X-Cargo-Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
                               -e 's|, |", "|g' \
-                        | tr '\n' ',' \
-                        | tr '*' '\n' \
+                        | tr '\n' ',' | tr '*' '\n' \
                         | sort -n \
                         | tr '\n' '*' \
                         | sed -e 's|" ,\* "Package": "|" }, { "Package": "|g' \
                               -e 's|* "Package": |{ "Package": |' \
                               -e 's|^\(.*"\)\( ,\*\)$|\1|' \
-                        | sed -e 's|^\(.*\)$|\1, "Apropos": [ '$(
-                                echo -e ${apropos[@]} | sed -e 's|@$||' -e 's|@|,|g'
-                              )' ]|' \
+                        | sed -e 's|^\(.*\)$|\1, "Apropos": [ '${block_apropos}' ]|' \
                         | sed -e 's|^\(.*\)$|\1, "Listing": [ '$(
                                 echo -e ${listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
                               )' ]|' \
                         | sed -e 's|^\(.*\)$|\1 }|'
                       )"; \
                     ## Processing and formatting the collected output into a JSON file.
-                    # echo -e "${packages}";
+                    echo -e;
                     echo -e "${packages}" | python -m json.tool | tee "${xpath}/${package}.json";
                     ;;
 
@@ -282,11 +291,6 @@ for xitem in ${packages[@]}; do
 
 done;
 
-IFS="${oIFS}";
+echo -e "\nDone.\n";
 
-# | tr '\n' ',' | tr '*' '\n' \
-# | sort -n \
-# | tr '\n' '{' \
-# | sed -e 's|^\(.*\),{$|\1 ]|' \
-#       -e 's|\({ "Package": .*\)$|[ \1|' \
-# | sed -e 's|^\(.*\)\(,Description:.*\)$|\1} ]|' \
+IFS="${oIFS}";
