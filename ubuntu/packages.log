@@ -9,27 +9,7 @@ atom  1.60.0   286  latest/stable  snapcrafters  classic
 Reading package lists...
 Building dependency tree...
 Reading state information...
-name:      atom
-summary:   A hackable text editor for the 21st Century.
-publisher: Snapcrafters
-store-url: https://snapcraft.io/atom
-contact:   https://github.com/snapcrafters/atom/issues
-license:   unset
-description: |
-  Atom is a free and open source text editor that is modern,
-  approachable, and hackable to the core.
-commands:
-  - atom.apm
-  - atom
-snap-id:      Lf1MF6tizzusVuA6l13ETyH5VDXxwA0D
-tracking:     latest/stable
-refresh-date: yesterday at 01:01 MST
-channels:
-  latest/stable:    1.60.0 2022-07-02 (286) 298MB classic
-  latest/candidate: ^                             
-  latest/beta:      1.60.0 2022-07-02 (286) 298MB classic
-  latest/edge:      1.60.0 2022-06-04 (286) 298MB classic
-installed:          1.60.0            (286) 298MB classic
+
 Name               Version   Rev  Tracking       Publisher    Notes
 pycharm-community  2022.3.1  312  latest/stable  jetbrains**  classic
 
@@ -45,91 +25,7 @@ Reading state information...
 No apt package "pycharm-community", but there is a snap with that name.
 Try "snap install pycharm-community"
 
-name:      pycharm-community
-summary:   PyCharm Community Edition
-publisher: jetbrains**
-store-url: https://snapcraft.io/pycharm-community
-contact:   https://www.jetbrains.com/pycharm/documentation/
-license:   unset
-description: |
-  Python IDE for professional developers. Save time while PyCharm takes care
-  of the routine. Focus on bigger things and embrace the keyboard-centric
-  approach to get the most of PyCharm’s many productivity features.
-commands:
-  - pycharm-community
-snap-id:      Qo9GiW9eyzgN1tXmWpQ9gdstdFsj4K7E
-tracking:     latest/stable
-refresh-date: 2 days ago, at 21:45 MST
-channels:
-  latest/stable:    2022.3.1 2022-12-27 (312) 631MB classic
-  latest/candidate: 2022.3.1 2022-12-27 (312) 631MB classic
-  latest/beta:      2022.3.1 2022-12-27 (312) 631MB classic
-  latest/edge:      2022.3.1 2022-12-27 (312) 631MB classic
-  2022.3/stable:    2022.3.1 2022-12-27 (312) 631MB classic
-  2022.3/candidate: 2022.3.1 2022-12-27 (312) 631MB classic
-  2022.3/beta:      2022.3.1 2022-12-27 (312) 631MB classic
-  2022.3/edge:      2022.3.1 2022-12-27 (312) 631MB classic
-  2022.2/stable:    2022.2.4 2022-11-17 (307) 587MB classic
-  2022.2/candidate: 2022.2.4 2022-11-17 (307) 587MB classic
-  2022.2/beta:      2022.2.4 2022-11-17 (307) 587MB classic
-  2022.2/edge:      2022.2.4 2022-11-17 (307) 587MB classic
-  2022.1/stable:    2022.1.4 2022-07-21 (291) 592MB classic
-  2022.1/candidate: 2022.1.4 2022-07-21 (291) 592MB classic
-  2022.1/beta:      2022.1.4 2022-07-21 (291) 592MB classic
-  2022.1/edge:      2022.1.4 2022-07-21 (291) 592MB classic
-  2021.3/stable:    2021.3.3 2022-03-17 (274) 553MB classic
-  2021.3/candidate: 2021.3.3 2022-03-17 (274) 553MB classic
-  2021.3/beta:      2021.3.3 2022-03-17 (274) 553MB classic
-  2021.3/edge:      2021.3.3 2022-03-17 (274) 553MB classic
-  2021.2/stable:    2021.2.4 2021-12-22 (264) 452MB classic
-  2021.2/candidate: 2021.2.4 2021-12-22 (264) 452MB classic
-  2021.2/beta:      2021.2.4 2021-12-22 (264) 452MB classic
-  2021.2/edge:      2021.2.4 2021-12-22 (264) 452MB classic
-  2021.1/stable:    2021.1.3 2021-06-30 (244) 430MB classic
-  2021.1/candidate: 2021.1.3 2021-06-30 (244) 430MB classic
-  2021.1/beta:      2021.1.3 2021-06-30 (244) 430MB classic
-  2021.1/edge:      2021.1.3 2021-06-30 (244) 430MB classic
-  2020.3/stable:    2020.3.5 2021-03-26 (233) 446MB classic
-  2020.3/candidate: 2020.3.5 2021-03-26 (233) 446MB classic
-  2020.3/beta:      2020.3.5 2021-03-26 (233) 446MB classic
-  2020.3/edge:      2020.3.5 2021-03-26 (233) 446MB classic
-  2020.2/stable:    2020.2.5 2020-12-02 (221) 371MB classic
-  2020.2/candidate: 2020.2.5 2020-12-02 (221) 371MB classic
-  2020.2/beta:      2020.2.5 2020-12-02 (221) 371MB classic
-  2020.2/edge:      2020.2.5 2020-12-02 (221) 371MB classic
-  2020.1/stable:    2020.1.5 2020-12-02 (220) 356MB classic
-  2020.1/candidate: 2020.1.5 2020-12-02 (220) 356MB classic
-  2020.1/beta:      2020.1.5 2020-12-02 (220) 356MB classic
-  2020.1/edge:      2020.1.5 2020-12-02 (220) 356MB classic
-  2019.3/stable:    2019.3.5 2020-05-08 (195) 364MB classic
-  2019.3/candidate: ^                               
-  2019.3/beta:      ^                               
-  2019.3/edge:      ^                               
-  2019.2/stable:    2019.2.6 2020-02-10 (180) 339MB classic
-  2019.2/candidate: ^                               
-  2019.2/beta:      ^                               
-  2019.2/edge:      ^                               
-  2019.1/stable:    2019.1.4 2019-07-30 (144) 311MB classic
-  2019.1/candidate: ^                               
-  2019.1/beta:      ^                               
-  2019.1/edge:      ^                               
-  2018.3/stable:    2018.3.7 2019-07-10 (138) 284MB classic
-  2018.3/candidate: ^                               
-  2018.3/beta:      ^                               
-  2018.3/edge:      ^                               
-  2018.2/stable:    2018.2.8 2019-04-12 (124) 242MB classic
-  2018.2/candidate: ^                               
-  2018.2/beta:      ^                               
-  2018.2/edge:      ^                               
-  2018.1/stable:    2018.1.6 2018-11-15  (96) 248MB classic
-  2018.1/candidate: ^                               
-  2018.1/beta:      ^                               
-  2018.1/edge:      ^                               
-  2017.3/stable:    2017.3.7 2018-11-15  (97) 279MB classic
-  2017.3/candidate: ^                               
-  2017.3/beta:      ^                               
-  2017.3/edge:      ^                               
-installed:          2022.3.1            (312) 631MB classic
+
 Name     Version  Rev  Tracking    Publisher      Notes
 postman  10.1.2   185  v10/stable  postman-inc**  -
 
@@ -145,49 +41,7 @@ Reading state information...
 No apt package "postman", but there is a snap with that name.
 Try "snap install postman"
 
-name:      postman
-summary:   API Development Environment
-publisher: Postman, Inc. (postman-inc**)
-store-url: https://snapcraft.io/postman
-contact:   https://www.postman.com/contact-us
-license:   unset
-description: |
-  Postman is the complete toolchain for API developers, used by more than 3
-  million developers and 30000 companies worldwide. Postman makes working
-  with APIs faster and easier by supporting developers at every stage of
-  their workflow, and is available for Mac OS X, Windows, Linux and Chrome
-  users.
-commands:
-  - postman
-snap-id:      fFcOtEEF4EdyYb95IUE5Isy28tICYMLf
-tracking:     v10/stable
-refresh-date: yesterday at 01:14 MST
-channels:
-  v10/stable:       10.1.2 2022-11-08 (185) 205MB -
-  v10/candidate:    ^                             
-  v10/beta:         ^                             
-  v10/edge:         10.1.2 2022-11-08 (185) 205MB -
-  latest/stable:    7.36.5 2021-02-22 (133) 183MB -
-  latest/candidate: 7.36.5 2021-02-22 (133) 183MB -
-  latest/beta:      7.36.5 2021-02-22 (133) 183MB -
-  latest/edge:      8.5.0  2021-05-21 (139) 198MB -
-  v9/stable:        9.31.0 2022-09-13 (184) 197MB -
-  v9/candidate:     ^                             
-  v9/beta:          ^                             
-  v9/edge:          9.31.0 2022-09-13 (184) 197MB -
-  v8/stable:        8.12.5 2021-10-28 (149) 176MB -
-  v8/candidate:     ^                             
-  v8/beta:          ^                             
-  v8/edge:          8.12.5 2021-10-28 (149) 176MB -
-  v7/stable:        7.36.7 2021-11-25 (152) 183MB -
-  v7/candidate:     ^                             
-  v7/beta:          ^                             
-  v7/edge:          7.36.7 2021-11-25 (152) 183MB -
-  v6/stable:        6.7.6  2019-10-23  (95) 138MB -
-  v6/candidate:     ^                             
-  v6/beta:          ^                             
-  v6/edge:          ^                             
-installed:          10.1.2            (185) 205MB -
+
 Name        Version  Rev  Tracking       Publisher               Notes
 powershell  7.3.1    226  latest/stable  microsoft-powershell**  classic
 
@@ -203,35 +57,7 @@ Reading state information...
 No apt package "powershell", but there is a snap with that name.
 Try "snap install powershell"
 
-name:      powershell
-summary:   PowerShell for every system!
-publisher: Microsoft PowerShell**
-store-url: https://snapcraft.io/powershell
-contact:   https://github.com/powershell/powershell
-license:   unset
-description: |
-  PowerShell is an automation and configuration management platform.
-  It consists of a cross-platform (Windows, Linux, and macOS)
-  command-line shell and associated scripting language.
-  
-  See
-  https://docs.microsoft.com/powershell/scripting/powershell-support-lifecycl
-  e for support details.
-commands:
-  - powershell
-snap-id:      JSNnoJl3EqkMuWoy5Dgq8PMqZ0uNcpie
-tracking:     latest/stable
-refresh-date: yesterday at 01:40 MST
-channels:
-  latest/stable:    7.3.1 2022-12-13 (226) 74MB classic
-  latest/candidate: 7.3.1 2022-12-13 (226) 74MB classic
-  latest/beta:      7.3.1 2022-12-13 (226) 74MB classic
-  latest/edge:      7.3.1 2022-12-13 (226) 74MB classic
-  lts/stable:       7.2.8 2022-12-13 (227) 71MB classic
-  lts/candidate:    7.2.8 2022-12-13 (227) 71MB classic
-  lts/beta:         7.2.8 2022-12-13 (227) 71MB classic
-  lts/edge:         7.2.8 2022-12-13 (227) 71MB classic
-installed:          7.3.1            (226) 74MB classic
+
 
 --------------------------------------------------------------------------------
  Installed: present = 5 -> 5
@@ -300,7 +126,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "ansible/jammy,jammy,now 2.10.7+merged+base+2.10.8+dfsg-1 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:57:10"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -345,7 +175,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "apt-file/jammy,jammy,now 3.2.2 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:20:35"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -409,7 +243,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "aptitude/jammy,now 0.8.13-3ubuntu1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:19:43"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -454,7 +292,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "arp-scan/jammy,now 1.9.7-2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:52:07"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -508,7 +350,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "autoconf/jammy,jammy,now 2.71-2 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:31:38"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -639,7 +485,11 @@ Use 'sudo apt autoremove' to remove them.
     "Apropos": [],
     "Listing": [
         "bat/jammy-updates,jammy-security,now 0.19.0-1ubuntu0.1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:34:43"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -681,7 +531,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "bmon/jammy,now 1:4.0-8 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:52:38"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -726,7 +580,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "build-essential/jammy,now 12.9ubuntu3 amd64 [installed]",
         "build-essential/jammy 12.9ubuntu3 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-29",
+        "time": "15:20:43"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -765,7 +623,11 @@ Use 'sudo apt autoremove' to remove them.
     "Apropos": [],
     "Listing": [
         "bwctl-client/jammy,now 1.5.4+dfsg1-1build1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:47:15"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -808,7 +670,11 @@ Use 'sudo apt autoremove' to remove them.
     "Apropos": [],
     "Listing": [
         "bwctl-server/jammy,now 1.5.4+dfsg1-1build1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:47:06"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -848,7 +714,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "cloc/jammy,jammy,now 1.90-1 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:45:48"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -955,7 +825,11 @@ Use 'sudo apt autoremove' to remove them.
         "code/stable,now 1.74.2-1671533413 amd64 [installed]",
         "code/stable 1.74.2-1671532382 arm64",
         "code/stable 1.74.2-1671532193 armhf"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "17:12:17"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1000,7 +874,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "coreutils/jammy,now 8.32-4.1ubuntu1 amd64 [installed]",
         "coreutils/jammy 8.32-4.1ubuntu1 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:14"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1050,7 +928,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "curl/jammy-updates,jammy-security,now 7.81.0-1ubuntu1.6 amd64 [installed]",
         "curl/jammy-updates,jammy-security 7.81.0-1ubuntu1.6 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:29:11"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1087,7 +969,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "dos2unix/jammy,now 7.4.2-2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:45:06"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1133,7 +1019,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "ethtool/jammy,now 1:5.16-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "",
+        "time": ""
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1176,7 +1066,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "fping/jammy,now 5.1-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:53:13"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1278,7 +1172,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "gh/jammy,now 2.4.0+dfsg1-2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:34"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1414,7 +1312,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "git/jammy-updates,jammy-security,now 1:2.34.1-1ubuntu1.5 amd64 [installed]",
         "git/jammy-updates,jammy-security 1:2.34.1-1ubuntu1.5 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:27:29"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1519,7 +1421,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "gnupg/jammy-updates,jammy-updates,jammy-security,jammy-security,now 2.2.27-3ubuntu2.1 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:37"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1558,7 +1464,11 @@ Use 'sudo apt autoremove' to remove them.
     "Apropos": [],
     "Listing": [
         "golang/jammy,now 2:1.18~0ubuntu2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:52:35"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1595,7 +1505,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "grepcidr/jammy,now 2.0-2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:53:40"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1634,7 +1548,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "hping3/jammy,now 3.a2.ds2-10 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:54:00"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1691,7 +1609,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "htop/jammy,now 3.0.5-7build2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:22:38"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1748,7 +1670,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "htop/jammy,now 3.0.5-7build2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:22:38"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1785,7 +1711,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "ifstat/jammy,now 1.1-8.2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:54:28"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1825,7 +1755,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "iftop/jammy,now 1.0~pre4-7 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:55:05"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1862,7 +1796,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "ipcalc/jammy,jammy,now 0.42-2 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:55:23"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1900,7 +1838,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "iperf3/jammy,now 3.9-1build1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:55:49"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -1966,7 +1908,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "iproute2/jammy,now 5.15.0-1ubuntu2 amd64 [installed]",
         "iproute2/jammy 5.15.0-1ubuntu2 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:27"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2008,7 +1954,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "iptraf-ng/jammy,now 1:1.2.1-1build2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "13:56:09"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2047,7 +1997,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "jq/jammy,now 1.6-2.1ubuntu3 amd64 [installed]",
         "jq/jammy 1.6-2.1ubuntu3 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:30:41"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2090,7 +2044,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "libssl-dev/jammy-updates,jammy-security,now 3.0.2-0ubuntu1.7 amd64 [installed]",
         "libssl-dev/jammy-updates,jammy-security 3.0.2-0ubuntu1.7 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:07:26"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2154,7 +2112,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "lynx/jammy,now 2.9.0dev.10-1 amd64 [installed]",
         "lynx/jammy 2.9.0dev.10-1 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:21:52"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2229,7 +2191,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "mc/jammy,now 3:4.8.27-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:21:06"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2279,7 +2245,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "mtr/jammy,now 0.95-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:24"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2316,7 +2286,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "netcat/jammy,jammy,now 1.218-4ubuntu1 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:29"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2356,7 +2330,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "net-tools/jammy,now 1.60+git20181103.0eebece-1ubuntu5 amd64 [installed]",
         "net-tools/jammy 1.60+git20181103.0eebece-1ubuntu5 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "16:13:48"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2396,7 +2374,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "ngrep/jammy,now 1.47+ds1-5 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:10:50"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2439,7 +2421,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "nikto/jammy,jammy,now 1:2.1.5-3.1 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:09:45"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2491,7 +2477,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "nodejs/jammy,now 12.22.9~dfsg-1ubuntu3 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:11:39"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2532,7 +2522,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "nload/jammy,now 0.7.4-2build3 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "14:00:38"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2584,7 +2578,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "nmap/jammy,now 7.91+dfsg1+really7.80+dfsg1-2build1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:08:24"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2726,7 +2724,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "npm/jammy,jammy,now 8.5.1~ds-1 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:13:19"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2816,7 +2818,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "openssh-server/jammy,now 1:8.9p1-3 amd64 [installed]",
         "openssh-server/jammy 1:8.9p1-3 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-29",
+        "time": "17:18:22"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2876,7 +2882,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "parallel/jammy,jammy,now 20210822+ds-2 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:15:31"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2915,7 +2925,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "pgpdump/jammy,now 0.34-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:26:37"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -2983,7 +2997,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "procps/jammy,now 2:3.3.17-6ubuntu2 amd64 [installed,automatic]",
         "procps/jammy 2:3.3.17-6ubuntu2 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:18"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3029,7 +3047,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "psmisc/jammy,now 23.4-2build3 amd64 [installed]",
         "psmisc/jammy 23.4-2build3 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:24"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3068,7 +3090,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "python3-venv/jammy-updates,now 3.10.6-1~22.04 amd64 [installed]",
         "python3-venv/jammy-updates 3.10.6-1~22.04 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:09:50"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3147,7 +3173,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "screen/jammy,now 4.9.0-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:17:52"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3184,7 +3214,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "sipcalc/jammy,now 1.1.6-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:07:48"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3229,7 +3263,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "socat/jammy,now 1.7.4.1-3ubuntu4 amd64 [installed]",
         "socat/jammy 1.7.4.1-3ubuntu4 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:16:27"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3270,7 +3308,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "speedometer/jammy,jammy,now 2.8-3 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "14:12:43"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3309,7 +3351,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "speedtest-cli/jammy,jammy,now 2.1.3-2 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:06:59"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3346,7 +3392,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "stress/jammy,now 1.0.5-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:16:57"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3388,7 +3438,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "sysvinit-utils/jammy,now 3.01-1ubuntu1 amd64 [installed,automatic]",
         "sysvinit-utils/jammy 3.01-1ubuntu1 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:18"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3439,7 +3493,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "telnet/jammy,now 0.17-44build1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:25"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3494,7 +3552,11 @@ Use 'sudo apt autoremove' to remove them.
     "Apropos": [],
     "Listing": [
         "tftpd-hpa/jammy,now 5.2+20150808-1.2build2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:14:27"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3578,7 +3640,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "tree/jammy,now 2.0.2-1 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:17:22"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3636,7 +3702,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "unzip/jammy-updates,jammy-security,now 6.0-26ubuntu3.1 amd64 [installed,automatic]",
         "unzip/jammy-updates,jammy-security 6.0-26ubuntu3.1 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:40"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3700,7 +3770,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "vim/jammy-updates,jammy-security,now 2:8.2.3995-1ubuntu2.1 amd64 [installed]",
         "vim/jammy-updates,jammy-security 2:8.2.3995-1ubuntu2.1 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:31"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3738,7 +3812,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "virtualenv/jammy,jammy,now 20.13.0+ds-2 all [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:18:40"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3792,7 +3870,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "wget/jammy,now 1.21.2-2ubuntu1 amd64 [installed]",
         "wget/jammy 1.21.2-2ubuntu1 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:25"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3830,7 +3912,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "wireshark/jammy,now 3.6.2-2 amd64 [installed]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-12-30",
+        "time": "12:12:33"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3886,7 +3972,11 @@ Use 'sudo apt autoremove' to remove them.
     ],
     "Listing": [
         "zenity/jammy-updates,now 3.42.1-0ubuntu1 amd64 [installed,automatic]"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:50:27"
+    }
 }
 
 --------------------------------------------------------------------------------
@@ -3952,7 +4042,11 @@ Use 'sudo apt autoremove' to remove them.
     "Listing": [
         "zip/jammy,now 3.0-12build2 amd64 [installed,automatic]",
         "zip/jammy 3.0-12build2 i386"
-    ]
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:40"
+    }
 }
 
 Done.
