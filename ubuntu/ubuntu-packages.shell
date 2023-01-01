@@ -291,6 +291,8 @@ for xitem in ${packages[@]}; do
 
 done;
 
+## Exporting Installed Packages JSON
+find ${location} -type f -name '*.json' | xargs -I {} cat {} | jq -s > ${0%\.*}.json;
 echo -e "\nDone.\n";
 
 IFS="${oIFS}";
