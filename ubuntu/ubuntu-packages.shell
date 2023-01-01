@@ -298,10 +298,10 @@ for xitem in ${packages[@]}; do
 done;
 
 ## Exporting Installed Packages JSON file.
-find ${location} -type f -name '*.json' | xargs -I {} cat {} | jq -s > ${0%\.*}.json;
+find ${location} -type f -name '*.json' | xargs -I {} cat {} | jq -s > $(pwd)/packages.json;
 
 ## Exporting Installed Packages (name, version) ino LIST file.
-jq '.[] | "\(.Package) -> \(.Version)"' --raw-output ${0%\.*}.json > ${0%\.*}.installed;
+jq '.[] | "\(.Package) -> \(.Version)"' --raw-output $(pwd)/packages.json > $(pwd)/packages.list;
 
 echo -e "\nDone.\n";
 
