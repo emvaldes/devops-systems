@@ -15,7 +15,9 @@ function packages_ubuntu () {
     oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
-      [[ ${1#*\--} = "packages" ]] && local pkgs_filename="${2}";
+      [[ ${1#*\--} = "pkgs-list" ]] && {
+          declare -a pkgs_listing=($( echo -e ${2} | tr ',' '\n' ));
+        };
       [[ ${1#*\--} = "log-file" ]] && local log_filename="${2}";
       [[ ${1#*\--} = "json-file" ]] && local json_filename="${2}";
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
@@ -26,24 +28,28 @@ function packages_ubuntu () {
     script_name=$( basename ${0%\.*} );
     script_type=$( basename ${0##*\.} );
     ## Define custom-parameter(s)
-    [[ ${#pkgs_filename} -eq 0 ]] && {
-        pkgs_filename='packages.list';
-        echo -e "Using: Default '${pkgs_filename}' Packages List! ";
-      };
+    if [[ ${#pkgs_listing} -eq 0 ]]; then
+            pkgs_listing='packages.list';
+            echo -e "Loading: '${pkgs_listing}' Default Packages List!\n ";
+            ## Loading Packages Listing
+            source "${script_path}/${pkgs_listing}";
+      else  echo -e "Loading: Custom Packages List!\n ";
+	    declare -a packages=( ${pkgs_listing[@]} );
+            for package in ${packages[@]}; do echo -e "${package}"; done;
+    fi;
     [[ ${#log_filename} -eq 0 ]] && {
         log_filename='packages.log';
-        echo -e "Using: Default '${log_filename}' Log File! ";
+        echo -e "Using: '${log_filename}' default Log File! ";
       };
     [[ ${#json_filename} -eq 0 ]] && {
         json_filename='packages.json';
-        echo -e "Using: '${json_filename}' Default JSON File! ";
+        echo -e "Using: '${json_filename}' default JSON File! ";
       };
     [[ ${#report_filename} -eq 0 ]] && {
         report_filename='packages.report';
-        echo -e "Using: '${report_filename}' Default Report File! ";
+        echo -e "Using: '${report_filename}' default Report File! ";
       };
-    ## Loading Packages Listing
-    source "${script_path}/${pkgs_filename}";
+
     ## Script Execution Log-file
     logfile="${script_path}/${log_filename}";
     cat /dev/null > "${logfile}";
@@ -60,7 +66,7 @@ function packages_ubuntu () {
         | tr '[[:upper:]]' '[[:lower:]]'
       )/packages";
     rm -rf ${location} 2>/dev/null && mkdir -p ${location};
-    ## Identifying the installed-packages report file
+    ## Identifying the Installed-Packages report file
     missing="${location}/missing.list";
     cat /dev/null > "${missing}"
     ## Default DPKG Log-file
@@ -72,11 +78,15 @@ function packages_ubuntu () {
     ## Processing Listed Packages:
     for xitem in ${packages[@]}; do
       ## Options: apt, snap
-      xcommand="${xitem%%\:*}";
-      installer="${xcommand%\ *}";
-      # echo -e "Installer: ${installer}";
-      package="${xitem##*\:}";
-      # echo -e "Package: ${package}";
+      if [[ ${xitem} =~ ':' ]]; then
+              xcommand="${xitem%%\:*}";
+              installer="${xcommand%\ *}";
+              package="${xitem##*\:}";
+              # echo -e "Package: ${package}";
+        else  installer='apt';
+              xcommand="${installer}";
+	      package="${xitem}";
+      fi;
       ## Identifying if package is already installed.
       available='false';
       case "${installer}" in
@@ -181,7 +191,7 @@ function packages_ubuntu () {
                         headers+=("^Task: ");
                         headers+=("^Version: ");
                         headers+=("^X-Cargo-Built-Using: ");
-                        packages="$(
+                        json_object="$(
                             for line in $( apt show ${package} 2>/dev/null ); do
                               [[ ${line} =~ "Description: " ]] && { break; } || { echo ${line}; };
                             done \
@@ -230,9 +240,9 @@ function packages_ubuntu () {
                             | sed -e 's|^\(.*\)$|\1 }|'
                           )"; \
                         ## Processing and formatting the collected output into a JSON file.
-                        ## echo -e "${packages}" | python -m json.tool; break ;
+                        ## echo -e "${json_object}" | python -m json.tool; break ;
                         echo -e;
-                        echo -e "${packages}" | python -m json.tool | tee "${xpath}/${package}.json";
+                        echo -e "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
                         ;;
                 snap ) snap info ${package} | tee "${xpath}/${package}.info";
                         ;;
@@ -247,11 +257,10 @@ function packages_ubuntu () {
     echo -e "\nDone.\n";
     IFS="${oIFS}";
     return 0;
-  }; ## alias packages-ubuntu='packages_ubuntu';
+  }; alias packages-ubuntu='packages_ubuntu';
 
-packages_ubuntu --packages=packages.list \
-                --log-file=packages.log \
+## packages_ubuntu --pkgs-list='jq,openssh-server,python-is-python3' \
+packages_ubuntu --log-file=packages.log \
                 --json-file=packages.json \
                 --report-file=packages.report \
 | tee $(pwd)/packages.log;
-
