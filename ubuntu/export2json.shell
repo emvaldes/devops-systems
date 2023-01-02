@@ -1,0 +1,141 @@
+#!/usr/bin/env bash
+
+function export2json () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "package" ]] && local package="${2}";
+      [[ ${1#*\--} = "location" ]] && local xpath="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    ## Script configuration
+    local script_path=$( dirname ${0} );
+    ## echo -e "Module Path: ${script_path}";
+    local script_name="export2json";
+    ## echo -e "Module Name: ${script_name}";
+    local script_type="shell";
+    ## echo -e "Module Type: ${script_type}";
+    ## Define custom-parameter(s)
+    ## ...
+    ## -------------------------------------------------------------------------
+    declare -a apropos_listing=();
+    local apropos_block=;
+    local apropos_listing=;
+    if [[ $( apropos ${package} 2>/dev/null | wc -l ) -eq 0 ]]; then
+            apropos_block='';
+      else  for record in $(
+              apropos --exact ${package} 2>/dev/null | sed -e "s|\('\)\{1,\}|\'|g" -e 's|\("\)\{1,\}||g'
+            ); do apropos_listing+=("\"${record}\"@");
+            done;
+            ## Removing multiple spacing in a single entry.
+            [[ ${#apropos_listing[@]} -eq 1 ]] && {
+                  apropos_listing="$(
+                  echo -e "${apropos_listing[@]}" | sed -e 's|\([[:blank:]]\)\{1,\}| |g'
+                )"
+              }
+            apropos_block="$(
+                echo -e ${apropos_listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
+              )";
+    fi;
+    declare -a listing=();
+    for record in $(
+        apt list ${package} 2>/dev/null | egrep -v "^Listing....*$" \
+                            | sed -e "s|\('\)\{1,\}|\'|g" -e 's|\("\)\{1,\}||g'
+      ); do listing+=("\"${record}\"@");
+    done;
+    ## -------------------------------------------------------------------------
+    ## Tracking Date & Time installation time-stamp.
+    declare -a timestamp=($(
+        zgrep 'install ' ${dpkg_logfile}* \
+        | sort | cut -f1,2,4 -d' ' | grep " ${package}" \
+        |  sed -e "s|\(${dpkg_logfile}\)\([\.0-9]*\):\(.*\)\( ${package}\)\(.*\)|\3|g" \
+              -e 's|\([[:blank:]]\)\{1,\}$||' \
+        | tr ' ' '\n'
+      ));
+    # echo -e "Time-Stamp: '${timestamp[*]}'";
+    declare -a headers=();
+    headers+=("^APT-Manual-Installed: ");
+    headers+=("^APT-Sources: ");
+    headers+=("^Breaks: ");
+    headers+=("^Build-Essential: ");
+    headers+=("^Built-Using: ");
+    headers+=("^Conflicts: ");
+    headers+=("^Depends: ");
+    headers+=("^Download-Size: ");
+    headers+=("^Enhances: ");
+    headers+=("^Essential: ");
+    headers+=("^Homepage: ");
+    headers+=("^Installed-Size: ");
+    headers+=("^Origin: ");
+    headers+=("^Original-Maintainer: ");
+    headers+=("^Package: ");
+    headers+=("^Pre-Depends: ");
+    headers+=("^Priority: ");
+    headers+=("^Provides: ");
+    headers+=("^Recommends: ");
+    headers+=("^Replaces: ");
+    headers+=("^Section: ");
+    headers+=("^Source: ");
+    headers+=("^Suggests: ");
+    headers+=("^Task: ");
+    headers+=("^Version: ");
+    headers+=("^X-Cargo-Built-Using: ");
+    local json_object="$(
+        for line in $( apt show ${package} 2>/dev/null ); do
+          [[ ${line} =~ "Description: " ]] && { break; } || { echo ${line}; };
+        done \
+        | sed -e 's|"||g' \
+        | egrep "$(echo -n ${headers[@]} | tr ' ' '|')" \
+        | egrep -v "^Maintainer: |^Bugs: " \
+        | sed \
+              -e 's|^\(APT-Manual-Installed\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(APT-Sources\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Breaks\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Build-Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Conflicts\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Download-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Enhances\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Homepage\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Installed-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Origin\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Original-Maintainer\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Package\)\(: \)\(.*\)$|* "\1"\2"\3" |g' \
+              -e 's|^\(Pre-Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Priority\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Provides\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Recommends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Replaces\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Section\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Source\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(Suggests\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Task\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Version\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
+              -e 's|^\(X-Cargo-Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|, |", "|g' \
+        | tr '\n' ',' | tr '*' '\n' \
+        | sort -n \
+        | tr '\n' '*' \
+        | sed -e 's|" ,\* "Package": "|" }, { "Package": "|g' \
+              -e 's|* "Package": |{ "Package": |' \
+              -e 's|^\(.*"\)\( ,\*\)$|\1|' \
+        | sed -e 's|^\(.*\)$|\1, "Apropos": [ '${apropos_block}' ]|' \
+        | sed -e 's|^\(.*\)$|\1, "Listing": [ '$(
+                echo -e ${listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
+              )' ]|' \
+        | sed -e 's|^\(.*\)$|\1, "Timestamp": { "date": "'${timestamp[0]}'", "time": "'${timestamp[1]}'" }|' \
+        | sed -e 's|^\(.*\)$|\1 }|'
+      )"; \
+    ## Processing and formatting the collected output into a JSON file.
+    ## echo -e "${json_object}" | python -m json.tool; break ;
+    echo -e;
+    echo -e "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
+    ## -------------------------------------------------------------------------
+    echo -e "\nDone.\n";
+    IFS="${oIFS}";
+    return 0;
+  };
+
+## export2json --package='ansible' | tee $(pwd)/export2json.log;
