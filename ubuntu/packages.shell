@@ -19,7 +19,8 @@ function packages_ubuntu () {
       [[ ${1#*\--} = "log-file" ]] && local log_filename="${2}";
       [[ ${1#*\--} = "json-file" ]] && local json_filename="${2}";
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
-    done; IFS="${oIFS}";
+    done; ## IFS="${oIFS}";
+    oIFS="${IFS}"; IFS=$'\n';
     ## Script configuration
     script_path=$( dirname ${0} );
     script_name=$( basename ${0%\.*} );
@@ -71,22 +72,22 @@ function packages_ubuntu () {
     ## Processing Listed Packages:
     for xitem in ${packages[@]}; do
       ## Options: apt, snap
-      installer="${xitem%%\:*}";
+      xcommand="${xitem%%\:*}";
+      installer="${xcommand%\ *}";
       # echo -e "Installer: ${installer}";
       package="${xitem##*\:}";
       # echo -e "Package: ${package}";
       ## Identifying if package is already installed.
       available='false';
       case "${installer}" in
-          apt ) available="$(
-                    apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*"
-                  )";
-                status=$?;
-                ;;
-        snap* ) snap list ${package};
-                installer='apt';
-                status=$?;
-                ;;
+         apt ) available="$(
+                   apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*"
+                 )";
+               status=$?;
+               ;;
+        snap ) snap list ${package};
+               status=$?;
+               ;;
       esac;
       ## Configuring package status flag
       [[ ${result} -eq 0 ]] && { result="present"; } || { result="absent"; }
@@ -94,8 +95,8 @@ function packages_ubuntu () {
       if [[ $result == 'absent' ]]; then
               ## Package is not installed.
               echo -e "\n--------------------------------------------------------------------------------";
-    	        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-              echo -e "   Package: ${available}";
+              echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
+              echo -e "   Package: ${package}";
               echo -e "--------------------------------------------------------------------------------\n";
               echo -e "Warning: ${package} package is not installed! ";
               echo -e "${package}" >> ${missing};
@@ -110,7 +111,7 @@ function packages_ubuntu () {
         else  ## Inspecting installed package.
               echo -e "\n--------------------------------------------------------------------------------";
               echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-              echo -e "   Package: ${available}";
+              echo -e "   Package: ${package}";
               echo -e "--------------------------------------------------------------------------------\n";
           	  # echo -e "${package}" >> ${installed};
               ## Constructing package's folder (container)
@@ -229,10 +230,11 @@ function packages_ubuntu () {
                             | sed -e 's|^\(.*\)$|\1 }|'
                           )"; \
                         ## Processing and formatting the collected output into a JSON file.
+                        ## echo -e "${packages}" | python -m json.tool; break ;
                         echo -e;
                         echo -e "${packages}" | python -m json.tool | tee "${xpath}/${package}.json";
                         ;;
-                snap* ) snap info ${package} | tee "${xpath}/${package}.info";
+                snap ) snap info ${package} | tee "${xpath}/${package}.info";
                         ;;
               esac;
       fi;
@@ -245,9 +247,11 @@ function packages_ubuntu () {
     echo -e "\nDone.\n";
     IFS="${oIFS}";
     return 0;
-  }; alias packages-ubuntu='packages_ubuntu';
+  }; ## alias packages-ubuntu='packages_ubuntu';
 
-# packages-ubuntu --packages=packages.list \
-#                 --log-file=./packages.log \
-#                 --json-file=./packages.json \
-#                 --report-file=./packages.report;
+packages_ubuntu --packages=packages.list \
+                --log-file=packages.log \
+                --json-file=packages.json \
+                --report-file=packages.report \
+| tee $(pwd)/packages.log;
+
