@@ -1,82 +1,8 @@
-
---------------------------------------------------------------------------------
- Installed: present = 1 -> 1
-   Package: ansible
---------------------------------------------------------------------------------
-
-Reading package lists...
-Building dependency tree...
-Reading state information...
-ansible is already the newest version (2.10.7+merged+base+2.10.8+dfsg-1).
-The following packages were automatically installed and are no longer required:
-  libflashrom1 libftdi1-2
-Use 'sudo apt autoremove' to remove them.
-0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
-
-{
-    "Package": "ansible",
-    "Version": "2.10.7+merged+base+2.10.8+dfsg-1",
-    "Priority": "optional",
-    "Section": "universe/admin",
-    "Origin": "Ubuntu",
-    "Original-Maintainer": "Lee Garrett <debian@rocketjump.eu>",
-    "Installed-Size": "204 MB",
-    "Depends": [
-        "python3-cryptography",
-        "python3-jinja2",
-        "python3-packaging",
-        "python3-yaml",
-        "python3:any",
-        "openssh-client | python3-paramiko (>= 2.6.0)",
-        "python3-pycryptodome",
-        "python3-distutils",
-        "python3-dnspython",
-        "python3-httplib2",
-        "python3-netaddr"
-    ],
-    "Recommends": [
-        "python3-argcomplete",
-        "python3-jmespath",
-        "python3-kerberos",
-        "python3-libcloud",
-        "python3-selinux",
-        "python3-winrm",
-        "python3-xmltodict"
-    ],
-    "Suggests": [
-        "cowsay",
-        "sshpass"
-    ],
-    "Breaks": [
-        "ansible-base (<= 2.10.5+dfsg-2)"
-    ],
-    "Replaces": [
-        "ansible-base (<= 2.10.5+dfsg-2)"
-    ],
-    "Homepage": "https://www.ansible.com",
-    "Download-Size": "17.5 MB",
-    "APT-Manual-Installed": "yes",
-    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
-    "Apropos": [
-        "ansible (1)          - Define and run a single task 'playbook' against a set of hosts",
-        "ansible-config (1)   - View ansible configuration.",
-        "ansible-console (1)  - REPL console for executing Ansible tasks.",
-        "ansible-playbook (1) - Runs Ansible playbooks, executing the defined tasks on the targeted hosts.",
-        "ansible-vault (1)    - encryption/decryption utility for Ansible data files"
-    ],
-    "Listing": [
-        "ansible/jammy,jammy,now 2.10.7+merged+base+2.10.8+dfsg-1 all [installed]"
-    ],
-    "Timestamp": {
-        "date": "2022-12-31",
-        "time": "01:57:10"
-    }
-}
 Name  Version  Rev  Tracking       Publisher     Notes
 atom  1.60.0   286  latest/stable  snapcrafters  classic
 
 --------------------------------------------------------------------------------
- Installed: present = 2 -> 2
+ Installed: present = 1 -> 1
    Package: atom
 --------------------------------------------------------------------------------
 
@@ -108,7 +34,7 @@ Name               Version   Rev  Tracking       Publisher    Notes
 pycharm-community  2022.3.1  312  latest/stable  jetbrains**  classic
 
 --------------------------------------------------------------------------------
- Installed: present = 3 -> 3
+ Installed: present = 2 -> 2
    Package: pycharm-community
 --------------------------------------------------------------------------------
 
@@ -208,7 +134,7 @@ Name     Version  Rev  Tracking    Publisher      Notes
 postman  10.1.2   185  v10/stable  postman-inc**  -
 
 --------------------------------------------------------------------------------
- Installed: present = 4 -> 4
+ Installed: present = 3 -> 3
    Package: postman
 --------------------------------------------------------------------------------
 
@@ -266,7 +192,7 @@ Name        Version  Rev  Tracking       Publisher               Notes
 powershell  7.3.1    226  latest/stable  microsoft-powershell**  classic
 
 --------------------------------------------------------------------------------
- Installed: present = 5 -> 5
+ Installed: present = 4 -> 4
    Package: powershell
 --------------------------------------------------------------------------------
 
@@ -306,6 +232,80 @@ channels:
   lts/beta:         7.2.8 2022-12-13 (227) 71MB classic
   lts/edge:         7.2.8 2022-12-13 (227) 71MB classic
 installed:          7.3.1            (226) 74MB classic
+
+--------------------------------------------------------------------------------
+ Installed: present = 5 -> 5
+   Package: ansible
+--------------------------------------------------------------------------------
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+ansible is already the newest version (2.10.7+merged+base+2.10.8+dfsg-1).
+The following packages were automatically installed and are no longer required:
+  libflashrom1 libftdi1-2
+Use 'sudo apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+{
+    "Package": "ansible",
+    "Version": "2.10.7+merged+base+2.10.8+dfsg-1",
+    "Priority": "optional",
+    "Section": "universe/admin",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Lee Garrett <debian@rocketjump.eu>",
+    "Installed-Size": "204 MB",
+    "Depends": [
+        "python3-cryptography",
+        "python3-jinja2",
+        "python3-packaging",
+        "python3-yaml",
+        "python3:any",
+        "openssh-client | python3-paramiko (>= 2.6.0)",
+        "python3-pycryptodome",
+        "python3-distutils",
+        "python3-dnspython",
+        "python3-httplib2",
+        "python3-netaddr"
+    ],
+    "Recommends": [
+        "python3-argcomplete",
+        "python3-jmespath",
+        "python3-kerberos",
+        "python3-libcloud",
+        "python3-selinux",
+        "python3-winrm",
+        "python3-xmltodict"
+    ],
+    "Suggests": [
+        "cowsay",
+        "sshpass"
+    ],
+    "Breaks": [
+        "ansible-base (<= 2.10.5+dfsg-2)"
+    ],
+    "Replaces": [
+        "ansible-base (<= 2.10.5+dfsg-2)"
+    ],
+    "Homepage": "https://www.ansible.com",
+    "Download-Size": "17.5 MB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "ansible (1)          - Define and run a single task 'playbook' against a set of hosts",
+        "ansible-config (1)   - View ansible configuration.",
+        "ansible-console (1)  - REPL console for executing Ansible tasks.",
+        "ansible-playbook (1) - Runs Ansible playbooks, executing the defined tasks on the targeted hosts.",
+        "ansible-vault (1)    - encryption/decryption utility for Ansible data files"
+    ],
+    "Listing": [
+        "ansible/jammy,jammy,now 2.10.7+merged+base+2.10.8+dfsg-1 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2022-12-31",
+        "time": "01:57:10"
+    }
+}
 
 --------------------------------------------------------------------------------
  Installed: present = 6 -> 6
