@@ -82,10 +82,9 @@ function packages_ubuntu () {
               xcommand="${xitem%%\:*}";
               installer="${xcommand%\ *}";
               package="${xitem##*\:}";
-              # echo -e "Package: ${package}";
         else  installer='apt';
               xcommand="${installer}";
-	      package="${xitem}";
+	            package="${xitem}";
       fi;
       ## Identifying if package is already installed.
       available='false';
