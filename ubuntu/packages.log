@@ -1,67 +1,7 @@
-Name  Version  Rev  Tracking       Publisher     Notes
-atom  1.60.0   286  latest/stable  snapcrafters  classic
 
 --------------------------------------------------------------------------------
  Installed: present = 1 -> 1
-   Package: 
---------------------------------------------------------------------------------
-
-Reading package lists...
-Building dependency tree...
-Reading state information...
-
-Name               Version   Rev  Tracking       Publisher    Notes
-pycharm-community  2022.3.1  312  latest/stable  jetbrains**  classic
-
---------------------------------------------------------------------------------
- Installed: present = 2 -> 2
-   Package: 
---------------------------------------------------------------------------------
-
-Reading package lists...
-Building dependency tree...
-Reading state information...
-
-No apt package "pycharm-community", but there is a snap with that name.
-Try "snap install pycharm-community"
-
-
-Name     Version  Rev  Tracking    Publisher      Notes
-postman  10.1.2   185  v10/stable  postman-inc**  -
-
---------------------------------------------------------------------------------
- Installed: present = 3 -> 3
-   Package: 
---------------------------------------------------------------------------------
-
-Reading package lists...
-Building dependency tree...
-Reading state information...
-
-No apt package "postman", but there is a snap with that name.
-Try "snap install postman"
-
-
-Name        Version  Rev  Tracking       Publisher               Notes
-powershell  7.3.1    226  latest/stable  microsoft-powershell**  classic
-
---------------------------------------------------------------------------------
- Installed: present = 4 -> 4
-   Package: 
---------------------------------------------------------------------------------
-
-Reading package lists...
-Building dependency tree...
-Reading state information...
-
-No apt package "powershell", but there is a snap with that name.
-Try "snap install powershell"
-
-
-
---------------------------------------------------------------------------------
- Installed: present = 5 -> 5
-   Package: ansible/jammy,jammy,now 2.10.7+merged+base+2.10.8+dfsg-1 all [installed]
+   Package: ansible
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -132,10 +72,244 @@ Use 'sudo apt autoremove' to remove them.
         "time": "01:57:10"
     }
 }
+Name  Version  Rev  Tracking       Publisher     Notes
+atom  1.60.0   286  latest/stable  snapcrafters  classic
+
+--------------------------------------------------------------------------------
+ Installed: present = 2 -> 2
+   Package: atom
+--------------------------------------------------------------------------------
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+name:      atom
+summary:   A hackable text editor for the 21st Century.
+publisher: Snapcrafters
+store-url: https://snapcraft.io/atom
+contact:   https://github.com/snapcrafters/atom/issues
+license:   unset
+description: |
+  Atom is a free and open source text editor that is modern,
+  approachable, and hackable to the core.
+commands:
+  - atom.apm
+  - atom
+snap-id:      Lf1MF6tizzusVuA6l13ETyH5VDXxwA0D
+tracking:     latest/stable
+refresh-date: yesterday at 01:01 MST
+channels:
+  latest/stable:    1.60.0 2022-07-02 (286) 298MB classic
+  latest/candidate: ^                             
+  latest/beta:      1.60.0 2022-07-02 (286) 298MB classic
+  latest/edge:      1.60.0 2022-06-04 (286) 298MB classic
+installed:          1.60.0            (286) 298MB classic
+Name               Version   Rev  Tracking       Publisher    Notes
+pycharm-community  2022.3.1  312  latest/stable  jetbrains**  classic
+
+--------------------------------------------------------------------------------
+ Installed: present = 3 -> 3
+   Package: pycharm-community
+--------------------------------------------------------------------------------
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+
+No apt package "pycharm-community", but there is a snap with that name.
+Try "snap install pycharm-community"
+
+name:      pycharm-community
+summary:   PyCharm Community Edition
+publisher: jetbrains**
+store-url: https://snapcraft.io/pycharm-community
+contact:   https://www.jetbrains.com/pycharm/documentation/
+license:   unset
+description: |
+  Python IDE for professional developers. Save time while PyCharm takes care
+  of the routine. Focus on bigger things and embrace the keyboard-centric
+  approach to get the most of PyCharm’s many productivity features.
+commands:
+  - pycharm-community
+snap-id:      Qo9GiW9eyzgN1tXmWpQ9gdstdFsj4K7E
+tracking:     latest/stable
+refresh-date: 2 days ago, at 21:45 MST
+channels:
+  latest/stable:    2022.3.1 2022-12-27 (312) 631MB classic
+  latest/candidate: 2022.3.1 2022-12-27 (312) 631MB classic
+  latest/beta:      2022.3.1 2022-12-27 (312) 631MB classic
+  latest/edge:      2022.3.1 2022-12-27 (312) 631MB classic
+  2022.3/stable:    2022.3.1 2022-12-27 (312) 631MB classic
+  2022.3/candidate: 2022.3.1 2022-12-27 (312) 631MB classic
+  2022.3/beta:      2022.3.1 2022-12-27 (312) 631MB classic
+  2022.3/edge:      2022.3.1 2022-12-27 (312) 631MB classic
+  2022.2/stable:    2022.2.4 2022-11-17 (307) 587MB classic
+  2022.2/candidate: 2022.2.4 2022-11-17 (307) 587MB classic
+  2022.2/beta:      2022.2.4 2022-11-17 (307) 587MB classic
+  2022.2/edge:      2022.2.4 2022-11-17 (307) 587MB classic
+  2022.1/stable:    2022.1.4 2022-07-21 (291) 592MB classic
+  2022.1/candidate: 2022.1.4 2022-07-21 (291) 592MB classic
+  2022.1/beta:      2022.1.4 2022-07-21 (291) 592MB classic
+  2022.1/edge:      2022.1.4 2022-07-21 (291) 592MB classic
+  2021.3/stable:    2021.3.3 2022-03-17 (274) 553MB classic
+  2021.3/candidate: 2021.3.3 2022-03-17 (274) 553MB classic
+  2021.3/beta:      2021.3.3 2022-03-17 (274) 553MB classic
+  2021.3/edge:      2021.3.3 2022-03-17 (274) 553MB classic
+  2021.2/stable:    2021.2.4 2021-12-22 (264) 452MB classic
+  2021.2/candidate: 2021.2.4 2021-12-22 (264) 452MB classic
+  2021.2/beta:      2021.2.4 2021-12-22 (264) 452MB classic
+  2021.2/edge:      2021.2.4 2021-12-22 (264) 452MB classic
+  2021.1/stable:    2021.1.3 2021-06-30 (244) 430MB classic
+  2021.1/candidate: 2021.1.3 2021-06-30 (244) 430MB classic
+  2021.1/beta:      2021.1.3 2021-06-30 (244) 430MB classic
+  2021.1/edge:      2021.1.3 2021-06-30 (244) 430MB classic
+  2020.3/stable:    2020.3.5 2021-03-26 (233) 446MB classic
+  2020.3/candidate: 2020.3.5 2021-03-26 (233) 446MB classic
+  2020.3/beta:      2020.3.5 2021-03-26 (233) 446MB classic
+  2020.3/edge:      2020.3.5 2021-03-26 (233) 446MB classic
+  2020.2/stable:    2020.2.5 2020-12-02 (221) 371MB classic
+  2020.2/candidate: 2020.2.5 2020-12-02 (221) 371MB classic
+  2020.2/beta:      2020.2.5 2020-12-02 (221) 371MB classic
+  2020.2/edge:      2020.2.5 2020-12-02 (221) 371MB classic
+  2020.1/stable:    2020.1.5 2020-12-02 (220) 356MB classic
+  2020.1/candidate: 2020.1.5 2020-12-02 (220) 356MB classic
+  2020.1/beta:      2020.1.5 2020-12-02 (220) 356MB classic
+  2020.1/edge:      2020.1.5 2020-12-02 (220) 356MB classic
+  2019.3/stable:    2019.3.5 2020-05-08 (195) 364MB classic
+  2019.3/candidate: ^                               
+  2019.3/beta:      ^                               
+  2019.3/edge:      ^                               
+  2019.2/stable:    2019.2.6 2020-02-10 (180) 339MB classic
+  2019.2/candidate: ^                               
+  2019.2/beta:      ^                               
+  2019.2/edge:      ^                               
+  2019.1/stable:    2019.1.4 2019-07-30 (144) 311MB classic
+  2019.1/candidate: ^                               
+  2019.1/beta:      ^                               
+  2019.1/edge:      ^                               
+  2018.3/stable:    2018.3.7 2019-07-10 (138) 284MB classic
+  2018.3/candidate: ^                               
+  2018.3/beta:      ^                               
+  2018.3/edge:      ^                               
+  2018.2/stable:    2018.2.8 2019-04-12 (124) 242MB classic
+  2018.2/candidate: ^                               
+  2018.2/beta:      ^                               
+  2018.2/edge:      ^                               
+  2018.1/stable:    2018.1.6 2018-11-15  (96) 248MB classic
+  2018.1/candidate: ^                               
+  2018.1/beta:      ^                               
+  2018.1/edge:      ^                               
+  2017.3/stable:    2017.3.7 2018-11-15  (97) 279MB classic
+  2017.3/candidate: ^                               
+  2017.3/beta:      ^                               
+  2017.3/edge:      ^                               
+installed:          2022.3.1            (312) 631MB classic
+Name     Version  Rev  Tracking    Publisher      Notes
+postman  10.1.2   185  v10/stable  postman-inc**  -
+
+--------------------------------------------------------------------------------
+ Installed: present = 4 -> 4
+   Package: postman
+--------------------------------------------------------------------------------
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+
+No apt package "postman", but there is a snap with that name.
+Try "snap install postman"
+
+name:      postman
+summary:   API Development Environment
+publisher: Postman, Inc. (postman-inc**)
+store-url: https://snapcraft.io/postman
+contact:   https://www.postman.com/contact-us
+license:   unset
+description: |
+  Postman is the complete toolchain for API developers, used by more than 3
+  million developers and 30000 companies worldwide. Postman makes working
+  with APIs faster and easier by supporting developers at every stage of
+  their workflow, and is available for Mac OS X, Windows, Linux and Chrome
+  users.
+commands:
+  - postman
+snap-id:      fFcOtEEF4EdyYb95IUE5Isy28tICYMLf
+tracking:     v10/stable
+refresh-date: yesterday at 01:14 MST
+channels:
+  v10/stable:       10.1.2 2022-11-08 (185) 205MB -
+  v10/candidate:    ^                             
+  v10/beta:         ^                             
+  v10/edge:         10.1.2 2022-11-08 (185) 205MB -
+  latest/stable:    7.36.5 2021-02-22 (133) 183MB -
+  latest/candidate: 7.36.5 2021-02-22 (133) 183MB -
+  latest/beta:      7.36.5 2021-02-22 (133) 183MB -
+  latest/edge:      8.5.0  2021-05-21 (139) 198MB -
+  v9/stable:        9.31.0 2022-09-13 (184) 197MB -
+  v9/candidate:     ^                             
+  v9/beta:          ^                             
+  v9/edge:          9.31.0 2022-09-13 (184) 197MB -
+  v8/stable:        8.12.5 2021-10-28 (149) 176MB -
+  v8/candidate:     ^                             
+  v8/beta:          ^                             
+  v8/edge:          8.12.5 2021-10-28 (149) 176MB -
+  v7/stable:        7.36.7 2021-11-25 (152) 183MB -
+  v7/candidate:     ^                             
+  v7/beta:          ^                             
+  v7/edge:          7.36.7 2021-11-25 (152) 183MB -
+  v6/stable:        6.7.6  2019-10-23  (95) 138MB -
+  v6/candidate:     ^                             
+  v6/beta:          ^                             
+  v6/edge:          ^                             
+installed:          10.1.2            (185) 205MB -
+Name        Version  Rev  Tracking       Publisher               Notes
+powershell  7.3.1    226  latest/stable  microsoft-powershell**  classic
+
+--------------------------------------------------------------------------------
+ Installed: present = 5 -> 5
+   Package: powershell
+--------------------------------------------------------------------------------
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+
+No apt package "powershell", but there is a snap with that name.
+Try "snap install powershell"
+
+name:      powershell
+summary:   PowerShell for every system!
+publisher: Microsoft PowerShell**
+store-url: https://snapcraft.io/powershell
+contact:   https://github.com/powershell/powershell
+license:   unset
+description: |
+  PowerShell is an automation and configuration management platform.
+  It consists of a cross-platform (Windows, Linux, and macOS)
+  command-line shell and associated scripting language.
+  
+  See
+  https://docs.microsoft.com/powershell/scripting/powershell-support-lifecycl
+  e for support details.
+commands:
+  - powershell
+snap-id:      JSNnoJl3EqkMuWoy5Dgq8PMqZ0uNcpie
+tracking:     latest/stable
+refresh-date: yesterday at 01:40 MST
+channels:
+  latest/stable:    7.3.1 2022-12-13 (226) 74MB classic
+  latest/candidate: 7.3.1 2022-12-13 (226) 74MB classic
+  latest/beta:      7.3.1 2022-12-13 (226) 74MB classic
+  latest/edge:      7.3.1 2022-12-13 (226) 74MB classic
+  lts/stable:       7.2.8 2022-12-13 (227) 71MB classic
+  lts/candidate:    7.2.8 2022-12-13 (227) 71MB classic
+  lts/beta:         7.2.8 2022-12-13 (227) 71MB classic
+  lts/edge:         7.2.8 2022-12-13 (227) 71MB classic
+installed:          7.3.1            (226) 74MB classic
 
 --------------------------------------------------------------------------------
  Installed: present = 6 -> 6
-   Package: apt-file/jammy,jammy,now 3.2.2 all [installed]
+   Package: apt-file
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -184,7 +358,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 7 -> 7
-   Package: aptitude/jammy,now 0.8.13-3ubuntu1 amd64 [installed]
+   Package: aptitude
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -252,7 +426,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 8 -> 8
-   Package: arp-scan/jammy,now 1.9.7-2 amd64 [installed]
+   Package: arp-scan
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -301,7 +475,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 9 -> 9
-   Package: autoconf/jammy,jammy,now 2.71-2 all [installed]
+   Package: autoconf
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -359,7 +533,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 10 -> 10
-   Package: bat/jammy-updates,jammy-security,now 0.19.0-1ubuntu0.1 amd64 [installed]
+   Package: bat
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -494,7 +668,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 11 -> 11
-   Package: bmon/jammy,now 1:4.0-8 amd64 [installed]
+   Package: bmon
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -540,7 +714,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 12 -> 12
-   Package: build-essential/jammy,now 12.9ubuntu3 amd64 [installed]
+   Package: build-essential
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -589,7 +763,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 13 -> 13
-   Package: bwctl-client/jammy,now 1.5.4+dfsg1-1build1 amd64 [installed]
+   Package: bwctl-client
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -632,7 +806,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 14 -> 14
-   Package: bwctl-server/jammy,now 1.5.4+dfsg1-1build1 amd64 [installed]
+   Package: bwctl-server
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -679,7 +853,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 15 -> 15
-   Package: cloc/jammy,jammy,now 1.90-1 all [installed]
+   Package: cloc
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -723,7 +897,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 16 -> 16
-   Package: code/stable,now 1.74.2-1671533413 amd64 [installed]
+   Package: code
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -834,7 +1008,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 17 -> 17
-   Package: coreutils/jammy,now 8.32-4.1ubuntu1 amd64 [installed]
+   Package: coreutils
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -883,7 +1057,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 18 -> 18
-   Package: curl/jammy-updates,jammy-security,now 7.81.0-1ubuntu1.6 amd64 [installed]
+   Package: curl
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -937,7 +1111,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 19 -> 19
-   Package: dos2unix/jammy,now 7.4.2-2 amd64 [installed]
+   Package: dos2unix
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -978,7 +1152,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 20 -> 20
-   Package: ethtool/jammy,now 1:5.16-1 amd64 [installed]
+   Package: ethtool
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1028,7 +1202,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 21 -> 21
-   Package: fping/jammy,now 5.1-1 amd64 [installed]
+   Package: fping
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1075,7 +1249,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 22 -> 22
-   Package: gh/jammy,now 2.4.0+dfsg1-2 amd64 [installed]
+   Package: gh
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1181,7 +1355,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 23 -> 23
-   Package: git/jammy-updates,jammy-security,now 1:2.34.1-1ubuntu1.5 amd64 [installed]
+   Package: git
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1321,7 +1495,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 24 -> 24
-   Package: gnupg/jammy-updates,jammy-updates,jammy-security,jammy-security,now 2.2.27-3ubuntu2.1 all [installed]
+   Package: gnupg
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1430,7 +1604,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 25 -> 25
-   Package: golang/jammy,now 2:1.18~0ubuntu2 amd64 [installed]
+   Package: golang
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1473,7 +1647,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 26 -> 26
-   Package: grepcidr/jammy,now 2.0-2 amd64 [installed]
+   Package: grepcidr
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1514,7 +1688,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 27 -> 27
-   Package: hping3/jammy,now 3.a2.ds2-10 amd64 [installed]
+   Package: hping3
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1557,7 +1731,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 28 -> 28
-   Package: htop/jammy,now 3.0.5-7build2 amd64 [installed]
+   Package: htop
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1618,7 +1792,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 29 -> 29
-   Package: htop/jammy,now 3.0.5-7build2 amd64 [installed]
+   Package: htop
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1679,7 +1853,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 30 -> 30
-   Package: ifstat/jammy,now 1.1-8.2 amd64 [installed]
+   Package: ifstat
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1720,7 +1894,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 31 -> 31
-   Package: iftop/jammy,now 1.0~pre4-7 amd64 [installed]
+   Package: iftop
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1764,7 +1938,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 32 -> 32
-   Package: ipcalc/jammy,jammy,now 0.42-2 all [installed]
+   Package: ipcalc
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1805,7 +1979,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 33 -> 33
-   Package: iperf3/jammy,now 3.9-1build1 amd64 [installed]
+   Package: iperf3
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1847,7 +2021,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 34 -> 34
-   Package: iproute2/jammy,now 5.15.0-1ubuntu2 amd64 [installed]
+   Package: iproute2
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1917,7 +2091,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 35 -> 35
-   Package: iptraf-ng/jammy,now 1:1.2.1-1build2 amd64 [installed]
+   Package: iptraf-ng
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -1963,7 +2137,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 36 -> 36
-   Package: jq/jammy,now 1.6-2.1ubuntu3 amd64 [installed]
+   Package: jq
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2006,7 +2180,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 37 -> 37
-   Package: libssl-dev/jammy-updates,jammy-security,now 3.0.2-0ubuntu1.7 amd64 [installed]
+   Package: libssl-dev
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2053,7 +2227,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 38 -> 38
-   Package: lynx/jammy,now 2.9.0dev.10-1 amd64 [installed]
+   Package: lynx
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2121,7 +2295,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 39 -> 39
-   Package: mc/jammy,now 3:4.8.27-1 amd64 [installed]
+   Package: mc
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2200,7 +2374,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 40 -> 40
-   Package: mtr/jammy,now 0.95-1 amd64 [installed]
+   Package: mtr
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2254,7 +2428,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 41 -> 41
-   Package: netcat/jammy,jammy,now 1.218-4ubuntu1 all [installed]
+   Package: netcat
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2295,7 +2469,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 42 -> 42
-   Package: net-tools/jammy,now 1.60+git20181103.0eebece-1ubuntu5 amd64 [installed]
+   Package: net-tools
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2339,7 +2513,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 43 -> 43
-   Package: ngrep/jammy,now 1.47+ds1-5 amd64 [installed]
+   Package: ngrep
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2383,7 +2557,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 44 -> 44
-   Package: nikto/jammy,jammy,now 1:2.1.5-3.1 all [installed]
+   Package: nikto
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2430,7 +2604,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 45 -> 45
-   Package: nodejs/jammy,now 12.22.9~dfsg-1ubuntu3 amd64 [installed]
+   Package: nodejs
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2486,7 +2660,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 46 -> 46
-   Package: nload/jammy,now 0.7.4-2build3 amd64 [installed]
+   Package: nload
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2531,7 +2705,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 47 -> 47
-   Package: nmap/jammy,now 7.91+dfsg1+really7.80+dfsg1-2build1 amd64 [installed]
+   Package: nmap
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2587,7 +2761,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 48 -> 48
-   Package: npm/jammy,jammy,now 8.5.1~ds-1 all [installed]
+   Package: npm
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2733,7 +2907,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 49 -> 49
-   Package: openssh-server/jammy,now 1:8.9p1-3 amd64 [installed]
+   Package: openssh-server
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2827,7 +3001,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 50 -> 50
-   Package: parallel/jammy,jammy,now 20210822+ds-2 all [installed]
+   Package: parallel
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2891,7 +3065,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 51 -> 51
-   Package: pgpdump/jammy,now 0.34-1 amd64 [installed]
+   Package: pgpdump
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -2934,7 +3108,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 52 -> 52
-   Package: procps/jammy,now 2:3.3.17-6ubuntu2 amd64 [installed,automatic]
+   Package: procps
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3006,7 +3180,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 53 -> 53
-   Package: psmisc/jammy,now 23.4-2build3 amd64 [installed]
+   Package: psmisc
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3056,7 +3230,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 54 -> 54
-   Package: python3-venv/jammy-updates,now 3.10.6-1~22.04 amd64 [installed]
+   Package: python3-venv
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3099,7 +3273,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 55 -> 55
-   Package: python-is-python3/jammy,jammy,now 3.9.2-2 all [installed]
+   Package: python-is-python3
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3114,7 +3288,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 56 -> 56
-   Package: screen/jammy,now 4.9.0-1 amd64 [installed]
+   Package: screen
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3182,7 +3356,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 57 -> 57
-   Package: sipcalc/jammy,now 1.1.6-1 amd64 [installed]
+   Package: sipcalc
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3223,7 +3397,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 58 -> 58
-   Package: socat/jammy,now 1.7.4.1-3ubuntu4 amd64 [installed]
+   Package: socat
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3272,7 +3446,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 59 -> 59
-   Package: speedometer/jammy,jammy,now 2.8-3 all [installed]
+   Package: speedometer
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3317,7 +3491,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 60 -> 60
-   Package: speedtest-cli/jammy,jammy,now 2.1.3-2 all [installed]
+   Package: speedtest-cli
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3360,7 +3534,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 61 -> 61
-   Package: stress/jammy,now 1.0.5-1 amd64 [installed]
+   Package: stress
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3401,7 +3575,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 62 -> 62
-   Package: sysvinit-utils/jammy,now 3.01-1ubuntu1 amd64 [installed,automatic]
+   Package: sysvinit-utils
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3447,7 +3621,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 63 -> 63
-   Package: telnet/jammy,now 0.17-44build1 amd64 [installed]
+   Package: telnet
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3502,7 +3676,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 64 -> 64
-   Package: tftpd-hpa/jammy,now 5.2+20150808-1.2build2 amd64 [installed]
+   Package: tftpd-hpa
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3561,7 +3735,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 65 -> 65
-   Package: tree/jammy,now 2.0.2-1 amd64 [installed]
+   Package: tree
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3649,7 +3823,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 66 -> 66
-   Package: unzip/jammy-updates,jammy-security,now 6.0-26ubuntu3.1 amd64 [installed,automatic]
+   Package: unzip
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3711,7 +3885,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 67 -> 67
-   Package: vim/jammy-updates,jammy-security,now 2:8.2.3995-1ubuntu2.1 amd64 [installed]
+   Package: vim
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3779,7 +3953,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 68 -> 68
-   Package: virtualenv/jammy,jammy,now 20.13.0+ds-2 all [installed]
+   Package: virtualenv
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3821,7 +3995,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 69 -> 69
-   Package: wget/jammy,now 1.21.2-2ubuntu1 amd64 [installed]
+   Package: wget
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3879,7 +4053,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 70 -> 70
-   Package: wireshark/jammy,now 3.6.2-2 amd64 [installed]
+   Package: wireshark
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3921,7 +4095,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 71 -> 71
-   Package: zenity/jammy-updates,now 3.42.1-0ubuntu1 amd64 [installed,automatic]
+   Package: zenity
 --------------------------------------------------------------------------------
 
 Reading package lists...
@@ -3981,7 +4155,7 @@ Use 'sudo apt autoremove' to remove them.
 
 --------------------------------------------------------------------------------
  Installed: present = 72 -> 72
-   Package: zip/jammy,now 3.0-12build2 amd64 [installed,automatic]
+   Package: zip
 --------------------------------------------------------------------------------
 
 Reading package lists...
