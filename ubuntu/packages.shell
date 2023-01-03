@@ -151,19 +151,22 @@ function packages_ubuntu () {
               touch "${absent_tools}/${package}.marked";
               if [[ ${install_packages} == 'true' ]]; then
                 ## Constructing package's folder (container)
-                installed_tools="${location}/install/${installer}";
+                installed_tools="${location}/present/${installer}";
                 mkdir -p "${installed_tools}";
                 ## Installing package depending on its manager (APT, SNAP)
+                local status=;
                 case "${installer}" in
                    apt ) sudo apt  install ${package} --yes \
                               | tee "${installed_tools}/${package}.log";
-                         ;;
+                         status=$?; ;;
                   snap ) sudo snap install ${package} ${installer/snap /} \
                               | tee "${installed_tools}/${package}.log";
-                         ;;
+                         status=$?; ;;
                 esac;
+                local result=;
+                [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
               fi;
-              ## Identifying if package is already installed.
+              ## Collecting Package Details (Specs)
               local status=;
               case "${installer}" in
                  apt ) package_status="$(
@@ -174,13 +177,27 @@ function packages_ubuntu () {
                 snap ) package_status="$(
                           snap list ${package} | egrep -w "^${package}.*"
                         )";
+                       status=$?; ;;
               esac;
               local result=;
               [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
         else  ## Constructing package's folder (container)
               present_tools="${location}/default/${installer}";
               mkdir -p "${present_tools}";
-              touch "${present_tools}/${package}.default";
+              ## Identifying if package is already installed
+              local status=;
+              case "${installer}" in
+                 apt ) package_details="$(
+                           apt show ${package} 2>/dev/null | tee "${present_tools}/${package}.details"
+                         )";
+                       status=$?; ;;
+                snap ) package_details="$(
+                           snap info ${package} | tee "${present_tools}/${package}.details"
+                         )";
+                       status=$?; ;;
+              esac;
+              local result=;
+              [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
       fi;
       echo -e "\n--------------------------------------------------------------------------------";
       echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
