@@ -22,6 +22,7 @@ declare -a hashicorp=(
 ## "pycharm-community:snap --classic"
 ## "postman:snap"
 ## "powershell:snap --classic"
+## "code:snap"
 
 ## Requires user input.
 ## Note: It's not a suitable candidate for automatic deployment.
@@ -40,7 +41,6 @@ declare -a packages=(
     bwctl-client:apt
     bwctl-server:apt
     cloc:apt
-    code:apt
     coreutils:apt
     curl:apt
     dos2unix:apt
@@ -97,4 +97,3 @@ declare -a packages=(
     zenity:apt
     zip:apt
   );
-  
