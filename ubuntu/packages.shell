@@ -155,7 +155,7 @@ function packages_ubuntu () {
               # echo -e "${package_status}" > "${absent_tools}/${package}.marked";
               if [[ ${install_packages} == 'true' ]]; then
                 ## Constructing package's folder (container)
-                installed_tools="${location}/present/${installer}";
+                installed_tools="${location}/installed/${installer}";
                 mkdir -p "${installed_tools}";
                 ## Installing package depending on its manager (APT, SNAP)
                 local status=;
@@ -211,7 +211,7 @@ function packages_ubuntu () {
       ## Upgrading package only if it's already installed.
       sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
       ## Constructing package's folder (container)
-      xpath="${location}/installed/${installer}";
+      xpath="${location}/present/${installer}";
       mkdir -p "${xpath}";
       case "${installer}" in
          apt ) ## Processing APT-Installed Packages:
