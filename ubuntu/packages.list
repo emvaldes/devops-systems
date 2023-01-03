@@ -17,12 +17,18 @@ declare -a hashicorp=(
     waypoint
   );
 
+## Disabling until SNAP is integrated.
+## "snap --classic:atom"
+## "snap --classic:pycharm-community"
+## "snap:postman"
+## "snap --classic:powershell"
+
+## Requires user input.
+## It's not a suitable candidate for automatic deployment.
+
+    apt:wireshark
 ## Inpsecting these already installed devnetops tools
 declare -a packages=(
-    "snap --classic:atom"
-    "snap --classic:pycharm-community"
-    "snap:postman"
-    "snap --classic:powershell"
     apt:ansible
     apt:apt-file
     apt:aptitude
@@ -88,7 +94,6 @@ declare -a packages=(
     apt:vim
     apt:virtualenv
     apt:wget
-    apt:wireshark
     apt:zenity
     apt:zip
   );
