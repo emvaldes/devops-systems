@@ -200,18 +200,22 @@ function packages_ubuntu () {
               #   )";
               # ## Processing Pre-Installed Packages
               for xitem in ${preinstalled[@]}; do
+                ## echo -e "Pre-Installed: ${xitem} -> ${package}";
                 [[ ${xitem} == ${package} ]] && {
                     xpath="${default_packages}/native";
                     mkdir -p "${xpath}" 2>/dev/null ;
-                    skip_report='true'; break;
+                    ## skip_report='true';
+                    break;
                   };
               done;
               ## Processing Post-Installed Packages
               for xitem in ${postinstalled[@]}; do
+                ## echo -e "Post-Installed: ${xitem} -> ${package}";
                 [[ ${xitem} == ${package} ]] && {
                     xpath="${default_packages}/presets";
                     mkdir -p "${xpath}" 2>/dev/null ;
-                    skip_report='true'; break;
+                    ## skip_report='true';
+                    break;
                   };
               done;
               # ## Identifying if package is already installed
