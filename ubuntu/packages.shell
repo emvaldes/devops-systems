@@ -130,48 +130,47 @@ function packages_ubuntu () {
       esac;
       ## Configuring package status flag
       local result=;
-      [[ ${result} -eq 0 ]] && { result="present"; } || { result="absent"; }
+      [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
       ## Evaluating APT Installed output
       local xpath=;
       if [[ $result == 'absent' ]]; then
-              ## Package is not installed.
-              echo -e "\n--------------------------------------------------------------------------------";
-              echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-              echo -e "   Package: ${package}";
-              echo -e "--------------------------------------------------------------------------------\n";
-              echo -e "Warning: ${package} package is not installed! ";
-              echo -e "${package}" >> ${missing};
-              ## Constructing package's folder (container)
-              xpath="${location}/missing/${package}";
-              mkdir -p "${xpath}";
-              ## Installing package depending on its manager (APT, SNAP)
-              case "${installer}" in
-                  apt ) sudo apt  install ${package} --yes; ;;
-                snap* ) sudo snap install ${package} ${installer/snap /}; ;;
-              esac;
-        else  ## Inspecting installed package.
-              echo -e "\n--------------------------------------------------------------------------------";
-              echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-              echo -e "   Package: ${package}";
-              echo -e "--------------------------------------------------------------------------------\n";
-          	  # echo -e "${package}" >> ${installed};
-              ## Constructing package's folder (container)
-              xpath="${location}/installed/${installer}";
-          	  mkdir -p "${xpath}";
-              ## Upgrading package only if it's already installed.
-              sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
-              ## ---------------------------------------------------------------
-              ## Inspecting package based on its installer (APT, SNAP)
-              ## ---------------------------------------------------------------
-              case "${installer}" in
-                 apt ) ## Processing APT-Installed Packages:
-                       export2json --package="${package}" \
-                                   --location="${xpath}";
-                       ;;
-                snap ) snap info ${package} | tee "${xpath}/${package}.info";
-                       ;;
-              esac;
+        ## Package is not installed.
+        echo -e "\n--------------------------------------------------------------------------------";
+        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
+        echo -e "   Package: ${package}";
+        echo -e "--------------------------------------------------------------------------------\n";
+        echo -e "Warning: ${package} package is not installed! ";
+        echo -e "${package}" >> ${missing};
+        ## Constructing package's folder (container)
+        xpath="${location}/missing/${package}";
+        mkdir -p "${xpath}";
+        ## Installing package depending on its manager (APT, SNAP)
+        case "${installer}" in
+            apt ) sudo apt  install ${package} --yes; ;;
+          snap* ) sudo snap install ${package} ${installer/snap /}; ;;
+        esac;
       fi;
+      echo -e "\n--------------------------------------------------------------------------------";
+      echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
+      echo -e "   Package: ${package}";
+      echo -e "--------------------------------------------------------------------------------\n";
+      # echo -e "${package}" >> ${installed};
+      ## Constructing package's folder (container)
+      xpath="${location}/installed/${installer}";
+      mkdir -p "${xpath}";
+      ## Upgrading package only if it's already installed.
+      sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
+      ## ---------------------------------------------------------------
+      ## Inspecting package based on its installer (APT, SNAP)
+      ## ---------------------------------------------------------------
+      case "${installer}" in
+         apt ) ## Processing APT-Installed Packages:
+               export2json --package="${package}" \
+                           --location="${xpath}";
+               ;;
+        snap ) snap info ${package} | tee "${xpath}/${package}.info";
+               ;;
+      esac;
     done;
     ## Exporting Installed Packages JSON file.
     find ${location} -type f -name '*.json' \
