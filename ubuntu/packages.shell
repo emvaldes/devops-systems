@@ -26,7 +26,7 @@ function packages_ubuntu () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     echo -e;
-    timestamp="$(date +"%Y%m%d%H%M%S")";
+    timestamp="$(date +"%y%m%d%H%M%S")";
     dateset="${timestamp:0:6}";
     timeset="${timestamp:6:6}";
     ## Loading Modules (dependencies):
@@ -147,7 +147,7 @@ function packages_ubuntu () {
               echo -e "\n--------------------------------------------------------------------------------";
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
               echo -e "   Warning: ${package} package is not installed! ";
-              echo -e "--------------------------------------------------------------------------------\n";
+              echo -e "--------------------------------------------------------------------------------";
               echo -e "${package}" >> ${missing};
               ## Constructing package's folder (container)
               absent_tools="${location}/absent/${installer}";
