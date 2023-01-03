@@ -88,13 +88,13 @@ function packages_ubuntu () {
     ## Installed Packages Report-file
     local reportfile="${script_path}/${report_filename}";
     cat /dev/null > "${reportfile}";
-    local reports="$(
+    local reports="/tmp/$(
         lsb_release -d \
         | sed -e 's|\([[:blank:]]*\)||g' -e 's|Description:||' \
         | tr '[[:upper:]]' '[[:lower:]]'
       )";
     ## Configuring Package Instation Reports path
-    local location="/tmp/${reports}/${dateset}/${timeset}/packages";
+    local location="${reports}/${dateset}/${timeset}/packages";
     ## Constructing target location
     mkdir -p ${location};
     ## Identifying the Installed-Packages report file
