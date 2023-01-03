@@ -196,7 +196,7 @@ function packages_ubuntu () {
               mkdir -p "${default_packages}";
               local already_exists="$(
                   find ${default_packages}/* \
-                       -type f -name ${package}
+                       -type f -name ${package} 2>/dev/null
                 )";
               ## Processing Pre-Installed Packages
               [[ ${#already_exists} -gt 0 ]] && {
