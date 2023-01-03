@@ -1,5 +1,32 @@
 #!/usr/bin/env bash
 
+declare -a preinstalled=(
+    build-essential
+    coreutils
+    ethtool
+    gnupg
+    htop
+    iproute2
+    procps
+    psmisc
+    sysvinit-utils
+    telnet
+    unzip
+    wget
+    zenity
+    zip
+  );
+
+declare -a postinstalled=(
+    gh
+    git
+    jq
+    net-tools
+    openssh-server
+    python-is-python3
+    vim
+  };
+
 declare -a awscloud=(
     awscli
     aws-iam-authenticator
