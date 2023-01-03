@@ -144,6 +144,8 @@ function packages_ubuntu () {
       esac;
       local result=;
       [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
+      ## Skipping Processing blocks
+      local skip_report='false';
       ## Evaluating APT Installed output
       if [[ $result == 'absent' ]]; then
               ## Package is not installed.
@@ -191,19 +193,25 @@ function packages_ubuntu () {
         else  ## Processing Default Packages
               local default_packages="${reports}/default/${installer}";
               ## Processing Pre-Installed Packages
-              for xitem in ${preinstalled[@]}; do
-                [[ ${xitem} == ${package} ]] && {
-                    xpath="${default_packages}/pre-installed";
-                    break;
-                  };
-              done;
+              if [[ ! -e ${default_packages}/native/${package}.json ]]; then
+                for xitem in ${preinstalled[@]}; do
+                  [[ ${xitem} == ${package} ]] && {
+                      xpath="${default_packages}/native";
+                      mkdir -p "${xpath}" 2>/dev/null ;
+                      skip_report='true'; break;
+                    };
+                done;
+              fi;
               ## Processing Post-Installed Packages
-              for xitem in ${postinstalled[@]}; do
-                [[ ${xitem} == ${package} ]] && {
-                    xpath="${default_packages}/post-installed";
-                    break;
-                  };
-              done;
+              if [[ ! -e ${default_packages}/presets/${package}.json ]]; then
+                for xitem in ${postinstalled[@]}; do
+                  [[ ${xitem} == ${package} ]] && {
+                      xpath="${default_packages}/presets";
+                      mkdir -p "${xpath}" 2>/dev/null ;
+                      skip_report='true'; break;
+                    };
+                done;
+              fi;
               # ## Identifying if package is already installed
               # status=;
               # case "${installer}" in
