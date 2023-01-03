@@ -142,9 +142,8 @@ function packages_ubuntu () {
               ## Package is not installed.
               echo -e "\n--------------------------------------------------------------------------------";
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-              echo -e "   Package: ${package}";
+              echo -e "   Warning: ${package} package is not installed! ";
               echo -e "--------------------------------------------------------------------------------\n";
-              echo -e "Warning: ${package} package is not installed! ";
               echo -e "${package}" >> ${missing};
               ## Constructing package's folder (container)
               absent_tools="${location}/absent/${installer}";
@@ -199,7 +198,8 @@ function packages_ubuntu () {
   }; alias packages-ubuntu='packages_ubuntu';
 
 ## packages_ubuntu --pkgs-list='jq,openssh-server,python-is-python3' \
-packages_ubuntu --log-file=packages.log \
+packages_ubuntu --install \
+                --log-file=packages.log \
                 --json-file=packages.json \
                 --report-file=packages.report \
 | tee $(pwd)/packages.log;
