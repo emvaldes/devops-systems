@@ -193,6 +193,7 @@ function packages_ubuntu () {
               [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
         else  ## Processing Default Packages
               local default_packages="${reports}/default/${installer}";
+              mkdir -p "${default_packages}";
               local already_exists="$(
                   find ${default_packages}/* \
                        -type f -name ${package}
