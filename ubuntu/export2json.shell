@@ -59,6 +59,7 @@ function export2json () {
     headers+=("^Breaks: ");
     headers+=("^Build-Essential: ");
     headers+=("^Built-Using: ");
+    headers+=("^Cnf-Ignore-Commands: ");
     headers+=("^Conflicts: ");
     headers+=("^Depends: ");
     headers+=("^Download-Size: ");
@@ -93,6 +94,7 @@ function export2json () {
               -e 's|^\(Breaks\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
               -e 's|^\(Build-Essential\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
               -e 's|^\(Built-Using\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
+              -e 's|^\(Cnf-Ignore-Commands\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
               -e 's|^\(Conflicts\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
               -e 's|^\(Depends\)\(: \)\(.*\)$| "\1"\2[ "\3" ]|g' \
               -e 's|^\(Download-Size\)\(: \)\(.*\)$| "\1"\2"\3" |g' \
