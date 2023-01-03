@@ -248,3 +248,134 @@ wireshark -> 3.6.2-2
 zenity -> 3.42.1-0ubuntu1
 zip -> 3.0-12build2
 ```
+
+The structure looks like this:
+
+```
+ubuntu22.04.1lts/
+├── 230103
+│   └── 152352
+│       └── packages
+│           ├── installed
+│           │   └── apt
+│           │       ├── ansible.log
+│           │       ├── apt-file.log
+│           │       ├── aptitude.log
+│           │       ├── arp-scan.log
+│           │       ├── autoconf.log
+│           │       ├── bat.log
+│           │       ├── bmon.log
+│           │       ├── bwctl-client.log
+│           │       ├── bwctl-server.log
+│           │       ├── cloc.log
+│           │       ├── curl.log
+│           │       ├── dos2unix.log
+│           │       ├── fping.log
+│           │       ├── golang.log
+│           │       ├── grepcidr.log
+│           │       ├── hping3.log
+│           │       ├── htop.log
+│           │       ├── ifstat.log
+│           │       ├── iftop.log
+│           │       ├── ipcalc.log
+│           │       ├── iperf3.log
+│           │       ├── iptraf-ng.log
+│           │       ├── libssl-dev.log
+│           │       ├── lynx.log
+│           │       ├── mc.log
+│           │       ├── mtr.log
+│           │       ├── netcat.log
+│           │       ├── ngrep.log
+│           │       ├── nikto.log
+│           │       ├── nload.log
+│           │       ├── nmap.log
+│           │       ├── nodejs.log
+│           │       ├── npm.log
+│           │       ├── parallel.log
+│           │       ├── pgpdump.log
+│           │       ├── python3-venv.log
+│           │       ├── screen.log
+│           │       ├── sipcalc.log
+│           │       ├── socat.log
+│           │       ├── speedometer.log
+│           │       ├── speedtest-cli.log
+│           │       ├── stress.log
+│           │       ├── tftpd-hpa.log
+│           │       ├── tree.log
+│           │       └── virtualenv.log
+│           ├── missing.list
+│           └── present
+│               └── apt
+│                   ├── ansible.json
+│                   ├── apt-file.json
+│                   ├── aptitude.json
+│                   ├── arp-scan.json
+│                   ├── autoconf.json
+│                   ├── bat.json
+│                   ├── bmon.json
+│                   ├── bwctl-client.json
+│                   ├── bwctl-server.json
+│                   ├── cloc.json
+│                   ├── curl.json
+│                   ├── dos2unix.json
+│                   ├── fping.json
+│                   ├── golang.json
+│                   ├── grepcidr.json
+│                   ├── hping3.json
+│                   ├── htop.json
+│                   ├── ifstat.json
+│                   ├── iftop.json
+│                   ├── ipcalc.json
+│                   ├── iperf3.json
+│                   ├── iptraf-ng.json
+│                   ├── libssl-dev.json
+│                   ├── lynx.json
+│                   ├── mc.json
+│                   ├── mtr.json
+│                   ├── netcat.json
+│                   ├── ngrep.json
+│                   ├── nikto.json
+│                   ├── nload.json
+│                   ├── nmap.json
+│                   ├── nodejs.json
+│                   ├── npm.json
+│                   ├── parallel.json
+│                   ├── pgpdump.json
+│                   ├── python3-venv.json
+│                   ├── screen.json
+│                   ├── sipcalc.json
+│                   ├── socat.json
+│                   ├── speedometer.json
+│                   ├── speedtest-cli.json
+│                   ├── stress.json
+│                   ├── tftpd-hpa.json
+│                   ├── tree.json
+│                   └── virtualenv.json
+└── default
+    └── apt
+        ├── native
+        │   ├── build-essential.json
+        │   ├── coreutils.json
+        │   ├── ethtool.json
+        │   ├── gnupg.json
+        │   ├── htop.json
+        │   ├── iproute2.json
+        │   ├── procps.json
+        │   ├── psmisc.json
+        │   ├── sysvinit-utils.json
+        │   ├── telnet.json
+        │   ├── unzip.json
+        │   ├── wget.json
+        │   ├── zenity.json
+        │   └── zip.json
+        └── presets
+            ├── gh.json
+            ├── git.json
+            ├── jq.json
+            ├── net-tools.json
+            ├── openssh-server.json
+            ├── python-is-python3.json
+            └── vim.json
+
+12 directories, 112 files
+```
