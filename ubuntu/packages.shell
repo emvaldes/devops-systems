@@ -228,21 +228,24 @@ function packages_ubuntu () {
               # [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
               # [[ $result == 'present' ]] && mkdir -p "${default_packages}";
       fi;
-      echo -e "\n--------------------------------------------------------------------------------";
-      echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-      echo -e "   Package: ${package_status}";
-      echo -e "--------------------------------------------------------------------------------\n";
-      # echo -e "${package}" >> ${installed};
-      ## Upgrading package only if it's already installed.
-      sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
-      case "${installer}" in
-         apt ) ## Processing APT-Installed Packages:
-               export2json --package="${package}" \
-                           --location="${xpath}";
-               ;;
-        snap ) snap info ${package} | tee "${xpath}/${package}.info";
-               ;;
-      esac;
+      ## Determine if processing package-report
+      if [[ $skip_report == 'false' ]]; then
+        echo -e "\n--------------------------------------------------------------------------------";
+        echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
+        echo -e "   Package: ${package_status}";
+        echo -e "--------------------------------------------------------------------------------\n";
+        # echo -e "${package}" >> ${installed};
+        ## Upgrading package only if it's already installed.
+        sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
+        case "${installer}" in
+           apt ) ## Processing APT-Installed Packages:
+                 export2json --package="${package}" \
+                             --location="${xpath}";
+                 ;;
+          snap ) snap info ${package} | tee "${xpath}/${package}.info";
+                 ;;
+        esac;
+      fi;
     done;
     ## Exporting Installed Packages JSON file.
     find ${location} -type f -name '*.json' \
