@@ -192,26 +192,28 @@ function packages_ubuntu () {
               [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
         else  ## Processing Default Packages
               local default_packages="${reports}/default/${installer}";
+              local already_exists="$(
+                  find default_packages="${default_packages}/* \
+                       -type f -name ${package}
+                )";
               ## Processing Pre-Installed Packages
-              if [[ ! -e ${default_packages}/native/${package}.json ]]; then
-                for xitem in ${preinstalled[@]}; do
-                  [[ ${xitem} == ${package} ]] && {
-                      xpath="${default_packages}/native";
-                      mkdir -p "${xpath}" 2>/dev/null ;
-                      skip_report='true'; break;
-                    };
-                done;
-              fi;
-              ## Processing Post-Installed Packages
-              if [[ ! -e ${default_packages}/presets/${package}.json ]]; then
-                for xitem in ${postinstalled[@]}; do
-                  [[ ${xitem} == ${package} ]] && {
-                      xpath="${default_packages}/presets";
-                      mkdir -p "${xpath}" 2>/dev/null ;
-                      skip_report='true'; break;
-                    };
-                done;
-              fi;
+              [[ ${#already_exists} -gt 0 ]] && {
+                  for xitem in ${preinstalled[@]}; do
+                    [[ ${xitem} == ${package} ]] && {
+                        xpath="${default_packages}/native";
+                        mkdir -p "${xpath}" 2>/dev/null ;
+                        skip_report='true'; break;
+                      };
+                  done;
+                  ## Processing Post-Installed Packages
+                  for xitem in ${postinstalled[@]}; do
+                    [[ ${xitem} == ${package} ]] && {
+                        xpath="${default_packages}/presets";
+                        mkdir -p "${xpath}" 2>/dev/null ;
+                        skip_report='true'; break;
+                      };
+                  done;
+                };
               # ## Identifying if package is already installed
               # status=;
               # case "${installer}" in
@@ -228,15 +230,15 @@ function packages_ubuntu () {
               # [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
               # [[ $result == 'present' ]] && mkdir -p "${default_packages}";
       fi;
+      ## Upgrading package only if it's already installed.
+      sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
       ## Determine if processing package-report
-      if [[ $skip_report == 'false' ]]; then
+      if [[ ${skip_report} == 'false' ]]; then
         echo -e "\n--------------------------------------------------------------------------------";
         echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
         echo -e "   Package: ${package_status}";
         echo -e "--------------------------------------------------------------------------------\n";
         # echo -e "${package}" >> ${installed};
-        ## Upgrading package only if it's already installed.
-        sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
         case "${installer}" in
            apt ) ## Processing APT-Installed Packages:
                  export2json --package="${package}" \
