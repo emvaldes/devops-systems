@@ -150,9 +150,9 @@ function packages_ubuntu () {
               echo -e "--------------------------------------------------------------------------------";
               echo -e "${package}" >> ${missing};
               ## Constructing package's folder (container)
-              absent_tools="${location}/absent/${installer}";
-              mkdir -p "${absent_tools}";
-              echo -e "${package_status}" > "${absent_tools}/${package}.marked";
+              # absent_tools="${location}/absent/${installer}";
+              # mkdir -p "${absent_tools}";
+              # echo -e "${package_status}" > "${absent_tools}/${package}.marked";
               if [[ ${install_packages} == 'true' ]]; then
                 ## Constructing package's folder (container)
                 installed_tools="${location}/present/${installer}";
