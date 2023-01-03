@@ -25,7 +25,7 @@ declare -a postinstalled=(
     openssh-server
     python-is-python3
     vim
-  };
+  );
 
 declare -a awscloud=(
     awscli
