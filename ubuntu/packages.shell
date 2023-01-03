@@ -21,6 +21,7 @@ function packages_ubuntu () {
       [[ ${1#*\--} = "log-file" ]] && local log_filename="${2}";
       [[ ${1#*\--} = "json-file" ]] && local json_filename="${2}";
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
+      [[ ${1#*\--} = "install" ]] && local install_packages='true';
       [[ ${1#*\--} = "import" ]] && local import_filename="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
@@ -66,6 +67,10 @@ function packages_ubuntu () {
         report_filename='packages.report';
         echo -e "Using: '${report_filename}' default Report file! ";
       };
+    if [[ ${install_packages} == 'true' ]]; then
+            echo -e "\nInstalling: Marked Packages! ";
+      else  install_packages='false';
+    fi;
     if [[ ${#import_filename} -gt 0 ]]; then
             echo -e "\nImporting: '${import_filename}' custom file! ";
             import_report='true';
@@ -134,35 +139,46 @@ function packages_ubuntu () {
       ## Evaluating APT Installed output
       local xpath=;
       if [[ $result == 'absent' ]]; then
-        ## Package is not installed.
-        echo -e "\n--------------------------------------------------------------------------------";
-        echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-        echo -e "   Package: ${package}";
-        echo -e "--------------------------------------------------------------------------------\n";
-        echo -e "Warning: ${package} package is not installed! ";
-        echo -e "${package}" >> ${missing};
-        ## Constructing package's folder (container)
-        xpath="${location}/missing/${package}";
-        mkdir -p "${xpath}";
-        ## Installing package depending on its manager (APT, SNAP)
-        case "${installer}" in
-            apt ) sudo apt  install ${package} --yes; ;;
-          snap* ) sudo snap install ${package} ${installer/snap /}; ;;
-        esac;
+              ## Package is not installed.
+              echo -e "\n--------------------------------------------------------------------------------";
+              echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
+              echo -e "   Package: ${package}";
+              echo -e "--------------------------------------------------------------------------------\n";
+              echo -e "Warning: ${package} package is not installed! ";
+              echo -e "${package}" >> ${missing};
+              ## Constructing package's folder (container)
+              absent_tools="${location}/absent/${installer}";
+              mkdir -p "${absent_tools}";
+              touch "${absent_tools}/${package}.marked";
+              if [[ ${install_packages} == 'true' ]]; then
+                ## Constructing package's folder (container)
+                installed_tools="${location}/install/${installer}";
+                mkdir -p "${installed_tools}";
+                ## Installing package depending on its manager (APT, SNAP)
+                case "${installer}" in
+                    apt ) sudo apt  install ${package} --yes \
+                               | tee "${installed_tools}/${package}.log";
+                          ;;
+                  snap* ) sudo snap install ${package} ${installer/snap /} \
+                               | tee "${installed_tools}/${package}.log";
+                          ;;
+                esac;
+              fi;
+        else  ## Constructing package's folder (container)
+              present_tools="${location}/present/${installer}";
+              mkdir -p "${present_tools}";
+              touch "${present_tools}/${package}.default";
       fi;
       echo -e "\n--------------------------------------------------------------------------------";
       echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
       echo -e "   Package: ${package}";
       echo -e "--------------------------------------------------------------------------------\n";
       # echo -e "${package}" >> ${installed};
+      ## Upgrading package only if it's already installed.
+      sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
       ## Constructing package's folder (container)
       xpath="${location}/installed/${installer}";
       mkdir -p "${xpath}";
-      ## Upgrading package only if it's already installed.
-      sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
-      ## ---------------------------------------------------------------
-      ## Inspecting package based on its installer (APT, SNAP)
-      ## ---------------------------------------------------------------
       case "${installer}" in
          apt ) ## Processing APT-Installed Packages:
                export2json --package="${package}" \
