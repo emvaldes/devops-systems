@@ -24,9 +24,9 @@ declare -a hashicorp=(
 ## "snap --classic:powershell"
 
 ## Requires user input.
-## It's not a suitable candidate for automatic deployment.
+## Note: It's not a suitable candidate for automatic deployment.
+##       apt:wireshark
 
-    apt:wireshark
 ## Inpsecting these already installed devnetops tools
 declare -a packages=(
     apt:ansible
