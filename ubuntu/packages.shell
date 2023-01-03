@@ -103,37 +103,32 @@ function packages_ubuntu () {
     local count_inst=1;
     ## Processing Listed Packages:
     for xitem in ${packages[@]}; do
-      if [[ ${import_report} == 'true' ]]; then
-              echo -e "Processing APT Show Configuration report...";
-              return 10;
-        else  echo -e "Processing default workflow...";
-      fi;
+      # if [[ ${import_report} == 'true' ]]; then
+      #         echo -e "Processing APT Show Configuration report...";
+      #         return 10;
+      #   else  echo -e "Processing default workflow...";
+      # fi;
       ## Options: apt, snap
-      local xcommand=;
       local installer=;
       local package=;
       if [[ ${xitem} =~ ':' ]]; then
-              xcommand="${xitem%%\:*}";
-              installer="${xcommand%\ *}";
-              package="${xitem##*\:}";
+              declare -a request=($( echo -e "${xitem}" | tr ' ' '\n' ));
+              package="${request[0]}";
+              ## Removes first elemnent in array
+              request=("${request[@]:1}");
+              installer="${request[0]}";
         else  installer='apt';
-              xcommand="${installer}";
 	            package="${xitem}";
+              request='';
       fi;
       ## Identifying if package is already installed.
-      local available='false';
       local status=;
       case "${installer}" in
-         apt ) available="$(
-                   apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*"
-                 )";
-               status=$?;
-               ;;
-        snap ) snap list ${package};
-               status=$?;
-               ;;
+         apt ) result="$( apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*" )";
+               status=$?; ;;
+        snap ) snap list ${package} | egrep -w "^${package}.*";
+               status=$?; ;;
       esac;
-      ## Configuring package status flag
       local result=;
       [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
       ## Evaluating APT Installed output
@@ -163,8 +158,18 @@ function packages_ubuntu () {
                           ;;
                 esac;
               fi;
+              ## Identifying if package is already installed.
+              local status=;
+              case "${installer}" in
+                 apt ) result="$( apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*" )";
+                       status=$?; ;;
+                snap ) snap list ${package} | egrep -w "^${package}.*";
+                       status=$?; ;;
+              esac;
+              local result=;
+              [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
         else  ## Constructing package's folder (container)
-              present_tools="${location}/present/${installer}";
+              present_tools="${location}/default/${installer}";
               mkdir -p "${present_tools}";
               touch "${present_tools}/${package}.default";
       fi;
