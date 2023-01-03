@@ -196,10 +196,10 @@ function packages_ubuntu () {
               mkdir -p "${default_packages}";
               local already_exists="$(
                   find ${default_packages}/* \
-                       -type f -name ${package} 2>/dev/null
+                       -type f -name ${package}.json 2>/dev/null
                 )";
               ## Processing Pre-Installed Packages
-              [[ ${#already_exists} -gt 0 ]] && {
+              [[ ${#already_exists} -eq 0 ]] && {
                   for xitem in ${preinstalled[@]}; do
                     [[ ${xitem} == ${package} ]] && {
                         xpath="${default_packages}/native";
