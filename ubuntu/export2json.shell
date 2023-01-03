@@ -133,7 +133,7 @@ function export2json () {
     echo -e;
     echo -e "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
     ## -------------------------------------------------------------------------
-    echo -e "\nDone.\n";
+    # echo -e "\nDone.\n";
     IFS="${oIFS}";
     return 0;
   };
