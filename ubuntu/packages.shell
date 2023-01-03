@@ -124,9 +124,14 @@ function packages_ubuntu () {
       ## Identifying if package is already installed.
       local status=;
       case "${installer}" in
-         apt ) result="$( apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*" )";
+         apt ) package_status="$(
+                   apt list --installed ${package} 2>/dev/null \
+                   | egrep -v "Listing... Done" | egrep -w "^${package}.*"
+                 )";
                status=$?; ;;
-        snap ) snap list ${package} | egrep -w "^${package}.*";
+        snap ) package_status="$(
+                  snap list ${package} | egrep -w "^${package}.*"
+                )";
                status=$?; ;;
       esac;
       local result=;
@@ -150,21 +155,25 @@ function packages_ubuntu () {
                 mkdir -p "${installed_tools}";
                 ## Installing package depending on its manager (APT, SNAP)
                 case "${installer}" in
-                    apt ) sudo apt  install ${package} --yes \
-                               | tee "${installed_tools}/${package}.log";
-                          ;;
-                  snap* ) sudo snap install ${package} ${installer/snap /} \
-                               | tee "${installed_tools}/${package}.log";
-                          ;;
+                   apt ) sudo apt  install ${package} --yes \
+                              | tee "${installed_tools}/${package}.log";
+                         ;;
+                  snap ) sudo snap install ${package} ${installer/snap /} \
+                              | tee "${installed_tools}/${package}.log";
+                         ;;
                 esac;
               fi;
               ## Identifying if package is already installed.
               local status=;
               case "${installer}" in
-                 apt ) result="$( apt list --installed ${package} 2>/dev/null | egrep -w "^${package}.*" )";
+                 apt ) package_status="$(
+                           apt list --installed ${package} 2>/dev/null \
+                           | egrep -v "Listing... Done" | egrep -w "^${package}.*"
+                         )";
                        status=$?; ;;
-                snap ) snap list ${package} | egrep -w "^${package}.*";
-                       status=$?; ;;
+                snap ) package_status="$(
+                          snap list ${package} | egrep -w "^${package}.*"
+                        )";
               esac;
               local result=;
               [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
@@ -175,7 +184,7 @@ function packages_ubuntu () {
       fi;
       echo -e "\n--------------------------------------------------------------------------------";
       echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-      echo -e "   Package: ${package}";
+      echo -e "   Package: ${package_status}";
       echo -e "--------------------------------------------------------------------------------\n";
       # echo -e "${package}" >> ${installed};
       ## Upgrading package only if it's already installed.
