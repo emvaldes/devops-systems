@@ -88,12 +88,13 @@ function packages_ubuntu () {
     ## Installed Packages Report-file
     local reportfile="${script_path}/${report_filename}";
     cat /dev/null > "${reportfile}";
-    ## Configuring Package Instation Reports path
-    local location="/tmp/$(
+    local reports="$(
         lsb_release -d \
         | sed -e 's|\([[:blank:]]*\)||g' -e 's|Description:||' \
         | tr '[[:upper:]]' '[[:lower:]]'
-      )/${dateset}/${timeset}/packages";
+      )";
+    ## Configuring Package Instation Reports path
+    local location="/tmp/${reports}/${dateset}/${timeset}/packages";
     ## Constructing target location
     mkdir -p ${location};
     ## Identifying the Installed-Packages report file
@@ -125,6 +126,9 @@ function packages_ubuntu () {
 	            package="${xitem}";
               request='';
       fi;
+      ## Constructing package's folder (container)
+      local xpath="${location}/present/${installer}";
+      mkdir -p "${xpath}";
       ## Identifying if package is already installed.
       local status=;
       case "${installer}" in
@@ -141,7 +145,6 @@ function packages_ubuntu () {
       local result=;
       [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
       ## Evaluating APT Installed output
-      local xpath=;
       if [[ $result == 'absent' ]]; then
               ## Package is not installed.
               echo -e "\n--------------------------------------------------------------------------------";
@@ -158,7 +161,7 @@ function packages_ubuntu () {
                 installed_tools="${location}/installed/${installer}";
                 mkdir -p "${installed_tools}";
                 ## Installing package depending on its manager (APT, SNAP)
-                local status=;
+                status=;
                 case "${installer}" in
                    apt ) sudo apt  install ${package} --yes \
                               | tee "${installed_tools}/${package}.log";
@@ -167,11 +170,11 @@ function packages_ubuntu () {
                               | tee "${installed_tools}/${package}.log";
                          status=$?; ;;
                 esac;
-                local result=;
+                result=;
                 [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
               fi;
               ## Collecting Package Details (Specs)
-              local status=;
+              status=;
               case "${installer}" in
                  apt ) package_status="$(
                            apt list --installed ${package} 2>/dev/null \
@@ -183,25 +186,39 @@ function packages_ubuntu () {
                         )";
                        status=$?; ;;
               esac;
-              local result=;
+              result=;
               [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
-        else  ## Constructing package's folder (container)
-              present_tools="${location}/default/${installer}";
-              mkdir -p "${present_tools}";
-              ## Identifying if package is already installed
-              local status=;
-              case "${installer}" in
-                 apt ) package_details="$(
-                           apt show ${package} 2>/dev/null | tee "${present_tools}/${package}.details"
-                         )";
-                       status=$?; ;;
-                snap ) package_details="$(
-                           snap info ${package} | tee "${present_tools}/${package}.details"
-                         )";
-                       status=$?; ;;
-              esac;
-              local result=;
-              [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
+        else  ## Processing Default Packages
+              local default_packages="${reports}/default/${installer}";
+              ## Processing Pre-Installed Packages
+              for xitem in ${preinstalled[@]}; do
+                [[ ${xitem} == ${package} ]] && {
+                    xpath="${default_packages}/pre-installed";
+                    break;
+                  };
+              done;
+              ## Processing Post-Installed Packages
+              for xitem in ${postinstalled[@]}; do
+                [[ ${xitem} == ${package} ]] && {
+                    xpath="${default_packages}/post-installed";
+                    break;
+                  };
+              done;
+              # ## Identifying if package is already installed
+              # status=;
+              # case "${installer}" in
+              #    apt ) package_details="$(
+              #              apt show ${package} 2>/dev/null | tee "${present_tools}/${package}.details"
+              #            )";
+              #          status=$?; ;;
+              #   snap ) package_details="$(
+              #              snap info ${package} | tee "${present_tools}/${package}.details"
+              #            )";
+              #          status=$?; ;;
+              # esac;
+              # result=;
+              # [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
+              # [[ $result == 'present' ]] && mkdir -p "${default_packages}";
       fi;
       echo -e "\n--------------------------------------------------------------------------------";
       echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
@@ -210,9 +227,6 @@ function packages_ubuntu () {
       # echo -e "${package}" >> ${installed};
       ## Upgrading package only if it's already installed.
       sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
-      ## Constructing package's folder (container)
-      xpath="${location}/present/${installer}";
-      mkdir -p "${xpath}";
       case "${installer}" in
          apt ) ## Processing APT-Installed Packages:
                export2json --package="${package}" \
