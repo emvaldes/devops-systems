@@ -54,8 +54,8 @@
             "ansible/jammy,jammy,now 2.10.7+merged+base+2.10.8+dfsg-1 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-31",
-            "time": "01:57:10"
+            "date": "2023-01-03",
+            "time": "06:31:02"
         }
     },
     {
@@ -82,14 +82,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "apt-file (1) - - APT package searching utility -- command-line interface"
+            "apt-file (1)         - - APT package searching utility -- command-line interface"
         ],
         "Listing": [
             "apt-file/jammy,jammy,now 3.2.2 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:20:35"
+            "date": "2023-01-03",
+            "time": "06:41:54"
         }
     },
     {
@@ -141,8 +141,8 @@
             "aptitude/jammy,now 0.8.13-3ubuntu1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:19:43"
+            "date": "2023-01-03",
+            "time": "06:42:02"
         }
     },
     {
@@ -168,15 +168,15 @@
         "Apropos": [
             "arp-scan (1)         - The ARP scanner",
             "get-iab (1)          - Fetch the arp-scan IAB file from the IEEE website",
-            "get-oui (1)          - Fetch the arp-scan OUI file from the IEEE website (on Debian and Debian based systems, data is fetched from ie...",
+            "get-oui (1)          - Fetch the arp-scan OUI file from the IEEE website (on Debian and Debian based systems, data is fetched from ieee-data package)",
             "mac-vendor (5)       - Ethernet vendor file for arp-scan"
         ],
         "Listing": [
             "arp-scan/jammy,now 1.9.7-2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:52:07"
+            "date": "2023-01-03",
+            "time": "06:42:08"
         }
     },
     {
@@ -218,8 +218,8 @@
             "autoconf/jammy,jammy,now 2.71-2 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:31:38"
+            "date": "2023-01-03",
+            "time": "06:42:16"
         }
     },
     {
@@ -338,8 +338,8 @@
             "bat/jammy-updates,jammy-security,now 0.19.0-1ubuntu0.1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:34:43"
+            "date": "2023-01-03",
+            "time": "06:42:27"
         }
     },
     {
@@ -363,14 +363,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "bmon (8) - bandwidth monitor and rate estimator"
+            "bmon (8)             - bandwidth monitor and rate estimator"
         ],
         "Listing": [
             "bmon/jammy,now 1:4.0-8 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:52:38"
+            "date": "2023-01-03",
+            "time": "06:42:32"
         }
     },
     {
@@ -403,8 +403,8 @@
             "build-essential/jammy 12.9ubuntu3 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-29",
-            "time": "15:20:43"
+            "date": "2023-01-02",
+            "time": "20:04:27"
         }
     },
     {
@@ -431,8 +431,8 @@
             "bwctl-client/jammy,now 1.5.4+dfsg1-1build1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:47:15"
+            "date": "2023-01-03",
+            "time": "06:42:38"
         }
     },
     {
@@ -463,8 +463,8 @@
             "bwctl-server/jammy,now 1.5.4+dfsg1-1build1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:47:06"
+            "date": "2023-01-03",
+            "time": "06:42:47"
         }
     },
     {
@@ -486,110 +486,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "cloc (1) - Count, or compute differences of, lines of source code and comments."
+            "cloc (1)             - Count, or compute differences of, lines of source code and comments."
         ],
         "Listing": [
             "cloc/jammy,jammy,now 1.90-1 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:45:48"
-        }
-    },
-    {
-        "Package": "code",
-        "Version": "1.74.2-1671533413",
-        "Priority": "optional",
-        "Section": "devel",
-        "Installed-Size": "404 MB",
-        "Provides": [
-            "visual-studio-code"
-        ],
-        "Depends": [
-            "ca-certificates",
-            "libasound2 (>= 1.0.16)",
-            "libatk-bridge2.0-0 (>= 2.5.3)",
-            "libatk1.0-0 (>= 2.2.0)",
-            "libatspi2.0-0 (>= 2.9.90)",
-            "libc6 (>= 2.14)",
-            "libc6 (>= 2.17)",
-            "libc6 (>= 2.2.5)",
-            "libcairo2 (>= 1.6.0)",
-            "libcups2 (>= 1.6.0)",
-            "libcurl3-gnutls | libcurl3-nss | libcurl4 | libcurl3",
-            "libdbus-1-3 (>= 1.5.12)",
-            "libdrm2 (>= 2.4.38)",
-            "libexpat1 (>= 2.0.1)",
-            "libgbm1 (>= 8.1~0)",
-            "libglib2.0-0 (>= 2.16.0)",
-            "libglib2.0-0 (>= 2.39.4)",
-            "libgtk-3-0 (>= 3.9.10)",
-            "libgtk-3-0 (>= 3.9.10) | libgtk-4-1",
-            "libnspr4 (>= 2:4.9-2~)",
-            "libnss3 (>= 2:3.22)",
-            "libnss3 (>= 3.26)",
-            "libpango-1.0-0 (>= 1.14.0)",
-            "libsecret-1-0 (>= 0.18)",
-            "libx11-6",
-            "libx11-6 (>= 2:1.4.99.1)",
-            "libxcb1 (>= 1.9.2)",
-            "libxcomposite1 (>= 1:0.4.4-1)",
-            "libxdamage1 (>= 1:1.1)",
-            "libxext6",
-            "libxfixes3",
-            "libxkbcommon0 (>= 0.4.1)",
-            "libxkbfile1",
-            "libxrandr2",
-            "xdg-utils (>= 1.0.2)"
-        ],
-        "Recommends": [
-            "libvulkan1"
-        ],
-        "Conflicts": [
-            "visual-studio-code"
-        ],
-        "Replaces": [
-            "visual-studio-code"
-        ],
-        "Homepage": "https://code.visualstudio.com/",
-        "Download-Size": "98.0 MB",
-        "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://packages.microsoft.com/repos/code stable/main amd64 Packages",
-        "Apropos": [
-            "B::Hooks::EndOfScope (3pm) - Execute code after a scope finished compilation",
-            "B::Hooks::EndOfScope::PP (3pm) - Execute code after a scope finished compilation - PP implementation",
-            "B::Hooks::EndOfScope::XS (3pm) - Execute code after a scope finished compilation - XS implementation",
-            "cloc (1)             - Count, or compute differences of, lines of source code and comments.",
-            "dftest (1)           - Shows display filter byte-code, for debugging dfilter routines.",
-            "File::MimeInfo::Cookbook (3pm) - various code snippets",
-            "foo2zjs-pstops (1)   - Add PS code for foo2*-wrapper",
-            "gdk-pixbuf-csource (1) - C code generation utility for GdkPixbuf images",
-            "gh-codespace-code (1) - Open a codespace in Visual Studio Code",
-            "git-sh-i18n (1)      - Git's i18n setup code for shell scripts",
-            "git-sh-setup (1)     - Common Git shell script setup code",
-            "Glib::CodeGen (3pm)  - code generation utilities for Glib-based bindings.",
-            "go (1)               - tool for managing Go source code",
-            "go-install (1)       - tool for managing Go source code",
-            "go-packages (7)      - tool for managing Go source code",
-            "go-path (7)          - tool for managing Go source code",
-            "go-remote (7)        - tool for managing Go source code",
-            "go-testflag (7)      - tool for managing Go source code",
-            "go-testfunc (7)      - tool for managing Go source code",
-            "go-tool (1)          - tool for managing Go source code",
-            "HTTP::Status (3pm)   - HTTP Status code processing",
-            "openssl-mac (1ssl)   - perform Message Authentication Code operations",
-            "repertoiremap (5)    - map symbolic character names to Unicode code points",
-            "Sub::Identify (3pm)  - Retrieve names of code references",
-            "xsubpp (1)           - compiler to convert Perl XS code into C code"
-        ],
-        "Listing": [
-            "code/stable,now 1.74.2-1671533413 amd64 [installed]",
-            "code/stable 1.74.2-1671532382 arm64",
-            "code/stable 1.74.2-1671532193 armhf"
-        ],
-        "Timestamp": {
-            "date": "2022-12-30",
-            "time": "17:12:17"
+            "date": "2023-01-03",
+            "time": "06:43:10"
         }
     },
     {
@@ -614,11 +518,11 @@
             "server-minimal"
         ],
         "Download-Size": "1,438 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [],
         "Listing": [
-            "coreutils/jammy,now 8.32-4.1ubuntu1 amd64 [installed]",
+            "coreutils/jammy,now 8.32-4.1ubuntu1 amd64 [installed,automatic]",
             "coreutils/jammy 8.32-4.1ubuntu1 i386"
         ],
         "Timestamp": {
@@ -654,15 +558,15 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
         "Apropos": [
-            "curl (1) - transfer a URL"
+            "curl (1)             - transfer a URL"
         ],
         "Listing": [
             "curl/jammy-updates,jammy-security,now 7.81.0-1ubuntu1.6 amd64 [installed]",
             "curl/jammy-updates,jammy-security 7.81.0-1ubuntu1.6 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:29:11"
+            "date": "2023-01-03",
+            "time": "06:43:20"
         }
     },
     {
@@ -681,14 +585,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "dos2unix (1) - DOS/Mac to Unix and vice versa text file format converter"
+            "dos2unix (1)         - DOS/Mac to Unix and vice versa text file format converter"
         ],
         "Listing": [
             "dos2unix/jammy,now 7.4.2-2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:45:06"
+            "date": "2023-01-03",
+            "time": "06:43:25"
         }
     },
     {
@@ -713,13 +617,13 @@
             "ubuntu-mate-desktop"
         ],
         "Download-Size": "208 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "ethtool (8) - query or control network driver and hardware settings"
+            "ethtool (8)          - query or control network driver and hardware settings"
         ],
         "Listing": [
-            "ethtool/jammy,now 1:5.16-1 amd64 [installed]"
+            "ethtool/jammy,now 1:5.16-1 amd64 [installed,automatic]"
         ],
         "Timestamp": {
             "date": "",
@@ -754,8 +658,8 @@
             "fping/jammy,now 5.1-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:53:13"
+            "date": "2023-01-03",
+            "time": "06:43:32"
         }
     },
     {
@@ -970,8 +874,8 @@
             "git/jammy-updates,jammy-security 1:2.34.1-1ubuntu1.5 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:27:29"
+            "date": "2023-01-02",
+            "time": "20:39:28"
         }
     },
     {
@@ -1046,7 +950,7 @@
             "ubuntu-budgie-desktop-raspi"
         ],
         "Download-Size": "315 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
         "Apropos": [
             "gnupg (7)            - The GNU Privacy Guard suite of programs",
@@ -1061,7 +965,7 @@
             "pinentry-x11 (1)     - PIN or pass-phrase entry dialog for GnuPG"
         ],
         "Listing": [
-            "gnupg/jammy-updates,jammy-updates,jammy-security,jammy-security,now 2.2.27-3ubuntu2.1 all [installed]"
+            "gnupg/jammy-updates,jammy-updates,jammy-security,jammy-security,now 2.2.27-3ubuntu2.1 all [installed,automatic]"
         ],
         "Timestamp": {
             "date": "2022-08-09",
@@ -1092,8 +996,8 @@
             "golang/jammy,now 2:1.18~0ubuntu2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-31",
-            "time": "01:52:35"
+            "date": "2023-01-03",
+            "time": "06:43:49"
         }
     },
     {
@@ -1112,14 +1016,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "grepcidr (1) - Filter IPv4 and IPv6 addresses matching CIDR patterns"
+            "grepcidr (1)         - Filter IPv4 and IPv6 addresses matching CIDR patterns"
         ],
         "Listing": [
             "grepcidr/jammy,now 2.0-2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:53:40"
+            "date": "2023-01-03",
+            "time": "06:44:04"
         }
     },
     {
@@ -1140,14 +1044,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "hping3 (8) - send (almost) arbitrary TCP/IP packets to network hosts"
+            "hping3 (8)           - send (almost) arbitrary TCP/IP packets to network hosts"
         ],
         "Listing": [
             "hping3/jammy,now 3.a2.ds2-10 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:54:00"
+            "date": "2023-01-03",
+            "time": "06:44:08"
         }
     },
     {
@@ -1186,14 +1090,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "htop (1) - interactive process viewer"
+            "htop (1)             - interactive process viewer"
         ],
         "Listing": [
             "htop/jammy,now 3.0.5-7build2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:22:38"
+            "date": "2023-01-03",
+            "time": "06:44:13"
         }
     },
     {
@@ -1212,14 +1116,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "ifstat (1) - Report InterFace STATistics"
+            "ifstat (1)           - Report InterFace STATistics"
         ],
         "Listing": [
             "ifstat/jammy,now 1.1-8.2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:54:28"
+            "date": "2023-01-03",
+            "time": "06:44:21"
         }
     },
     {
@@ -1241,14 +1145,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "iftop (8) - display bandwidth usage on an interface by host"
+            "iftop (8)            - display bandwidth usage on an interface by host"
         ],
         "Listing": [
             "iftop/jammy,now 1.0~pre4-7 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:55:05"
+            "date": "2023-01-03",
+            "time": "06:44:26"
         }
     },
     {
@@ -1267,14 +1171,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "ipcalc (1) - An IPv4 Netmask/broadcast/etc calculator"
+            "ipcalc (1)           - An IPv4 Netmask/broadcast/etc calculator"
         ],
         "Listing": [
             "ipcalc/jammy,jammy,now 0.42-2 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:55:23"
+            "date": "2023-01-03",
+            "time": "06:44:31"
         }
     },
     {
@@ -1294,14 +1198,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "iperf3 (1) - perform network throughput tests"
+            "iperf3 (1)           - perform network throughput tests"
         ],
         "Listing": [
             "iperf3/jammy,now 3.9-1build1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:55:49"
+            "date": "2023-01-03",
+            "time": "06:44:37"
         }
     },
     {
@@ -1347,11 +1251,11 @@
             "server-minimal"
         ],
         "Download-Size": "1,070 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [],
         "Listing": [
-            "iproute2/jammy,now 5.15.0-1ubuntu2 amd64 [installed]",
+            "iproute2/jammy,now 5.15.0-1ubuntu2 amd64 [installed,automatic]",
             "iproute2/jammy 5.15.0-1ubuntu2 i386"
         ],
         "Timestamp": {
@@ -1380,14 +1284,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "iptraf-ng (8) - Interactive Colorful IP LAN Monitor"
+            "iptraf-ng (8)        - Interactive Colorful IP LAN Monitor"
         ],
         "Listing": [
             "iptraf-ng/jammy,now 1:1.2.1-1build2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "13:56:09"
+            "date": "2023-01-03",
+            "time": "06:44:45"
         }
     },
     {
@@ -1407,15 +1311,15 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "jq (1) - Command-line JSON processor"
+            "jq (1)               - Command-line JSON processor"
         ],
         "Listing": [
             "jq/jammy,now 1.6-2.1ubuntu3 amd64 [installed]",
             "jq/jammy 1.6-2.1ubuntu3 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:30:41"
+            "date": "2023-01-02",
+            "time": "20:35:42"
         }
     },
     {
@@ -1446,8 +1350,8 @@
             "libssl-dev/jammy-updates,jammy-security 3.0.2-0ubuntu1.7 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-31",
-            "time": "01:07:26"
+            "date": "2023-01-03",
+            "time": "06:44:53"
         }
     },
     {
@@ -1492,15 +1396,15 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "lynx (1) - a general purpose distributed information browser for the World Wide Web"
+            "lynx (1)             - a general purpose distributed information browser for the World Wide Web"
         ],
         "Listing": [
             "lynx/jammy,now 2.9.0dev.10-1 amd64 [installed]",
             "lynx/jammy 2.9.0dev.10-1 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:21:52"
+            "date": "2023-01-03",
+            "time": "06:44:59"
         }
     },
     {
@@ -1557,14 +1461,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "mc (1) - Visual shell for Unix-like systems."
+            "mc (1)               - Visual shell for Unix-like systems."
         ],
         "Listing": [
             "mc/jammy,now 3:4.8.27-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:21:06"
+            "date": "2023-01-03",
+            "time": "06:45:06"
         }
     },
     {
@@ -1596,7 +1500,7 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "mtr (8) - a network diagnostic tool"
+            "mtr (8)              - a network diagnostic tool"
         ],
         "Listing": [
             "mtr/jammy,now 0.95-1 amd64 [installed]"
@@ -1622,7 +1526,7 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "netcat (1) - arbitrary TCP and UDP connections and listens"
+            "netcat (1)           - arbitrary TCP and UDP connections and listens"
         ],
         "Listing": [
             "netcat/jammy,jammy,now 1.218-4ubuntu1 all [installed]"
@@ -1657,8 +1561,8 @@
             "net-tools/jammy 1.60+git20181103.0eebece-1ubuntu5 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "16:13:48"
+            "date": "2023-01-02",
+            "time": "20:35:20"
         }
     },
     {
@@ -1680,14 +1584,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "ngrep (8) - network grep"
+            "ngrep (8)            - network grep"
         ],
         "Listing": [
             "ngrep/jammy,now 1.47+ds1-5 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:10:50"
+            "date": "2023-01-03",
+            "time": "06:45:25"
         }
     },
     {
@@ -1712,14 +1616,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages",
         "Apropos": [
-            "nikto (1) - Scan web server for known vulnerabilities"
+            "nikto (1)            - Scan web server for known vulnerabilities"
         ],
         "Listing": [
             "nikto/jammy,jammy,now 1:2.1.5-3.1 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:09:45"
+            "date": "2023-01-03",
+            "time": "06:45:31"
         }
     },
     {
@@ -1742,14 +1646,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "nload (1) - displays the current network usage"
+            "nload (1)            - displays the current network usage"
         ],
         "Listing": [
             "nload/jammy,now 0.7.4-2build3 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "14:00:38"
+            "date": "2023-01-03",
+            "time": "06:45:46"
         }
     },
     {
@@ -1783,14 +1687,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "nmap (1) - Network exploration tool and security / port scanner"
+            "nmap (1)             - Network exploration tool and security / port scanner"
         ],
         "Listing": [
             "nmap/jammy,now 7.91+dfsg1+really7.80+dfsg1-2build1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:08:24"
+            "date": "2023-01-03",
+            "time": "06:45:54"
         }
     },
     {
@@ -1824,14 +1728,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "nodejs (1) - server-side JavaScript runtime"
+            "nodejs (1)           - server-side JavaScript runtime"
         ],
         "Listing": [
             "nodejs/jammy,now 12.22.9~dfsg-1ubuntu3 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-31",
-            "time": "01:11:39"
+            "date": "2023-01-03",
+            "time": "06:45:40"
         }
     },
     {
@@ -1961,8 +1865,8 @@
             "npm/jammy,jammy,now 8.5.1~ds-1 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-31",
-            "time": "01:13:19"
+            "date": "2023-01-03",
+            "time": "06:47:13"
         }
     },
     {
@@ -2040,8 +1944,8 @@
             "openssh-server/jammy 1:8.9p1-3 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-29",
-            "time": "17:18:22"
+            "date": "2023-01-02",
+            "time": "20:29:09"
         }
     },
     {
@@ -2089,8 +1993,8 @@
             "parallel/jammy,jammy,now 20210822+ds-2 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:15:31"
+            "date": "2023-01-03",
+            "time": "06:47:25"
         }
     },
     {
@@ -2111,14 +2015,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "pgpdump (1) - A PGP packet visualizer"
+            "pgpdump (1)          - A PGP packet visualizer"
         ],
         "Listing": [
             "pgpdump/jammy,now 0.34-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:26:37"
+            "date": "2023-01-03",
+            "time": "06:47:33"
         }
     },
     {
@@ -2167,7 +2071,7 @@
         "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "procps (1) - report a snapshot of the current processes."
+            "procps (1)           - report a snapshot of the current processes."
         ],
         "Listing": [
             "procps/jammy,now 2:3.3.17-6ubuntu2 amd64 [installed,automatic]",
@@ -2201,11 +2105,11 @@
             "standard"
         ],
         "Download-Size": "119 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [],
         "Listing": [
-            "psmisc/jammy,now 23.4-2build3 amd64 [installed]",
+            "psmisc/jammy,now 23.4-2build3 amd64 [installed,automatic]",
             "psmisc/jammy 23.4-2build3 i386"
         ],
         "Timestamp": {
@@ -2237,8 +2141,8 @@
             "python3-venv/jammy-updates 3.10.6-1~22.04 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-31",
-            "time": "01:09:50"
+            "date": "2023-01-03",
+            "time": "06:47:43"
         }
     },
     {
@@ -2290,8 +2194,8 @@
             "screen/jammy,now 4.9.0-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:17:52"
+            "date": "2023-01-03",
+            "time": "06:47:51"
         }
     },
     {
@@ -2310,14 +2214,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "sipcalc (1) - IP subnet calculator"
+            "sipcalc (1)          - IP subnet calculator"
         ],
         "Listing": [
             "sipcalc/jammy,now 1.1.6-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:07:48"
+            "date": "2023-01-03",
+            "time": "06:47:57"
         }
     },
     {
@@ -2343,15 +2247,15 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "socat (1) - Multipurpose relay (SOcket CAT)"
+            "socat (1)            - Multipurpose relay (SOcket CAT)"
         ],
         "Listing": [
             "socat/jammy,now 1.7.4.1-3ubuntu4 amd64 [installed]",
             "socat/jammy 1.7.4.1-3ubuntu4 i386"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:16:27"
+            "date": "2023-01-03",
+            "time": "06:48:03"
         }
     },
     {
@@ -2374,14 +2278,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "speedometer (1) - measure and display the rate of data across a network connection"
+            "speedometer (1)      - measure and display the rate of data across a network connection"
         ],
         "Listing": [
             "speedometer/jammy,jammy,now 2.8-3 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "14:12:43"
+            "date": "2023-01-03",
+            "time": "06:48:11"
         }
     },
     {
@@ -2402,14 +2306,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "speedtest-cli (1) - Command line interface for testing internet bandwidth using speedtest.net"
+            "speedtest-cli (1)    - Command line interface for testing internet bandwidth using speedtest.net"
         ],
         "Listing": [
             "speedtest-cli/jammy,jammy,now 2.1.3-2 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:06:59"
+            "date": "2023-01-03",
+            "time": "06:48:17"
         }
     },
     {
@@ -2428,14 +2332,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "stress (1) - tool to impose load on and stress test a computer system"
+            "stress (1)           - tool to impose load on and stress test a computer system"
         ],
         "Listing": [
             "stress/jammy,now 1.0.5-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:16:57"
+            "date": "2023-01-03",
+            "time": "06:48:22"
         }
     },
     {
@@ -2494,7 +2398,7 @@
             "standard"
         ],
         "Download-Size": "66.9 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
             "Regexp::Common::URI::telnet (3pm) - - Returns a pattern for telnet URIs.",
@@ -2502,7 +2406,7 @@
             "telnet.netkit (1)    - user interface to the TELNET protocol"
         ],
         "Listing": [
-            "telnet/jammy,now 0.17-44build1 amd64 [installed]"
+            "telnet/jammy,now 0.17-44build1 amd64 [installed,automatic]"
         ],
         "Timestamp": {
             "date": "2022-08-09",
@@ -2549,8 +2453,8 @@
             "tftpd-hpa/jammy,now 5.2+20150808-1.2build2 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:14:27"
+            "date": "2023-01-03",
+            "time": "06:48:31"
         }
     },
     {
@@ -2622,8 +2526,8 @@
             "tree/jammy,now 2.0.2-1 amd64 [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:17:22"
+            "date": "2023-01-03",
+            "time": "06:48:36"
         }
     },
     {
@@ -2662,7 +2566,7 @@
         "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
         "Apropos": [
-            "unzip (1) - list, test and extract compressed files in a ZIP archive"
+            "unzip (1)            - list, test and extract compressed files in a ZIP archive"
         ],
         "Listing": [
             "unzip/jammy-updates,jammy-security,now 6.0-26ubuntu3.1 amd64 [installed,automatic]",
@@ -2743,14 +2647,14 @@
         "APT-Manual-Installed": "yes",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
         "Apropos": [
-            "virtualenv (1) - Python virtual environment creator"
+            "virtualenv (1)       - Python virtual environment creator"
         ],
         "Listing": [
             "virtualenv/jammy,jammy,now 20.13.0+ds-2 all [installed]"
         ],
         "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:18:40"
+            "date": "2023-01-03",
+            "time": "06:48:57"
         }
     },
     {
@@ -2782,45 +2686,18 @@
             "server-minimal"
         ],
         "Download-Size": "367 kB",
-        "APT-Manual-Installed": "yes",
+        "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
         "Apropos": [
-            "wget (1) - The non-interactive network downloader."
+            "wget (1)             - The non-interactive network downloader."
         ],
         "Listing": [
-            "wget/jammy,now 1.21.2-2ubuntu1 amd64 [installed]",
+            "wget/jammy,now 1.21.2-2ubuntu1 amd64 [installed,automatic]",
             "wget/jammy 1.21.2-2ubuntu1 i386"
         ],
         "Timestamp": {
             "date": "2022-08-09",
             "time": "11:49:25"
-        }
-    },
-    {
-        "Package": "wireshark",
-        "Version": "3.6.2-2",
-        "Priority": "optional",
-        "Section": "universe/net",
-        "Origin": "Ubuntu",
-        "Original-Maintainer": "Balint Reczey <balint@balintreczey.hu>",
-        "Installed-Size": "61.4 kB",
-        "Depends": [
-            "wireshark-qt (= 3.6.2-2)"
-        ],
-        "Homepage": "https://www.wireshark.org/",
-        "Download-Size": "4,992 B",
-        "APT-Manual-Installed": "yes",
-        "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
-        "Apropos": [
-            "wireshark (1)        - Interactively dump and analyze network traffic",
-            "wireshark-filter (4) - Wireshark display filter syntax and reference"
-        ],
-        "Listing": [
-            "wireshark/jammy,now 3.6.2-2 amd64 [installed]"
-        ],
-        "Timestamp": {
-            "date": "2022-12-30",
-            "time": "12:12:33"
         }
     },
     {
@@ -2858,7 +2735,7 @@
         "APT-Manual-Installed": "no",
         "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
         "Apropos": [
-            "zenity (1) - display GTK+ dialogs"
+            "zenity (1)           - display GTK+ dialogs"
         ],
         "Listing": [
             "zenity/jammy-updates,now 3.42.1-0ubuntu1 amd64 [installed,automatic]"

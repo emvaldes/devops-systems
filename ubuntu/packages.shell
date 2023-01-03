@@ -26,6 +26,9 @@ function packages_ubuntu () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     echo -e;
+    timestamp="$(date +"%Y%m%d%H%M%S")";
+    dateset="${timestamp:0:6}";
+    timeset="${timestamp:6:6}";
     ## Loading Modules (dependencies):
     declare -a modules=(
         export2json.shell
@@ -90,8 +93,9 @@ function packages_ubuntu () {
         lsb_release -d \
         | sed -e 's|\([[:blank:]]*\)||g' -e 's|Description:||' \
         | tr '[[:upper:]]' '[[:lower:]]'
-      )/packages";
-    rm -rf ${location} 2>/dev/null && mkdir -p ${location};
+      )/${dateset}/${timeset}/packages";
+    ## Constructing target location
+    mkdir -p ${location};
     ## Identifying the Installed-Packages report file
     local missing="${location}/missing.list";
     cat /dev/null > "${missing}"
@@ -112,7 +116,7 @@ function packages_ubuntu () {
       local installer=;
       local package=;
       if [[ ${xitem} =~ ':' ]]; then
-              declare -a request=($( echo -e "${xitem}" | tr ' ' '\n' ));
+              declare -a request=($( echo -e "${xitem}" | tr ':' '\n' ));
               package="${request[0]}";
               ## Removes first elemnent in array
               request=("${request[@]:1}");
@@ -148,7 +152,7 @@ function packages_ubuntu () {
               ## Constructing package's folder (container)
               absent_tools="${location}/absent/${installer}";
               mkdir -p "${absent_tools}";
-              touch "${absent_tools}/${package}.marked";
+              echo -e "${package_status}" > "${absent_tools}/${package}.marked";
               if [[ ${install_packages} == 'true' ]]; then
                 ## Constructing package's folder (container)
                 installed_tools="${location}/present/${installer}";

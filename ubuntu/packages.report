@@ -9,7 +9,6 @@ build-essential -> 12.9ubuntu3
 bwctl-client -> 1.5.4+dfsg1-1build1
 bwctl-server -> 1.5.4+dfsg1-1build1
 cloc -> 1.90-1
-code -> 1.74.2-1671533413
 coreutils -> 8.32-4.1ubuntu1
 curl -> 7.81.0-1ubuntu1.6
 dos2unix -> 7.4.2-2
@@ -61,6 +60,5 @@ unzip -> 6.0-26ubuntu3.1
 vim -> 2:8.2.3995-1ubuntu2.1
 virtualenv -> 20.13.0+ds-2
 wget -> 1.21.2-2ubuntu1
-wireshark -> 3.6.2-2
 zenity -> 3.42.1-0ubuntu1
 zip -> 3.0-12build2
