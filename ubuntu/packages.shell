@@ -201,8 +201,8 @@ function packages_ubuntu () {
                        status=$?; ;;
                 snap ) status=$?; ;;
               esac;
-              result=;
-              [[ ${status} -eq 0 ]] && { result="upgraded"; } || { result="latest"; }
+              # result=;
+              # [[ ${status} -eq 0 ]] && { result="upgraded"; } || { result="latest"; }
               ## Processing Default Packages
               local default_packages="${reports}/default/${installer}";
               mkdir -p "${default_packages}";
@@ -236,7 +236,7 @@ function packages_ubuntu () {
         echo -e "\n--------------------------------------------------------------------------------";
         echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
         echo -e "   Package: ${package_status}";
-        echo -e "--------------------------------------------------------------------------------\n";
+        echo -e "--------------------------------------------------------------------------------";
         # echo -e "${package}" >> ${installed};
         case "${installer}" in
            apt ) ## Processing APT-Installed Packages:
@@ -247,6 +247,7 @@ function packages_ubuntu () {
                  ;;
         esac;
       fi;
+      echo -e;
     done;
     ## Exporting Installed Packages JSON file.
     find ${location} -type f -name '*.json' \

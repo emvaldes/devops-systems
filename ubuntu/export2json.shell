@@ -132,7 +132,7 @@ function export2json () {
       )"; \
     ## Processing and formatting the collected output into a JSON file.
     ## echo -e "${json_object}" | python -m json.tool; break ;
-    echo -e;
+    # echo -e;
     echo -e "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
     ## -------------------------------------------------------------------------
     # echo -e "\nDone.\n";
