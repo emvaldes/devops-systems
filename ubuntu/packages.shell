@@ -100,8 +100,6 @@ function packages_ubuntu () {
     ## Constructing target location
     mkdir -p ${location};
     ## Identifying the Installed-Packages report file
-    local missing="${location}/missing.list";
-    cat /dev/null > "${missing}"
     ## Default DPKG Log-file
     local dpkg_logfile='/var/log/dpkg.log';
     ## Defining iteration counters.
@@ -158,7 +156,6 @@ function packages_ubuntu () {
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
               echo -e "   Warning: ${package} package is not installed! ";
               echo -e "--------------------------------------------------------------------------------";
-              echo -e "${package}" >> ${missing};
               ## Constructing package's folder (container)
               # absent_tools="${location}/absent/${installer}";
               # mkdir -p "${absent_tools}";
