@@ -88,7 +88,8 @@ function packages_ubuntu () {
     ## Installed Packages Report-file
     local reportfile="${script_path}/${report_filename}";
     cat /dev/null > "${reportfile}";
-    local sandbox='/tmp';
+    ## Enforcing User Sandbox ~/reports
+    local sandbox="${HOME}/reports";
     local reports="${sandbox}/$(
         lsb_release -d \
         | sed -e 's|\([[:blank:]]*\)||g' -e 's|Description:||' \
