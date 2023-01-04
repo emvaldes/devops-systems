@@ -1,0 +1,34 @@
+{
+    "Package": "socat",
+    "Version": "1.7.4.1-3ubuntu4",
+    "Priority": "extra",
+    "Section": "net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Laszlo Boszormenyi (GCS) <gcs@debian.org>",
+    "Installed-Size": "1,381 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libssl3 (>= 3.0.0~~alpha1)",
+        "libwrap0 (>= 7.6-4~)"
+    ],
+    "Homepage": "http://www.dest-unreach.org/socat/",
+    "Task": [
+        "kubuntu-desktop",
+        "ubuntustudio-desktop-core",
+        "ubuntustudio-desktop"
+    ],
+    "Download-Size": "349 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "socat (1)            - Multipurpose relay (SOcket CAT)"
+    ],
+    "Listing": [
+        "socat/jammy,now 1.7.4.1-3ubuntu4 amd64 [installed]",
+        "socat/jammy 1.7.4.1-3ubuntu4 i386"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:20:54"
+    }
+}

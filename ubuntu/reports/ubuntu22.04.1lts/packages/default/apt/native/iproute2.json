@@ -1,0 +1,55 @@
+{
+    "Package": "iproute2",
+    "Version": "5.15.0-1ubuntu2",
+    "Priority": "important",
+    "Section": "net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Alexander Wirt <formorer@debian.org>",
+    "Installed-Size": "2,949 kB",
+    "Provides": [
+        "arpd"
+    ],
+    "Depends": [
+        "debconf (>= 0.5) | debconf-2.0",
+        "libbpf0 (>= 1:0.2)",
+        "libbsd0 (>= 0.0)",
+        "libc6 (>= 2.34)",
+        "libcap2 (>= 1:2.10)",
+        "libdb5.3",
+        "libelf1 (>= 0.131)",
+        "libmnl0 (>= 1.0.3-4~)",
+        "libselinux1 (>= 3.1~)",
+        "libxtables12 (>= 1.6.0+snapshot20161117)",
+        "libcap2-bin"
+    ],
+    "Recommends": [
+        "libatm1 (>= 2.4.1-17~)"
+    ],
+    "Suggests": [
+        "iproute2-doc"
+    ],
+    "Conflicts": [
+        "arpd",
+        "iproute (<< 20130000-1)"
+    ],
+    "Replaces": [
+        "iproute"
+    ],
+    "Homepage": "https://wiki.linuxfoundation.org/networking/iproute2",
+    "Task": [
+        "minimal",
+        "server-minimal"
+    ],
+    "Download-Size": "1,070 kB",
+    "APT-Manual-Installed": "no",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [],
+    "Listing": [
+        "iproute2/jammy,now 5.15.0-1ubuntu2 amd64 [installed,automatic]",
+        "iproute2/jammy 5.15.0-1ubuntu2 i386"
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:27"
+    }
+}

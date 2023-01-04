@@ -1,0 +1,43 @@
+{
+    "Package": "wget",
+    "Version": "1.21.2-2ubuntu1",
+    "Priority": "standard",
+    "Section": "web",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "No\u00ebl K\u00f6the <noel@debian.org>",
+    "Installed-Size": "1,008 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libidn2-0 (>= 0.6)",
+        "libpcre2-8-0 (>= 10.22)",
+        "libpsl5 (>= 0.16.0)",
+        "libssl3 (>= 3.0.0~~alpha1)",
+        "libuuid1 (>= 2.16)",
+        "zlib1g (>= 1:1.1.4)"
+    ],
+    "Recommends": [
+        "ca-certificates"
+    ],
+    "Conflicts": [
+        "wget-ssl"
+    ],
+    "Homepage": "https://www.gnu.org/software/wget/",
+    "Task": [
+        "standard",
+        "server-minimal"
+    ],
+    "Download-Size": "367 kB",
+    "APT-Manual-Installed": "no",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "wget (1)             - The non-interactive network downloader."
+    ],
+    "Listing": [
+        "wget/jammy,now 1.21.2-2ubuntu1 amd64 [installed,automatic]",
+        "wget/jammy 1.21.2-2ubuntu1 i386"
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:25"
+    }
+}

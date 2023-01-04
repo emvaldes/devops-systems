@@ -1,0 +1,26 @@
+{
+    "Package": "dos2unix",
+    "Version": "7.4.2-2",
+    "Priority": "extra",
+    "Section": "universe/text",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "tony mancill <tmancill@debian.org>",
+    "Installed-Size": "1,367 kB",
+    "Depends": [
+        "libc6 (>= 2.34)"
+    ],
+    "Homepage": "https://waterlan.home.xs4all.nl/dos2unix.html",
+    "Download-Size": "384 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "dos2unix (1)         - DOS/Mac to Unix and vice versa text file format converter"
+    ],
+    "Listing": [
+        "dos2unix/jammy,now 7.4.2-2 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:16:43"
+    }
+}

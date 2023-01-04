@@ -1,0 +1,28 @@
+{
+    "Package": "python3-venv",
+    "Version": "3.10.6-1~22.04",
+    "Priority": "optional",
+    "Section": "universe/python",
+    "Source": "python3-defaults",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Matthias Klose <doko@debian.org>",
+    "Installed-Size": "6,144 B",
+    "Depends": [
+        "python3.10-venv (>= 3.10.6-1~)",
+        "python3 (= 3.10.6-1~22.04)",
+        "python3-distutils (>= 3.10.6-1~)"
+    ],
+    "Homepage": "https://www.python.org/",
+    "Download-Size": "1,038 B",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/universe amd64 Packages",
+    "Apropos": [],
+    "Listing": [
+        "python3-venv/jammy-updates,now 3.10.6-1~22.04 amd64 [installed]",
+        "python3-venv/jammy-updates 3.10.6-1~22.04 i386"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:20:39"
+    }
+}

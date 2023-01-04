@@ -1,0 +1,29 @@
+{
+    "Package": "net-tools",
+    "Version": "1.60+git20181103.0eebece-1ubuntu5",
+    "Priority": "optional",
+    "Section": "net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "net-tools Team <team+net-tools@tracker.debian.org>",
+    "Installed-Size": "819 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libselinux1 (>= 3.1~)"
+    ],
+    "Homepage": "http://sourceforge.net/projects/net-tools/",
+    "Task": [
+        "ubuntukylin-desktop"
+    ],
+    "Download-Size": "204 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [],
+    "Listing": [
+        "net-tools/jammy,now 1.60+git20181103.0eebece-1ubuntu5 amd64 [installed]",
+        "net-tools/jammy 1.60+git20181103.0eebece-1ubuntu5 i386"
+    ],
+    "Timestamp": {
+        "date": "2023-01-02",
+        "time": "20:35:20"
+    }
+}

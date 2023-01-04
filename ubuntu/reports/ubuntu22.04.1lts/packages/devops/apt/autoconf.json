@@ -1,0 +1,43 @@
+{
+    "Package": "autoconf",
+    "Version": "2.71-2",
+    "Priority": "optional",
+    "Section": "devel",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian QA Group <packages@qa.debian.org>",
+    "Installed-Size": "2,081 kB",
+    "Depends": [
+        "perl (>> 5.005)",
+        "m4 (>= 1.4.13)",
+        "debianutils (>= 1.8)"
+    ],
+    "Recommends": [
+        "automake | automaken"
+    ],
+    "Suggests": [
+        "autoconf-archive",
+        "gnu-standards",
+        "autoconf-doc",
+        "libtool",
+        "gettext"
+    ],
+    "Breaks": [
+        "gettext (<< 0.10.39)",
+        "pkg-config (<< 0.25-1.1)"
+    ],
+    "Homepage": "https://www.gnu.org/software/autoconf/",
+    "Download-Size": "338 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "autoconf (1)         - Generate configuration scripts",
+        "autoupdate (1)       - Update a configure.ac to a newer Autoconf"
+    ],
+    "Listing": [
+        "autoconf/jammy,jammy,now 2.71-2 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:15:46"
+    }
+}

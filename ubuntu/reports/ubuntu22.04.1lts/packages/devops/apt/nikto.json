@@ -1,0 +1,32 @@
+{
+    "Package": "nikto",
+    "Version": "1:2.1.5-3.1",
+    "Priority": "extra",
+    "Section": "multiverse/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Vincent Bernat <bernat@debian.org>",
+    "Installed-Size": "1,909 kB",
+    "Depends": [
+        "perl:any",
+        "libwhisker2-perl (>= 2.5)",
+        "libjson-pp-perl",
+        "libnet-ssleay-perl"
+    ],
+    "Suggests": [
+        "nmap"
+    ],
+    "Homepage": "http://cirt.net/nikto2",
+    "Download-Size": "246 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/multiverse amd64 Packages",
+    "Apropos": [
+        "nikto (1)            - Scan web server for known vulnerabilities"
+    ],
+    "Listing": [
+        "nikto/jammy,jammy,now 1:2.1.5-3.1 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:18:33"
+    }
+}

@@ -1,0 +1,31 @@
+{
+    "Package": "bmon",
+    "Version": "1:4.0-8",
+    "Priority": "optional",
+    "Section": "universe/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Patrick Matth\u00e4i <pmatthaei@debian.org>",
+    "Installed-Size": "141 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libconfuse2 (>= 3.2.1~)",
+        "libncursesw6 (>= 6)",
+        "libnl-3-200 (>= 3.2.7)",
+        "libnl-route-3-200 (>= 3.2.7)",
+        "libtinfo6 (>= 6)"
+    ],
+    "Homepage": "http://www.infradead.org/~tgr/bmon/",
+    "Download-Size": "48.1 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "bmon (8)             - bandwidth monitor and rate estimator"
+    ],
+    "Listing": [
+        "bmon/jammy,now 1:4.0-8 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:16:00"
+    }
+}

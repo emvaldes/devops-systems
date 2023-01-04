@@ -1,0 +1,28 @@
+{
+    "Package": "hping3",
+    "Version": "3.a2.ds2-10",
+    "Priority": "optional",
+    "Section": "universe/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Marcio de Souza Oliveira <marciosouza@debian.org>",
+    "Installed-Size": "263 kB",
+    "Depends": [
+        "libc6 (>= 2.15)",
+        "libpcap0.8 (>= 0.9.8)",
+        "libtcl8.6 (>= 8.6.0)"
+    ],
+    "Homepage": "http://www.hping.org/",
+    "Download-Size": "106 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "hping3 (8)           - send (almost) arbitrary TCP/IP packets to network hosts"
+    ],
+    "Listing": [
+        "hping3/jammy,now 3.a2.ds2-10 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:17:28"
+    }
+}

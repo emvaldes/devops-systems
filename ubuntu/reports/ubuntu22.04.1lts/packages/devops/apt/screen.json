@@ -1,0 +1,53 @@
+{
+    "Package": "screen",
+    "Version": "4.9.0-1",
+    "Priority": "optional",
+    "Section": "misc",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Axel Beckert <abe@debian.org>",
+    "Installed-Size": "1,029 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libcrypt1 (>= 1:4.1.0)",
+        "libpam0g (>= 0.99.7.1)",
+        "libtinfo6 (>= 6)",
+        "libutempter0 (>= 1.1.5)"
+    ],
+    "Suggests": [
+        "byobu | screenie | iselect (>= 1.4.0-1)",
+        "ncurses-term"
+    ],
+    "Homepage": "https://savannah.gnu.org/projects/screen",
+    "Task": [
+        "cloud-image",
+        "ubuntu-wsl",
+        "server",
+        "ubuntu-server-raspi"
+    ],
+    "Download-Size": "672 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "clear (1)            - clear the terminal screen",
+        "gdm-screenshot (1)   - take a picture of the screen",
+        "gdm3 (8)             - take a picture of the screen",
+        "gdmflexiserver (1)   - take a picture of the screen",
+        "mapscrn (8)          - load screen output mapping table",
+        "orca (1)             - a scriptable screen reader",
+        "scr_dump (5)         - format of curses screen-dumps.",
+        "screen (1)           - screen manager with VT100/ANSI terminal emulation",
+        "setfont (8)          - load EGA/VGA console screen font",
+        "setvesablank (8)     - Turn VESA screen blanking on or off",
+        "showconsolefont (8)  - Show the current EGA/VGA console screen font",
+        "vcstime (8)          - Show time in upper right hand corner of the console screen",
+        "xmag (1)             - magnify parts of the screen",
+        "xrefresh (1)         - refresh all or part of an X screen"
+    ],
+    "Listing": [
+        "screen/jammy,now 4.9.0-1 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-03",
+        "time": "20:20:45"
+    }
+}

@@ -1,0 +1,53 @@
+{
+    "Package": "vim",
+    "Version": "2:8.2.3995-1ubuntu2.1",
+    "Priority": "optional",
+    "Section": "editors",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian Vim Maintainers <team+vim@tracker.debian.org>",
+    "Installed-Size": "4,011 kB",
+    "Provides": [
+        "editor"
+    ],
+    "Depends": [
+        "vim-common (= 2:8.2.3995-1ubuntu2.1)",
+        "vim-runtime (= 2:8.2.3995-1ubuntu2.1)",
+        "libacl1 (>= 2.2.23)",
+        "libc6 (>= 2.34)",
+        "libgpm2 (>= 1.20.7)",
+        "libpython3.10 (>= 3.10.0)",
+        "libselinux1 (>= 3.1~)",
+        "libsodium23 (>= 1.0.14)",
+        "libtinfo6 (>= 6)"
+    ],
+    "Suggests": [
+        "ctags",
+        "vim-doc",
+        "vim-scripts"
+    ],
+    "Homepage": "https://www.vim.org/",
+    "Task": [
+        "cloud-image",
+        "ubuntu-wsl",
+        "server",
+        "ubuntu-server-raspi",
+        "lubuntu-desktop"
+    ],
+    "Download-Size": "1,727 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy-updates/main amd64 Packages",
+    "Apropos": [
+        "apparmor.vim (5)     - vim syntax highlighting file for AppArmor profiles",
+        "vim (1)              - Vi IMproved, a programmer's text editor",
+        "vimdiff (1)          - edit between two and eight versions of a file with Vim and show differences",
+        "vimtutor (1)         - the Vim tutor"
+    ],
+    "Listing": [
+        "vim/jammy-updates,jammy-security,now 2:8.2.3995-1ubuntu2.1 amd64 [installed]",
+        "vim/jammy-updates,jammy-security 2:8.2.3995-1ubuntu2.1 i386"
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:48:31"
+    }
+}
