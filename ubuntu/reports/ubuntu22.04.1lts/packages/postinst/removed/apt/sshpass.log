@@ -1,0 +1,14 @@
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  libflashrom1 libftdi1-2
+Use 'sudo apt autoremove' to remove them.
+The following packages will be REMOVED:
+  sshpass
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+After this operation, 35.8 kB disk space will be freed.
+(Reading database ... 204625 files and directories currently installed.)
+Removing sshpass (1.09-1) ...
+Processing triggers for man-db (2.10.2-1) ...
+
