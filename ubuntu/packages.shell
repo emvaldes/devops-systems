@@ -246,8 +246,8 @@ function packages_ubuntu () {
           snap ) snap info ${package} | tee "${xpath}/${package}.info";
                  ;;
         esac;
+        echo -e;
       fi;
-      echo -e;
     done;
     ## Exporting Installed Packages JSON file.
     find ${location} -type f -name '*.json' \
