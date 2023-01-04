@@ -94,9 +94,9 @@ function packages_ubuntu () {
         lsb_release -d \
         | sed -e 's|\([[:blank:]]*\)||g' -e 's|Description:||' \
         | tr '[[:upper:]]' '[[:lower:]]'
-      )";
+      )/packages";
     ## Configuring Package Instation Reports path
-    local location="${reports}/${dateset}/${timeset}/packages";
+    local location="${reports}/${dateset}/${timeset}";
     ## Constructing target location
     mkdir -p ${location};
     ## Identifying the Installed-Packages report file
