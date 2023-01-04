@@ -95,10 +95,6 @@ function packages_ubuntu () {
         | sed -e 's|\([[:blank:]]*\)||g' -e 's|Description:||' \
         | tr '[[:upper:]]' '[[:lower:]]'
       )/packages";
-    ## Configuring Package Instation Reports path
-    local location="${reports}/${dateset}/${timeset}";
-    ## Constructing target location
-    mkdir -p ${location};
     ## Identifying the Installed-Packages report file
     ## Default DPKG Log-file
     local dpkg_logfile='/var/log/dpkg.log';
@@ -127,8 +123,6 @@ function packages_ubuntu () {
               request='';
       fi;
       ## Constructing package's folder (container)
-      ## Warning: Deprecating this in favor of a unified location.
-      ##          local xpath="${location}/present/${installer}";
       local xpath="${reports}/devops/${installer}";
       mkdir -p "${xpath}";
       ## Identifying if package is already installed.
@@ -156,11 +150,12 @@ function packages_ubuntu () {
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
               echo -e "   Warning: ${package} package is not installed! ";
               echo -e "--------------------------------------------------------------------------------";
-              ## Constructing package's folder (container)
-              # absent_tools="${location}/absent/${installer}";
-              # mkdir -p "${absent_tools}";
-              # echo -e "${package_status}" > "${absent_tools}/${package}.marked";
+	      ## Conditioning Package Installation based on explicit request
               if [[ ${install_packages} == 'true' ]]; then
+                ## Configuring Package Instation Reports path
+                local location="${reports}/${dateset}/${timeset}";
+                ## Constructing target location
+                mkdir -p ${location};
                 ## Constructing package's folder (container)
                 installed_tools="${location}/installed/${installer}";
                 mkdir -p "${installed_tools}";
@@ -248,7 +243,7 @@ function packages_ubuntu () {
       fi;
     done;
     ## Exporting Installed Packages JSON file.
-    find ${location} -type f -name '*.json' \
+    find ${reports} -type f -name '*.json' \
          | sort -n | xargs -I {} cat {} | jq -s | python -m json.tool > ${jsonfile};
     ## Exporting Installed Packages (name, version) ino LIST file.
     jq '.[] | "\(.Package) -> \(.Version)"' --raw-output ${jsonfile} > ${reportfile};
