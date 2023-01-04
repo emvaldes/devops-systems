@@ -128,7 +128,9 @@ function packages_ubuntu () {
               request='';
       fi;
       ## Constructing package's folder (container)
-      local xpath="${location}/present/${installer}";
+      ## Warning: Deprecating this in favor of a unified location.
+      ##          local xpath="${location}/present/${installer}";
+      local xpath="${reports}/devops/${installer}";
       mkdir -p "${xpath}";
       ## Identifying if package is already installed.
       local status=;
@@ -222,7 +224,7 @@ function packages_ubuntu () {
               for xitem in ${postinstalled[@]}; do
                 ## echo -e "Post-Installed: ${xitem} -> ${package}";
                 [[ ${xitem} == ${package} ]] && {
-                    xpath="${default_packages}/presets";
+                    xpath="${default_packages}/devops";
                     mkdir -p "${xpath}" 2>/dev/null ;
                     ## skip_report='true';
                     break;
