@@ -191,7 +191,17 @@ function packages_ubuntu () {
               esac;
               result=;
               [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
-        else  ## Processing Default Packages
+        else  ## Identify Package Upgrade Capabilities
+              status=;
+              case "${installer}" in
+                 apt ) ## Upgrading package only if it's already installed.
+                       sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
+                       status=$?; ;;
+                snap ) status=$?; ;;
+              esac;
+              result=;
+              [[ ${status} -eq 0 ]] && { result="upgraded"; } || { result="latest"; }
+              ## Processing Default Packages
               local default_packages="${reports}/default/${installer}";
               mkdir -p "${default_packages}";
               # local already_exists="$(
@@ -218,24 +228,7 @@ function packages_ubuntu () {
                     break;
                   };
               done;
-              # ## Identifying if package is already installed
-              # status=;
-              # case "${installer}" in
-              #    apt ) package_details="$(
-              #              apt show ${package} 2>/dev/null | tee "${present_tools}/${package}.details"
-              #            )";
-              #          status=$?; ;;
-              #   snap ) package_details="$(
-              #              snap info ${package} | tee "${present_tools}/${package}.details"
-              #            )";
-              #          status=$?; ;;
-              # esac;
-              # result=;
-              # [[ ${status} -eq 0 ]] && { result="present"; } || { result="absent"; }
-              # [[ $result == 'present' ]] && mkdir -p "${default_packages}";
       fi;
-      ## Upgrading package only if it's already installed.
-      sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
       ## Determine if processing package-report
       if [[ ${skip_report} == 'false' ]]; then
         echo -e "\n--------------------------------------------------------------------------------";
