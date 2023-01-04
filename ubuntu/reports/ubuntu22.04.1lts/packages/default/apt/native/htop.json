@@ -1,0 +1,46 @@
+{
+    "Package": "htop",
+    "Version": "3.0.5-7build2",
+    "Priority": "optional",
+    "Section": "utils",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Daniel Lange <DLange@debian.org>",
+    "Installed-Size": "342 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libncursesw6 (>= 6)",
+        "libnl-3-200 (>= 3.2.7)",
+        "libnl-genl-3-200 (>= 3.2.7)",
+        "libtinfo6 (>= 6)"
+    ],
+    "Suggests": [
+        "lm-sensors",
+        "lsof",
+        "strace"
+    ],
+    "Homepage": "https://htop.dev/",
+    "Task": [
+        "cloud-image",
+        "ubuntu-wsl",
+        "server",
+        "ubuntu-server-raspi",
+        "lubuntu-desktop",
+        "ubuntu-mate-core",
+        "ubuntu-mate-desktop",
+        "ubuntu-budgie-desktop",
+        "ubuntu-budgie-desktop-raspi"
+    ],
+    "Download-Size": "128 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "htop (1)             - interactive process viewer"
+    ],
+    "Listing": [
+        "htop/jammy,now 3.0.5-7build2 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:14:23"
+    }
+}

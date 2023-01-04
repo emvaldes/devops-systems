@@ -1,0 +1,53 @@
+{
+    "Package": "aptitude",
+    "Version": "0.8.13-3ubuntu1",
+    "Priority": "optional",
+    "Section": "universe/admin",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Aptitude Development Team <aptitude-devel@lists.alioth.debian.org>",
+    "Installed-Size": "3,624 kB",
+    "Depends": [
+        "aptitude-common (= 0.8.13-3ubuntu1)",
+        "libapt-pkg6.0 (>= 1.9.11~)",
+        "libboost-iostreams1.74.0 (>= 1.74.0)",
+        "libc6 (>= 2.33)",
+        "libcwidget4 (>= 0.5.18-1)",
+        "libgcc-s1 (>= 3.3.1)",
+        "libncursesw6 (>= 6.1+20180210)",
+        "libsigc++-2.0-0v5 (>= 2.8.0)",
+        "libsqlite3-0 (>= 3.6.5)",
+        "libstdc++6 (>= 9)",
+        "libtinfo6 (>= 6.1+20180210)",
+        "libxapian30 (>= 1.4.17~)"
+    ],
+    "Recommends": [
+        "libdpkg-perl",
+        "sensible-utils"
+    ],
+    "Suggests": [
+        "apt-xapian-index",
+        "aptitude-doc-en | aptitude-doc",
+        "debtags",
+        "tasksel"
+    ],
+    "Homepage": "https://wiki.debian.org/Aptitude",
+    "Task": [
+        "kubuntu-desktop",
+        "kubuntu-full"
+    ],
+    "Download-Size": "1,100 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "aptitude (8)         - high-level interface to the package manager",
+        "aptitude-create-state-bundle (1) - bundle the current aptitude state",
+        "aptitude-run-state-bundle (1) - unpack an aptitude state bundle and invoke aptitude on it"
+    ],
+    "Listing": [
+        "aptitude/jammy,now 0.8.13-3ubuntu1 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:12:36"
+    }
+}

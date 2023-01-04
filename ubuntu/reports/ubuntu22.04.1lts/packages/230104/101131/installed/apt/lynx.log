@@ -1,0 +1,25 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  lynx-common
+The following NEW packages will be installed:
+  lynx lynx-common
+0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
+Need to get 1,743 kB of archives.
+After this operation, 5,598 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 lynx-common all 2.9.0dev.10-1 [1,024 kB]
+Get:2 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 lynx amd64 2.9.0dev.10-1 [719 kB]
+Fetched 1,743 kB in 1s (1,167 kB/s)
+Selecting previously unselected package lynx-common.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 261870 files and directories currently installed.)
+Preparing to unpack .../lynx-common_2.9.0dev.10-1_all.deb ...
+Unpacking lynx-common (2.9.0dev.10-1) ...
+Selecting previously unselected package lynx.
+Preparing to unpack .../lynx_2.9.0dev.10-1_amd64.deb ...
+Unpacking lynx (2.9.0dev.10-1) ...
+Setting up lynx-common (2.9.0dev.10-1) ...
+Setting up lynx (2.9.0dev.10-1) ...
+update-alternatives: using /usr/bin/lynx to provide /usr/bin/www-browser (www-browser) in auto mode
+Processing triggers for man-db (2.10.2-1) ...
+Processing triggers for mailcap (3.70+nmu1ubuntu1) ...

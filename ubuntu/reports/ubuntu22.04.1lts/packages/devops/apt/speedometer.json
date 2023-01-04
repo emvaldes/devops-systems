@@ -1,0 +1,30 @@
+{
+    "Package": "speedometer",
+    "Version": "2.8-3",
+    "Priority": "optional",
+    "Section": "universe/utils",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Giovani Augusto Ferreira <giovani@debian.org>",
+    "Installed-Size": "50.2 kB",
+    "Depends": [
+        "python3-psutil",
+        "python3-setuptools",
+        "python3-six",
+        "python3-urwid",
+        "python3:any"
+    ],
+    "Homepage": "http://excess.org/speedometer",
+    "Download-Size": "14.6 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "speedometer (1)      - measure and display the rate of data across a network connection"
+    ],
+    "Listing": [
+        "speedometer/jammy,jammy,now 2.8-3 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:17:45"
+    }
+}

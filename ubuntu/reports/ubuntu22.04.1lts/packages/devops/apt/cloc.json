@@ -1,0 +1,29 @@
+{
+    "Package": "cloc",
+    "Version": "1.90-1",
+    "Priority": "optional",
+    "Section": "universe/devel",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Jari Aalto <jari.aalto@cante.net>",
+    "Installed-Size": "636 kB",
+    "Depends": [
+        "libalgorithm-diff-perl",
+        "libparallel-forkmanager-perl",
+        "libregexp-common-perl",
+        "perl:any"
+    ],
+    "Homepage": "https://github.com/AlDanial/cloc",
+    "Download-Size": "106 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "cloc (1)             - Count, or compute differences of, lines of source code and comments."
+    ],
+    "Listing": [
+        "cloc/jammy,jammy,now 1.90-1 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:13:30"
+    }
+}

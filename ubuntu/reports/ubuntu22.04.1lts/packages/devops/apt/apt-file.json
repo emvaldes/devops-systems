@@ -1,0 +1,34 @@
+{
+    "Package": "apt-file",
+    "Version": "3.2.2",
+    "Priority": "optional",
+    "Section": "universe/admin",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "APT Development Team <deity@lists.debian.org>",
+    "Installed-Size": "92.2 kB",
+    "Depends": [
+        "perl:any",
+        "apt (>= 1.3~exp1~)",
+        "libapt-pkg-perl",
+        "liblist-moreutils-perl",
+        "libregexp-assemble-perl"
+    ],
+    "Breaks": [
+        "apt-venv (<< 1.0.0-1~)",
+        "command-not-found (<< 0.2.38-2~)",
+        "devscripts (<< 2.15.10~)"
+    ],
+    "Download-Size": "27.6 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "apt-file (1)         - - APT package searching utility -- command-line interface"
+    ],
+    "Listing": [
+        "apt-file/jammy,jammy,now 3.2.2 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:12:29"
+    }
+}

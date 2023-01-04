@@ -1,0 +1,26 @@
+{
+    "Package": "sipcalc",
+    "Version": "1.1.6-1",
+    "Priority": "optional",
+    "Section": "universe/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Marc Haber <dispatch+sipcalc_contact@tracker.debian.org>",
+    "Installed-Size": "74.8 kB",
+    "Depends": [
+        "libc6 (>= 2.4)"
+    ],
+    "Homepage": "http://www.routemeister.net/projects/sipcalc/",
+    "Download-Size": "30.2 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "sipcalc (1)          - IP subnet calculator"
+    ],
+    "Listing": [
+        "sipcalc/jammy,now 1.1.6-1 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:17:35"
+    }
+}

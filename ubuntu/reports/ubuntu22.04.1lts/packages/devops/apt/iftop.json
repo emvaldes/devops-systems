@@ -1,0 +1,29 @@
+{
+    "Package": "iftop",
+    "Version": "1.0~pre4-7",
+    "Priority": "optional",
+    "Section": "universe/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Markus Koschany <apo@debian.org>",
+    "Installed-Size": "95.2 kB",
+    "Depends": [
+        "libc6 (>= 2.29)",
+        "libncurses6 (>= 6)",
+        "libpcap0.8 (>= 0.9.8)",
+        "libtinfo6 (>= 6)"
+    ],
+    "Homepage": "http://www.ex-parrot.com/~pdw/iftop/",
+    "Download-Size": "35.6 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "iftop (8)            - display bandwidth usage on an interface by host"
+    ],
+    "Listing": [
+        "iftop/jammy,now 1.0~pre4-7 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:14:32"
+    }
+}

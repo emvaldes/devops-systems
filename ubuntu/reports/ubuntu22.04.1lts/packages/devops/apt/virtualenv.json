@@ -1,0 +1,27 @@
+{
+    "Package": "virtualenv",
+    "Version": "20.13.0+ds-2",
+    "Priority": "optional",
+    "Section": "universe/python",
+    "Source": "python-virtualenv",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian Python Team <team+python@tracker.debian.org>",
+    "Installed-Size": "30.7 kB",
+    "Depends": [
+        "python3-virtualenv"
+    ],
+    "Homepage": "https://virtualenv.pypa.io/",
+    "Download-Size": "1,968 B",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "virtualenv (1)       - Python virtual environment creator"
+    ],
+    "Listing": [
+        "virtualenv/jammy,jammy,now 20.13.0+ds-2 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:18:23"
+    }
+}

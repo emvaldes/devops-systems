@@ -1,0 +1,49 @@
+{
+    "Package": "parallel",
+    "Version": "20210822+ds-2",
+    "Priority": "extra",
+    "Section": "universe/utils",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian Med Packaging Team <debian-med-packaging@lists.alioth.debian.org>",
+    "Installed-Size": "3,014 kB",
+    "Depends": [
+        "procps",
+        "sysstat",
+        "perl:any"
+    ],
+    "Suggests": [
+        "ash",
+        "csh",
+        "fish",
+        "ksh",
+        "tcsh",
+        "zsh"
+    ],
+    "Homepage": "https://www.gnu.org/software/parallel/",
+    "Download-Size": "1,947 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "env_parallel (1)     - export environment to GNU parallel",
+        "parallel (1)         - build and execute shell command lines from standard input in parallel",
+        "Parallel::ForkManager (3pm) - A simple parallel processing fork manager",
+        "Parallel::ForkManager::Child (3pm) - role adopted by forked Parallel::ForkManager processes",
+        "parallel_alternatives (7) - Alternatives to GNU parallel",
+        "parcat (1)           - cat files or fifos in parallel",
+        "parset (1)           - set shell variables in parallel",
+        "parsort (1)          - Sort (big files) in parallel",
+        "sane-as6e (5)        - SANE backend for using the Artec AS6E parallel port interface scanner.",
+        "sane-canon_pp (5)    - SANE backend for Canon CanoScan Parallel Port flatbed scanners",
+        "sane-mustek_pp (5)   - SANE backend for Mustek parallel port flatbed scanners",
+        "sane-plustek_pp (5)  - SANE backend for Plustek parallel port flatbed scanners",
+        "sane-umax_pp (5)     - SANE backend for Umax Astra parallel port flatbed scanners",
+        "sem (1)              - semaphore for executing shell command lines in parallel"
+    ],
+    "Listing": [
+        "parallel/jammy,jammy,now 20210822+ds-2 all [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:17:09"
+    }
+}

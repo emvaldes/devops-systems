@@ -1,0 +1,34 @@
+{
+    "Package": "arp-scan",
+    "Version": "1.9.7-2",
+    "Priority": "extra",
+    "Section": "universe/admin",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian Security Tools <team+pkg-security@tracker.debian.org>",
+    "Installed-Size": "1,095 kB",
+    "Depends": [
+        "libc6 (>= 2.33)",
+        "libpcap0.8 (>= 1.5.1)",
+        "ieee-data"
+    ],
+    "Recommends": [
+        "libwww-perl"
+    ],
+    "Homepage": "https://github.com/royhills/arp-scan",
+    "Download-Size": "338 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "arp-scan (1)         - The ARP scanner",
+        "get-iab (1)          - Fetch the arp-scan IAB file from the IEEE website",
+        "get-oui (1)          - Fetch the arp-scan OUI file from the IEEE website (on Debian and Debian based systems, data is fetched from ieee-data package)",
+        "mac-vendor (5)       - Ethernet vendor file for arp-scan"
+    ],
+    "Listing": [
+        "arp-scan/jammy,now 1.9.7-2 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:12:41"
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "Package": "ngrep",
+    "Version": "1.47+ds1-5",
+    "Priority": "optional",
+    "Section": "universe/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Romain Francoise <rfrancoise@debian.org>",
+    "Installed-Size": "74.8 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libnet1 (>= 1.1.2.1)",
+        "libpcap0.8 (>= 0.9.8)",
+        "libpcre2-8-0 (>= 10.22)"
+    ],
+    "Homepage": "https://github.com/jpr5/ngrep",
+    "Download-Size": "33.1 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "ngrep (8)            - network grep"
+    ],
+    "Listing": [
+        "ngrep/jammy,now 1.47+ds1-5 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:15:20"
+    }
+}

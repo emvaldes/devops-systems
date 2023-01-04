@@ -1,0 +1,35 @@
+{
+    "Package": "psmisc",
+    "Version": "23.4-2build3",
+    "Priority": "standard",
+    "Section": "admin",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Craig Small <csmall@debian.org>",
+    "Installed-Size": "463 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libtinfo6 (>= 6)"
+    ],
+    "Breaks": [
+        "manpages-de (<< 4.9.1-1)"
+    ],
+    "Replaces": [
+        "manpages-de (<< 4.9.1-1)"
+    ],
+    "Homepage": "http://psmisc.sf.net/",
+    "Task": [
+        "standard"
+    ],
+    "Download-Size": "119 kB",
+    "APT-Manual-Installed": "no",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [],
+    "Listing": [
+        "psmisc/jammy,now 23.4-2build3 amd64 [installed,automatic]",
+        "psmisc/jammy 23.4-2build3 i386"
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:24"
+    }
+}

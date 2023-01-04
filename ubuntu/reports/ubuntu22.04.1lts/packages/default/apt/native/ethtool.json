@@ -1,0 +1,35 @@
+{
+    "Package": "ethtool",
+    "Version": "1:5.16-1",
+    "Priority": "optional",
+    "Section": "utils",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian Kernel Team <debian-kernel@lists.debian.org>",
+    "Installed-Size": "645 kB",
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libmnl0 (>= 1.0.3-4~)"
+    ],
+    "Homepage": "https://www.kernel.org/pub/software/network/ethtool/",
+    "Task": [
+        "cloud-image",
+        "server",
+        "ubuntu-server-raspi",
+        "ubuntukylin-desktop",
+        "ubuntu-mate-core",
+        "ubuntu-mate-desktop"
+    ],
+    "Download-Size": "208 kB",
+    "APT-Manual-Installed": "no",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "ethtool (8)          - query or control network driver and hardware settings"
+    ],
+    "Listing": [
+        "ethtool/jammy,now 1:5.16-1 amd64 [installed,automatic]"
+    ],
+    "Timestamp": {
+        "date": "",
+        "time": ""
+    }
+}

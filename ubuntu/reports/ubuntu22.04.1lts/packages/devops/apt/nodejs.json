@@ -1,0 +1,41 @@
+{
+    "Package": "nodejs",
+    "Version": "12.22.9~dfsg-1ubuntu3",
+    "Priority": "extra",
+    "Section": "universe/web",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian Javascript Maintainers <pkg-javascript-devel@alioth-lists.debian.net>",
+    "Installed-Size": "932 kB",
+    "Provides": [
+        "node-types-node (= 12.20.42~12.22.9~dfsg-1ubuntu3)"
+    ],
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libnode72 (= 12.22.9~dfsg-1ubuntu3)"
+    ],
+    "Recommends": [
+        "ca-certificates",
+        "nodejs-doc"
+    ],
+    "Suggests": [
+        "npm"
+    ],
+    "Breaks": [
+        "node-babel-runtime (<< 7)",
+        "node-typescript-types (<< 20210110~)"
+    ],
+    "Homepage": "https://nodejs.org/",
+    "Download-Size": "122 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "nodejs (1)           - server-side JavaScript runtime"
+    ],
+    "Listing": [
+        "nodejs/jammy,now 12.22.9~dfsg-1ubuntu3 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:15:33"
+    }
+}

@@ -1,0 +1,44 @@
+{
+    "Package": "tftpd-hpa",
+    "Version": "5.2+20150808-1.2build2",
+    "Priority": "extra",
+    "Section": "net",
+    "Source": "tftp-hpa",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Ron Lee <ron@debian.org>",
+    "Installed-Size": "122 kB",
+    "Provides": [
+        "tftp-server"
+    ],
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libwrap0 (>= 7.6-4~)",
+        "adduser",
+        "debconf (>= 0.5) | debconf-2.0"
+    ],
+    "Suggests": [
+        "pxelinux"
+    ],
+    "Conflicts": [
+        "atftpd",
+        "tftp-server",
+        "tftpd"
+    ],
+    "Replaces": [
+        "atftpd",
+        "tftp-server",
+        "tftpd"
+    ],
+    "Homepage": "http://git.kernel.org/cgit/network/tftp/tftp-hpa.git",
+    "Download-Size": "40.7 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [],
+    "Listing": [
+        "tftpd-hpa/jammy,now 5.2+20150808-1.2build2 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:18:00"
+    }
+}

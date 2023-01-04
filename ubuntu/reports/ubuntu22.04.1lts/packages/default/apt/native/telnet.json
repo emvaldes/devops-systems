@@ -1,0 +1,40 @@
+{
+    "Package": "telnet",
+    "Version": "0.17-44build1",
+    "Priority": "standard",
+    "Section": "net",
+    "Source": "netkit-telnet",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Debian QA Group <packages@qa.debian.org>",
+    "Installed-Size": "158 kB",
+    "Provides": [
+        "telnet-client"
+    ],
+    "Depends": [
+        "libc6 (>= 2.34)",
+        "libstdc++6 (>= 5)",
+        "netbase"
+    ],
+    "Replaces": [
+        "netstd"
+    ],
+    "Homepage": "http://www.hcs.harvard.edu/~dholland/computers/netkit.html",
+    "Task": [
+        "standard"
+    ],
+    "Download-Size": "66.9 kB",
+    "APT-Manual-Installed": "no",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/main amd64 Packages",
+    "Apropos": [
+        "Regexp::Common::URI::telnet (3pm) - - Returns a pattern for telnet URIs.",
+        "telnet (1)           - user interface to the TELNET protocol",
+        "telnet.netkit (1)    - user interface to the TELNET protocol"
+    ],
+    "Listing": [
+        "telnet/jammy,now 0.17-44build1 amd64 [installed,automatic]"
+    ],
+    "Timestamp": {
+        "date": "2022-08-09",
+        "time": "11:49:25"
+    }
+}

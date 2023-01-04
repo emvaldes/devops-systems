@@ -1,0 +1,30 @@
+{
+    "Package": "nload",
+    "Version": "0.7.4-2build3",
+    "Priority": "extra",
+    "Section": "universe/net",
+    "Origin": "Ubuntu",
+    "Original-Maintainer": "Marcio de Souza Oliveira <m.desouza20@gmail.com>",
+    "Installed-Size": "173 kB",
+    "Depends": [
+        "libc6 (>= 2.14)",
+        "libgcc-s1 (>= 3.0)",
+        "libncurses6 (>= 6)",
+        "libstdc++6 (>= 5.2)",
+        "libtinfo6 (>= 6)"
+    ],
+    "Homepage": "http://www.roland-riegel.de/nload/",
+    "Download-Size": "55.1 kB",
+    "APT-Manual-Installed": "yes",
+    "APT-Sources": "http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 Packages",
+    "Apropos": [
+        "nload (1)            - displays the current network usage"
+    ],
+    "Listing": [
+        "nload/jammy,now 0.7.4-2build3 amd64 [installed]"
+    ],
+    "Timestamp": {
+        "date": "2023-01-04",
+        "time": "10:15:38"
+    }
+}
