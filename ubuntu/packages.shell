@@ -237,7 +237,7 @@ function packages_ubuntu () {
         echo -e "\n--------------------------------------------------------------------------------";
         echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
         echo -e "   Package: ${package_status}";
-        echo -e "--------------------------------------------------------------------------------";
+        echo -e "--------------------------------------------------------------------------------\n";
         # echo -e "${package}" >> ${installed};
         case "${installer}" in
            apt ) ## Processing APT-Installed Packages:
@@ -247,7 +247,6 @@ function packages_ubuntu () {
           snap ) snap info ${package} | tee "${xpath}/${package}.info";
                  ;;
         esac;
-        echo -e;
       fi;
     done;
     ## Exporting Installed Packages JSON file.
