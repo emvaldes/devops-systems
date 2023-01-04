@@ -31,7 +31,8 @@ Description: fast, scalable, distributed revision control system
 **Description**: Executing the **packages.shell** script generates these JSON objects.
 
 ```shell
-$ packages_ubuntu --log-file=packages.log \
+$ packages_ubuntu --install \
+                  --log-file=packages.log \
                   --json-file=packages.json \
                   --report-file=packages.report \
   | tee $(pwd)/packages.log;
@@ -40,7 +41,8 @@ $ packages_ubuntu --log-file=packages.log \
 or
 
 ```shell
-$ packages_ubuntu --pkgs-list='jq,openssh-server,python-is-python3' \
+$ packages_ubuntu --install \
+                  --pkgs-list='jq,openssh-server,python-is-python3' \
                   --json-file=packages.json \
                   --report-file=packages.report \
   | tee $(pwd)/packages.log;
