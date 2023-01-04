@@ -1,25 +1,0 @@
-Reading package lists...
-Building dependency tree...
-Reading state information...
-The following additional packages will be installed:
-  libwhisker2-perl
-Suggested packages:
-  nmap
-The following NEW packages will be installed:
-  libwhisker2-perl nikto
-0 upgraded, 2 newly installed, 0 to remove and 0 not upgraded.
-Need to get 344 kB of archives.
-After this operation, 2,207 kB of additional disk space will be used.
-Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 libwhisker2-perl all 2.5-1.2 [98.1 kB]
-Get:2 http://us.archive.ubuntu.com/ubuntu jammy/multiverse amd64 nikto all 1:2.1.5-3.1 [246 kB]
-Fetched 344 kB in 2s (227 kB/s)
-Selecting previously unselected package libwhisker2-perl.
-(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 262382 files and directories currently installed.)
-Preparing to unpack .../libwhisker2-perl_2.5-1.2_all.deb ...
-Unpacking libwhisker2-perl (2.5-1.2) ...
-Selecting previously unselected package nikto.
-Preparing to unpack .../nikto_1%3a2.1.5-3.1_all.deb ...
-Unpacking nikto (1:2.1.5-3.1) ...
-Setting up libwhisker2-perl (2.5-1.2) ...
-Setting up nikto (1:2.1.5-3.1) ...
-Processing triggers for man-db (2.10.2-1) ...
