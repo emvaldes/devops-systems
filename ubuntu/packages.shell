@@ -136,7 +136,8 @@ function packages_ubuntu () {
       ## Identifying if package is already installed.
       local status=;
       case "${installer}" in
-         apt ) package_status="$(
+         apt ) echo -e;
+               package_status="$(
                    apt list --installed ${package} 2>/dev/null \
                    | egrep -v "Listing... Done" | egrep -w "^${package}.*"
                  )";
