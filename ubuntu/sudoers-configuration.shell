@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+## Provisioning the deployment to auto-provide sudo's password.
+echo -e "devops\n" | sudo -S systemctl status ssh 2>&1>/dev/null ;
+
+export sudoers_logfile="/tmp/sudoers.log";
+cat /dev/null > ${sudoers_logfile};
+echo -e "\n* Starting Sudoers Configuration ...\n" | tee -a "${sudoers_logfile}" ;
+
+## Configuring passwordless access to all sudo-requests.
+echo 'devops  ALL=(ALL)  NOPASSWD: ALL' | sudo tee /etc/sudoers.d/devops ;
+
+## Configuring /etc/sudoers.d/devops file-permissions.
+sudo chmod 0440 /etc/sudoers.d/devops ;
+
+## Listing these [/etc/sudoers.d/devops] configured permissions.
+sudo ls -al /etc/sudoers.d/devops ;
+
+## Listing the [/etc/sudoers.d/devops] file-content.
+sudo cat /etc/sudoers.d/devops ;
+
+echo -e "\n* Completed Sudoers Configuration! \n" | tee -a "${sudoers_logfile}" ;
