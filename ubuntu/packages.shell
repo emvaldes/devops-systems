@@ -261,8 +261,8 @@ function packages_ubuntu () {
   }; alias packages-ubuntu='packages_ubuntu';
 
 ## packages_ubuntu --pkgs-list='jq,openssh-server,python-is-python3' \
-packages_ubuntu --install \
-                --log-file=packages.log \
-                --json-file=packages.json \
-                --report-file=packages.report \
-| tee $(pwd)/packages.log;
+## packages_ubuntu --install \
+##                 --log-file=packages.log \
+##                 --json-file=packages.json \
+##                 --report-file=packages.report \
+## | tee $(pwd)/packages.log;
