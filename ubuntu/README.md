@@ -260,28 +260,26 @@ The structure looks like this:
         ├── default
         │   └── apt
         │       ├── devops
-        │       │   ├── gh.json
         │       │   ├── git.json
         │       │   ├── jq.json
-        │       │   ├── net-tools.json
-        │       │   ├── openssh-server.json
-        │       │   ├── python-is-python3.json
-        │       │   └── vim.json
-        │       └── native
-        │           ├── build-essential.json
-        │           ├── coreutils.json
-        │           ├── ethtool.json
-        │           ├── gnupg.json
-        │           ├── htop.json
-        │           ├── iproute2.json
-        │           ├── procps.json
-        │           ├── psmisc.json
-        │           ├── sysvinit-utils.json
-        │           ├── telnet.json
-        │           ├── unzip.json
-        │           ├── wget.json
-        │           ├── zenity.json
-        │           └── zip.json
+        │       │   └── python-is-python3.json
+        │       ├── native
+        │       │   ├── build-essential.json
+        │       │   ├── coreutils.json
+        │       │   ├── ethtool.json
+        │       │   ├── gnupg.json
+        │       │   ├── htop.json
+        │       │   ├── iproute2.json
+        │       │   ├── procps.json
+        │       │   ├── psmisc.json
+        │       │   ├── sysvinit-utils.json
+        │       │   ├── telnet.json
+        │       │   ├── unzip.json
+        │       │   ├── wget.json
+        │       │   ├── zenity.json
+        │       │   └── zip.json
+        │       └── preinst
+        │           └── openssh-server.json
         ├── devops
         │   └── apt
         │       ├── ansible.json
@@ -297,6 +295,7 @@ The structure looks like this:
         │       ├── curl.json
         │       ├── dos2unix.json
         │       ├── fping.json
+        │       ├── gh.json
         │       ├── golang.json
         │       ├── grepcidr.json
         │       ├── hping3.json
@@ -310,6 +309,7 @@ The structure looks like this:
         │       ├── lynx.json
         │       ├── mc.json
         │       ├── mtr.json
+        │       ├── net-tools.json
         │       ├── netcat.json
         │       ├── ngrep.json
         │       ├── nikto.json
@@ -328,6 +328,7 @@ The structure looks like this:
         │       ├── stress.json
         │       ├── tftpd-hpa.json
         │       ├── tree.json
+        │       ├── vim.json
         │       └── virtualenv.json
         ├── installed
         │   └── apt
@@ -392,5 +393,5 @@ The structure looks like this:
             └── apt
                 └── sshpass.log
 
-16 directories, 121 files
+17 directories, 121 files
 ```
