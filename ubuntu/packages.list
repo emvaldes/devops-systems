@@ -18,13 +18,10 @@ declare -a preinstalled=(
   );
 
 declare -a postinstalled=(
-    gh
     git
     jq
-    net-tools
     openssh-server
     python-is-python3
-    vim
   );
 
 declare -a awscloud=(
