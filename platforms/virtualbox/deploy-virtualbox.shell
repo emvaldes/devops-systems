@@ -2,7 +2,8 @@
 
 oIFS="${IFS}"; IFS=$'\n';
 ## -----------------------------------------------------------------------------
-## Reference: https://www.virtualbox.org/manual/UserManual.html#unattended-guest-install-example
+## Reference: https://www.virtualbox.org/manual/UserManual.html
+              #unattended-guest-install-example
 
 function vboxmanage_storage () {
     local oIFS="${IFS}";
@@ -14,26 +15,34 @@ function vboxmanage_storage () {
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
-    [[ ${#vm_location} -eq 0 ]] && vm_location="${HOME}/.virtualization/virtualbox/${vm_name}";
+    [[ ${#vm_location} -eq 0 ]] && vm_location="${virtualbox}/${vm_name}";
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
-    ## Create a virtual hard disk 25GB and storage devices for the Virtual Machine.
-    VBoxManage createhd --filename "${vm_location}/${vm_name}.vdi" \
-                        --size 25000 ;
+    ## Create a virtual hard disk and storage devices for the Virtual Machine.
+    VBoxManage createhd \
+             --filename "${vm_location}/${vm_name}.vdi" \
+             --size 25000 ;
     ## Create a SATA storage controller and attach the virtual hard disk.
-    VBoxManage storagectl ${vm_name} --name "SATA Controller" \
-                                     --add sata \
-                                     --controller IntelAHCI ;
-    VBoxManage storageattach ${vm_name} --storagectl "SATA Controller" \
-                                        --port 0 --device 0 \
-                                        --type hdd \
-                                        --medium "${vm_location}/${vm_name}.vdi" ;
-    ## Create an IDE storage controller for a virtual DVD drive and attach a Linux installation ISO.
-    VBoxManage storagectl ${vm_name} --name "IDE Controller" \
-                                     --add ide ;
-    VBoxManage storageattach ${vm_name} --storagectl "IDE Controller" \
-                                        --port 1 --device 0 \
-                                        --type dvddrive \
-                                        --medium ${iso_filename} ;
+    VBoxManage storagectl ${vm_name} \
+             --name "SATA Controller" \
+             --add sata \
+             --controller IntelAHCI ;
+    VBoxManage storageattach ${vm_name} \
+             --storagectl "SATA Controller" \
+             --port 0 \
+             --device 0 \
+             --type hdd \
+             --medium "${vm_location}/${vm_name}.vdi" ;
+    ## Create an IDE Storage Controller for a virtual DVD drive
+    ## and attach a Linux installation ISO.
+    VBoxManage storagectl ${vm_name} \
+             --name "IDE Controller" \
+             --add ide ;
+    VBoxManage storageattach ${vm_name} \
+             --storagectl "IDE Controller" \
+             --port 1 \
+             --device 0 \
+             --type dvddrive \
+             --medium ${iso_filename} ;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-storage='vboxmanage_storage';
@@ -49,37 +58,46 @@ function vboxmanage_configvm () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     ## General -> Advanced:
-    VBoxManage modifyvm ${vm_name} --clipboard-mode=bidirectional \
-                                   --drag-and-drop=bidirectional ;
+    VBoxManage modifyvm ${vm_name} \
+             --clipboard-mode=bidirectional \
+             --drag-and-drop=bidirectional ;
     ## System -> Motherboard:
-    VBoxManage modifyvm ${vm_name} --memory ${memory_size} ;
+    VBoxManage modifyvm ${vm_name} \
+             --memory ${memory_size} ;
 
-    VBoxManage modifyvm ${vm_name} --boot1 dvd \
-                                   --boot2 disk \
-                                   --boot3 none \
-                                   --boot4 none ;
-    VBoxManage modifyvm ${vm_name} --chipset=piix3 \
-                                   --mouse=usbmtscreenpluspad \
-                                   --ioapic=on \
-                                   --rtc-use-utc=on ;
+    VBoxManage modifyvm ${vm_name} \
+             --boot1 dvd \
+             --boot2 disk \
+             --boot3 none \
+             --boot4 none ;
+    VBoxManage modifyvm ${vm_name} \
+             --chipset=piix3 \
+             --mouse=usbmtscreenpluspad \
+             --ioapic=on \
+             --rtc-use-utc=on ;
     ## System -> Processor:
-    VBoxManage modifyvm ${vm_name} --cpus=${total_cpus} \
-                                   --cpu-execution-cap=100 \
-                                   --pae=off ;
+    VBoxManage modifyvm ${vm_name} \
+             --cpus=${total_cpus} \
+             --cpu-execution-cap=100 \
+             --pae=off ;
     ## System -> Acceleration:
-    VBoxManage modifyvm ${vm_name} --paravirt-provider=default \
-                                   --nested-paging=on ;
+    VBoxManage modifyvm ${vm_name} \
+             --paravirt-provider=default \
+             --nested-paging=on ;
     ## Display -> Screen:
-    VBoxManage modifyvm ${vm_name} --vram ${vram_size} \
-                                   --monitor-count=1 \
-                                   --graphicscontroller=vmsvga \
-                                   --accelerate-3d=off ;
+    VBoxManage modifyvm ${vm_name} \
+             --vram ${vram_size} \
+             --monitor-count=1 \
+             --graphicscontroller=vmsvga \
+             --accelerate-3d=off ;
     # ## Ports -> Serial Ports:
-    # VBoxManage modifyvm ${vm_name} --uart1=0x3f8 5 \
-    #                                --uart-mode1="/tmp/vbox--${vm_name}" \
-    #                                --uart-type1=16550a ;
+    # VBoxManage modifyvm ${vm_name} \
+    #          --uart1=0x3f8 5 \
+    #          --uart-mode1="/tmp/vbox--${vm_name}" \
+    #          --uart-type1=16550a ;
     ## Ports -> USB 2.0 (OHCI + EHCI) Controller
-    VBoxManage modifyvm ${vm_name} --usb-ehci=on ;
+    VBoxManage modifyvm ${vm_name} \
+             --usb-ehci=on ;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-configvm='vboxmanage_configvm';
@@ -95,21 +113,25 @@ function vboxmanage_multimedia () {
       [[ ${1#*\--} = "video-quality" ]] && local video_quality="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
-    [[ ${#recording} -eq 0 ]] && recording="${HOME}/.virtualization/virtualbox/recordings/${vm_name}-screen0.webm";
+    [[ ${#recording} -eq 0 ]] && {
+        recording="${virtualbox}/recordings/${vm_name}-screen0.webm";
+      }
     [[ ${#frame_rate} -eq 0 ]] && frame_rate='30';
     [[ ${#video_quality} -eq 0 ]] && video_quality='2048';
     [[ ${#audio_controller} -eq 0 ]] && audio_controller='ac97';
     # ## Display
-    VBoxManage modifyvm ${vm_name} --recording=on \
-                                   --recording-file=${recording} \
-                                   --recording-video-fps=${frame_rate} \
-                                   --recording-video-res=${resolution} \
-                                   --recording-video-rate=${video_quality} ;
+    VBoxManage modifyvm ${vm_name} \
+             --recording=on \
+             --recording-file=${recording} \
+             --recording-video-fps=${frame_rate} \
+             --recording-video-res=${resolution} \
+             --recording-video-rate=${video_quality} ;
     ## Audio:
-    VBoxManage modifyvm ${vm_name} --audio=default \
-                                   --audio-controller=${audio_controller} \
-                                   --audio-in=on \
-                                   --audio-out=on ;
+    VBoxManage modifyvm ${vm_name} \
+             --audio=default \
+             --audio-controller=${audio_controller} \
+             --audio-in=on \
+             --audio-out=on ;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-multimedia='vboxmanage_multimedia';
@@ -127,42 +149,50 @@ function vboxmanage_networking () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     [[ "${#bridged_network}" -gt 0 ]] && {
+        trace_filename="/tmp/trace--bridged-network--${vm_name}";
         index="${bridged_network%%\,*}";
         interface="${bridged_network##*\,}";
-        VBoxManage modifyvm ${vm_name} --nic${index}=bridged \
-                                       --nic-type${index}=${nic_type} \
-                                       --bridge-adapter${index}="${interface}" \
-                                       --cable-connected${index}=on \
-                                       --nic-trace${index}=on \
-                                       --nic-trace-file${index}=/tmp/trace--bridged-network--${vm_name} ;
+        VBoxManage modifyvm ${vm_name} \
+                 --nic${index}=bridged \
+                 --nic-type${index}=${nic_type} \
+                 --bridge-adapter${index}="${interface}" \
+                 --cable-connected${index}=on \
+                 --nic-trace${index}=on \
+                 --nic-trace-file${index}=${trace_filename};
       };
     [[ "${#hostonly_network}" -gt 0 ]] && {
+        trace_filename="/tmp/trace--hostonly-network--${vm_name}";
         index="${hostonly_network%%\,*}";
         interface="${hostonly_network##*\,}";
-        VBoxManage modifyvm ${vm_name} --nic${index}=hostonlynet \
-                                       --nic-type${index}=${nic_type} \
-                                       --host-only-net${index}="${interface}" \
-                                       --cable-connected${index}=on \
-                                       --nic-trace${index}=on \
-                                       --nic-trace-file${index}=/tmp/trace--hostonly-network--${vm_name} ;
+        VBoxManage modifyvm ${vm_name} \
+                 --nic${index}=hostonlynet \
+                 --nic-type${index}=${nic_type} \
+                 --host-only-net${index}="${interface}" \
+                 --cable-connected${index}=on \
+                 --nic-trace${index}=on \
+                 --nic-trace-file${index}=${trace_filename};
       };
     [[ "${#nat_network}" -gt 0 ]] && {
+        trace_filename="/tmp/trace--nat-network--${vm_name}";
         index="${nat_network%%\,*}";
         interface="${nat_network##*\,}";
-        VBoxManage modifyvm ${vm_name} --nic${index}=natnetwork \
-                                       --nic-type${index}=${nic_type} \
-                                       --host-only-net${index}="${interface}" \
-                                       --cable-connected${index}=on \
-                                       --nic-trace${index}=on \
-                                       --nic-trace-file${index}=/tmp/trace--nat-network--${vm_name} ;
+        VBoxManage modifyvm ${vm_name} \
+                 --nic${index}=natnetwork \
+                 --nic-type${index}=${nic_type} \
+                 --host-only-net${index}="${interface}" \
+                 --cable-connected${index}=on \
+                 --nic-trace${index}=on \
+                 --nic-trace-file${index}=${trace_filename};
       };
     [[ ${#nat_only} -gt 0 ]] && {
+        trace_filename="/tmp/trace--nat-only--${vm_name}";
         index="${nat_only%%\,*}";
-        VBoxManage modifyvm ${vm_name} --nic${index}=nat \
-                                       --nic-type${index}=${nic_type} \
-                                       --cable-connected${index}=on \
-                                       --nic-trace${index}=on \
-                                       --nic-trace-file${index}=/tmp/trace--nat-only--${vm_name} ;
+        VBoxManage modifyvm ${vm_name} \
+                 --nic${index}=nat \
+                 --nic-type${index}=${nic_type} \
+                 --cable-connected${index}=on \
+                 --nic-trace${index}=on \
+                 --nic-trace-file${index}=${trace_filename};
       };
     IFS="${oIFS}";
     return 0;
@@ -178,14 +208,22 @@ export vm_name="${1}";
   } || {
 
     export service_account="${2}";
+    export virtualbox="${3}";
+
     [[ ${#service_account} -eq 0 ]] && {
-        service_account='devops';
-        echo -e "\nWarning: Using default '${service_account}' service account! \n";
+        export service_account='devops';
+        echo -en "\nWarning: Using default ";
+        echo -e  "'${service_account}' service account! \n";
+      } ;
+    [[ ${#virtualbox} -eq 0 ]] && {
+        export virtualbox="${HOME}/.virtualization/virtualbox";
+        echo -en "\nWarning: Using default ";
+        echo -e  "'${service_account}' service account! \n";
       } ;
     ## Installation media (DVD ISO):
     export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
     ## Cleaning existing location:
-    rm -rfv ${HOME}/.virtualization/virtualbox/${vm_name} ;
+    rm -rfv ${virtualbox}/${vm_name} ;
     ## Collecting Virtual Machinen OS Type:
     vm_ostype="$(
         VBoxManage list ostypes \
@@ -194,15 +232,16 @@ export vm_name="${1}";
       )";
     ## Create the virtual machine.
     declare -a response=($(
-        VBoxManage createvm --name "${vm_name}" \
-                            --ostype "${vm_ostype}" \
-                            --register
+        VBoxManage createvm \
+                 --name "${vm_name}" \
+                 --ostype "${vm_ostype}" \
+                 --register
       ));
     ## Virtual machine 'Ubuntu22_LTS_64' is created and registered.
     vm_registration="${response[0]}";
     ## UUID: f6fc21d3-7a3a-4490-a5fc-7d26aca20e09
     vm_uuid="${response[1]/UUID: /}";
-    ## Settings file: '/Users/emvaldes/.virtualization/virtualbox/Ubuntu22_LTS_64/Ubuntu22_LTS_64.vbox'
+    ## Settings file: '${virttualbox}/Ubuntu22_LTS_64/Ubuntu22_LTS_64.vbox'
     vm_settings="$(
         echo -e ${response[2]} \
         | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
@@ -246,21 +285,20 @@ export vm_name="${1}";
              --hostname=${vm_name}.local \
              --language=en \
     ;
-    # ## Identifying Patch-Files Location:
-    # patching_files="$( dirname "${vm_location}" )";
-    # ## Patching Pre-Seed Configurations:
-    # patch ${vm_location}/Unattended-*-preseed.cfg < ${patching_files}/patch-preseed.cfg ;
-    # ## Patching VBOX Post-Install Script:
-    # patch ${vm_location}/Unattended-*-vboxpostinstall.sh < ${patching_files}/patch-vboxpostinstall.sh ;
-
+    ## Identifying Patch-Files Location:
+    patching_files="$( dirname "${vm_location}" )";
+    ## Patching Pre-Seed Configurations:
+    patch ${vm_location}/Unattended-*-preseed.cfg \
+          < ${patching_files}/patch-preseed.cfg ;
+    ## Patching VBOX Post-Install Script:
+    patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
+          < ${patching_files}/patch-vboxpostinstall.sh ;
   };
 
 ## Starting VirtualBox Virtual Machine.
 ## VBoxManage startvm ${vm_name} ;
 
 ## -----------------------------------------------------------------------------
-
 ## VBoxManage unregistervm --delete ${vm_name} ;
-
 ## -----------------------------------------------------------------------------
 IFS="${oIFS}";
