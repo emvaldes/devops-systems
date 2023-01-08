@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+export postinstall_logfile="/tmp/postinstall.log";
+cat /dev/null > ${postinstall_logfile};
+
+echo -e "\n* Starting Post-Install ...\n" | tee -a "${postinstall_logfile}" ;
+
+## Installing and Configuring Git CLI:
+sudo apt install git --yes | tee -a "${postinstall_logfile}" ;
+
+## Installing and Configuring additional packages:
+sudo apt install jq --yes | tee -a "${postinstall_logfile}" ;
+sudo apt install python-is-python3 --yes | tee -a "${postinstall_logfile}" ;
+
+echo -e "\n* Completed Post-Install! \n" | tee -a "${postinstall_logfile}" ;
