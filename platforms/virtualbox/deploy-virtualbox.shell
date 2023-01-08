@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-oIFS="${IFS}"; IFS=$'\n';
 ## -----------------------------------------------------------------------------
 ## Reference: https://www.virtualbox.org/manual/UserManual.html
               #unattended-guest-install-example
+## -----------------------------------------------------------------------------
 
 function vboxmanage_storage () {
     local oIFS="${IFS}";
@@ -198,32 +198,53 @@ function vboxmanage_networking () {
     return 0;
   }; alias vboxmanage-networking='vboxmanage_networking';
 
-## -----------------------------------------------------------------------------
-
-export vm_name="${1}";
-[[ ${#vm_name} -eq 0 ]] && {
-
-    echo -e "\nWarning: No Virtual Machine Name was provided! \n";
-
-  } || {
-
-    export service_account="${2}";
-    export virtualbox="${3}";
-
+function deploy_virtualbox () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
+      [[ ${1#*\--} = "account" ]] && local service_account="${2}";
+      [[ ${1#*\--} = "password" ]] && local account_password="${2}";
+      [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
+      [[ ${1#*\--} = "auto-install" ]] && local unattended_install='true';
+      [[ ${1#*\--} = "patch" ]] && local patch_files='true';
+      [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
+    done; IFS="${oIFS}";
+    ## Script configuration
+    local script_path=$( dirname ${0} );
+    ## echo -e "Script Path: ${script_path}";
+    local script_name=$( basename ${0%\.*} );
+    ## echo -e "Script Name: ${script_name}";
+    local script_type=$( basename ${0##*\.} );
+    ## echo -e "Script Type: ${script_type}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    [[ ${#vm_name} -eq 0 ]] && {
+        echo -e "\nWarning: No Virtual Machine Name was provided! \n";
+        return 1;
+      };
     [[ ${#service_account} -eq 0 ]] && {
         export service_account='devops';
         echo -en "\nWarning: Using default ";
         echo -e  "'${service_account}' service account! \n";
       } ;
+    [[ ${#account_password} -eq 0 ]] && {
+        export account_password="${service_account}";
+        echo -en "\nWarning: Using default ";
+        echo -e  "'${account_password}' account password! \n";
+      } ;
     [[ ${#virtualbox} -eq 0 ]] && {
         export virtualbox="${HOME}/.virtualization/virtualbox";
         echo -en "\nWarning: Using default ";
         echo -e  "'${service_account}' service account! \n";
+        ## Cleaning existing location:
+        rm -rfv ${virtualbox}/${vm_name} 2>/dev/null ;
       } ;
-    ## Installation media (DVD ISO):
-    export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
-    ## Cleaning existing location:
-    rm -rfv ${virtualbox}/${vm_name} ;
+    [[ ${#iso_filename} -eq 0 ]] && {
+        echo -e "\nWarning: No Installation ISO file was provided! \n";
+        ## Installation media (DVD ISO):
+        export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
+        # return 1;
+      };
     ## Collecting Virtual Machinen OS Type:
     vm_ostype="$(
         VBoxManage list ostypes \
@@ -272,33 +293,34 @@ export vm_name="${1}";
                           --nat-network='3,NatNetwork' \
                           --nat-only='4' \
     ; sleep 1;
-    ## Generating VirtualBox Un-Attended Installation configurations:
-    VBoxManage unattended install ${vm_name} \
-             --iso=/Users/emvaldes/Downloads/${iso_filename} \
-             --user=${service_account} \
-             --password=${service_account} \
-             --full-user-name='DevOps Engineer' \
-             --install-additions \
-             --locale=en_US \
-             --country=US \
-             --time-zone=utc \
-             --hostname=${vm_name}.local \
-             --language=en \
-    ;
-    ## Identifying Patch-Files Location:
-    patching_files="$( dirname "${vm_location}" )";
-    ## Patching Pre-Seed Configurations:
-    patch ${vm_location}/Unattended-*-preseed.cfg \
-          < ${patching_files}/patch-preseed.cfg ;
-    ## Patching VBOX Post-Install Script:
-    patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
-          < ${patching_files}/patch-vboxpostinstall.sh ;
-  };
-
-## Starting VirtualBox Virtual Machine.
-## VBoxManage startvm ${vm_name} ;
-
-## -----------------------------------------------------------------------------
-## VBoxManage unregistervm --delete ${vm_name} ;
-## -----------------------------------------------------------------------------
-IFS="${oIFS}";
+    [[ ${#unattended_install} -eq 0 ]] && {
+        ## Generating VirtualBox Un-Attended Installation configurations:
+        VBoxManage unattended install ${vm_name} \
+                 --iso=/Users/emvaldes/Downloads/${iso_filename} \
+                 --user=${service_account} \
+                 --password=${service_account} \
+                 --full-user-name='DevOps Engineer' \
+                 --install-additions \
+                 --locale=en_US \
+                 --country=US \
+                 --time-zone=utc \
+                 --hostname=${vm_name}.local \
+                 --language=en \
+        ;
+        [[ ${#patch_files} -eq 0 ]] && {
+            ## Patching Pre-Seed Configurations:
+            patch ${vm_location}/Unattended-*-preseed.cfg \
+                  < ${script_path}/patch-preseed.cfg ;
+            ## Patching VBOX Post-Install Script:
+            patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
+                  < ${script_path}/patch-vboxpostinstall.sh ;
+          };
+      };
+    ## Starting VirtualBox Virtual Machine.
+    ## VBoxManage startvm ${vm_name} ;
+    ## -----------------------------------------------------------------------------
+    ## VBoxManage unregistervm --delete ${vm_name} ;
+    ## -----------------------------------------------------------------------------
+    IFS="${oIFS}";
+    return 0;
+  }; alias deploy-virtualbox='deploy_virtualbox';
