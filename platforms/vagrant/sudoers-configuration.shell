@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+## Creating Service Account (devops)
+service_account='devops';
+
+sudo adduser \
+       --shell /bin/bash \
+       --disabled-password \
+       --gecos '' \
+       ${service_account} ;
+
+## Output:
+## Adding user `devops' ...
+## Adding new group `devops' (1001) ...
+## Adding new user `devops' (1001) with group `devops' ...
+## Creating home directory `/home/devops' ...
+## Copying files from `/etc/skel' ...
+
+## Adding the Service Account (devops) to the sudo Group
+sudo usermod -aG sudo ${service_account} ;
+
+## Recursively copying the ~/.ssh into the Service Account
+sudo cp -prv ${HOME}/.ssh /home/${service_account}/ ;
+
+## Output:
+## '/home/vagrant/.ssh' -> '/home/devops/.ssh'
+## '/home/vagrant/.ssh/authorized_keys' -> '/home/devops/.ssh/authorized_keys'
+
+## Recursively changing the Service Account ~/.ssh folder Owner/Group
+sudo chown -Rfv ${service_account}:${service_account} \
+                /home/${service_account}/.ssh ;
+
+## Output
+## changed ownership of '/home/devops/.ssh/authorized_keys'
+##                   from vagrant:vagrant to devops:devops
+## changed ownership of '/home/devops/.ssh' from vagrant:vagrant to devops:devops
+
+## Configuring passwordless access to all sudo-requests.
+echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
+     | sudo tee /etc/sudoers.d/${service_account} ;
+
+## Configuring /etc/sudoers.d/devops file-permissions.
+sudo chmod 0440 /etc/sudoers.d/${service_account} ;
+
+## Listing these [/etc/sudoers.d/devops] configured permissions.
+sudo ls -al /etc/sudoers.d/${service_account} ;
+
+## Listing the [/etc/sudoers.d/devops] file-content.
+sudo cat /etc/sudoers.d/${service_account} ;
