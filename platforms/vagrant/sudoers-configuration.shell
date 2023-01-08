@@ -46,7 +46,6 @@ sudo chown -Rfv ${service_account}:${service_account} \
 ##                   from vagrant:vagrant to ***:***
 ## changed ownership of '/home/***/.ssh' from vagrant:vagrant to ***:***
 
-newline;
 echo -e "Configuring Service Account passwordless access";
 
 ## Configuring Service Account passwordless access to sudo-requests
