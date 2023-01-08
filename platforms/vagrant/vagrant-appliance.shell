@@ -68,9 +68,6 @@ vagrant ssh-config;
 
 machine_configs=".vagrant/machines/default/virtualbox";
 cat ${HOME}/.vagrant.d/sources/ubuntu-22.04/${machine_configs}/private_key;
-
-cat ${HOME}/.ssh/public/${devops_sshkey};
-
 vagrant ssh -c \
         "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
 
@@ -82,7 +79,7 @@ vagrant ssh -c "systemctl status ssh" 2>/dev/null;
 ## -----------------------------------------------------------------------------
 ## Objective: Executing SUDO Configuration Script
 
-script_name="sudoers-configuration.shell";
+script_name="sudoers-configfile.shell";
 remote_resource="platforms/vagrant/${script_name}";
 curl --silent \
      https://${github_content}/${github_repo}/master/${remote_resource} \
@@ -91,6 +88,7 @@ curl --silent \
 ## -----------------------------------------------------------------------------
 ## Objective: Transferring SSH Access Credentials
 
+cat ${HOME}/.ssh/public/${devops_sshkey};
 cp -v ${HOME}/.ssh/${devops_sshkey} ${temp_vagrant}/shared/;
 authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 vagrant ssh -c \
