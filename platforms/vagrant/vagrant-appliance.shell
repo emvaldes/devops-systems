@@ -102,6 +102,30 @@ ssh vagrant--ubuntu-22.04 -C \
     "systemctl status ssh" 2>/dev/null;
 
 ## -----------------------------------------------------------------------------
+## Objective: Pre-Installing Core Packages
+
+script_name="ubuntu-preinstall.shell";
+github_content='raw.githubusercontent.com';
+github_repo='emvaldes/devops-systems';
+remote_resource="platforms/vagrant/${script_name}";
+curl --silent \
+     --output ${script_name} \
+     https://${github_content}/${github_repo}/master/${remote_resource} \
+| vagrant ssh -c 'bash -';
+
+## -----------------------------------------------------------------------------
+## Objective: Post-Installing Core Packages
+
+script_name="ubuntu-postinstall.shell";
+github_content='raw.githubusercontent.com';
+github_repo='emvaldes/devops-systems';
+remote_resource="platforms/vagrant/${script_name}";
+curl --silent \
+     --output ${script_name} \
+     https://${github_content}/${github_repo}/master/${remote_resource} \
+| vagrant ssh -c 'bash -';
+
+## -----------------------------------------------------------------------------
 ## Objective: Destroying Vagrant Box (ubuntu)
 
 cd /.vagrant.d/sources/${ubuntu_instance};
