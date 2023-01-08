@@ -79,7 +79,7 @@ vagrant ssh -c "systemctl status ssh" 2>/dev/null;
 ## -----------------------------------------------------------------------------
 ## Objective: Executing SUDO Configuration Script
 
-script_name="sudoers-configfile.shell";
+script_name="service_account.shell";
 remote_resource="platforms/vagrant/${script_name}";
 curl --silent \
      https://${github_content}/${github_repo}/master/${remote_resource} \
