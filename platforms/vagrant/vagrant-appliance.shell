@@ -66,7 +66,7 @@ vagrant ssh-config;
 ## -----------------------------------------------------------------------------
 ## Objective: Validating Vagrant Box Credentials
 
-cat ${HOME}/.ssh/vagrant/vagrant--ubuntu-22.04;
+cat ${HOME}/.ssh/public/${devops_sshkey};
 ssh vagrant--ubuntu-22.04 -C \
     "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
 
@@ -98,10 +98,6 @@ rm -v ${temp_vagrant}/shared/${devops_sshkey};
 ## -----------------------------------------------------------------------------
 ## Objective: Adding SSH Configuration Section
 
-mkdir -p ${HOME}/.ssh/vagrant && cd $_;
-vagrant_ubuntu="../../.vagrant.d/sources/${ubuntu_instance}";
-vagrant_machine="${vagrant_ubuntu}/.vagrant/machines/default";
-ln -s ${vagrant_machine}/virtualbox/private_key "vagrant--${ubuntu_instance}";
 cd /.vagrant.d/sources/${ubuntu_instance};
 private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
 vagrant ssh-config \
