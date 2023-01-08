@@ -66,9 +66,13 @@ vagrant ssh-config;
 ## -----------------------------------------------------------------------------
 ## Objective: Validating Vagrant Box Credentials
 
+machine_configs=".vagrant/machines/default/virtualbox";
+cat ${HOME}/.vagrant.d/sources/ubuntu-22.04/${machine_configs}/private_key;
+
 cat ${HOME}/.ssh/public/${devops_sshkey};
-ssh vagrant--ubuntu-22.04 -C \
-    "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
+
+vagrant ssh -c \
+        "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
 
 ## -----------------------------------------------------------------------------
 ## Objective: Reviewing Remote Execution (vagrant)
