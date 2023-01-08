@@ -5,6 +5,11 @@ function newline () { echo -e; return 0; };
 ## Creating Service Account
 service_account='devops';
 
+export sudoers_logfile="/tmp/sudoers.log";
+cat /dev/null > ${sudoers_logfile};
+
+echo -e "\n* Starting Sudoers Configuration ...\n" | tee -a "${sudoers_logfile}" ;
+
 sudo adduser \
      --shell /bin/bash \
      --disabled-password \
@@ -55,3 +60,5 @@ newline;
 
 ## Listing Service Account /etc/sudoers.d/ file-permissions
 sudo ls -al /etc/sudoers.d/${service_account} ;
+
+echo -e "\n* Completed Sudoers Configuration! \n" | tee -a "${sudoers_logfile}" ;
