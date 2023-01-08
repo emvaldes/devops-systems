@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+function newline () { echo -e; return 0; };
+
 ## Creating Service Account
 service_account='devops';
 
@@ -16,6 +18,8 @@ sudo adduser \
 ## Creating home directory `/home/***' ...
 ## Copying files from `/etc/skel' ...
 
+newline;
+
 ## Adding the Service Account to the sudo Group
 sudo usermod -aG sudo ${service_account} ;
 
@@ -26,6 +30,8 @@ sudo cp -prv ${HOME}/.ssh /home/${service_account}/ ;
 ## '/home/vagrant/.ssh' -> '/home/***/.ssh'
 ## '/home/vagrant/.ssh/authorized_keys' -> '/home/***/.ssh/authorized_keys'
 
+newline;
+
 ## Recursively changing the Service Account ~/.ssh ownership
 sudo chown -Rfv ${service_account}:${service_account} \
                 /home/${service_account}/.ssh ;
@@ -34,6 +40,8 @@ sudo chown -Rfv ${service_account}:${service_account} \
 ## changed ownership of '/home/***/.ssh/authorized_keys'
 ##                   from vagrant:vagrant to ***:***
 ## changed ownership of '/home/***/.ssh' from vagrant:vagrant to ***:***
+
+newline;
 
 ## Configuring Service Account passwordless access to sudo-requests
 echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
@@ -44,6 +52,3 @@ sudo chmod 0440 /etc/sudoers.d/${service_account} ;
 
 ## Listing Service Account /etc/sudoers.d/ file-permissions
 sudo ls -al /etc/sudoers.d/${service_account} ;
-
-## Listing Service Account /etc/sudoers.d/ file-content
-sudo cat /etc/sudoers.d/${service_account} ;
