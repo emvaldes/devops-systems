@@ -100,7 +100,7 @@ rm -v ${temp_vagrant}/shared/${devops_sshkey};
 ## -----------------------------------------------------------------------------
 ## Objective: Adding SSH Configuration Section
 
-cd /.vagrant.d/sources/${ubuntu_instance};
+cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
 private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
 vagrant ssh-config \
       | sed -e "s|Host default|Host vagrant--ubuntu-22.04|g" \
@@ -136,5 +136,5 @@ curl --silent \
 ## -----------------------------------------------------------------------------
 ## Objective: Destroying Vagrant Box (ubuntu)
 
-## cd /.vagrant.d/sources/${ubuntu_instance};
+## cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
 ## vagrant destroy;
