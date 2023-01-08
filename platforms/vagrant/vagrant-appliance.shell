@@ -1,9 +1,23 @@
 #!/usr/bin/env bash
 
 ## -----------------------------------------------------------------------------
-## Objective: Reviewing existing Vagrant Infrastructure
+## Objective: Script & Environment Variables
 
 ubuntu_instance="ubuntu-22.04";
+
+service_account='devops';
+devops_sshkey="devnetops.pub";
+
+github_content='raw.githubusercontent.com';
+github_repo='emvaldes/devops-systems';
+
+## Required Local Vagrant Structure
+temp_vagrant="/tmp/vagrant";
+mkdir -pv ${temp_vagrant}/shared;
+
+## -----------------------------------------------------------------------------
+## Objective: Reviewing existing Vagrant Infrastructure
+
 tree -a ${HOME}/.vagrant.d/;
 vagrant box list;
 
@@ -24,9 +38,16 @@ tree -a ${HOME}/.vagrant.d/;
 
 ## -----------------------------------------------------------------------------
 ## Objective: Patching Vagrant Box (Vagrantfile)
+## Create Patch-file:
+## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
 
-diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
-patch ./Vagrantfile < ./patch-vagrantfile;
+script_name="ubuntu-preinstall.shell";
+remote_resource="platforms/vagrant/${script_name}";
+curl --silent \
+     --output /tmp/vagrant/${script_name} \
+     https://${github_content}/${github_repo}/master/${remote_resource};
+patch ${HOME}/.vagrant.d/sources/${ubuntu_instance}/Vagrantfile \
+    < /tmp/vagrant/patch-vagrantfile;
 vagrant validate;
 
 ## -----------------------------------------------------------------------------
@@ -57,26 +78,21 @@ vagrant ssh -c "systemctl status ssh" 2>/dev/null;
 ## Objective: Executing SUDO Configuration Script
 
 script_name="sudoers-configuration.shell";
-github_content='raw.githubusercontent.com';
-github_repo='emvaldes/devops-systems';
 remote_resource="platforms/vagrant/${script_name}";
 curl --silent \
-     --output ${script_name} \
      https://${github_content}/${github_repo}/master/${remote_resource} \
 | vagrant ssh -c 'bash -';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Transferring SSH Access Credentials
 
-devops_sshkey="devnetops.pub";
-mkdir -pv /tmp/vagrant/shared;
-cp -v ${HOME}/.ssh/${devops_sshkey} /tmp/vagrant/shared/;
+cp -v ${HOME}/.ssh/${devops_sshkey} ${temp_vagrant}/shared/;
 authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 vagrant ssh -c \
-        "cat /shared/devnetops.pub | sudo tee -a ${authorized_keys}";
+        "cat /shared/${devops_sshkey} | sudo tee -a ${authorized_keys}";
 vagrant ssh -c \
         "sudo cat ${authorized_keys} | fold -b -w 70";
-rm -v /tmp/vagrant/shared/${devops_sshkey};
+rm -v ${temp_vagrant}/shared/${devops_sshkey};
 
 ## -----------------------------------------------------------------------------
 ## Objective: Adding SSH Configuration Section
@@ -86,8 +102,7 @@ vagrant_ubuntu="../../.vagrant.d/sources/${ubuntu_instance}";
 vagrant_machine="${vagrant_ubuntu}/.vagrant/machines/default";
 ln -s ${vagrant_machine}/virtualbox/private_key "vagrant--${ubuntu_instance}";
 cd /.vagrant.d/sources/${ubuntu_instance};
-service_account='devops';
-private_sshkey="${HOME}/.ssh/private/devnetops";
+private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
 vagrant ssh-config \
       | sed -e "s|Host default|Host vagrant--ubuntu-22.04|g" \
             -e "s|\(User \)\(.*\)|\1${service_account}|g" \
@@ -105,11 +120,8 @@ ssh vagrant--ubuntu-22.04 -C \
 ## Objective: Pre-Installing Core Packages
 
 script_name="ubuntu-preinstall.shell";
-github_content='raw.githubusercontent.com';
-github_repo='emvaldes/devops-systems';
 remote_resource="platforms/vagrant/${script_name}";
 curl --silent \
-     --output ${script_name} \
      https://${github_content}/${github_repo}/master/${remote_resource} \
 | vagrant ssh -c 'bash -';
 
@@ -117,11 +129,8 @@ curl --silent \
 ## Objective: Post-Installing Core Packages
 
 script_name="ubuntu-postinstall.shell";
-github_content='raw.githubusercontent.com';
-github_repo='emvaldes/devops-systems';
 remote_resource="platforms/vagrant/${script_name}";
 curl --silent \
-     --output ${script_name} \
      https://${github_content}/${github_repo}/master/${remote_resource} \
 | vagrant ssh -c 'bash -';
 
