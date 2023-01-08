@@ -1,0 +1,14 @@
+--- ./Vagrantfile         2023-01-07 20:34:50
++++ ./custon-vagrantfile  2023-01-07 20:36:47
+@@ -67,4 +67,10 @@
+   #   apt-get update
+   #   apt-get install -y apache2
+   # SHELL
++
++  config.vm.synced_folder "/tmp/vagrant/shared", "/shared"
++  config.vm.hostname = "devops-console"
++  config.vm.provider "virtualbox" do |console|
++    console.name = "devops-console"
++  end
++
+ end
