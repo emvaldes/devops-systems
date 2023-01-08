@@ -25,6 +25,7 @@ vagrant box list;
 ## Objective: Adding Vagrant Box (bento/ubuntu-22.04)
 
 vagrant box add bento/${ubuntu_instance} \
+      --force \
       --provider virtualbox;
 tree -a ${HOME}/.vagrant.d/boxes/;
 vagrant box list;
