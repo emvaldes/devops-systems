@@ -6,10 +6,10 @@ function newline () { echo -e; return 0; };
 service_account='devops';
 
 sudo adduser \
-       --shell /bin/bash \
-       --disabled-password \
-       --gecos '' \
-       ${service_account} ;
+     --shell /bin/bash \
+     --disabled-password \
+     --gecos '' \
+     ${service_account} ;
 
 ## Output:
 ## Adding user `***' ...
@@ -42,13 +42,16 @@ sudo chown -Rfv ${service_account}:${service_account} \
 ## changed ownership of '/home/***/.ssh' from vagrant:vagrant to ***:***
 
 newline;
+echo -e "Configuring Service Account passwordless access";
 
 ## Configuring Service Account passwordless access to sudo-requests
 echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
      | sudo tee /etc/sudoers.d/${service_account} ;
 
 ## Service Account /etc/sudoers.d/ file-permissions
-sudo chmod 0440 /etc/sudoers.d/${service_account} ;
+sudo chmod -v 0440 /etc/sudoers.d/${service_account} ;
+
+newline;
 
 ## Listing Service Account /etc/sudoers.d/ file-permissions
 sudo ls -al /etc/sudoers.d/${service_account} ;
