@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-## Creating Service Account (devops)
+## Creating Service Account
 service_account='devops';
 
 sudo adduser \
@@ -10,40 +10,40 @@ sudo adduser \
        ${service_account} ;
 
 ## Output:
-## Adding user `devops' ...
-## Adding new group `devops' (1001) ...
-## Adding new user `devops' (1001) with group `devops' ...
-## Creating home directory `/home/devops' ...
+## Adding user `***' ...
+## Adding new group `***' (1001) ...
+## Adding new user `***' (1001) with group `***' ...
+## Creating home directory `/home/***' ...
 ## Copying files from `/etc/skel' ...
 
-## Adding the Service Account (devops) to the sudo Group
+## Adding the Service Account to the sudo Group
 sudo usermod -aG sudo ${service_account} ;
 
-## Recursively copying the ~/.ssh into the Service Account
+## Recursively copying ~/.ssh into the Service Account
 sudo cp -prv ${HOME}/.ssh /home/${service_account}/ ;
 
 ## Output:
-## '/home/vagrant/.ssh' -> '/home/devops/.ssh'
-## '/home/vagrant/.ssh/authorized_keys' -> '/home/devops/.ssh/authorized_keys'
+## '/home/vagrant/.ssh' -> '/home/***/.ssh'
+## '/home/vagrant/.ssh/authorized_keys' -> '/home/***/.ssh/authorized_keys'
 
-## Recursively changing the Service Account ~/.ssh folder Owner/Group
+## Recursively changing the Service Account ~/.ssh ownership
 sudo chown -Rfv ${service_account}:${service_account} \
                 /home/${service_account}/.ssh ;
 
 ## Output
-## changed ownership of '/home/devops/.ssh/authorized_keys'
-##                   from vagrant:vagrant to devops:devops
-## changed ownership of '/home/devops/.ssh' from vagrant:vagrant to devops:devops
+## changed ownership of '/home/***/.ssh/authorized_keys'
+##                   from vagrant:vagrant to ***:***
+## changed ownership of '/home/***/.ssh' from vagrant:vagrant to ***:***
 
-## Configuring passwordless access to all sudo-requests.
+## Configuring Service Account passwordless access to sudo-requests
 echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
      | sudo tee /etc/sudoers.d/${service_account} ;
 
-## Configuring /etc/sudoers.d/devops file-permissions.
+## Service Account /etc/sudoers.d/ file-permissions
 sudo chmod 0440 /etc/sudoers.d/${service_account} ;
 
-## Listing these [/etc/sudoers.d/devops] configured permissions.
+## Listing Service Account /etc/sudoers.d/ file-permissions
 sudo ls -al /etc/sudoers.d/${service_account} ;
 
-## Listing the [/etc/sudoers.d/devops] file-content.
+## Listing Service Account /etc/sudoers.d/ file-content
 sudo cat /etc/sudoers.d/${service_account} ;
