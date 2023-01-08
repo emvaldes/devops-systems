@@ -42,13 +42,13 @@ tree -a ${HOME}/.vagrant.d/;
 ## Create Patch-file:
 ## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
 
-script_name="ubuntu-preinstall.shell";
+script_name="patch-vagrantfile";
 remote_resource="platforms/vagrant/${script_name}";
 curl --silent \
-     --output /tmp/vagrant/${script_name} \
+     --output ${temp_vagrant}/${script_name} \
      https://${github_content}/${github_repo}/master/${remote_resource};
 patch ${HOME}/.vagrant.d/sources/${ubuntu_instance}/Vagrantfile \
-    < /tmp/vagrant/patch-vagrantfile;
+    < ${temp_vagrant}/patch-vagrantfile;
 vagrant validate;
 
 ## -----------------------------------------------------------------------------
