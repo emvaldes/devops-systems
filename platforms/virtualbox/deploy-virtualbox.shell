@@ -15,7 +15,10 @@ function vboxmanage_storage () {
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
-    [[ ${#vm_location} -eq 0 ]] && vm_location="${virtualbox}/${vm_name}";
+    [[ ${#vm_location} -eq 0 ]] && {
+        echo -e "\nWarning: No Virtual Machine Location was provided! \n";
+        exit 1;
+      };
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
     VBoxManage createhd \
@@ -203,11 +206,14 @@ function deploy_virtualbox () {
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
+      [[ ${1#*\--} = "create" ]] && local create_machine='true';
       [[ ${1#*\--} = "account" ]] && local service_account="${2}";
       [[ ${1#*\--} = "password" ]] && local account_password="${2}";
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "auto-install" ]] && local unattended_install='true';
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
+      [[ ${1#*\--} = "start" ]] && local start_machine='true';
+      [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
     done; IFS="${oIFS}";
     ## Script configuration
@@ -242,34 +248,39 @@ function deploy_virtualbox () {
     [[ ${#iso_filename} -eq 0 ]] && {
         echo -e "\nWarning: No Installation ISO file was provided! \n";
         ## Installation media (DVD ISO):
-        export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
-        # return 1;
+        # export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
+        unattended_install='false';
       };
     ## Collecting Virtual Machinen OS Type:
-    vm_ostype="$(
+    declare -a vm_ostype="$(
         VBoxManage list ostypes \
         | egrep "^(ID:)([[:blank:]]*)(Ubuntu22.*)(LTS).*(64)$" \
         | awk '{print $2}'
       )";
-    ## Create the virtual machine.
-    declare -a response=($(
-        VBoxManage createvm \
-                 --name "${vm_name}" \
-                 --ostype "${vm_ostype}" \
-                 --register
-      ));
-    ## Virtual machine 'Ubuntu22_LTS_64' is created and registered.
-    vm_registration="${response[0]}";
-    ## UUID: f6fc21d3-7a3a-4490-a5fc-7d26aca20e09
-    vm_uuid="${response[1]/UUID: /}";
-    ## Settings file: '${virttualbox}/Ubuntu22_LTS_64/Ubuntu22_LTS_64.vbox'
-    vm_settings="$(
-        echo -e ${response[2]} \
-        | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
-      )";
-    ## Extracting Virtual Machine Location and VBox-file:
-    vm_location="$( dirname "${vm_settings}" )";
-    vm_vboxfile="$( basename "${vm_settings}" )";
+    local vm_location="";
+    if [[ ${unattended_install} == 'true' ]]; then
+            ## Create the virtual machine.
+            declare -a response=($(
+                VBoxManage createvm \
+                         --name "${vm_name}" \
+                         --ostype "${vm_ostype}" \
+                         --register
+              ));
+            ## Virtual machine 'Ubuntu22_LTS_64' is created and registered.
+            vm_registration="${response[0]}";
+            ## UUID: f6fc21d3-7a3a-4490-a5fc-7d26aca20e09
+            vm_uuid="${response[1]/UUID: /}";
+            ## Settings file: '${virttualbox}/Ubuntu22_LTS_64/Ubuntu22_LTS_64.vbox'
+            vm_settings="$(
+                echo -e ${response[2]} \
+                | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
+              )";
+            ## Extracting Virtual Machine Location and VBox-file:
+            vm_location="$( dirname "${vm_settings}" )";
+            vm_vboxfile="$( basename "${vm_settings}" )";
+      else  vm_location="${virtualbox}/${vm_name}";
+    fi;
+    local vm_vboxfile="${vm_location}/${vm_name}.vbox";
     ## Processing Virtual Machine Storage:
     vboxmanage_storage --vm-name="${vm_name}" \
                        --vm-location="${vm_location}" \
@@ -293,7 +304,7 @@ function deploy_virtualbox () {
                           --nat-network='3,NatNetwork' \
                           --nat-only='4' \
     ; sleep 1;
-    [[ ${#unattended_install} -eq 0 ]] && {
+    [[ ${unattended_install} == 'true' ]] && {
         ## Generating VirtualBox Un-Attended Installation configurations:
         VBoxManage unattended install ${vm_name} \
                  --iso=/Users/emvaldes/Downloads/${iso_filename} \
@@ -307,7 +318,7 @@ function deploy_virtualbox () {
                  --hostname=${vm_name}.local \
                  --language=en \
         ;
-        [[ ${#patch_files} -eq 0 ]] && {
+        [[ ${patch_files} == 'true' ]] && {
             ## Patching Pre-Seed Configurations:
             patch ${vm_location}/Unattended-*-preseed.cfg \
                   < ${script_path}/patch-preseed.cfg ;
@@ -316,11 +327,25 @@ function deploy_virtualbox () {
                   < ${script_path}/patch-vboxpostinstall.sh ;
           };
       };
-    ## Starting VirtualBox Virtual Machine.
-    ## VBoxManage startvm ${vm_name} ;
-    ## -----------------------------------------------------------------------------
-    ## VBoxManage unregistervm --delete ${vm_name} ;
-    ## -----------------------------------------------------------------------------
+    [[ ${start_machine} == 'true' ]] && {
+        ## Starting VirtualBox Virtual Machine.
+        VBoxManage startvm ${vm_name} ;
+      };
+    [[ ${delete_machine} == 'true' ]] && {
+        ## Starting VirtualBox Virtual Machine.
+        VBoxManage controlvm ${vm_name} acpipowerbutton ;
+        VBoxManage unregistervm --delete ${vm_name} ;
+        return 10;
+      };
     IFS="${oIFS}";
     return 0;
   }; alias deploy-virtualbox='deploy_virtualbox';
+
+# deploy_virtualbox --vm-name=devops-console \
+#                   --account=devops \
+#                   --password=devops \
+#                   --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
+#                   --virtualbox="${HOME}/.virtualization/virtualbox" \
+#                   --auto-install \
+#                   --patch \
+# ;
