@@ -128,5 +128,5 @@ curl --silent \
 ## -----------------------------------------------------------------------------
 ## Objective: Destroying Vagrant Box (ubuntu)
 
-cd /.vagrant.d/sources/${ubuntu_instance};
-vagrant destroy;
+## cd /.vagrant.d/sources/${ubuntu_instance};
+## vagrant destroy;
