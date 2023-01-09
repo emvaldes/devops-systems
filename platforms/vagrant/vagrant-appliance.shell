@@ -1,10 +1,10 @@
-#!/usr/bin/env bash
+vagrant_instance#!/usr/bin/env bash
 
 [[ ${#1} -gt 0 ]] && export vagrant_boxset="${1}" \
                   || export vagrant_boxset='bento/ubuntu-22.04';
 
 export vagrant_cloudset="${vagrant_boxset%%\/*}";
-export ubuntu_instance="${vagrant_boxset##*\/}";
+export vagrant_instance="${vagrant_boxset##*\/}";
 
 ## Default Service Account:
 [[ ${#2} -gt 0 ]] && export service_account="${2}" \
@@ -19,6 +19,9 @@ export ubuntu_instance="${vagrant_boxset##*\/}";
 
 ## SSH Access authorized keys:
 export authorized_keys="/home/${service_account}/.ssh/authorized_keys";
+
+## Target Vagrant Instance Location:
+export vagrant_location="${HOME}/.vagrant.d/sources/${vagrant_instance}";
 
 ## GitHub raw user content:
 export github_content='raw.githubusercontent.com';
@@ -37,21 +40,20 @@ function newline () { echo -e; return 0; };
 function check_status () {
     status=${1};
     if [[ ${status} -ne 0 ]]; then
-              user_input="$((counter++))\t= Error was found. Continue [Y/n]: ";
-              newline; read -t 15 -p "${user_input}" response;
-              if [[ ${#response} -eq 0 ]]; then
-                      echo -e "Warning: Aborting execution! ";
-                      exit ${status};
-                else  selection="$(
-                          echo -e ${response}|tr '[[:upper:]]' '[[:lower:]]'
-                        )";
-                      if [[ 'Y|y' =~ "${selection:0:1}" ]]; then
-                              return 0;
-                        else  exit ${status};
-                      fi;
-              fi;
-        else  return 0;
-      fi;
+            user_input="$((counter++)) = Error was found. Continue [N/y]: ";
+            newline; read -t 15 -p "${user_input}" response;
+            if [[ ${#response} -gt 0 ]]; then
+                    selection="$(
+                        echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                      )";
+                    if [[ 'n' =~ "${selection:0:1}" ]]; then
+                            exit ${status};
+                      else  return 0;
+                    fi;
+              else  exit ${status};
+            fi;
+      else  return 0;
+    fi;
     # return 0;
   }; alias check-status='check_status';
 
@@ -62,6 +64,32 @@ function vagrant_review () {
     check_status $?;
     vagrant box list;
     check_status $?;
+    local existing="$(
+        vagrant box list | grep -F "${vagrant_boxset}"
+      )";
+    if [[ ${#existing} -gt 0 ]]; then
+      user_input="$((counter++)) = ${vagrant_boxset} was found. Destroy [N/y]: ";
+      newline; read -t 15 -p "${user_input}" response;
+      if [[ ${#response} -gt 0 ]]; then
+              newline; read -t 30 -p "${user_input}" response;
+              if [[ ${#response} -gt 0 ]]; then
+                      selection="$(
+                          echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                        )";
+                      if [[ 'n' =~ "${selection:0:1}" ]]; then
+                              return 0;
+                        else  cd ${vagrant_location};
+                              vagrant destroy "${vagrant_boxset}" --graceful;
+                              vagrant box remove "${vagrant_boxset}" \
+                                      --provider virtualbox \
+                                      --force \
+                                      --all;
+                      fi;
+                else  exit ${status};
+              fi;
+        else  return 0;
+      fi;
+    fi;
     return 0;
   }; alias vagrant-review='vagrant_review';
 
@@ -82,7 +110,7 @@ function vagrant_addbox () {
 ## -----------------------------------------------------------------------------
 ## Objective: Initializing Vagrant Box (review)
 function vagrant_initbox () {
-    mkdir -p ${HOME}/.vagrant.d/sources/${ubuntu_instance} && cd $_;
+    mkdir -p ${vagrant_location} && cd $_;
     check_status $?;
     vagrant init ${vagrant_boxset};
     check_status $?;
@@ -104,8 +132,7 @@ function patch_vagrantfile () {
     check_status $?;
     cat ${temp_vagrant}/${patch_vagrantfile};
     check_status $?;
-    patch ${HOME}/.vagrant.d/sources/${ubuntu_instance}/Vagrantfile \
-        < ${temp_vagrant}/patch-vagrantfile;
+    patch ${vagrant_location}/Vagrantfile < ${temp_vagrant}/patch-vagrantfile;
     check_status $?;
     vagrant validate;
     check_status $?;
@@ -147,9 +174,8 @@ function vagrant_config () {
 ## -----------------------------------------------------------------------------
 ## Objective: Validating Vagrant Box Credentials
 function vagrant_access () {
-    local target_path="${HOME}/.vagrant.d/sources/${ubuntu_instance}";
     local machine_configs=".vagrant/machines/default/virtualbox";
-    cat ${target_filepath}/${machine_configs}/private_key;
+    cat ${vagrant_location}/${machine_configs}/private_key;
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     check_status $?;
@@ -197,18 +223,18 @@ function service_access () {
 function config_section () {
     local private_sshkey="~/.ssh/private/${devops_sshkey/.pub/}";
     ## Purging configuration block if it already exists
-    section_header="/Host vagrant--${ubuntu_instance}";
-    sed -i '' "${section_header}/,/LogLevel FATAL/d" ${HOME}/.ssh/config ;
-    sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config ;
-    cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
+    section_header="/Host vagrant--${vagrant_instance}";
+    sed -i '' "${section_header}/,/LogLevel FATAL/d" ${HOME}/.ssh/config;
+    sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config;
+    cd ${vagrant_location};
     check_status $?;
     vagrant ssh-config \
-          | sed -e "s|Host default|Host vagrant--${ubuntu_instance}|g" \
+          | sed -e "s|Host default|Host vagrant--${vagrant_instance}|g" \
                 -e "s|\(User \)\(.*\)|\1${service_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
     >> ${HOME}/.ssh/config;
     check_status $?;
-    egrep -A12 "^Host vagrant--${ubuntu_instance}" ${HOME}/.ssh/config;
+    egrep -A12 "^Host vagrant--${vagrant_instance}" ${HOME}/.ssh/config;
     check_status $?;
     return 0;
   }; alias config-section='config_section';
@@ -246,7 +272,7 @@ function postinst_package () {
 ## -----------------------------------------------------------------------------
 ## Objective: Destroying Vagrant Box (ubuntu)
 function destroy_appliance () {
-    cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
+    cd ${vagrant_location};
     vagrant destroy;
     check_status $?;
     return 0;
