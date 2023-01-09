@@ -13,7 +13,7 @@ devops_sshkey="devnetops.pub";
 github_content='raw.githubusercontent.com';
 github_repo='emvaldes/devops-systems';
 
-local counter=0;
+counter=0;
 
 function newline () { echo -e; return 0; };
 
