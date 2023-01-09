@@ -74,7 +74,7 @@ vagrant ssh -c \
 ## -----------------------------------------------------------------------------
 ## Objective: Reviewing Remote Execution (vagrant)
 
-vagrant ssh -c "systemctl status ssh" 2>/dev/null;
+## vagrant ssh -c "systemctl status ssh" 2>/dev/null;
 
 ## -----------------------------------------------------------------------------
 ## Objective: Executing SUDO Configuration Script
