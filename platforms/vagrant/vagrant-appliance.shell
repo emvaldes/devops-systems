@@ -147,8 +147,9 @@ function vagrant_config () {
 ## -----------------------------------------------------------------------------
 ## Objective: Validating Vagrant Box Credentials
 function vagrant_access () {
+    local target_path="${HOME}/.vagrant.d/sources/${ubuntu_instance}";
     local machine_configs=".vagrant/machines/default/virtualbox";
-    cat ${HOME}/.vagrant.d/sources/${ubuntu_instance}/${machine_configs}/private_key;
+    cat ${target_filepath}/${machine_configs}/private_key;
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     check_status $?;
