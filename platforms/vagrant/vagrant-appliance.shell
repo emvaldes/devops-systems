@@ -1,18 +1,30 @@
 #!/usr/bin/env bash
 
+[[ ${#1} -gt 0 ]] && export vagrant_boxset="${1}" \
+                  || export vagrant_boxset='bento/ubuntu-22.04';
+
+export vagrant_clouset="${vagrant_boxset%%\/*}";
+export ubuntu_instance="${vagrant_boxset##*\/}";
+
+## Default Service Account:
+[[ ${#2} -gt 0 ]] && export service_account="${2}" \
+                  || export service_account='devops';
+
+## DevNetOps framework credentials:
+[[ ${#3} -gt 0 ]] && export devops_sshkey="${3}" \
+                  || export devops_sshkey='devnetops.pub';
+
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
 
-ubuntu_instance="ubuntu-22.04";
-
-service_account='devops';
+## SSH Access authorized keys:
 authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 
-devops_sshkey="devnetops.pub";
-
+## GitHub raw user content:
 github_content='raw.githubusercontent.com';
 github_repo='emvaldes/devops-systems';
 
+## Events status counter:
 counter=0;
 
 function newline () { echo -e; return 0; };
@@ -67,7 +79,7 @@ function vagrant_addbox () {
 function vagrant_initbox () {
     mkdir -p ${HOME}/.vagrant.d/sources/${ubuntu_instance} && cd $_;
     check_status $?;
-    vagrant init bento/${ubuntu_instance};
+    vagrant init;  ## bento/${ubuntu_instance};
     check_status $?;
     tree -a ${HOME}/.vagrant.d/;
     check_status $?;
