@@ -24,6 +24,9 @@ authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 github_content='raw.githubusercontent.com';
 github_repo='emvaldes/devops-systems';
 
+## Temporary folder/container:
+temp_vagrant="/tmp/vagrant";
+
 ## Events status counter:
 counter=0;
 
@@ -243,7 +246,6 @@ function destroy_appliance () {
 ## -----------------------------------------------------------------------------
 ## Objective: Deploy Vagrant Appliance
 function vagrant_appliance () {
-    local temp_vagrant="/tmp/vagrant";
     mkdir -pv ${temp_vagrant}/shared;
     vagrant_review;
     vagrant_addbox;
