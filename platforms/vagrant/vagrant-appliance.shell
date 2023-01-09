@@ -18,17 +18,20 @@ export ubuntu_instance="${vagrant_boxset##*\/}";
 ## Objective: Script & Environment Variables
 
 ## SSH Access authorized keys:
-authorized_keys="/home/${service_account}/.ssh/authorized_keys";
+export authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 
 ## GitHub raw user content:
-github_content='raw.githubusercontent.com';
-github_repo='emvaldes/devops-systems';
+export github_content='raw.githubusercontent.com';
+export github_repo='emvaldes/devops-systems';
+
+export local_temp="${HOME}/.local/tmp";
+mkdir -p "${local_temp}";
 
 ## Temporary folder/container:
-temp_vagrant="/tmp/vagrant";
+export temp_vagrant="${local_temp}/vagrant";
 
 ## Events status counter:
-counter=0;
+export counter=0;
 
 function newline () { echo -e; return 0; };
 
