@@ -3,7 +3,7 @@
 [[ ${#1} -gt 0 ]] && export vagrant_boxset="${1}" \
                   || export vagrant_boxset='bento/ubuntu-22.04';
 
-export vagrant_clouset="${vagrant_boxset%%\/*}";
+export vagrant_cloudset="${vagrant_boxset%%\/*}";
 export ubuntu_instance="${vagrant_boxset##*\/}";
 
 ## Default Service Account:
