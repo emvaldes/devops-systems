@@ -1,4 +1,4 @@
-vagrant_instance#!/usr/bin/env bash
+#!/usr/bin/env bash
 
 [[ ${#1} -gt 0 ]] && export vagrant_boxset="${1}" \
                   || export vagrant_boxset='bento/ubuntu-22.04';
