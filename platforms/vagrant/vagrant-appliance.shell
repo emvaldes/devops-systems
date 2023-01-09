@@ -94,15 +94,15 @@ function vagrant_appliance () {
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Reviewing Remote Execution (vagrant)
-    vagrant ssh -c "systemctl status ssh"; ## 2>/dev/null;
-    ## status=1
-    ## VM must be running to open SSH connection. Run `vagrant up`
-    ## to start the virtual machine.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
-      };
+    # ## -----------------------------------------------------------------------------
+    # ## Objective: Reviewing Remote Execution (vagrant)
+    # vagrant ssh -c "systemctl status ssh"; ## 2>/dev/null;
+    # ## status=1
+    # ## VM must be running to open SSH connection. Run `vagrant up`
+    # ## to start the virtual machine.
+    # status=$?; [[ $status -ne 0 ]] && {
+    #     echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+    #   };
     ## -----------------------------------------------------------------------------
     ## Objective: Executing SUDO Configuration Script
     script_name="service-account.shell";
