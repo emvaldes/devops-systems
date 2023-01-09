@@ -263,19 +263,6 @@ function vagrant_appliance () {
 
 vagrant_appliance;
 
-## This was failing and needs further testing:
-## -----------------------------------------------------------------------------
-## Objective: Reviewing Remote Execution (vagrant)
-## vagrant ssh -c "systemctl status ssh"; ## 2>/dev/null;
-## ## status=1
-## ## VM must be running to open SSH connection. Run `vagrant up`
-## ## to start the virtual machine.
-## status=$?; [[ $status -ne 0 ]] && {
-##     echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-##   };
-
-## -----------------------------------------------------------------------------
-## Objective: Reviewing Remote Execution (ssh)
-## ssh vagrant--ubuntu-22.04 -C \
-##     "systemctl status ssh" 2>/dev/null;
-## check_status $?;
+## Reviewing Remote Execution (vagrant)
+## vagrant ssh -c "systemctl status ssh" 2>/dev/null;
+## ssh vagrant -C "systemctl status ssh" 2>/dev/null;
