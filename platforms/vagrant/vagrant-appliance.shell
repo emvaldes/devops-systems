@@ -79,7 +79,7 @@ function vagrant_review () {
                       if [[ 'n' =~ "${selection:0:1}" ]]; then
                               return 0;
                         else  cd ${vagrant_location};
-                              vagrant destroy "${vagrant_boxset}" --graceful;
+                              vagrant destroy --graceful;
                               vagrant box remove "${vagrant_boxset}" \
                                       --provider virtualbox \
                                       --force \
