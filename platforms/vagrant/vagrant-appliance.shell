@@ -24,11 +24,10 @@ export authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
-export local_temp="${HOME}/.local/tmp";
-mkdir -p "${local_temp}";
-
 ## Temporary folder/container:
+export local_temp="${HOME}/.local/tmp";
 export temp_vagrant="${local_temp}/vagrant";
+mkdir -p "${temp_vagrant}";
 
 ## Events status counter:
 export counter=0;
