@@ -5,7 +5,7 @@
    #   apt-get install -y apache2
    # SHELL
 +
-+  config.vm.synced_folder "/tmp/vagrant/shared", "/shared"
++  config.vm.synced_folder "~/.local/tmp/vagrant/shared", "/shared"
 +  config.vm.hostname = "devops-console"
 +  config.vm.provider "virtualbox" do |console|
 +    console.name = "devops-console"
