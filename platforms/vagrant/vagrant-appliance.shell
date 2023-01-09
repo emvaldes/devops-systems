@@ -147,7 +147,7 @@ function vagrant_config () {
 ## Objective: Validating Vagrant Box Credentials
 function vagrant_access () {
     local machine_configs=".vagrant/machines/default/virtualbox";
-    cat ${HOME}/.vagrant.d/sources/ubuntu-22.04/${machine_configs}/private_key;
+    cat ${HOME}/.vagrant.d/sources/${ubuntu_instance}/${machine_configs}/private_key;
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     check_status $?;
@@ -194,10 +194,13 @@ function service_access () {
 ## Objective: Adding SSH Configuration Section
 function config_section () {
     local private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
+    ## Purge configuration block if it already exists
+    sed -i '' "/Host vagrant--${ubuntu_instance}/,/LogLevel FATAL/d" ~/.ssh/config ;
+    sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config ;
     cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
     check_status $?;
     vagrant ssh-config \
-          | sed -e "s|Host default|Host vagrant--ubuntu-22.04|g" \
+          | sed -e "s|Host default|Host vagrant--${ubuntu_instance}|g" \
                 -e "s|\(User \)\(.*\)|\1${service_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
     >> ${HOME}/.ssh/config;
