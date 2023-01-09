@@ -13,186 +13,257 @@ devops_sshkey="devnetops.pub";
 github_content='raw.githubusercontent.com';
 github_repo='emvaldes/devops-systems';
 
-function vagrant_appliance () {
-    local counter=0;
-    local status=;
-    ## Required Local Vagrant Structure
-    local temp_vagrant="/tmp/vagrant";
-    mkdir -pv ${temp_vagrant}/shared;
-    ## -----------------------------------------------------------------------------
-    ## Objective: Reviewing existing Vagrant Infrastructure
+local counter=0;
+
+function newline () { echo -e; return 0; };
+
+function check_status () {
+    status=${1};
+    if [[ ${status} -ne 0 ]]; then
+              user_input="$((counter++))\t= Error was found. Continue [Y/n]: ";
+              newline; read -t 15 -p "${user_input}" response;
+              if [[ ${#response} -eq 0 ]]; then
+                      echo -e "Warning: Aborting execution! ";
+                      exit ${status};
+                else  selection="$(
+                          echo -e ${response}|tr '[[:upper:]]' '[[:lower:]]'
+                        )";
+                      if [[ 'Y|y' =~ "${selection:0:1}" ]]; then
+                              return 0;
+                        else  exit ${status};
+                      fi;
+              fi;
+        else  return 0;
+      fi;
+    # return 0;
+  }; alias check-status='check_status';
+
+## -----------------------------------------------------------------------------
+## Objective: Reviewing existing Vagrant Infrastructure
+function vagrant_review () {
     tree -a ${HOME}/.vagrant.d/;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     vagrant box list;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Adding Vagrant Box (bento/ubuntu-22.04)
+    check_status $?;
+    return 0;
+  }; alias vagrant-review='vagrant_review';
+
+## -----------------------------------------------------------------------------
+## Objective: Adding Vagrant Box (bento/ubuntu-22.04)
+function vagrant_addbox () {
     vagrant box add bento/${ubuntu_instance} \
           --force \
           --provider virtualbox;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     tree -a ${HOME}/.vagrant.d/boxes/;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     vagrant box list;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Initializing Vagrant Box (review)
+    check_status $?;
+    return 0;
+  }; alias vagrant-addbox='vagrant_addbox';
+
+## -----------------------------------------------------------------------------
+## Objective: Initializing Vagrant Box (review)
+function vagrant_initbox () {
     mkdir -p ${HOME}/.vagrant.d/sources/${ubuntu_instance} && cd $_;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     vagrant init bento/${ubuntu_instance};
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     tree -a ${HOME}/.vagrant.d/;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Patching Vagrant Box (Vagrantfile)
-    ## Create Patch-file:
-    ## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
-    script_name="patch-vagrantfile";
-    remote_resource="platforms/vagrant/${script_name}";
+    check_status $?;
+    return 0;
+  }; alias vagrant-initbox='vagrant_initbox';
+
+## -----------------------------------------------------------------------------
+## Objective: Patching Vagrant Box (Vagrantfile)
+## Create Patch-file:
+## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
+function patch_vagrantfile () {
+    local script_name="patch-vagrantfile";
+    local remote_resource="platforms/vagrant/${script_name}";
     curl --silent \
          --output ${temp_vagrant}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     patch ${HOME}/.vagrant.d/sources/${ubuntu_instance}/Vagrantfile \
         < ${temp_vagrant}/patch-vagrantfile;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     vagrant validate;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Deploying Vagrant Box Appliance
+    check_status $?;
+    return 0;
+  }; alias patch-vagrantfile='patch_vagrantfile';
+
+## -----------------------------------------------------------------------------
+## Objective: Deploying Vagrant Box Appliance
+## status=1
+## A VirtualBox machine with the name 'devops-console' already exists.
+## Please use another name or delete the machine with the existing
+## name, and try again.
+function vagrant_deploy () {
     vagrant up;
-    ## status=1
-    ## A VirtualBox machine with the name 'devops-console' already exists.
-    ## Please use another name or delete the machine with the existing
-    ## name, and try again.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
+    check_status $?;
     tree ${HOME}/.vagrant.d/boxes/;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Reviewing Vagrant Box Configuration
+    check_status $?;
+    return 0;
+  }; alias vagrant-deploy='vagrant_deploy';
+
+## -----------------------------------------------------------------------------
+## Objective: Reviewing Vagrant Box Configuration
+## status=1
+## The provider for this Vagrant-managed machine is reporting that it
+## is not yet ready for SSH. Depending on your provider this can carry
+## different meanings. Make sure your machine is created and running and
+## try again. Additionally, check the output of `vagrant status` to verify
+## that the machine is in the state that you expect. If you continue to
+## get this error message, please view the documentation for the provider
+## you're using.
+function vagrant_config () {
     vagrant status;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     vagrant ssh-config;
-    ## status=1
-    ## The provider for this Vagrant-managed machine is reporting that it
-    ## is not yet ready for SSH. Depending on your provider this can carry
-    ## different meanings. Make sure your machine is created and running and
-    ## try again. Additionally, check the output of `vagrant status` to verify
-    ## that the machine is in the state that you expect. If you continue to
-    ## get this error message, please view the documentation for the provider
-    ## you're using.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Validating Vagrant Box Credentials
-    machine_configs=".vagrant/machines/default/virtualbox";
+    check_status $?;
+    return 0;
+  }; alias vagrant-config='vagrant_config';
+
+## -----------------------------------------------------------------------------
+## Objective: Validating Vagrant Box Credentials
+function vagrant_access () {
+    local machine_configs=".vagrant/machines/default/virtualbox";
     cat ${HOME}/.vagrant.d/sources/ubuntu-22.04/${machine_configs}/private_key;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    # ## -----------------------------------------------------------------------------
-    # ## Objective: Reviewing Remote Execution (vagrant)
-    # vagrant ssh -c "systemctl status ssh"; ## 2>/dev/null;
-    # ## status=1
-    # ## VM must be running to open SSH connection. Run `vagrant up`
-    # ## to start the virtual machine.
-    # status=$?; [[ $status -ne 0 ]] && {
-    #     echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-    #   };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Executing SUDO Configuration Script
-    script_name="service-account.shell";
-    remote_resource="platforms/vagrant/${script_name}";
+    check_status $?;
+    return 0;
+  }; alias vagrant-access='vagrant_access';
+
+## -----------------------------------------------------------------------------
+## Objective: Executing SUDO Configuration Script
+## status=1
+## VM must be running to open SSH connection. Run `vagrant up`
+## to start the virtual machine.
+function service_account () {
+    local script_name="service-account.shell";
+    local remote_resource="platforms/vagrant/${script_name}";
     curl --silent \
          https://${github_content}/${github_repo}/master/${remote_resource} \
     | vagrant ssh -c 'bash -';
-    ## status=1
-    ## VM must be running to open SSH connection. Run `vagrant up`
-    ## to start the virtual machine.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Transferring SSH Access Credentials
+    check_status $?;
+    return 0;
+  }; alias service-account='service_account';
+
+## -----------------------------------------------------------------------------
+## Objective: Transferring SSH Access Credentials
+## status=1
+## VM must be running to open SSH connection. Run `vagrant up`
+## to start the virtual machine.
+function service_access () {
     cat ${HOME}/.ssh/public/${devops_sshkey};
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     cp -v ${HOME}/.ssh/${devops_sshkey} ${temp_vagrant}/shared/;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     vagrant ssh -c \
             "cat /shared/${devops_sshkey} | sudo tee -a ${authorized_keys}";
-    ## status=1
-    ## VM must be running to open SSH connection. Run `vagrant up`
-    ## to start the virtual machine.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
+    check_status $?;
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
-    ## status=1
-    ## VM must be running to open SSH connection. Run `vagrant up`
-    ## to start the virtual machine.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
+    check_status $?;
     rm -v ${temp_vagrant}/shared/${devops_sshkey};
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    ## -----------------------------------------------------------------------------
-    ## Objective: Adding SSH Configuration Section
+    check_status $?;
+    return 0;
+  }; alias service-access='service_access';
+
+## -----------------------------------------------------------------------------
+## Objective: Adding SSH Configuration Section
+function config_section () {
+    local private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
     cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
-    private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
+    check_status $?;
     vagrant ssh-config \
           | sed -e "s|Host default|Host vagrant--ubuntu-22.04|g" \
                 -e "s|\(User \)\(.*\)|\1${service_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
     >> ${HOME}/.ssh/config;
-    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
+    check_status $?;
     egrep -A12 "^Host vagrant--${ubuntu_instance}" ${HOME}/.ssh/config;
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Reviewing Remote Execution (ssh)
-    ssh vagrant--ubuntu-22.04 -C \
-        "systemctl status ssh" 2>/dev/null;
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Pre-Installing Core Packages
-    script_name="ubuntu-preinstall.shell";
-    remote_resource="platforms/vagrant/${script_name}";
+    check_status $?;
+    return 0;
+  }; alias config-section='config_section';
+
+## -----------------------------------------------------------------------------
+## Objective: Pre-Installing Core Packages
+## status=1
+## VM must be running to open SSH connection. Run `vagrant up`
+## to start the virtual machine.
+function preinst_package () {
+    local script_name="ubuntu-preinstall.shell";
+    local remote_resource="platforms/vagrant/${script_name}";
     curl --silent \
          https://${github_content}/${github_repo}/master/${remote_resource} \
     | vagrant ssh -c 'bash -';
-    ## status=1
-    ## VM must be running to open SSH connection. Run `vagrant up`
-    ## to start the virtual machine.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Post-Installing Core Packages
-    script_name="ubuntu-postinstall.shell";
-    remote_resource="platforms/vagrant/${script_name}";
+    check_status $?;
+    return 0;
+  }; alias preinst-package='preinst_package';
+
+## -----------------------------------------------------------------------------
+## Objective: Post-Installing Core Packages
+## status=1
+## VM must be running to open SSH connection. Run `vagrant up`
+## to start the virtual machine.
+function postinst_package () {
+    local script_name="ubuntu-postinstall.shell";
+    local remote_resource="platforms/vagrant/${script_name}";
     curl --silent \
          https://${github_content}/${github_repo}/master/${remote_resource} \
     | vagrant ssh -c 'bash -';
-    ## status=1
-    ## VM must be running to open SSH connection. Run `vagrant up`
-    ## to start the virtual machine.
-    status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
-      };
-    ## -----------------------------------------------------------------------------
-    ## Objective: Destroying Vagrant Box (ubuntu)
-    ## cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
-    ## vagrant destroy;
+    check_status $?;
+    return 0;
+  }; alias postinst-package='postinst_package';
+
+## -----------------------------------------------------------------------------
+## Objective: Destroying Vagrant Box (ubuntu)
+function destroy_appliance () {
+    cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
+    vagrant destroy;
+    check_status $?;
+    return 0;
+  }; alias destroy-appliance='destroy_appliance';
+
+## -----------------------------------------------------------------------------
+## Objective: Deploy Vagrant Appliance
+function vagrant_appliance () {
+    local temp_vagrant="/tmp/vagrant";
+    mkdir -pv ${temp_vagrant}/shared;
+    vagrant_review;
+    vagrant_addbox;
+    vagrant_initbox;
+    patch_vagrantfile;
+    vagrant_deploy;
+    vagrant_config;
+    vagrant_access;
+    service_account;
+    service_access;
+    config_section;
+    preinst_package;
+    postinst_package;
+    ## destroy_machine;
     return 0;
   }; alias vagrant-appliance='vagrant_appliance';
 
 vagrant_appliance;
+
+## This was failing and needs further testing:
+## -----------------------------------------------------------------------------
+## Objective: Reviewing Remote Execution (vagrant)
+## vagrant ssh -c "systemctl status ssh"; ## 2>/dev/null;
+## ## status=1
+## ## VM must be running to open SSH connection. Run `vagrant up`
+## ## to start the virtual machine.
+## status=$?; [[ $status -ne 0 ]] && {
+##     echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
+##   };
+
+## -----------------------------------------------------------------------------
+## Objective: Reviewing Remote Execution (ssh)
+## ssh vagrant--ubuntu-22.04 -C \
+##     "systemctl status ssh" 2>/dev/null;
+## check_status $?;
