@@ -96,11 +96,13 @@ function vagrant_initbox () {
 ## Create Patch-file:
 ## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
 function patch_vagrantfile () {
-    local script_name="patch-vagrantfile";
-    local remote_resource="platforms/vagrant/${script_name}";
+    local patch_vagrantfile="patch-vagrantfile";
+    local remote_resource="platforms/vagrant/${patch_vagrantfile}";
     curl --silent \
-         --output ${temp_vagrant}/${script_name} \
+         --output ${temp_vagrant}/${patch_vagrantfile} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    cat ${temp_vagrant}/${patch_vagrantfile};
     check_status $?;
     patch ${HOME}/.vagrant.d/sources/${ubuntu_instance}/Vagrantfile \
         < ${temp_vagrant}/patch-vagrantfile;
