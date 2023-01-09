@@ -68,7 +68,7 @@ function vagrant_review () {
 ## -----------------------------------------------------------------------------
 ## Objective: Adding Vagrant Box (bento/ubuntu-22.04)
 function vagrant_addbox () {
-    vagrant box add bento/${ubuntu_instance} \
+    vagrant box add ${vagrant_boxset} \
           --force \
           --provider virtualbox;
     check_status $?;
@@ -84,7 +84,7 @@ function vagrant_addbox () {
 function vagrant_initbox () {
     mkdir -p ${HOME}/.vagrant.d/sources/${ubuntu_instance} && cd $_;
     check_status $?;
-    vagrant init;  ## bento/${ubuntu_instance};
+    vagrant init ${vagrant_boxset};
     check_status $?;
     tree -a ${HOME}/.vagrant.d/;
     check_status $?;
