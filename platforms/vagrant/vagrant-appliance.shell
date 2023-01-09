@@ -22,27 +22,27 @@ function vagrant_appliance () {
     ## -----------------------------------------------------------------------------
     ## Objective: Reviewing existing Vagrant Infrastructure
     tree -a ${HOME}/.vagrant.d/;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant box list;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     ## -----------------------------------------------------------------------------
     ## Objective: Adding Vagrant Box (bento/ubuntu-22.04)
     vagrant box add bento/${ubuntu_instance} \
           --force \
           --provider virtualbox;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     tree -a ${HOME}/.vagrant.d/boxes/;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant box list;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     ## -----------------------------------------------------------------------------
     ## Objective: Initializing Vagrant Box (review)
     mkdir -p ${HOME}/.vagrant.d/sources/${ubuntu_instance} && cd $_;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant init bento/${ubuntu_instance};
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     tree -a ${HOME}/.vagrant.d/;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     ## -----------------------------------------------------------------------------
     ## Objective: Patching Vagrant Box (Vagrantfile)
     ## Create Patch-file:
@@ -52,12 +52,12 @@ function vagrant_appliance () {
     curl --silent \
          --output ${temp_vagrant}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     patch ${HOME}/.vagrant.d/sources/${ubuntu_instance}/Vagrantfile \
         < ${temp_vagrant}/patch-vagrantfile;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant validate;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     ## -----------------------------------------------------------------------------
     ## Objective: Deploying Vagrant Box Appliance
     vagrant up;
@@ -66,14 +66,14 @@ function vagrant_appliance () {
     ## Please use another name or delete the machine with the existing
     ## name, and try again.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     tree ${HOME}/.vagrant.d/boxes/;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     ## -----------------------------------------------------------------------------
     ## Objective: Reviewing Vagrant Box Configuration
     vagrant status;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant ssh-config;
     ## status=1
     ## The provider for this Vagrant-managed machine is reporting that it
@@ -84,16 +84,16 @@ function vagrant_appliance () {
     ## get this error message, please view the documentation for the provider
     ## you're using.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     ## -----------------------------------------------------------------------------
     ## Objective: Validating Vagrant Box Credentials
     machine_configs=".vagrant/machines/default/virtualbox";
     cat ${HOME}/.vagrant.d/sources/ubuntu-22.04/${machine_configs}/private_key;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     # ## -----------------------------------------------------------------------------
     # ## Objective: Reviewing Remote Execution (vagrant)
     # vagrant ssh -c "systemctl status ssh"; ## 2>/dev/null;
@@ -101,7 +101,7 @@ function vagrant_appliance () {
     # ## VM must be running to open SSH connection. Run `vagrant up`
     # ## to start the virtual machine.
     # status=$?; [[ $status -ne 0 ]] && {
-    #     echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+    #     echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
     #   };
     ## -----------------------------------------------------------------------------
     ## Objective: Executing SUDO Configuration Script
@@ -114,21 +114,21 @@ function vagrant_appliance () {
     ## VM must be running to open SSH connection. Run `vagrant up`
     ## to start the virtual machine.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     ## -----------------------------------------------------------------------------
     ## Objective: Transferring SSH Access Credentials
     cat ${HOME}/.ssh/public/${devops_sshkey};
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     cp -v ${HOME}/.ssh/${devops_sshkey} ${temp_vagrant}/shared/;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     vagrant ssh -c \
             "cat /shared/${devops_sshkey} | sudo tee -a ${authorized_keys}";
     ## status=1
     ## VM must be running to open SSH connection. Run `vagrant up`
     ## to start the virtual machine.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
@@ -136,31 +136,31 @@ function vagrant_appliance () {
     ## VM must be running to open SSH connection. Run `vagrant up`
     ## to start the virtual machine.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     rm -v ${temp_vagrant}/shared/${devops_sshkey};
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     ## -----------------------------------------------------------------------------
     ## Objective: Adding SSH Configuration Section
     cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
     vagrant ssh-config \
           | sed -e "s|Host default|Host vagrant--ubuntu-22.04|g" \
                 -e "s|\(User \)\(.*\)|\1${service_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
     >> ${HOME}/.ssh/config;
-    status=$?; echo -e "\nStatus [ ((counter++)) ]: ${status}\n";
+    status=$?; echo -e "\nStatus [ $((counter++)) ]: ${status}\n";
     egrep -A12 "^Host vagrant--${ubuntu_instance}" ${HOME}/.ssh/config;
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     ## -----------------------------------------------------------------------------
     ## Objective: Reviewing Remote Execution (ssh)
     ssh vagrant--ubuntu-22.04 -C \
         "systemctl status ssh" 2>/dev/null;
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     ## -----------------------------------------------------------------------------
     ## Objective: Pre-Installing Core Packages
@@ -173,7 +173,7 @@ function vagrant_appliance () {
     ## VM must be running to open SSH connection. Run `vagrant up`
     ## to start the virtual machine.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     ## -----------------------------------------------------------------------------
     ## Objective: Post-Installing Core Packages
@@ -186,7 +186,7 @@ function vagrant_appliance () {
     ## VM must be running to open SSH connection. Run `vagrant up`
     ## to start the virtual machine.
     status=$?; [[ $status -ne 0 ]] && {
-        echo -e "\nStatus [ ((counter++)) ]: ${status}\n"; return $status;
+        echo -e "\nStatus [ $((counter++)) ]: ${status}\n"; return $status;
       };
     ## -----------------------------------------------------------------------------
     ## Objective: Destroying Vagrant Box (ubuntu)
