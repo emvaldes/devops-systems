@@ -195,7 +195,8 @@ function service_access () {
 function config_section () {
     local private_sshkey="${HOME}/.ssh/private/${devops_sshkey/.pub/}";
     ## Purging configuration block if it already exists
-    sed -i '' "/Host vagrant--${ubuntu_instance}/,/LogLevel FATAL/d" ~/.ssh/config ;
+    section_header="/Host vagrant--${ubuntu_instance}";
+    sed -i '' "${section_header}/,/LogLevel FATAL/d" ${HOME}/.ssh/config ;
     sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config ;
     cd ${HOME}/.vagrant.d/sources/${ubuntu_instance};
     check_status $?;
