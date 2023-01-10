@@ -3,12 +3,12 @@
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};
 
-echo -e "\n* Starting Framework Deployment ...\n" | tee -a "${postinstall_logfile}" ;
+echo -e "\n* Starting Framework Deployment ...\n" | tee -a "${postinstall_logfile}";
 
 ## Cloning GitHub Public Repository.
-git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems ;
+git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems;
 
 cd /tmp/devops-systems/ubuntu ;
 ./packages.shell ;
 
-echo -e "\n* Completed Framework Deployment! \n" | tee -a "${postinstall_logfile}" ;
+echo -e "\n* Completed Framework Deployment! \n" | tee -a "${postinstall_logfile}";

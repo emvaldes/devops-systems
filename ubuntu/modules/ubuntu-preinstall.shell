@@ -3,13 +3,13 @@
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
-echo -e "\n* Starting Pre-Install ...\n" | tee -a "${preinstall_logfile}" ;
+echo -e "\n* Starting Pre-Install ...\n" | tee -a "${preinstall_logfile}";
 
 ## Installing and Configuring Git CLI:
-sudo apt install git --yes | tee -a "${preinstall_logfile}" ;
+sudo apt install git --yes | tee -a "${preinstall_logfile}";
 
 ## Installing and Configuring additional packages:
-sudo apt install jq --yes | tee -a "${preinstall_logfile}" ;
-sudo apt install python-is-python3 --yes | tee -a "${preinstall_logfile}" ;
+sudo apt install jq --yes | tee -a "${preinstall_logfile}";
+sudo apt install python-is-python3 --yes | tee -a "${preinstall_logfile}";
 
-echo -e "\n* Completed Pre-Install! \n" | tee -a "${preinstall_logfile}" ;
+echo -e "\n* Completed Pre-Install! \n" | tee -a "${preinstall_logfile}";

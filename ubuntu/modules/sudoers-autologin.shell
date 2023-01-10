@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+function newline () { echo -e; return 0; };
+
+export sudoers_logfile="/tmp/sudoers-configuration.log";
+cat /dev/null > ${sudoers_logfile};
+echo -e "\n* Starting Sudoers Configuration ...\n" | tee -a "${sudoers_logfile}";
+
+## DevOps - Service Account
+export service_account='devops';
+
+## Configuring Service Account passwordless access to sudo-requests
+echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
+     | sudo tee /etc/sudoers.d/${service_account};
+
+## Service Account /etc/sudoers.d/ file-permissions
+sudo chmod -v 0440 /etc/sudoers.d/${service_account};
+
+## mode of '/etc/sudoers.d/devops' changed
+## from 0644 (rw-r--r--) to 0440 (r--r-----)
+
+newline;
+
+## Listing Service Account /etc/sudoers.d/ file-permissions
+sudo ls -al /etc/sudoers.d/${service_account};
+
+echo -e "\n* Completed Sudoers Configuration! \n" | tee -a "${sudoers_logfile}";
