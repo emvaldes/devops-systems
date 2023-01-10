@@ -29,8 +29,8 @@ export github_repo='emvaldes/devops-systems';
 
 ## Temporary folder/container:
 export local_temp="${HOME}/.local/tmp";
-export temp_vagrant="${local_temp}/vagrant";
-mkdir -p "${temp_vagrant}";
+export vagrant_temp="${local_temp}/vagrant";
+mkdir -p "${vagrant_temp}";
 
 ## Events status counter:
 export counter=0;
@@ -127,12 +127,12 @@ function patch_vagrantfile () {
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="platforms/vagrant/${patch_vagrantfile}";
     curl --silent \
-         --output ${temp_vagrant}/${patch_vagrantfile} \
+         --output ${vagrant_temp}/${patch_vagrantfile} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    cat ${temp_vagrant}/${patch_vagrantfile};
+    cat ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
-    patch ${vagrant_location}/Vagrantfile < ${temp_vagrant}/patch-vagrantfile;
+    patch ${vagrant_location}/Vagrantfile < ${vagrant_temp}/patch-vagrantfile;
     check_status $?;
     vagrant validate;
     check_status $?;
@@ -205,7 +205,7 @@ function service_account () {
 function service_access () {
     cat ${HOME}/.ssh/public/${devops_sshkey};
     check_status $?;
-    cp -v ${HOME}/.ssh/${devops_sshkey} ${temp_vagrant}/shared/;
+    cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_temp}/shared/;
     check_status $?;
     vagrant ssh -c \
             "cat /shared/${devops_sshkey} | sudo tee -a ${authorized_keys}";
@@ -213,7 +213,7 @@ function service_access () {
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
-    rm -v ${temp_vagrant}/shared/${devops_sshkey};
+    rm -v ${vagrant_temp}/shared/${devops_sshkey};
     check_status $?;
     return 0;
   }; alias service-access='service_access';
@@ -281,7 +281,7 @@ function destroy_appliance () {
 ## -----------------------------------------------------------------------------
 ## Objective: Deploy Vagrant Appliance
 function vagrant_appliance () {
-    mkdir -pv ${temp_vagrant}/shared;
+    mkdir -pv ${vagrant_temp}/shared;
     vagrant_review;
     vagrant_addbox;
     vagrant_initbox;
