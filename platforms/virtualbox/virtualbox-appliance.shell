@@ -201,7 +201,7 @@ function vboxmanage_networking () {
     return 0;
   }; alias vboxmanage-networking='vboxmanage_networking';
 
-function deploy_virtualbox () {
+function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
@@ -339,13 +339,13 @@ function deploy_virtualbox () {
       };
     IFS="${oIFS}";
     return 0;
-  }; alias deploy-virtualbox='deploy_virtualbox';
+  }; alias virtualbox-appliance='virtualbox_appliance';
 
-# deploy_virtualbox --vm-name=devops-console \
-#                   --account=devops \
-#                   --password=devops \
-#                   --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
-#                   --virtualbox="${HOME}/.virtualization/virtualbox" \
-#                   --auto-install \
-#                   --patch \
+# virtualbox_appliance --vm-name=devops-console \
+#                      --account=devops \
+#                      --password=devops \
+#                      --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
+#                      --virtualbox="${HOME}/.virtualization/virtualbox" \
+#                      --auto-install \
+#                      --patch \
 # ;
