@@ -1,17 +1,14 @@
 #!/usr/bin/env bash
 
-## Provisioning the deployment to auto-provide sudo's password.
-echo -e "devops\n" | sudo -S systemctl status ssh 2>&1>/dev/null ;
-
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};
-echo -e "\n* Starting Post-Install ...\n" | tee -a "${postinstall_logfile}" ;
 
-## Installing and Configuring Git CLI:
-sudo apt install git --yes | tee -a "${postinstall_logfile}" ;
+echo -e "\n* Starting Framework Deployment ...\n" | tee -a "${postinstall_logfile}" ;
 
-## Installing and Configuring additional packages:
-sudo apt install jq --yes | tee -a "${postinstall_logfile}" ;
-sudo apt install python-is-python3 --yes | tee -a "${postinstall_logfile}" ;
+## Cloning GitHub Public Repository.
+git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems ;
 
-echo -e "\n* Completed Post-Install! \n" | tee -a "${postinstall_logfile}" ;
+cd /tmp/devops-systems/ubuntu ;
+./packages.shell ;
+
+echo -e "\n* Completed Framework Deployment! \n" | tee -a "${postinstall_logfile}" ;

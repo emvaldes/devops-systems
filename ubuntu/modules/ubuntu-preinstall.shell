@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-export preinstall_logfile="/tmp/postinstall.log";
+export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
 echo -e "\n* Starting Pre-Install ...\n" | tee -a "${preinstall_logfile}" ;
