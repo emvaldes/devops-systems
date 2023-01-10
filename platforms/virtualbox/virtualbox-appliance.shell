@@ -5,6 +5,15 @@
               #unattended-guest-install-example
 ## -----------------------------------------------------------------------------
 
+export local_temp="${HOME}/.local/tmp";
+export vbox_temp="${local_temp}/vbox";
+
+mkdir -p "${vbox_temp}";
+
+## Description: Constructing GitHub URI (raw user content)
+export github_content='raw.githubusercontent.com';
+export github_repo='emvaldes/devops-systems';
+
 function vboxmanage_storage () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -23,29 +32,29 @@ function vboxmanage_storage () {
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
     VBoxManage createhd \
              --filename "${vm_location}/${vm_name}.vdi" \
-             --size 25000 ;
+             --size 25000;
     ## Create a SATA storage controller and attach the virtual hard disk.
     VBoxManage storagectl ${vm_name} \
              --name "SATA Controller" \
              --add sata \
-             --controller IntelAHCI ;
+             --controller IntelAHCI;
     VBoxManage storageattach ${vm_name} \
              --storagectl "SATA Controller" \
              --port 0 \
              --device 0 \
              --type hdd \
-             --medium "${vm_location}/${vm_name}.vdi" ;
+             --medium "${vm_location}/${vm_name}.vdi";
     ## Create an IDE Storage Controller for a virtual DVD drive
     ## and attach a Linux installation ISO.
     VBoxManage storagectl ${vm_name} \
              --name "IDE Controller" \
-             --add ide ;
+             --add ide;
     VBoxManage storageattach ${vm_name} \
              --storagectl "IDE Controller" \
              --port 1 \
              --device 0 \
              --type dvddrive \
-             --medium ${iso_filename} ;
+             --medium ${iso_filename};
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-storage='vboxmanage_storage';
@@ -63,44 +72,44 @@ function vboxmanage_configvm () {
     ## General -> Advanced:
     VBoxManage modifyvm ${vm_name} \
              --clipboard-mode=bidirectional \
-             --drag-and-drop=bidirectional ;
+             --drag-and-drop=bidirectional;
     ## System -> Motherboard:
     VBoxManage modifyvm ${vm_name} \
-             --memory ${memory_size} ;
+             --memory ${memory_size};
 
     VBoxManage modifyvm ${vm_name} \
              --boot1 dvd \
              --boot2 disk \
              --boot3 none \
-             --boot4 none ;
+             --boot4 none;
     VBoxManage modifyvm ${vm_name} \
              --chipset=piix3 \
              --mouse=usbmtscreenpluspad \
              --ioapic=on \
-             --rtc-use-utc=on ;
+             --rtc-use-utc=on;
     ## System -> Processor:
     VBoxManage modifyvm ${vm_name} \
              --cpus=${total_cpus} \
              --cpu-execution-cap=100 \
-             --pae=off ;
+             --pae=off;
     ## System -> Acceleration:
     VBoxManage modifyvm ${vm_name} \
              --paravirt-provider=default \
-             --nested-paging=on ;
+             --nested-paging=on;
     ## Display -> Screen:
     VBoxManage modifyvm ${vm_name} \
              --vram ${vram_size} \
              --monitor-count=1 \
              --graphicscontroller=vmsvga \
-             --accelerate-3d=off ;
+             --accelerate-3d=off;
     # ## Ports -> Serial Ports:
     # VBoxManage modifyvm ${vm_name} \
     #          --uart1=0x3f8 5 \
     #          --uart-mode1="/tmp/vbox--${vm_name}" \
-    #          --uart-type1=16550a ;
+    #          --uart-type1=16550a;
     ## Ports -> USB 2.0 (OHCI + EHCI) Controller
     VBoxManage modifyvm ${vm_name} \
-             --usb-ehci=on ;
+             --usb-ehci=on;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-configvm='vboxmanage_configvm';
@@ -128,13 +137,13 @@ function vboxmanage_multimedia () {
              --recording-file=${recording} \
              --recording-video-fps=${frame_rate} \
              --recording-video-res=${resolution} \
-             --recording-video-rate=${video_quality} ;
+             --recording-video-rate=${video_quality};
     ## Audio:
     VBoxManage modifyvm ${vm_name} \
              --audio=default \
              --audio-controller=${audio_controller} \
              --audio-in=on \
-             --audio-out=on ;
+             --audio-out=on;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-multimedia='vboxmanage_multimedia';
@@ -232,19 +241,19 @@ function virtualbox_appliance () {
         export service_account='devops';
         echo -en "\nWarning: Using default ";
         echo -e  "'${service_account}' service account! \n";
-      } ;
+      };
     [[ ${#account_password} -eq 0 ]] && {
         export account_password="${service_account}";
         echo -en "\nWarning: Using default ";
         echo -e  "'${account_password}' account password! \n";
-      } ;
+      };
     [[ ${#virtualbox} -eq 0 ]] && {
         export virtualbox="${HOME}/.virtualization/virtualbox";
         echo -en "\nWarning: Using default ";
         echo -e  "'${service_account}' service account! \n";
         ## Cleaning existing location:
-        rm -rfv ${virtualbox}/${vm_name} 2>/dev/null ;
-      } ;
+        rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
+      };
     [[ ${#iso_filename} -eq 0 ]] && {
         echo -e "\nWarning: No Installation ISO file was provided! \n";
         ## Installation media (DVD ISO):
@@ -270,7 +279,7 @@ function virtualbox_appliance () {
             vm_registration="${response[0]}";
             ## UUID: f6fc21d3-7a3a-4490-a5fc-7d26aca20e09
             vm_uuid="${response[1]/UUID: /}";
-            ## Settings file: '${virttualbox}/Ubuntu22_LTS_64/Ubuntu22_LTS_64.vbox'
+            ## Settings file: '${virttualbox}/***/***.vbox'
             vm_settings="$(
                 echo -e ${response[2]} \
                 | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
@@ -319,22 +328,36 @@ function virtualbox_appliance () {
                  --language=en \
         ;
         [[ ${patch_files} == 'true' ]] && {
+            ## -----------------------------------------------------------------
+            ## Configuring patch-pressed.cfg with custom settings.
+            export script_name="patch-preseed.cfg";
+            export remote_resource="master/platforms/virtualbox/${script_name}";
+            curl --silent \
+                 --output ${vbox_temp}/${script_name} \
+                 https://${github_content}/${github_repo}/${remote_resource};
             ## Patching Pre-Seed Configurations:
             patch ${vm_location}/Unattended-*-preseed.cfg \
-                  < ${script_path}/patch-preseed.cfg ;
+                < ${vbox_temp}/patch-preseed.cfg;
+            ## -----------------------------------------------------------------
+            ## Configuring patch-vboxpostinstall with custom settings.
+            export script_name="patch-vboxpostinstall.sh";
+            export remote_resource="master/platforms/virtualbox/${script_name}";
+            curl --silent \
+                 --output ${vbox_temp}/${script_name} \
+                 https://${github_content}/${github_repo}/${remote_resource};
             ## Patching VBOX Post-Install Script:
             patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
-                  < ${script_path}/patch-vboxpostinstall.sh ;
+                < ${vbox_temp}/patch-vboxpostinstall.sh;
           };
       };
     [[ ${start_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
-        VBoxManage startvm ${vm_name} ;
+        VBoxManage startvm ${vm_name};
       };
     [[ ${delete_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
-        VBoxManage controlvm ${vm_name} acpipowerbutton ;
-        VBoxManage unregistervm --delete ${vm_name} ;
+        VBoxManage controlvm ${vm_name} acpipowerbutton;
+        VBoxManage unregistervm --delete ${vm_name};
         return 10;
       };
     IFS="${oIFS}";
