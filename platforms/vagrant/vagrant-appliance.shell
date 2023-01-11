@@ -20,8 +20,11 @@ export vagrant_instance="${vagrant_boxset##*\/}";
 ## SSH Access authorized keys:
 export authorized_keys="/home/${service_account}/.ssh/authorized_keys";
 
+## Target Vagrant Home folder:
+export vagrant_projects="${HOME}/.vagrant.d";
+
 ## Target Vagrant Instance Location:
-export vagrant_location="${HOME}/.vagrant.d/sources/${vagrant_instance}";
+export vagrant_location="${vagrant_projects}/sources/${vagrant_instance}";
 
 ## GitHub raw user content:
 export github_content='raw.githubusercontent.com';
@@ -60,7 +63,7 @@ function check_status () {
 ## -----------------------------------------------------------------------------
 ## Objective: Reviewing existing Vagrant Infrastructure
 function vagrant_review () {
-    tree -a ${HOME}/.vagrant.d/;
+    tree -a ${vagrant_projects};
     check_status $?;
     vagrant box list;
     check_status $?;
@@ -100,7 +103,7 @@ function vagrant_addbox () {
           --force \
           --provider virtualbox;
     check_status $?;
-    tree -a ${HOME}/.vagrant.d/boxes/;
+    tree -a ${vagrant_projects}/boxes;
     check_status $?;
     vagrant box list;
     check_status $?;
@@ -110,11 +113,12 @@ function vagrant_addbox () {
 ## -----------------------------------------------------------------------------
 ## Objective: Initializing Vagrant Box (review)
 function vagrant_initbox () {
+    cd ${vagrant_location};
     mkdir -p ${vagrant_location} && cd $_;
     check_status $?;
     vagrant init ${vagrant_boxset};
     check_status $?;
-    tree -a ${HOME}/.vagrant.d/;
+    tree -a ${vagrant_projects};
     check_status $?;
     return 0;
   }; alias vagrant-initbox='vagrant_initbox';
@@ -124,6 +128,7 @@ function vagrant_initbox () {
 ## Create Patch-file:
 ## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
 function patch_vagrantfile () {
+    cd ${vagrant_location};
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="platforms/vagrant/${patch_vagrantfile}";
     curl --silent \
@@ -146,9 +151,10 @@ function patch_vagrantfile () {
 ## Please use another name or delete the machine with the existing
 ## name, and try again.
 function vagrant_deploy () {
+    cd ${vagrant_location};
     vagrant up;
     check_status $?;
-    tree ${HOME}/.vagrant.d/boxes/;
+    tree ${vagrant_projects}/boxes/;
     check_status $?;
     return 0;
   }; alias vagrant-deploy='vagrant_deploy';
@@ -164,6 +170,7 @@ function vagrant_deploy () {
 ## get this error message, please view the documentation for the provider
 ## you're using.
 function vagrant_config () {
+    cd ${vagrant_location};
     vagrant status;
     check_status $?;
     vagrant ssh-config;
@@ -183,11 +190,9 @@ function vagrant_access () {
   }; alias vagrant-access='vagrant_access';
 
 ## -----------------------------------------------------------------------------
-## Objective: Executing SUDO Configuration Script
-## status=1
-## VM must be running to open SSH connection. Run `vagrant up`
-## to start the virtual machine.
+## Objective: Creating Service Account Script
 function service_account () {
+    cd ${vagrant_location};
     local script_name="service-account.shell";
     local remote_resource="platforms/vagrant/${script_name}";
     curl --silent \
@@ -198,11 +203,26 @@ function service_account () {
   }; alias service-account='service_account';
 
 ## -----------------------------------------------------------------------------
+## Objective: Executing SUDO Configuration Script
+function sudoers_autologin () {
+    cd ${vagrant_location};
+    local script_name="sudoers-autologin.shell";
+    local remote_resource="ubuntu/models/${script_name}";
+    curl --silent \
+         --output ${vagrant_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource} \
+    | vagrant ssh -c 'bash -';
+    check_status $?;
+    return 0;
+  }; alias sudoers-autologin='sudoers_autologin';
+
+## -----------------------------------------------------------------------------
 ## Objective: Transferring SSH Access Credentials
 ## status=1
 ## VM must be running to open SSH connection. Run `vagrant up`
 ## to start the virtual machine.
 function service_access () {
+    cd ${vagrant_location};
     cat ${HOME}/.ssh/public/${devops_sshkey};
     check_status $?;
     cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_temp}/shared/;
@@ -221,12 +241,12 @@ function service_access () {
 ## -----------------------------------------------------------------------------
 ## Objective: Adding SSH Configuration Section
 function config_section () {
+    cd ${vagrant_location};
     local private_sshkey="~/.ssh/private/${devops_sshkey/.pub/}";
     ## Purging configuration block if it already exists
-    section_header="/Host vagrant--${vagrant_instance}";
+    local section_header="/Host vagrant--${vagrant_instance}";
     sed -i '' "${section_header}/,/LogLevel FATAL/d" ${HOME}/.ssh/config;
     sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config;
-    cd ${vagrant_location};
     check_status $?;
     vagrant ssh-config \
           | sed -e "s|Host default|Host vagrant--${vagrant_instance}|g" \
@@ -245,6 +265,7 @@ function config_section () {
 ## VM must be running to open SSH connection. Run `vagrant up`
 ## to start the virtual machine.
 function preinst_package () {
+    cd ${vagrant_location};
     local script_name="ubuntu-preinstall.shell";
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
@@ -260,6 +281,7 @@ function preinst_package () {
 ## VM must be running to open SSH connection. Run `vagrant up`
 ## to start the virtual machine.
 function postinst_package () {
+    cd ${vagrant_location};
     local script_name="ubuntu-postinstall.shell";
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
