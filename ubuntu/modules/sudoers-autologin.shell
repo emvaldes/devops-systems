@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+function newline () { echo -e; return 0; };
+
+export autologin_logfile="/tmp/sudoers-autologin.log";
+cat /dev/null > ${autologin_logfile};
+
+echo -e "\n* Starting Sudoers Configuration ...\n" \
+| tee -a "${autologin_logfile}";
+
+## DevOps - Service Account
+export devops_account='devops';
+
+sudo apt install sshpass --yes | tee -a "${autologin_logfile}";
+
+ssh-keygen -t rsa -b 4096 -C devops-console -f ~/.ssh/id_rsa -N '' <<<y \
+| tee -a "${autologin_logfile}";
+
+echo -e "${devops_account}" \
+| sshpass ssh-copy-id -o StrictHostKeyChecking=no localhost \
+| tee -a "${autologin_logfile}";
+
+rm -rfv ~/.ssh/ssh-copy-id* | tee -a "${autologin_logfile}";
+sudo apt remove sshpass --yes | tee -a "${autologin_logfile}";
+sudo apt autoremove --yes | tee -a "${autologin_logfile}";
+
+echo -e "\n* Completed Sudoers Configuration! \n" \
+| tee -a "${autologin_logfile}";

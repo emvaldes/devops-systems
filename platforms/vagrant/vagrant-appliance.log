@@ -16,8 +16,8 @@ curl --silent \
 + export ubuntu_instance=ubuntu-22.04
 + ubuntu_instance=ubuntu-22.04
 + [[ 0 -gt 0 ]]
-+ export service_account=devops
-+ service_account=devops
++ export devops_account=devops
++ devops_account=devops
 + [[ 0 -gt 0 ]]
 + export devops_sshkey=devnetops.pub
 + devops_sshkey=devnetops.pub

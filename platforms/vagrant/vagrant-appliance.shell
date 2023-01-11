@@ -7,8 +7,8 @@ export vagrant_cloudset="${vagrant_boxset%%\/*}";
 export vagrant_instance="${vagrant_boxset##*\/}";
 
 ## Default Service Account:
-[[ ${#2} -gt 0 ]] && export service_account="${2}" \
-                  || export service_account='devops';
+[[ ${#2} -gt 0 ]] && export devops_account="${2}" \
+                  || export devops_account='devops';
 
 ## DevNetOps framework credentials:
 [[ ${#3} -gt 0 ]] && export devops_sshkey="${3}" \
@@ -18,7 +18,7 @@ export vagrant_instance="${vagrant_boxset##*\/}";
 ## Objective: Script & Environment Variables
 
 ## SSH Access authorized keys:
-export authorized_keys="/home/${service_account}/.ssh/authorized_keys";
+export authorized_keys="/home/${devops_account}/.ssh/authorized_keys";
 
 ## Target Vagrant Home folder:
 export vagrant_projects="${HOME}/.vagrant.d";
@@ -199,10 +199,24 @@ function service_account () {
   }; alias service-account='service_account';
 
 ## -----------------------------------------------------------------------------
-## Objective: Executing SUDO Configuration Script
-function sudoers_autologin () {
+## Objective: Configuring Sudoers Privileges
+function sudoers_privileges () {
     cd ${vagrant_location};
     local script_name="sudoers-privileges.shell";
+    local remote_resource="ubuntu/models/${script_name}";
+    curl --silent \
+         --output ${vagrant_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource} \
+    | vagrant ssh -c 'bash -';
+    check_status $?;
+    return 0;
+  }; alias sudoers-privileges='sudoers_privileges';
+
+## -----------------------------------------------------------------------------
+## Objective: Configuring Auto-Login Capabilities
+function sudoers_autologin () {
+    cd ${vagrant_location};
+    local script_name="sudoers-autologin.shell";
     local remote_resource="ubuntu/models/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
@@ -243,7 +257,7 @@ function config_section () {
     check_status $?;
     vagrant ssh-config \
           | sed -e "s|Host default|Host vagrant--${vagrant_instance}|g" \
-                -e "s|\(User \)\(.*\)|\1${service_account}|g" \
+                -e "s|\(User \)\(.*\)|\1${devops_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
     >> ${HOME}/.ssh/config;
     check_status $?;
@@ -299,6 +313,8 @@ function vagrant_appliance () {
     vagrant_config;
     vagrant_access;
     service_account;
+    sudoers_privileges;
+    account_autologin;
     service_access;
     config_section;
     preinst_package;

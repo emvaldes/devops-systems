@@ -16,6 +16,7 @@ export github_repo='emvaldes/devops-systems';
 
 export virtualbox_platform='master/platforms/virtualbox';
 
+## -----------------------------------------------------------------------------
 function vboxmanage_storage () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -61,6 +62,7 @@ function vboxmanage_storage () {
     return 0;
   }; alias vboxmanage-storage='vboxmanage_storage';
 
+## -----------------------------------------------------------------------------
 function vboxmanage_configvm () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -116,6 +118,7 @@ function vboxmanage_configvm () {
     return 0;
   }; alias vboxmanage-configvm='vboxmanage_configvm';
 
+## -----------------------------------------------------------------------------
 function vboxmanage_multimedia () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -150,6 +153,7 @@ function vboxmanage_multimedia () {
     return 0;
   }; alias vboxmanage-multimedia='vboxmanage_multimedia';
 
+## -----------------------------------------------------------------------------
 function vboxmanage_networking () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -212,7 +216,9 @@ function vboxmanage_networking () {
     return 0;
   }; alias vboxmanage-networking='vboxmanage_networking';
 
-function sudoers_autologin () {
+## -----------------------------------------------------------------------------
+## Objective: Configuring Sudoers Privileges
+function sudoers_privileges () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
@@ -228,7 +234,7 @@ function sudoers_autologin () {
     ## Creating a temporary file and adding these hacking-lines
     echo -e "## Provisioning the deployment to auto-provide sudo's password." \
           > ${vbox_temp}/insert-lines.file;
-    echo -en 'echo -e "${account_password}\\n" ' \
+    echo -en 'echo -e "${devops_password}\\n" ' \
           >> ${vbox_temp}/insert-lines.file;
     echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
           >> ${vbox_temp}/insert-lines.file;
@@ -241,16 +247,31 @@ function sudoers_autologin () {
       < ${vbox_temp}/${script_name} 2>/dev/null;
     IFS="${oIFS}";
     return 0;
+  }; alias sudoers-privileges='sudoers_privileges';
+
+## -----------------------------------------------------------------------------
+## Objective: Configuring Auto-Login Capabilities
+function sudoers_autologin () {
+    cd ${vagrant_location};
+    local script_name="sudoers-autologin.shell";
+    local remote_resource="ubuntu/models/${script_name}";
+    curl --silent \
+         --output ${vagrant_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource} \
+    | vagrant ssh -c 'bash -';
+    check_status $?;
+    return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
+## -----------------------------------------------------------------------------
 function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
       [[ ${1#*\--} = "create" ]] && local create_machine='true';
-      [[ ${1#*\--} = "account" ]] && local service_account="${2}";
-      [[ ${1#*\--} = "password" ]] && local account_password="${2}";
+      [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
+      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "install" ]] && local unattended_install='true';
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
@@ -270,20 +291,20 @@ function virtualbox_appliance () {
         echo -e "\nWarning: No Virtual Machine Name was provided! \n";
         return 1;
       };
-    [[ ${#service_account} -eq 0 ]] && {
-        export service_account='devops';
+    [[ ${#devops_account} -eq 0 ]] && {
+        export devops_account='devops';
         echo -en "\nWarning: Using default ";
-        echo -e  "'${service_account}' service account! \n";
+        echo -e  "'${devops_account}' service account! \n";
       };
-    [[ ${#account_password} -eq 0 ]] && {
-        export account_password="${service_account}";
+    [[ ${#devops_password} -eq 0 ]] && {
+        export devops_password="${devops_account}";
         echo -en "\nWarning: Using default ";
-        echo -e  "'${account_password}' account password! \n";
+        echo -e  "'${devops_password}' account password! \n";
       };
     [[ ${#virtualbox} -eq 0 ]] && {
         export virtualbox="${HOME}/.virtualization/virtualbox";
         echo -en "\nWarning: Using default ";
-        echo -e  "'${service_account}' service account! \n";
+        echo -e  "'${devops_account}' service account! \n";
         ## Cleaning existing location:
         rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
       };
@@ -351,8 +372,8 @@ function virtualbox_appliance () {
         ## Generating VirtualBox Un-Attended Installation configurations:
         VBoxManage unattended install ${vm_name} \
                  --iso=/Users/emvaldes/Downloads/${iso_filename} \
-                 --user=${service_account} \
-                 --password=${service_account} \
+                 --user=${devops_account} \
+                 --password=${devops_account} \
                  --full-user-name='DevOps Engineer' \
                  --install-additions \
                  --locale=en_US \
@@ -384,7 +405,7 @@ function virtualbox_appliance () {
                 < ${vbox_temp}/patch-vboxpostinstall.sh;
           };
         ## Enabling Passwordless Access
-        sudoers_autologin;
+        sudoers_privileges;
       };
     [[ ${start_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
@@ -400,6 +421,7 @@ function virtualbox_appliance () {
     return 0;
   }; alias virtualbox-appliance='virtualbox_appliance';
 
+## -----------------------------------------------------------------------------
 function script_helper () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do

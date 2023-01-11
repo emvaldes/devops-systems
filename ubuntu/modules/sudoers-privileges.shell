@@ -2,20 +2,22 @@
 
 function newline () { echo -e; return 0; };
 
-export sudoers_logfile="/tmp/sudoers-configuration.log";
-cat /dev/null > ${sudoers_logfile};
-echo -e "\n* Starting Sudoers Configuration ...\n" | tee -a "${sudoers_logfile}";
+export privileges_logfile="/tmp/sudoers-privileges.log";
+cat /dev/null > ${privileges_logfile};
+
+echo -e "\n* Starting Sudoers Configuration ...\n" \
+| tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account
-export service_account='devops';
+export devops_account='devops';
 
 ## Configuring Service Account passwordless access to sudo-requests
-echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
-     | sudo tee /etc/sudoers.d/${service_account};
+echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
+     | sudo tee /etc/sudoers.d/${devops_account};
 
 ## Service Account /etc/sudoers.d/ file-permissions
-sudo chmod -v 0440 /etc/sudoers.d/${service_account} \
-| tee -a "${sudoers_logfile}";
+sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
+| tee -a "${privileges_logfile}";
 
 ## mode of '/etc/sudoers.d/devops' changed
 ## from 0644 (rw-r--r--) to 0440 (r--r-----)
@@ -23,7 +25,8 @@ sudo chmod -v 0440 /etc/sudoers.d/${service_account} \
 newline;
 
 ## Listing Service Account /etc/sudoers.d/ file-permissions
-sudo ls -al /etc/sudoers.d/${service_account}\
-| tee -a "${sudoers_logfile}";
+sudo ls -al /etc/sudoers.d/${devops_account}\
+| tee -a "${privileges_logfile}";
 
-echo -e "\n* Completed Sudoers Configuration! \n" | tee -a "${sudoers_logfile}";
+echo -e "\n* Completed Sudoers Configuration! \n" \
+| tee -a "${privileges_logfile}";
