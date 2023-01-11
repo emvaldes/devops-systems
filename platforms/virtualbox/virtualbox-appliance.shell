@@ -241,6 +241,47 @@ function sudoers_autologin () {
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
+function script_helper () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
+    done; IFS="${oIFS}";
+    declare -a options=();
+    options+=("--vm-name\t: ");
+    options+=("--create\t: ");
+    options+=("--account\t: ");
+    options+=("--password\t: ");
+    options+=("--iso-file\t: ");
+    options+=("--install\t: ");
+    options+=("--patch\t: ");
+    options+=("--start\t: ");
+    options+=("--delete\t: ");
+    options+=("--virtualbox\t: ");
+    options+=("--help\t: ");
+    echo -e "\nOptions: ${options[0]}";
+    options=("${options[@]:1}");
+    for xline in ${options[@]}; do
+      echo -e "$( printf "% s" )${xline}";
+    done; echo -e ";";
+    spanwidth="${#help_caller}";
+    local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
+    declare -a usage=();
+    usage+=("--vm-name=devops-console \\");
+    usage+=("--account=devops \\");
+    usage+=("--password=devops \\");
+    usage+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
+    usage+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
+    usage+=("--auto-install \\");
+    usage+=("--patch \\");
+    echo -e "\nUsage:\n\n${help_caller} ${usage[0]}";
+    usage=("${usage[@]:1}");
+    for xline in ${usage[@]}; do
+      echo -e "${spacer}${xline}";
+    done; echo -e ";";
+    return 0;
+  }; alias script-helper='script_helper';
+
 function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -250,7 +291,7 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "account" ]] && local service_account="${2}";
       [[ ${1#*\--} = "password" ]] && local account_password="${2}";
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
-      [[ ${1#*\--} = "auto-install" ]] && local unattended_install='true';
+      [[ ${1#*\--} = "install" ]] && local unattended_install='true';
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
@@ -259,21 +300,7 @@ function virtualbox_appliance () {
     done; IFS="${oIFS}";
     ## Prividing operational assistance (helper)
     if [[ ${assistance} == 'true' ]]; then
-      spanwidth="${#FUNCNAME}";
-      local spacer="$( printf "% $(echo "${#FUNCNAME} + 1" | bc)s" )";
-      declare -a helper=();
-      helper+=("--vm-name=devops-console \\");
-      helper+=("--account=devops \\");
-      helper+=("--password=devops \\");
-      helper+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
-      helper+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
-      helper+=("--auto-install \\");
-      helper+=("--patch \\");
-      echo -e "\nUsage:\n\n${FUNCNAME} ${helper[0]}";
-      helper=("${helper[@]:1}");
-      for xline in ${helper[@]}; do
-        echo -e "${spacer}${xline}"
-      done; echo -e ";";
+      script_helper --caller=${FUNCNAME};
       return 0;
     fi;
     local oIFS="${IFS}"; IFS=$'\n';
@@ -304,6 +331,7 @@ function virtualbox_appliance () {
         ## Installation media (DVD ISO):
         # export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
         unattended_install='false';
+        return 1;
       };
     ## Collecting Virtual Machinen OS Type:
     declare -a vm_ostype="$(
