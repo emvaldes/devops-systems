@@ -406,22 +406,22 @@ function script_helper () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     declare -a required=();
-    required+=("--vm-name\t: ");
-    required+=("--iso-file\t: ");
+    required+=("--vm-name\t: VirtualBox appliance name and hostname.");
+    required+=("--iso-file\t: Installation ISO file location.");
     echo -e "\nRequired: ${required[0]}";
     required=("${required[@]:1}");
     for xline in ${required[@]}; do
       echo -e "$( printf "% 10s" )${xline}";
     done;
     declare -a optional=();
-    optional+=("--account\t: ");
-    optional+=("--create\t: ");
-    optional+=("--delete\t: ");
-    optional+=("--install\t: ");
-    optional+=("--password\t: ");
-    optional+=("--patch\t: ");
-    optional+=("--start\t: ");
-    optional+=("--virtualbox\t: ");
+    optional+=("--account\t: Service Account (username: devops).");
+    optional+=("--create\t: Create VBox appliance (hardware only).");
+    optional+=("--delete\t: Shutdown & Destroy VBox appliance.");
+    optional+=("--install\t: Generate Auto-Install (unattended).");
+    optional+=("--password\t: Service Account (password: devops).");
+    optional+=("--patch\t: Patching Unattended installation.");
+    optional+=("--start\t: Requesting to launch VBox Appliance.");
+    optional+=("--virtualbox\t: Provide VBox projects location.");
     echo -e "\nOptional: ${optional[0]}";
     optional=("${optional[@]:1}");
     for xline in ${optional[@]}; do
@@ -441,7 +441,7 @@ function script_helper () {
     usage=("${usage[@]:1}");
     for xline in ${usage[@]}; do
       echo -e "${spacer}${xline}";
-    done; echo -e ";";
+    done; echo -e ";\n";
     return 0;
   }; alias script-helper='script_helper';
 
