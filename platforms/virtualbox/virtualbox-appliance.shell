@@ -444,7 +444,9 @@ function script_helper () {
     for xline in ${usage[@]}; do
       echo -e "${spacer}${xline}";
     done; echo -e ";\n";
+    local script_location="blob/${virtualbox_platform}";
+    script_location+="/${help_caller/_/-}.shell";
     echo -e "GitHub Project: ${github_repo}";
-    echo -e "        Source: blob/${virtualbox_platform}/${help_caller/_/-}";
+    echo -e "        Source: ${script_location}";
     return 0;
   }; alias script-helper='script_helper';
