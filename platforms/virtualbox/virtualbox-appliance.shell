@@ -257,13 +257,6 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
     done; IFS="${oIFS}";
-    # ## Script configuration
-    # local script_path=$( dirname ${0} );
-    # ## echo -e "Script Path: ${script_path}";
-    # local script_name=$( basename ${0%\.*} );
-    # ## echo -e "Script Name: ${script_name}";
-    # local script_type=$( basename ${0##*\.} );
-    # ## echo -e "Script Type: ${script_type}";
     ## Prividing operational assistance (helper)
     if [[ ${assistance} == 'true' ]]; then
       spanwidth="${#FUNCNAME}";
@@ -273,7 +266,7 @@ function virtualbox_appliance () {
       helper+=("--account=devops \\");
       helper+=("--password=devops \\");
       helper+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
-      helper+=("--virtualbox="${HOME}/.virtualization/virtualbox" \\");
+      helper+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
       helper+=("--auto-install \\");
       helper+=("--patch \\");
       echo -e "\nUsage:\n\n${FUNCNAME} ${helper[0]}";
@@ -426,3 +419,11 @@ function virtualbox_appliance () {
 #                      --auto-install \
 #                      --patch \
 # ;
+
+# ## Script configuration
+# local script_path=$( dirname ${0} );
+# ## echo -e "Script Path: ${script_path}";
+# local script_name=$( basename ${0%\.*} );
+# ## echo -e "Script Name: ${script_name}";
+# local script_type=$( basename ${0##*\.} );
+# ## echo -e "Script Type: ${script_type}";
