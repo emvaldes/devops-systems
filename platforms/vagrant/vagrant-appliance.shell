@@ -146,10 +146,6 @@ function patch_vagrantfile () {
 
 ## -----------------------------------------------------------------------------
 ## Objective: Deploying Vagrant Box Appliance
-## status=1
-## A VirtualBox machine with the name 'devops-console' already exists.
-## Please use another name or delete the machine with the existing
-## name, and try again.
 function vagrant_deploy () {
     cd ${vagrant_location};
     vagrant up;
@@ -218,9 +214,6 @@ function sudoers_autologin () {
 
 ## -----------------------------------------------------------------------------
 ## Objective: Transferring SSH Access Credentials
-## status=1
-## VM must be running to open SSH connection. Run `vagrant up`
-## to start the virtual machine.
 function service_access () {
     cd ${vagrant_location};
     cat ${HOME}/.ssh/public/${devops_sshkey};
@@ -261,9 +254,6 @@ function config_section () {
 
 ## -----------------------------------------------------------------------------
 ## Objective: Pre-Installing Core Packages
-## status=1
-## VM must be running to open SSH connection. Run `vagrant up`
-## to start the virtual machine.
 function preinst_package () {
     cd ${vagrant_location};
     local script_name="ubuntu-preinstall.shell";
@@ -277,9 +267,6 @@ function preinst_package () {
 
 ## -----------------------------------------------------------------------------
 ## Objective: Post-Installing Core Packages
-## status=1
-## VM must be running to open SSH connection. Run `vagrant up`
-## to start the virtual machine.
 function postinst_package () {
     cd ${vagrant_location};
     local script_name="ubuntu-postinstall.shell";
