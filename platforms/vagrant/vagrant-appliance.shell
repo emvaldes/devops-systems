@@ -221,7 +221,7 @@ function service_access () {
     cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_temp}/shared/;
     check_status $?;
     vagrant ssh -c \
-            "cat /shared/${devops_sshkey} | sudo tee -a ${authorized_keys}";
+            "cat /shared/${devops_sshkey} | sudo tee ${authorized_keys}";
     check_status $?;
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";

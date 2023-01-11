@@ -14,7 +14,8 @@ echo "${service_account}  ALL=(ALL)  NOPASSWD: ALL" \
      | sudo tee /etc/sudoers.d/${service_account};
 
 ## Service Account /etc/sudoers.d/ file-permissions
-sudo chmod -v 0440 /etc/sudoers.d/${service_account};
+sudo chmod -v 0440 /etc/sudoers.d/${service_account} \
+| tee -a "${sudoers_logfile}";
 
 ## mode of '/etc/sudoers.d/devops' changed
 ## from 0644 (rw-r--r--) to 0440 (r--r-----)
@@ -22,6 +23,7 @@ sudo chmod -v 0440 /etc/sudoers.d/${service_account};
 newline;
 
 ## Listing Service Account /etc/sudoers.d/ file-permissions
-sudo ls -al /etc/sudoers.d/${service_account};
+sudo ls -al /etc/sudoers.d/${service_account}\
+| tee -a "${sudoers_logfile}";
 
 echo -e "\n* Completed Sudoers Configuration! \n" | tee -a "${sudoers_logfile}";
