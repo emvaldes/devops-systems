@@ -241,52 +241,6 @@ function sudoers_autologin () {
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
-function script_helper () {
-    local oIFS="${IFS}";
-    for xitem in "${@}"; do
-      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
-      [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
-    done; IFS="${oIFS}";
-    declare -a required=();
-    required+=("--vm-name\t: ");
-    required+=("--iso-file\t: ");
-    echo -e "\nRequired: ${required[0]}";
-    required=("${required[@]:1}");
-    for xline in ${required[@]}; do
-      echo -e "$( printf "% 10s" )${xline}";
-    done;
-    declare -a optional=();
-    optional+=("--account\t: ");
-    optional+=("--create\t: ");
-    optional+=("--delete\t: ");
-    optional+=("--install\t: ");
-    optional+=("--password\t: ");
-    optional+=("--patch\t: ");
-    optional+=("--start\t: ");
-    optional+=("--virtualbox\t: ");
-    echo -e "\nOptional: ${optional[0]}";
-    optional=("${optional[@]:1}");
-    for xline in ${optional[@]}; do
-      echo -e "$( printf "% 10s" )${xline}";
-    done;
-    spanwidth="${#help_caller}";
-    local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
-    declare -a usage=();
-    usage+=("--vm-name=devops-console \\");
-    usage+=("--account=devops \\");
-    usage+=("--password=devops \\");
-    usage+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
-    usage+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
-    usage+=("--auto-install \\");
-    usage+=("--patch \\");
-    echo -e "\nUsage:\n\n${help_caller/_/-} ${usage[0]}";
-    usage=("${usage[@]:1}");
-    for xline in ${usage[@]}; do
-      echo -e "${spacer}${xline}";
-    done; echo -e ";";
-    return 0;
-  }; alias script-helper='script_helper';
-
 function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -303,12 +257,12 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
     done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
     ## Prividing operational assistance (helper)
     if [[ ${assistance} == 'true' ]]; then
       script_helper --caller=${FUNCNAME};
       return 0;
     fi;
-    local oIFS="${IFS}"; IFS=$'\n';
     ## Processing Function Input Parameters
     [[ ${#vm_name} -eq 0 ]] && {
         echo -e "\nWarning: No Virtual Machine Name was provided! \n";
@@ -444,6 +398,53 @@ function virtualbox_appliance () {
     return 0;
   }; alias virtualbox-appliance='virtualbox_appliance';
 
+function script_helper () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    declare -a required=();
+    required+=("--vm-name\t: ");
+    required+=("--iso-file\t: ");
+    echo -e "\nRequired: ${required[0]}";
+    required=("${required[@]:1}");
+    for xline in ${required[@]}; do
+      echo -e "$( printf "% 10s" )${xline}";
+    done;
+    declare -a optional=();
+    optional+=("--account\t: ");
+    optional+=("--create\t: ");
+    optional+=("--delete\t: ");
+    optional+=("--install\t: ");
+    optional+=("--password\t: ");
+    optional+=("--patch\t: ");
+    optional+=("--start\t: ");
+    optional+=("--virtualbox\t: ");
+    echo -e "\nOptional: ${optional[0]}";
+    optional=("${optional[@]:1}");
+    for xline in ${optional[@]}; do
+      echo -e "$( printf "% 10s" )${xline}";
+    done;
+    spanwidth="${#help_caller}";
+    local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
+    declare -a usage=();
+    usage+=("--vm-name=devops-console \\");
+    usage+=("--account=devops \\");
+    usage+=("--password=devops \\");
+    usage+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
+    usage+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
+    usage+=("--auto-install \\");
+    usage+=("--patch \\");
+    echo -e "\nUsage:\n\n${help_caller/_/-} ${usage[0]}";
+    usage=("${usage[@]:1}");
+    for xline in ${usage[@]}; do
+      echo -e "${spacer}${xline}";
+    done; echo -e ";";
+    return 0;
+  }; alias script-helper='script_helper';
+
 # virtualbox_appliance --vm-name=devops-console \
 #                      --account=devops \
 #                      --password=devops \
@@ -452,11 +453,3 @@ function virtualbox_appliance () {
 #                      --auto-install \
 #                      --patch \
 # ;
-
-# ## Script configuration
-# local script_path=$( dirname ${0} );
-# ## echo -e "Script Path: ${script_path}";
-# local script_name=$( basename ${0%\.*} );
-# ## echo -e "Script Name: ${script_name}";
-# local script_type=$( basename ${0##*\.} );
-# ## echo -e "Script Type: ${script_type}";
