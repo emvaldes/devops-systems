@@ -220,7 +220,7 @@ function sudoers_autologin () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     ## Enabling Passwordless Access
-    export script_name="sudoers-autologin.shell";
+    export script_name="sudoers-privileges.shell";
     export remote_module="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vbox_temp}/${script_name} \
@@ -232,11 +232,11 @@ function sudoers_autologin () {
           >> ${vbox_temp}/insert-lines.file;
     echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
           >> ${vbox_temp}/insert-lines.file;
-    ## Inserting into the sudoers-autologin.shell file
+    ## Inserting into the sudoers-privileges.shell file
     ## the insert-lines.file’s content
     sed -i '' '/\#\!\/usr\/bin\/env bash/ r ${vbox_temp}/insert-lines.file' \
         ${vbox_temp}/${script_name};
-    ## Executing the sudoers-autologin.shell script
+    ## Executing the sudoers-privileges.shell script
     ssh ${vm_name} -C 'bash -s' \
       < ${vbox_temp}/${script_name} 2>/dev/null;
     IFS="${oIFS}";

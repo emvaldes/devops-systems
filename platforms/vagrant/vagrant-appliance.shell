@@ -202,7 +202,7 @@ function service_account () {
 ## Objective: Executing SUDO Configuration Script
 function sudoers_autologin () {
     cd ${vagrant_location};
-    local script_name="sudoers-autologin.shell";
+    local script_name="sudoers-privileges.shell";
     local remote_resource="ubuntu/models/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
