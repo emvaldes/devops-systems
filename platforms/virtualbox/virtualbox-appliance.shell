@@ -210,6 +210,37 @@ function vboxmanage_networking () {
     return 0;
   }; alias vboxmanage-networking='vboxmanage_networking';
 
+function sudoers_autologin () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    ## Enabling Passwordless Access
+    export script_name="sudoers-autologin.shell";
+    export remote_resource="ubuntu/modules/${script_name}";
+    curl --silent \
+         --output ${vbox_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    ## Creating a temporary file and adding these hacking-lines
+    echo -e "## Provisioning the deployment to auto-provide sudo's password." \
+          > ${vbox_temp}/insert-lines.file;
+    echo -en 'echo -e "${account_password}\\n" ' \
+          >> ${vbox_temp}/insert-lines.file;
+    echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
+          >> ${vbox_temp}/insert-lines.file;
+    ## Inserting into the sudoers-autologin.shell file
+    ## the insert-lines.file’s content
+    sed -i '' '/\#\!\/usr\/bin\/env bash/ r ${vbox_temp}/insert-lines.file' \
+        ${vbox_temp}/${script_name};
+    ## Executing the sudoers-autologin.shell script
+    ssh ${vm_name} -C 'bash -s' \
+      < ${vbox_temp}/${script_name} 2>/dev/null;
+    IFS="${oIFS}";
+    return 0;
+  }; alias sudoers-autologin='sudoers_autologin';
+
 function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -349,6 +380,8 @@ function virtualbox_appliance () {
             patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
                 < ${vbox_temp}/patch-vboxpostinstall.sh;
           };
+        ## Enabling Passwordless Access
+        sudoers_autologin;
       };
     [[ ${start_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
@@ -363,6 +396,7 @@ function virtualbox_appliance () {
     IFS="${oIFS}";
     return 0;
   }; alias virtualbox-appliance='virtualbox_appliance';
+
 
 # virtualbox_appliance --vm-name=devops-console \
 #                      --account=devops \
