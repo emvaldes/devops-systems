@@ -262,8 +262,8 @@ function script_helper () {
     echo -e "\nOptions: ${options[0]}";
     options=("${options[@]:1}");
     for xline in ${options[@]}; do
-      echo -e "$( printf "% s" )${xline}";
-    done; echo -e ";";
+      echo -e "$( printf "% 9s" )${xline}";
+    done;
     spanwidth="${#help_caller}";
     local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
     declare -a usage=();
@@ -274,7 +274,7 @@ function script_helper () {
     usage+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
     usage+=("--auto-install \\");
     usage+=("--patch \\");
-    echo -e "\nUsage:\n\n${help_caller} ${usage[0]}";
+    echo -e "\nUsage:\n\n${help_caller/_/-} ${usage[0]}";
     usage=("${usage[@]:1}");
     for xline in ${usage[@]}; do
       echo -e "${spacer}${xline}";
