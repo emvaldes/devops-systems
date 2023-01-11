@@ -249,14 +249,14 @@ function script_helper () {
     done; IFS="${oIFS}";
     declare -a options=();
     options+=("--vm-name\t: ");
-    options+=("--create\t: ");
-    options+=("--account\t: ");
-    options+=("--password\t: ");
     options+=("--iso-file\t: ");
+    options+=("--account\t: ");
+    options+=("--create\t: ");
+    options+=("--delete\t: ");
     options+=("--install\t: ");
+    options+=("--password\t: ");
     options+=("--patch\t: ");
     options+=("--start\t: ");
-    options+=("--delete\t: ");
     options+=("--virtualbox\t: ");
     options+=("--help\t: ");
     echo -e "\nOptions: ${options[0]}";
