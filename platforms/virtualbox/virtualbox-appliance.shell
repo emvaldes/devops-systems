@@ -8,7 +8,7 @@
 export local_temp="${HOME}/.local/tmp";
 export vbox_temp="${local_temp}/vbox";
 
-mkdir -p "${vbox_temp}";
+mkdir -pv "${vbox_temp}";
 
 ## Description: Constructing GitHub URI (raw user content)
 export github_content='raw.githubusercontent.com';
