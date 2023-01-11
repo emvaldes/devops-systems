@@ -247,22 +247,27 @@ function script_helper () {
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
     done; IFS="${oIFS}";
-    declare -a options=();
-    options+=("--vm-name\t: ");
-    options+=("--iso-file\t: ");
-    options+=("--account\t: ");
-    options+=("--create\t: ");
-    options+=("--delete\t: ");
-    options+=("--install\t: ");
-    options+=("--password\t: ");
-    options+=("--patch\t: ");
-    options+=("--start\t: ");
-    options+=("--virtualbox\t: ");
-    options+=("--help\t: ");
-    echo -e "\nOptions: ${options[0]}";
-    options=("${options[@]:1}");
-    for xline in ${options[@]}; do
-      echo -e "$( printf "% 9s" )${xline}";
+    declare -a required=();
+    required+=("--vm-name\t: ");
+    required+=("--iso-file\t: ");
+    echo -e "\nRequired: ${required[0]}";
+    required=("${required[@]:1}");
+    for xline in ${required[@]}; do
+      echo -e "$( printf "% 10s" )${xline}";
+    done;
+    declare -a optional=();
+    optional+=("--account\t: ");
+    optional+=("--create\t: ");
+    optional+=("--delete\t: ");
+    optional+=("--install\t: ");
+    optional+=("--password\t: ");
+    optional+=("--patch\t: ");
+    optional+=("--start\t: ");
+    optional+=("--virtualbox\t: ");
+    echo -e "\nOptional: ${optional[0]}";
+    optional=("${optional[@]:1}");
+    for xline in ${optional[@]}; do
+      echo -e "$( printf "% 10s" )${xline}";
     done;
     spanwidth="${#help_caller}";
     local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
