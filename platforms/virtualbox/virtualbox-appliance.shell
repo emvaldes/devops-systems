@@ -255,15 +255,36 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
+      [[ ${1#*\--} = "help" ]] && local assistance='true';
     done; IFS="${oIFS}";
-    ## Script configuration
-    local script_path=$( dirname ${0} );
-    ## echo -e "Script Path: ${script_path}";
-    local script_name=$( basename ${0%\.*} );
-    ## echo -e "Script Name: ${script_name}";
-    local script_type=$( basename ${0##*\.} );
-    ## echo -e "Script Type: ${script_type}";
+    # ## Script configuration
+    # local script_path=$( dirname ${0} );
+    # ## echo -e "Script Path: ${script_path}";
+    # local script_name=$( basename ${0%\.*} );
+    # ## echo -e "Script Name: ${script_name}";
+    # local script_type=$( basename ${0##*\.} );
+    # ## echo -e "Script Type: ${script_type}";
+    ## Prividing operational assistance (helper)
+    if [[ ${assistance} == 'true' ]]; then
+      spanwidth="${#FUNCNAME}";
+      local spacer="$( printf "% $(echo "${#FUNCNAME} + 1" | bc)s" )";
+      declare -a helper=();
+      helper+=("--vm-name=devops-console \\");
+      helper+=("--account=devops \\");
+      helper+=("--password=devops \\");
+      helper+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
+      helper+=("--virtualbox="${HOME}/.virtualization/virtualbox" \\");
+      helper+=("--auto-install \\");
+      helper+=("--patch \\");
+      echo -e "\nUsage:\n\n${FUNCNAME} ${helper[0]}";
+      helper=("${helper[@]:1}");
+      for xline in ${helper[@]}; do
+        echo -e "${spacer}${xline}"
+      done; echo -e ";";
+      return 0;
+    fi;
     local oIFS="${IFS}"; IFS=$'\n';
+    ## Processing Function Input Parameters
     [[ ${#vm_name} -eq 0 ]] && {
         echo -e "\nWarning: No Virtual Machine Name was provided! \n";
         return 1;
@@ -396,7 +417,6 @@ function virtualbox_appliance () {
     IFS="${oIFS}";
     return 0;
   }; alias virtualbox-appliance='virtualbox_appliance';
-
 
 # virtualbox_appliance --vm-name=devops-console \
 #                      --account=devops \
