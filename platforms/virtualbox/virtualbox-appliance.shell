@@ -14,6 +14,8 @@ mkdir -p "${vbox_temp}";
 export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
+export virtualbox_platform='master/platforms/virtualbox';
+
 function vboxmanage_storage () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -219,10 +221,10 @@ function sudoers_autologin () {
     local oIFS="${IFS}"; IFS=$'\n';
     ## Enabling Passwordless Access
     export script_name="sudoers-autologin.shell";
-    export remote_resource="ubuntu/modules/${script_name}";
+    export remote_module="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vbox_temp}/${script_name} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/master/${remote_module};
     ## Creating a temporary file and adding these hacking-lines
     echo -e "## Provisioning the deployment to auto-provide sudo's password." \
           > ${vbox_temp}/insert-lines.file;
@@ -363,7 +365,7 @@ function virtualbox_appliance () {
             ## -----------------------------------------------------------------
             ## Configuring patch-pressed.cfg with custom settings.
             export script_name="patch-preseed.cfg";
-            export remote_resource="master/platforms/virtualbox/${script_name}";
+            export remote_resource="${virtualbox_platform}/${script_name}";
             curl --silent \
                  --output ${vbox_temp}/${script_name} \
                  https://${github_content}/${github_repo}/${remote_resource};
@@ -373,7 +375,7 @@ function virtualbox_appliance () {
             ## -----------------------------------------------------------------
             ## Configuring patch-vboxpostinstall with custom settings.
             export script_name="patch-vboxpostinstall.sh";
-            export remote_resource="master/platforms/virtualbox/${script_name}";
+            export remote_resource="${virtualbox_platform}/${script_name}";
             curl --silent \
                  --output ${vbox_temp}/${script_name} \
                  https://${github_content}/${github_repo}/${remote_resource};
@@ -442,14 +444,7 @@ function script_helper () {
     for xline in ${usage[@]}; do
       echo -e "${spacer}${xline}";
     done; echo -e ";\n";
+    echo -e "GitHub Project: ${github_repo}";
+    echo -e "        Source: blob/${virtualbox_platform}/${help_caller/_/-}";
     return 0;
   }; alias script-helper='script_helper';
-
-# virtualbox_appliance --vm-name=devops-console \
-#                      --account=devops \
-#                      --password=devops \
-#                      --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
-#                      --virtualbox="${HOME}/.virtualization/virtualbox" \
-#                      --auto-install \
-#                      --patch \
-# ;
