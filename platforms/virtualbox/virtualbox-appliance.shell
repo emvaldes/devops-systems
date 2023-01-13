@@ -442,6 +442,7 @@ function virtualbox_appliance.help () {
     # echo -e "Example: ${example}";
     spanwidth="${#help_caller}";
     local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
+    local spanner="$( printf "% 10s" )";
     declare -a patterns=(
         "machine\tdevops-console"
         "account\t${devops_account}"
@@ -466,7 +467,7 @@ function virtualbox_appliance.help () {
             echo -e "\nRequired: ${required[0]}";
             required=("${required[@]:1}");
             for xline in ${required[@]}; do
-              echo -e "$( printf "% 10s" )${xline}";
+              echo -e "${spanner}${xline}";
             done;
             ## -------------------------------------------------------------------------
             declare -a optional=();
