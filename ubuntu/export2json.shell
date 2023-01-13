@@ -13,7 +13,7 @@ function export2json () {
     if [[ ( ${assistance} == 'true' ) || \
           ( ${example} == 'true' )
       ]]; then
-      packages_ubuntu.help --caller=${FUNCNAME} --example=${example};
+      export2json.help --caller=${FUNCNAME} --example=${example};
       return 0;
     fi;
     ## Script configuration

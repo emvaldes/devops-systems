@@ -16,14 +16,14 @@ function packages_ubuntu () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "import" ]] && local import_filename="${2}";
+      [[ ${1#*\--} = "install" ]] && local install_packages='true';
+      [[ ${1#*\--} = "json-file" ]] && local json_filename="${2}";
+      [[ ${1#*\--} = "log-file" ]] && local log_filename="${2}";
       [[ ${1#*\--} = "pkgs-list" ]] && {
           declare -a pkgs_listing=($( echo -e ${2} | tr ',' '\n' ));
         };
-      [[ ${1#*\--} = "log-file" ]] && local log_filename="${2}";
-      [[ ${1#*\--} = "json-file" ]] && local json_filename="${2}";
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
-      [[ ${1#*\--} = "install" ]] && local install_packages='true';
-      [[ ${1#*\--} = "import" ]] && local import_filename="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
       [[ ${1#*\--} = "example" ]] && local example='true';
     done; IFS="${oIFS}";
@@ -284,19 +284,19 @@ function packages_ubuntu.help () {
     local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
     local spanner="$( printf "% 10s" )";
     declare -a patterns=(
-        "packages\tpkg1,pkg2"
-        "logfile\tpackages.log"
-        "jsonfile\tpackages.json"
-        "reportfile\texport.report"
         "importfile\timport.report"
+        "jsonfile\tpackages.json"
+        "logfile\tpackages.log"
+        "packages\tpkg1,pkg2"
+        "reportfile\texport.report"
       );
     declare -a usage=();
-    usage+=("--install \\");
-    usage+=("--pkgs-list='{{ packages }}' \\");
-    usage+=("--log-file='{{ logfile }}' \\");
-    usage+=("--json-file='{{ jsonfile }}' \\");
-    usage+=("--report-file='{{ reportfile }}' \\");
     usage+=("--import='{{ importfile }}' \\");
+    usage+=("--install \\");
+    usage+=("--json-file='{{ jsonfile }}' \\");
+    usage+=("--log-file='{{ logfile }}' \\");
+    usage+=("--pkgs-list='{{ packages }}' \\");
+    usage+=("--report-file='{{ reportfile }}' \\");
     if [[ ${example} == 'false' ]]; then
             ## -------------------------------------------------------------------------
             declare -a required=();
@@ -308,11 +308,11 @@ function packages_ubuntu.help () {
             done;
             ## -------------------------------------------------------------------------
             declare -a optional=();
-            optional+=("--pkgs-list\t: Custom Packages List.");
-            optional+=("--log-file\t: Default Process log-file.");
-            optional+=("--json-file\t: Installed Packages JSON file.");
-            optional+=("--report-file\t: Installed Packages report file.");
             optional+=("--import\t: Importing Listed Packages description.");
+            optional+=("--json-file\t: Installed Packages JSON file.");
+            optional+=("--log-file\t: Default Process log-file.");
+            optional+=("--pkgs-list\t: Custom Packages List.");
+            optional+=("--report-file\t: Installed Packages report file.");
             echo -e "\nOptional: ${optional[0]}";
             optional=("${optional[@]:1}");
             for xline in ${optional[@]}; do
