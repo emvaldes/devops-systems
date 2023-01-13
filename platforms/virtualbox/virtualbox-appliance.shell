@@ -8,13 +8,19 @@
 export local_temp="${HOME}/.local/tmp";
 export vbox_temp="${local_temp}/vbox";
 
-mkdir -pv "${vbox_temp}";
+mkdir -p "${vbox_temp}";
 
 ## Description: Constructing GitHub URI (raw user content)
 export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
+export virtualbox_projects="${HOME}/.virtualization/virtualbox";
+
 export virtualbox_platform='master/platforms/virtualbox';
+export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
+
+export devops_account='devops';
+export devops_password="${devops_account}";
 
 ## -----------------------------------------------------------------------------
 function vboxmanage_storage () {
@@ -279,11 +285,14 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
+      [[ ${1#*\--} = "example" ]] && local example='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     ## Prividing operational assistance (helper)
-    if [[ ${assistance} == 'true' ]]; then
-      script_helper --caller=${FUNCNAME};
+    if [[ ( ${assistance} == 'true' ) || \
+          ( ${example} == 'true' )
+      ]]; then
+      virtualbox_appliance.help --caller=${FUNCNAME} --example=${example};
       return 0;
     fi;
     ## Processing Function Input Parameters
@@ -302,16 +311,15 @@ function virtualbox_appliance () {
         echo -e  "'${devops_password}' account password! \n";
       };
     [[ ${#virtualbox} -eq 0 ]] && {
-        export virtualbox="${HOME}/.virtualization/virtualbox";
+        export virtualbox="${virtualbox_projects}";
         echo -en "\nWarning: Using default ";
-        echo -e  "'${devops_account}' service account! \n";
+        echo -e  "'${virtualbox}' projects path! \n";
         ## Cleaning existing location:
         rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
       };
     [[ ${#iso_filename} -eq 0 ]] && {
         echo -e "\nWarning: No Installation ISO file was provided! \n";
         ## Installation media (DVD ISO):
-        # export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
         unattended_install='false';
         return 1;
       };
@@ -422,53 +430,87 @@ function virtualbox_appliance () {
   }; alias virtualbox-appliance='virtualbox_appliance';
 
 ## -----------------------------------------------------------------------------
-function script_helper () {
+function virtualbox_appliance.help () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
+      [[ ${1#*\--} = "example" ]] && local example="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
-    declare -a required=();
-    required+=("--vm-name\t: VirtualBox appliance name and hostname.");
-    required+=("--iso-file\t: Installation ISO file location.");
-    echo -e "\nRequired: ${required[0]}";
-    required=("${required[@]:1}");
-    for xline in ${required[@]}; do
-      echo -e "$( printf "% 10s" )${xline}";
-    done;
-    declare -a optional=();
-    optional+=("--account\t: Service Account (username: devops).");
-    optional+=("--create\t: Create VBox appliance (hardware only).");
-    optional+=("--delete\t: Shutdown & Destroy VBox appliance.");
-    optional+=("--install\t: Generate Auto-Install (unattended).");
-    optional+=("--password\t: Service Account (password: devops).");
-    optional+=("--patch\t: Patching Unattended installation.");
-    optional+=("--start\t: Requesting to launch VBox Appliance.");
-    optional+=("--virtualbox\t: Provide VBox projects location.");
-    echo -e "\nOptional: ${optional[0]}";
-    optional=("${optional[@]:1}");
-    for xline in ${optional[@]}; do
-      echo -e "$( printf "% 10s" )${xline}";
-    done;
+    [[ ${#example} -eq 0 ]] && { local example='false'; };
+    # echo -e "Example: ${example}";
     spanwidth="${#help_caller}";
     local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
+    declare -a patterns=(
+        "machine\tdevops-console"
+        "account\t${devops_account}"
+        "password\t${devops_account}"
+        "isofile\t${iso_filename}"
+        "virtualbox\t${virtualbox_projects/${HOME}\//}"
+      );
     declare -a usage=();
-    usage+=("--vm-name=devops-console \\");
-    usage+=("--account=devops \\");
-    usage+=("--password=devops \\");
-    usage+=("--iso-file='ubuntu-22.04.1-desktop-amd64.iso' \\");
-    usage+=("--virtualbox="\${HOME}/.virtualization/virtualbox" \\");
-    usage+=("--auto-install \\");
+    usage+=("--vm-name='{{ machine }}' \\");
+    usage+=("--iso-file='{{ isofile }}' \\");
+    usage+=("--account='{{ account }}' \\");
+    usage+=("--create \\");
+    usage+=("--install \\");
+    usage+=("--password='{{ password }}' \\");
     usage+=("--patch \\");
-    echo -e "\nUsage:\n\n${help_caller/_/-} ${usage[0]}";
-    usage=("${usage[@]:1}");
-    for xline in ${usage[@]}; do
-      echo -e "${spacer}${xline}";
-    done; echo -e ";\n";
-    local script_location="blob/${virtualbox_platform}";
-    script_location+="/${help_caller/_/-}.shell";
-    echo -e "GitHub Project: ${github_repo}";
-    echo -e "        Source: ${script_location}";
+    usage+=("--virtualbox=\"\${HOME}/{{ virtualbox }}\" \\");
+    if [[ ${example} == 'false' ]]; then
+            ## -------------------------------------------------------------------------
+            declare -a required=();
+            required+=("--vm-name\t: VirtualBox appliance name and hostname.");
+            required+=("--iso-file\t: Installation ISO file location.");
+            echo -e "\nRequired: ${required[0]}";
+            required=("${required[@]:1}");
+            for xline in ${required[@]}; do
+              echo -e "$( printf "% 10s" )${xline}";
+            done;
+            ## -------------------------------------------------------------------------
+            declare -a optional=();
+            optional+=("--account\t: Service Account (username: devops).");
+            optional+=("--create\t: Create VBox appliance (hardware only).");
+            optional+=("--delete\t: Shutdown & Destroy VBox appliance.");
+            optional+=("--install\t: Generate Auto-Install (unattended).");
+            optional+=("--password\t: Service Account (password: devops).");
+            optional+=("--patch\t: Patching Unattended installation.");
+            optional+=("--start\t: Requesting to launch VBox Appliance.");
+            optional+=("--virtualbox\t: Provide VBox projects location.");
+            echo -e "\nOptional: ${optional[0]}";
+            optional=("${optional[@]:1}");
+            for xline in ${optional[@]}; do
+              echo -e "$( printf "% 10s" )${xline}";
+            done;
+            ## -----------------------------------------------------------------
+            echo -en "\nUsage:\n\n${help_caller/_/-} ";
+            counter=0; aligned='';
+            for xline in ${usage[@]}; do
+              stubset='false';
+              [[ ${counter} -gt 0 ]] && aligned="${spacer}";
+              for xitem in ${patterns[@]}; do
+                declare -a replace=($( echo -e "${xitem}" | tr '\t' '\n' ));
+                if [[ "${xline}" =~ "{{ ${replace[0]} }}" ]]; then
+                   echo -e "${aligned}${xline}" \
+                  | sed -e "s|{{ ${replace[0]} }}|${replace[1]}|"
+                  stubset='true'; break;
+                fi;
+              done;
+              [[ ${stubset} == 'false' ]] && echo -e "${aligned}${xline}";
+              ((counter++));
+            done; echo -e ";\n";
+      else  ## Listing command example:
+            echo -en "\n${help_caller/_/-} ";
+            echo -e "${usage[*]}" | sed -e 's/\ \\$//g' | tr '\n' ' ';
+            echo -e ";\n";
+    fi;
+    ## -------------------------------------------------------------------------
+    # local script_location="blob/${virtualbox_platform}";
+    # script_location+="/${help_caller/_/-}.shell";
+    # echo -e "GitHub Project: ${github_repo}";
+    # echo -e "        Source: ${script_location}";
     return 0;
-  }; alias script-helper='script_helper';
+  }; alias virtualbox-appliance.help='virtualbox_appliance.help';
+
+## virtualbox_appliance ${@}

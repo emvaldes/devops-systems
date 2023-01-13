@@ -11,6 +11,7 @@
 ## [cloud tools]:     aws-iam-authenticator, awscli, saml2aws
 ## [hashicorp]:       boundary, consul, nomad, packer, terraform, vagrant, vault, waypoint
 
+## -----------------------------------------------------------------------------
 function packages_ubuntu () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -23,8 +24,16 @@ function packages_ubuntu () {
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
       [[ ${1#*\--} = "install" ]] && local install_packages='true';
       [[ ${1#*\--} = "import" ]] && local import_filename="${2}";
+      [[ ${1#*\--} = "help" ]] && local assistance='true';
+      [[ ${1#*\--} = "example" ]] && local example='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
+    if [[ ( ${assistance} == 'true' ) || \
+          ( ${example} == 'true' )
+      ]]; then
+      packages_ubuntu.help --caller=${FUNCNAME} --example=${example};
+      return 0;
+    fi;
     echo -e;
     timestamp="$(date +"%y%m%d%H%M%S")";
     dateset="${timestamp:0:6}";

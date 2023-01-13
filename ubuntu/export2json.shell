@@ -6,8 +6,16 @@ function export2json () {
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "package" ]] && local package="${2}";
       [[ ${1#*\--} = "location" ]] && local xpath="${2}";
+      [[ ${1#*\--} = "help" ]] && local assistance='true';
+      [[ ${1#*\--} = "example" ]] && local example='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
+    if [[ ( ${assistance} == 'true' ) || \
+          ( ${example} == 'true' )
+      ]]; then
+      packages_ubuntu.help --caller=${FUNCNAME} --example=${example};
+      return 0;
+    fi;
     ## Script configuration
     local script_path=$( dirname ${0} );
     ## echo -e "Module Path: ${script_path}";
