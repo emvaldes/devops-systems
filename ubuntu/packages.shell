@@ -269,9 +269,83 @@ function packages_ubuntu () {
     return 0;
   }; alias packages-ubuntu='packages_ubuntu';
 
-## packages_ubuntu --pkgs-list='jq,openssh-server,python-is-python3' \
-packages_ubuntu --install \
-                --log-file=packages.log \
-                --json-file=packages.json \
-                --report-file=packages.report \
-| tee $(pwd)/packages.log;
+## -----------------------------------------------------------------------------
+function packages_ubuntu.help () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
+      [[ ${1#*\--} = "example" ]] && local example="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    [[ ${#example} -eq 0 ]] && { local example='false'; };
+    # echo -e "Example: ${example}";
+    spanwidth="${#help_caller}";
+    local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
+    local spanner="$( printf "% 10s" )";
+    declare -a patterns=(
+        "packages\tpkg1,pkg2"
+        "logfile\tpackages.log"
+        "jsonfile\tpackages.json"
+        "reportfile\texport.report"
+        "importfile\timport.report"
+      );
+    declare -a usage=();
+    usage+=("--install \\");
+    usage+=("--pkgs-list='{{ packages }}' \\");
+    usage+=("--log-file='{{ logfile }}' \\");
+    usage+=("--json-file='{{ jsonfile }}' \\");
+    usage+=("--report-file='{{ reportfile }}' \\");
+    usage+=("--import='{{ importfile }}' \\");
+    if [[ ${example} == 'false' ]]; then
+            ## -------------------------------------------------------------------------
+            declare -a required=();
+            required+=("--install\t: Install Packages List.");
+            echo -e "\nRequired: ${required[0]}";
+            required=("${required[@]:1}");
+            for xline in ${required[@]}; do
+              echo -e "${spanner}${xline}";
+            done;
+            ## -------------------------------------------------------------------------
+            declare -a optional=();
+            optional+=("--pkgs-list\t: Custom Packages List.");
+            optional+=("--log-file\t: Default Process log-file.");
+            optional+=("--json-file\t: Installed Packages JSON file.");
+            optional+=("--report-file\t: Installed Packages report file.");
+            optional+=("--import\t: Importing Listed Packages description.");
+            echo -e "\nOptional: ${optional[0]}";
+            optional=("${optional[@]:1}");
+            for xline in ${optional[@]}; do
+              echo -e "$( printf "% 10s" )${xline}";
+            done;
+            ## -----------------------------------------------------------------
+            echo -en "\nUsage:\n\n${help_caller/_/-} ";
+            counter=0; aligned='';
+            for xline in ${usage[@]}; do
+              stubset='false';
+              [[ ${counter} -gt 0 ]] && aligned="${spacer}";
+              for xitem in ${patterns[@]}; do
+                declare -a replace=($( echo -e "${xitem}" | tr '\t' '\n' ));
+                if [[ "${xline}" =~ "{{ ${replace[0]} }}" ]]; then
+                   echo -e "${aligned}${xline}" \
+                  | sed -e "s|{{ ${replace[0]} }}|${replace[1]}|"
+                  stubset='true'; break;
+                fi;
+              done;
+              [[ ${stubset} == 'false' ]] && echo -e "${aligned}${xline}";
+              ((counter++));
+            done; echo -e ";\n";
+      else  ## Listing command example:
+            echo -en "\n${help_caller/_/-} ";
+            echo -e "${usage[*]}" | sed -e 's/\ \\$//g' | tr '\n' ' ';
+            echo -e ";\n";
+    fi;
+    ## -------------------------------------------------------------------------
+    # local script_location="blob/${virtualbox_platform}";
+    # script_location+="/${help_caller/_/-}.shell";
+    # echo -e "GitHub Project: ${github_repo}";
+    # echo -e "        Source: ${script_location}";
+    return 0;
+  }; alias packages-ubuntu.help='packages_ubuntu.help';
+
+## packages_ubuntu ${@}
