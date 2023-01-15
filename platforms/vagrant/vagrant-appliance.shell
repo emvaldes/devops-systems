@@ -35,10 +35,9 @@ export github_repo='emvaldes/devops-systems';
 ## Temporary folder/container:
 export local_temp="${HOME}/.local/tmp";
 export vagrant_temp="${local_temp}/vagrant";
-mkdir -p "${vagrant_temp}";
 
 ## Constructing a Vagrant Shared folder to exchange content
-$ mkdir -pv ${vagrant_temp}/shared;
+mkdir -p "${vagrant_temp}/shared";
 
 ## Events status counter:
 export counter=0;
