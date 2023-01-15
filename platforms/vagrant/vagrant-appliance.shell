@@ -202,8 +202,10 @@ function service_account () {
     local script_name="service-account.shell";
     local remote_resource="platforms/vagrant/${script_name}";
     curl --silent \
-         https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
+         --output ${vagrant_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
     return 0;
   }; alias service-account='service_account';
@@ -216,8 +218,9 @@ function sudoers_privileges () {
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
-         https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
@@ -248,8 +251,9 @@ function sudoers_autologin () {
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
-         https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
@@ -301,8 +305,10 @@ function preinst_package () {
     local script_name="ubuntu-preinstall.shell";
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
-         https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
+         --output ${vagrant_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
     return 0;
   }; alias preinst-package='preinst_package';
@@ -314,8 +320,10 @@ function postinst_package () {
     local script_name="ubuntu-postinstall.shell";
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
-         https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
+         --output ${vagrant_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
     return 0;
   }; alias postinst-package='postinst_package';
