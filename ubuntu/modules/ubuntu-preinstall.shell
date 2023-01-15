@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Script: ubuntu-preinstall.shell
 
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};

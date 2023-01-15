@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Script: ubuntu-postinstall.shell
 
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};

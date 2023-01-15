@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Script: sudoers-privileges.shell
 
 function newline () { echo -e; return 0; };
 

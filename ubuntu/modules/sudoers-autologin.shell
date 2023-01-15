@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# Script: sudoers-autologin.shell
 
 function newline () { echo -e; return 0; };
 
