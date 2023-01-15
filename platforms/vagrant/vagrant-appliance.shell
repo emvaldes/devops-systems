@@ -22,6 +22,7 @@ export authorized_keys="/home/${devops_account}/.ssh/authorized_keys";
 
 ## Target Vagrant Home folder:
 export vagrant_projects="${HOME}/.vagrant.d";
+mkdir -p "${vagrant_projects}/sources";
 
 ## Target Vagrant Instance Location:
 export vagrant_location="${vagrant_projects}/sources/${vagrant_instance}";
@@ -35,6 +36,9 @@ export github_repo='emvaldes/devops-systems';
 export local_temp="${HOME}/.local/tmp";
 export vagrant_temp="${local_temp}/vagrant";
 mkdir -p "${vagrant_temp}";
+
+## Constructing a Vagrant Shared folder to exchange content
+$ mkdir -pv ${vagrant_temp}/shared;
 
 ## Events status counter:
 export counter=0;
@@ -136,7 +140,21 @@ function patch_vagrantfile () {
          --output ${vagrant_temp}/${patch_vagrantfile} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    cat ${vagrant_temp}/${patch_vagrantfile};
+    # cat ${vagrant_temp}/${patch_vagrantfile};
+    # --- ./Vagrantfile         2023-01-08 15:16:11
+    # +++ ./custom.vagrantfile  2023-01-08 15:30:15
+    # @@ -67,4 +67,11 @@
+    #    #   apt-get update
+    #    #   apt-get install -y apache2
+    #    # SHELL
+    # +
+    # +  config.vm.synced_folder "~/.local/tmp/vagrant/shared", "/shared"
+    # +  config.vm.hostname = "devops-console"
+    # +  config.vm.provider "virtualbox" do |console|
+    # +    console.name = "devops-console"
+    # +  end
+    # +
+    #  end
     check_status $?;
     patch ${vagrant_location}/Vagrantfile < ${vagrant_temp}/patch-vagrantfile;
     check_status $?;
@@ -158,14 +176,6 @@ function vagrant_deploy () {
 
 ## -----------------------------------------------------------------------------
 ## Objective: Reviewing Vagrant Box Configuration
-## status=1
-## The provider for this Vagrant-managed machine is reporting that it
-## is not yet ready for SSH. Depending on your provider this can carry
-## different meanings. Make sure your machine is created and running and
-## try again. Additionally, check the output of `vagrant status` to verify
-## that the machine is in the state that you expect. If you continue to
-## get this error message, please view the documentation for the provider
-## you're using.
 function vagrant_config () {
     cd ${vagrant_location};
     vagrant status;
@@ -212,6 +222,24 @@ function sudoers_privileges () {
     check_status $?;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
+
+## -----------------------------------------------------------------------------
+## Objective: Transferring Access Credentials
+function transfer_credentials () {
+    cd ${vagrant_location};
+    fold -b -w 70 ${HOME}/.ssh/public/${devops_sshkey};
+    cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_temp}/shared/;
+    check_status $?;
+    vagrant ssh -c \
+            "cat /shared/${devops_sshkey} | sudo tee ${authorized_keys}";
+    check_status $?;
+    vagrant ssh -c \
+            "sudo cat ${authorized_keys} | fold -b -w 70";
+    check_status $?;
+    rm -v ${vagrant_temp}/shared/${devops_sshkey};
+    check_status $?;
+    return 0;
+  }; alias transfer-credentials='transfer_credentials';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Configuring Auto-Login Capabilities
@@ -315,7 +343,8 @@ function vagrant_appliance () {
     vagrant_access;
     service_account;
     sudoers_privileges;
-    account_autologin;
+    transfer_credentials;
+    sudoers_autologin;
     service_access;
     config_section;
     preinst_package;
