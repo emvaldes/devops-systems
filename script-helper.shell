@@ -1,0 +1,221 @@
+#!/usr/bin/env bash
+
+# Description: Calling block for the script-helper.shell
+#
+# ## Prividing operational assistance (helper)
+# if [[ ( ${assistance} == 'true' )   || \
+#       ( ${example_mode} == 'true' ) || \
+#       ( ${wizard_mode} == 'true' )  || \
+#       ( ${info_mode} == 'true' )
+#   ]]; then
+#   ## JSON source and object:
+#   local script_helper="${HOME}/.local/bin/script-helper.shell";
+#   if [[ -e ${script_helper} ]]; then
+#           source ${script_helper};
+#           script_helper --caller="${script_file}" \
+#                         --example=${example_mode} \
+#                         --wizard=${wizard_mode} \
+#                         --info=${info_mode} \
+#           ;
+#           return 1;
+#     else  echo -e "\nWarning: Script Helper was not found! \n";
+#           return 2;
+#   fi;
+# fi;
+
+function script_helper () {
+    ## -------------------------------------------------------------------------
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "caller" ]] && local calling_script="${2}";
+      [[ ${1#*\--} = "example" ]] && local example_mode="${2}";
+      [[ ${1#*\--} = "wizard" ]] && local wizard_mode="${2}";
+      [[ ${1#*\--} = "info" ]] && local info_mode="${2}";
+    done; IFS="${oIFS}";
+    ## -------------------------------------------------------------------------
+    local oIFS="${IFS}"; IFS=$'\n';
+    [[ ${#example_mode} -eq 0 ]] && { local example_mode='false'; };
+    [[ ${#wizard_mode} -eq 0 ]] && { local wizard_mode='false'; };
+    [[ ${#info_mode} -eq 0 ]] && { local info_mode='false'; };
+    # echo -e "Example: ${example_mode}";
+    # echo -e " Wizard: ${wizard_mode}";
+    ## -------------------------------------------------------------------------
+    ## echo -e "Calling Script: ${calling_script}"
+    local script_filename="$( basename ${calling_script})";
+    spanwidth="${#script_filename}";
+    local output_spacer="$(
+        printf "% $(echo "${#script_name} + 1" | bc)s"
+      )";
+    ## JSON source and object:
+    local json_file="${script_name%\.*}.json";
+    local json_object="$(
+        jq --compact-output '' "${calling_script%\.*}.json"
+      )";
+    local warning="\nWarning: Unable to load '${json_file}' file ! \n";
+    abort='false';
+    if [[ -e ${json_file} ]]; then
+            [[ ${#json_object} -lt 3 ]] && {
+                echo -e "${warning}";
+                abort='true';
+              };
+      else  echo -e "${warning}";
+            abort='true';
+    fi;
+    ## Aborting condition (abort=true)
+    [[ ${abort} == 'true' ]] && return 1;
+    ## -------------------------------------------------------------------------
+    declare -a required=($( echo -e "${json_object}" \
+        | jq '.script.required[]' --raw-output
+      ));  # echo -e "required: ${required[@]}";
+    declare -a optional=($( echo -e "${json_object}" \
+        | jq '.script.optional[]' --raw-output
+      ));  # echo -e "Optional: ${optional[@]}";
+    declare -a options=( ${required[@]} ${optional[@]} );
+    declare -a parameters=($( echo -e "${json_object}" \
+        | jq '.params|keys[]' --raw-output
+      ));  # echo -e "Optional: ${parameters[@]}";
+    local command='';
+    ## -------------------------------------------------------------------------
+    declare -a usage_options=($( echo -e "${json_object}" \
+        | jq '.script.examples[]' --raw-output
+      ));
+    command="${script_name} ";
+    counter=0;
+    for xitem in ${usage_options[@]}; do
+      syntax='.params."'${xitem}'"|select(.value!=null)|.value';
+      example="$(
+          echo -e "${json_object}" \
+          | jq --raw-output "${syntax}"
+        )";
+      isbase64="$( echo -en "${example}" | base64 -d )";
+      [[ ${#isbase64} -gt 0 ]] && example="${isbase64}";
+      [[ $(( counter++ )) -gt 0 ]] && command+="${output_spacer}";
+      command+="--${xitem}";
+      [[ ${#example} -gt 0 ]] && command+="=";
+      command+="'${example}' \\*";
+    done; command+=";\n";
+    ## -------------------------------------------------------------------------
+    if [[ ${wizard_mode} == 'true' ]]; then
+      echo -e "\n$(
+          echo -e "${json_object}" \
+          | jq --raw-output ".script.headers.interview"
+        ):\n";
+      local question=''; counter=0;
+      for xitem in ${options[@]}; do
+        (( ++counter ));
+        syntax='.params."'${xitem}'"|select(.value!=null)|.query';
+        question="$(
+            echo -e "${json_object}" \
+            | jq --raw-output "${syntax}"
+          )";
+        if [[ ${#question} -gt 0 ]]; then
+                heading="${counter} -) ${question}: ";
+                read -p "${heading}" response;
+                [[ ${#response} -gt 0 ]] && {
+                    include=" --${xitem}='${response}'";
+                    echo -e "    ${include}\n";
+                    command+="${include}";
+                  };
+          else  ## Parsing non-parameterized options:
+                heading="${counter} -) Include '${xitem}' [Y/n] : ";
+                read -p "${heading}" response;
+                [[ 'Y|y' =~ ${response:0:1} ]] && {
+                    include=" --${xitem}";
+                    echo -e "    ${include}\n";
+                    command+="${include}";
+                  };
+        fi;
+      done;
+      echo -e "\n> ${calling_script}${command} ;\n";
+      read -p "Execute ? [Y/n] : " response;
+      [[ 'Y|y' =~ ${response:0:1} ]] && {
+          eval $(pwd)/${script_name}${command} ;
+        };
+      return 2;
+    fi;
+    ## -------------------------------------------------------------------------
+    if [[ ${example_mode} == 'true' ]]; then
+      ## Listing command example:
+      echo -e "\n${command}" \
+         | sed -e 's|\([[:blank:]]\)\{2,\}||g' \
+               -e 's|\ \\\*\-\-| --|g' \
+               -e 's|\(\ \)\(\\\*\)\(;\)$|\1\3|' \
+      ;
+      return 3;
+    fi;
+    ## -------------------------------------------------------------------------
+    if [[ ${info_mode} == 'true' ]]; then
+      echo -e;
+      declare -a references="$( echo -e "${json_object}" \
+          | jq --compact-output '.script.info'
+        )";
+      ## Generating GitHub properties:
+      ## export github_[id,domain,repo,path]
+      eval $( echo -e "${references}" \
+        | jq -r ".service|to_entries" \
+        | jq -r "map(\"export github_\(.key)='\(.value|tostring)'\")|.[]"
+      );
+      echo -en "GitHub Project: ";
+      echo -e  "https://${github_id}/${github_domain}/${github_repo}";
+      echo -e  "        Source: /${github_path}\n";
+      ## Generating Team properties:
+      ## export team_[id,name]
+      eval $( echo -e "${references}" \
+        | jq -r ".team|to_entries" \
+        | jq -r "map(\"export team_\(.key)='\(.value|tostring)'\")|.[]"
+      );
+      echo -e  "  Team: ${team_name}\n";
+      ## Generating DevOps properties:
+      ## export devops_[name,email]
+      total_users=$( echo -e "${references}" | jq -r ".devops|length" );
+      for (( each=0 ; each < ${total_users} ; each++ )); do
+        eval $( echo -e "${references}" \
+          | jq -r ".devops[${each}]|to_entries" \
+          | jq -r "map(\"export devops_\(.key)='\(.value|tostring)'\")|.[]"
+        );
+        echo -e  "DevOps: ${devops_name} <${devops_email}>"
+      done;
+      echo -e;
+      return 4;
+    fi;
+    ## -------------------------------------------------------------------------
+    options_header="Options:  ";
+    echo -en "\n${options_header}";
+    options_spacer="$( printf "% ${#options_header}s" )";
+    counter=0;
+    for xitem in ${options[@]}; do
+      syntax='.params."'${xitem}'"|select(.message!=null)|.message';
+      message="$(
+          echo -e "${json_object}" \
+          | jq --raw-output "${syntax}"
+        )";
+      [[ $(( counter++ )) -gt 0 ]] && echo -en "${options_spacer}";
+      echo -e "--${xitem}\t\t${message}";
+    done;
+    declare -a helper=($(
+        echo -e "${json_object}" \
+        | jq --raw-output '.helper | keys[]' \
+        | sed -e 's|help$||' | sed '/^$/d' \
+      ));
+    helper+=("help");
+    # echo -e "${helper}";
+    for xitem in ${helper[@]}; do
+      syntax='.helper."'${xitem}'".message';
+      message="$(
+          echo -e "${json_object}" \
+          | jq --raw-output "${syntax}"
+        )";
+      echo -en "${options_spacer}";
+      echo -e "--${xitem}\t\t${message}";
+    done;
+    ## -----------------------------------------------------------------
+    usage_header="Usage:";
+     echo -en "\n${usage_header}\n\n";
+     echo -e  "${command}" | \
+      sed -e  's|\(\ \)\(\\\*\)\(\ \)\{2,\}|\1\\\n'${output_spacer}'|g' \
+          -e  's|\(\ \)\(\\\*\)\(\;\)$|\1\\\n\3|' \
+    ;
+    # ${calling_script} --info;
+    return 0;
+  }; alias script-helper='script_helper';
