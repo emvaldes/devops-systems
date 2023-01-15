@@ -1,0 +1,109 @@
+{
+    "script": {
+        "headers": {
+            "interview": "Please, answer the following questions"
+        },
+        "required": [
+            "vm-name",
+            "iso-file"
+        ],
+        "optional": [
+            "account",
+            "create",
+            "delete",
+            "install",
+            "password",
+            "patch",
+            "start",
+            "virtualbox"
+        ],
+        "examples": [
+            "vm-name",
+            "iso-file"
+        ],
+        "info": {
+            "service": {
+                "id": "github.com",
+                "domain": "emvaldes",
+                "repo": "devops-systems",
+                "path": "blob/master/platforms/virtualbox/virtualbox-appliance.shell"
+            },
+            "team": {
+                "id": "dcs",
+                "name": "DevOps & Cloud Services"
+            },
+            "devops": [
+                {
+                    "name": "Eduardo Valdes",
+                    "email": "emvaldes@hotmail.com"
+                }
+            ]
+        }
+    },
+    "params": {
+        "vm-name": {
+            "value": "ubuntu-desktop",
+            "query": "",
+            "message": "VirtualBox appliance name and hostname"
+        },
+        "account": {
+            "value": "devops",
+            "query": "",
+            "message": "Service Account (username: devops)"
+        },
+        "create": {
+            "value": "",
+            "query": "",
+            "message": "Create VBox appliance (hardware only)"
+        },
+        "delete": {
+            "value": "",
+            "query": "",
+            "message": "Shutdown & Destroy VBox appliance"
+        },
+        "install": {
+            "value": "",
+            "query": "",
+            "message": "Generate Auto-Install (unattended)"
+        },
+        "iso-file": {
+            "value": "ubuntu-22.04.1-desktop-amd64.iso",
+            "query": "",
+            "message": "Installation ISO file location"
+        },
+        "password": {
+            "value": "devops",
+            "query": "",
+            "message": "Service Account (password: devops)"
+        },
+        "patch": {
+            "value": "",
+            "query": "",
+            "message": "Patching Unattended installation"
+        },
+        "start": {
+            "value": "",
+            "query": "",
+            "message": "Requesting to launch VBox Appliance"
+        },
+        "virtualbox": {
+            "value": "${HOME}/.virtualization/virtualbox",
+            "query": "",
+            "message": "Provide VBox projects location"
+        }
+    },
+    "helper": {
+        "help": {
+            "message": "Show this help message and exits"
+        },
+        "info": {
+            "message": "Project credits and online references"
+        },
+        "example": {
+            "message": "Display script's execution options"
+        },
+        "wizard": {
+            "message": "Parse user-input to execute command"
+        }
+    }
+}
