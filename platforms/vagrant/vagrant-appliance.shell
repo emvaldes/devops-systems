@@ -213,7 +213,7 @@ function service_account () {
 function sudoers_privileges () {
     cd ${vagrant_location};
     local script_name="sudoers-privileges.shell";
-    local remote_resource="ubuntu/models/${script_name}";
+    local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource} \
@@ -245,7 +245,7 @@ function transfer_credentials () {
 function sudoers_autologin () {
     cd ${vagrant_location};
     local script_name="sudoers-autologin.shell";
-    local remote_resource="ubuntu/models/${script_name}";
+    local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource} \
