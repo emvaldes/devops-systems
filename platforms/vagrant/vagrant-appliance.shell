@@ -315,7 +315,7 @@ function postinst_package () {
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
          https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
+    | vagrant ssh -c 'bash -x -';
     check_status $?;
     return 0;
   }; alias postinst-package='postinst_package';
