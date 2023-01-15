@@ -348,4 +348,4 @@ function packages_ubuntu.help () {
     return 0;
   }; alias packages-ubuntu.help='packages_ubuntu.help';
 
-## packages_ubuntu ${@}
+packages_ubuntu ${@}
