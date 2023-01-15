@@ -10,6 +10,6 @@ echo -e "\n* Starting Framework Deployment ...\n" | tee -a "${postinstall_logfil
 git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems;
 
 cd /tmp/devops-systems/ubuntu ;
-./packages.shell | tee /tmp/packages.shell;
+./packages.shell | tee ./packages.log;
 
 echo -e "\n* Completed Framework Deployment! \n" | tee -a "${postinstall_logfile}";
