@@ -309,39 +309,39 @@ Host default
 + local machine_configs=.vagrant/machines/default/virtualbox
 + cat /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04/.vagrant/machines/default/virtualbox/private_key
 -----BEGIN RSA PRIVATE KEY-----
-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
+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
 -----END RSA PRIVATE KEY-----
 + vagrant ssh -c 'fold -b -w 70 /home/vagrant/.ssh/authorized_keys'
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDlD89hFGQDjpWtVdB++h/Y3wDnuNHb1W
-mHUrvaFcwA/DUwkwPhNqKK6oXJFPc7oEgcm8PbiBjnBOcqjuRyKgaa2S2QSCAfwfijyP02
-mgTCzGvbP9RalHMPi5ynJZ5Y8NE2DyiWibHZRK4F7MQmrVf0KcPQV3o2KJIs3wOcQS8Ykk
-Gycyug3yWlbBJLg2wx6f+rj/xGbYlKnHdXkAYlbODu+AIM7fhOvVwzWtPw/Hm8/TwKi8S9
-mwBePGTERIEb12EQO56fKSc131li65p8FHg9J34t2lu5l6M3y+mqOLsQ0/pMKQiaE5/bEc
-FPJovH1HDj8TI/21EGIBH2XnwwpDOX vagrant
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAzzdp40vVOqKIro1F1BkMuamsYDUKQm
+QaTJo4ORxD2+qXuO0ufXHnwlx5wYWAAtZd8dptwaF0nDMT0fbs0F+8P70f3i19d7NdmPwp
+7U7ihpeJQGu+svF2l1AH0waqMbxhngkXVsJwNPHmZviRM3zF5L3Jrl1QJvku0vv8whWYq8
+0dpdPDfQrscDNre4W2xoLH7pHV4bIdGvAvfqrcgop7gWuh/B0HGiJ8Gz5a/8U/qAOKptWE
+lMmp0R5SpD7/LX2yhNoCK2sELxeObnRnNPwd9IXXcqsGKjj9MMeVDUC9MKV7g6FNWgLgHl
+X9Sx988QWGSgGhmdvOsiE56rPXfSyF vagrant
 + check_status 0
 + status=0
 + [[ 0 -ne 0 ]]
@@ -378,8 +378,8 @@ changed ownership of '/home/devops/.ssh' from vagrant:vagrant to devops:devops
 + sudoers_privileges
 + cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
 + local script_name=sudoers-privileges.shell
-+ local remote_resource=ubuntu/models/sudoers-privileges.shell
-+ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/models/sudoers-privileges.shell
++ local remote_resource=ubuntu/modules/sudoers-privileges.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-privileges.shell
 + vagrant ssh -c 'bash -'
 + check_status 0
 + status=0
@@ -428,8 +428,8 @@ so8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
 + sudoers_autologin
 + cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
 + local script_name=sudoers-autologin.shell
-+ local remote_resource=ubuntu/models/sudoers-autologin.shell
-+ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/models/sudoers-autologin.shell
++ local remote_resource=ubuntu/modules/sudoers-autologin.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-autologin.shell
 + vagrant ssh -c 'bash -'
 + check_status 0
 + status=0
@@ -547,7 +547,7 @@ debconf: unable to initialize frontend: Readline
 debconf: (This frontend requires a controlling tty.)
 debconf: falling back to frontend: Teletype
 dpkg-preconfigure: unable to re-open stdin:
-Fetched 357 kB in 2s (182 kB/s)
+Fetched 357 kB in 2s (183 kB/s)
 Selecting previously unselected package libonig5:amd64.
 (Reading database ... 44068 files and directories currently installed.)
 Preparing to unpack .../libonig5_6.9.7.1-2build1_amd64.deb ...
