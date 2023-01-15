@@ -61,7 +61,6 @@ $ curl --silent https://raw.githubusercontent.com/emvaldes/devops-systems/master
 │   ├── checkpoint_signature
 │   ├── fp-leases
 │   ├── lock.dotlock.lock
-│   ├── lock.machine-action-6533b421ab71ab7fcdc9e16e11e04fba.lock
 │   ├── machine-index
 │   │   ├── index
 │   │   └── index.lock
@@ -78,7 +77,7 @@ $ curl --silent https://raw.githubusercontent.com/emvaldes/devops-systems/master
 │   └── ubuntu-22.04
 └── tmp
 
-13 directories, 10 files
+13 directories, 9 files
 + check_status 0
 + status=0
 + [[ 0 -ne 0 ]]
@@ -161,7 +160,6 @@ the comments in the Vagrantfile as well as documentation on
 │   ├── checkpoint_signature
 │   ├── fp-leases
 │   ├── lock.dotlock.lock
-│   ├── lock.machine-action-6533b421ab71ab7fcdc9e16e11e04fba.lock
 │   ├── machine-index
 │   │   ├── index
 │   │   └── index.lock
@@ -179,7 +177,7 @@ the comments in the Vagrantfile as well as documentation on
 │       └── Vagrantfile
 └── tmp
 
-16 directories, 16 files
+16 directories, 15 files
 + check_status 0
 + status=0
 + [[ 0 -ne 0 ]]
@@ -309,39 +307,39 @@ Host default
 + local machine_configs=.vagrant/machines/default/virtualbox
 + cat /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04/.vagrant/machines/default/virtualbox/private_key
 -----BEGIN RSA PRIVATE KEY-----
-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
+MIIEpAIBAAKCAQEAtEm9x0PfjBIwrH0wf+8M9EKa00gcUrFq91yjyRPOuKORCeUk
+VlfjDULmp56qtLV9yqry519hz3diSmCW30QQ6MCO6RF+/kV+5AOzmHH1cDmz6wrr
+OZD6U0iuFN+zGeC4GmT1U8oX8Zn5u39jwBpTFT7IpYs1Tn1seMJEZNbAixJ+k+Kg
+AUam/IxjpHarlZmboPCj1/cpYqdZLrIW0+u/BqcoAWaQjc3zchrXgQWOLjKPOFkK
+6qAo3IdCh8nEoQbj2y3/1PAPcO/yxHl6nrn607xEQ2GrnmNCrrpIhcj8tMHwAoaE
+sTPGU912gZj6pzSzEArNS0vZrc6H0zdKd0vItQIDAQABAoIBACKBRogfrmZBiP1K
+TID/wIvzP2yWjY0qFZ3YJiSy3Mqry3OIXocD9RmxpzGHhYZmgffK9ghgUfkCEVbI
+27dJcK8LQ47J4XNK27lKGBJiJSZgdNXUVibDX5WXAHJQShf20WWD0wxBTonX/Vrs
+S6wVnbcgOAiu9vnZuWv3Sl2+WEWFZ2ZQaAT5ca16tgvgMPR7IEBQV5Z9WMTj9qjC
+aVvmJh5o7aGCeyjKK0jqKP1xNuAsuxBgu0QYmXE8OZna/nUjN7ExVUqxVkY3/VDq
+Zo6HvxqQ4LwRBG9kgKZJcWvM6ZV7fMUnPEIEjMz7TEibA6oPpg/MweSa0knYKPMB
+8xOI2nUCgYEA1x75uuxUvnMpogt54lAzo9AbRGjXkS2e7nmCyf+zlgcwCK1wJJ74
+uzOqCK09QAqAi7EEiXfSxu6NLuOj7cj0zLyi8mqlGTrFlFbog473TqHI4/7ubcSg
+zpMPRGd/cWUhznjLIWj306LgQUGdr75JYUk7UJEs1xFQhJvjzoPZcpcCgYEA1ow9
++flCg4J/7nd9eTCUI/QCAtFgoqG4cKcUhSIc+VRjtjqhuk0O5XCO2mMoNFAn6pCz
+zmWZkk3ebL+rIRJeHsj240nzbMK+JS4zHHlf+nXVgqi1RwbTX1XQSlKxXGa6Wjks
+p10y7jsuiHZtyTl4Y6/vT/YCYKAoJx0PjwY0ZJMCgYAjDML3t8Xe+fiQlHoZa6Pe
+TuwCa2qkFuDMTjQHIYhrK2SiJVAeR2CTb8mGfGN8abmkCQWKOGG5U+jg+Ooeth1c
+tmd+Q+3+fFrw3nAn70VQJIAM1d6XN/BTeBaGuK5FFYs6jufZ27Z1XxZWy5AbsE9Y
+cIwfhmfd6s5JrPSjE0x8pQKBgQCUs2j1S8TE/3sJ3fmyOHBEpweJynLO5YW/Vp5L
+VAR+7vWZRPP4+xW7ApOQW69u6qtv0VE+WX7iP2RNPV8vsdpYPfOYPxYfqK4/eNDm
+CF30ax1LzQCvtNRlvEV8beoN4AmDJSOE8HyvT4eF/4dCM7n0ZelZI2osbHTH/0Vc
+XPGNTwKBgQCcENi91sUV/H6tfdaUbKC7M03S5cGYpdGDnbLaIstTUd96pSV3JKTX
+cfgSnWrTyR3TVHVV/2paY5qfEUKtqSyMnKsGy23CXsQ6TW5JKeefl7VKCBQwrgyC
+yR0v3/0LWVldzeSbbK9sHK/JKeCxA1tQL0iufgswlt2RzDzNIkFXLg==
 -----END RSA PRIVATE KEY-----
 + vagrant ssh -c 'fold -b -w 70 /home/vagrant/.ssh/authorized_keys'
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDAzzdp40vVOqKIro1F1BkMuamsYDUKQm
-QaTJo4ORxD2+qXuO0ufXHnwlx5wYWAAtZd8dptwaF0nDMT0fbs0F+8P70f3i19d7NdmPwp
-7U7ihpeJQGu+svF2l1AH0waqMbxhngkXVsJwNPHmZviRM3zF5L3Jrl1QJvku0vv8whWYq8
-0dpdPDfQrscDNre4W2xoLH7pHV4bIdGvAvfqrcgop7gWuh/B0HGiJ8Gz5a/8U/qAOKptWE
-lMmp0R5SpD7/LX2yhNoCK2sELxeObnRnNPwd9IXXcqsGKjj9MMeVDUC9MKV7g6FNWgLgHl
-X9Sx988QWGSgGhmdvOsiE56rPXfSyF vagrant
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC0Sb3HQ9+MEjCsfTB/7wz0QprTSBxSsW
+r3XKPJE864o5EJ5SRWV+MNQuannqq0tX3KqvLnX2HPd2JKYJbfRBDowI7pEX7+RX7kA7OY
+cfVwObPrCus5kPpTSK4U37MZ4LgaZPVTyhfxmfm7f2PAGlMVPsilizVOfWx4wkRk1sCLEn
+6T4qABRqb8jGOkdquVmZug8KPX9ylip1kushbT678GpygBZpCNzfNyGteBBY4uMo84WQrq
+oCjch0KHycShBuPbLf/U8A9w7/LEeXqeufrTvERDYaueY0KuukiFyPy0wfAChoSxM8ZT3X
+aBmPqnNLMQCs1LS9mtzofTN0p3S8i1 vagrant
 + check_status 0
 + status=0
 + [[ 0 -ne 0 ]]
@@ -351,7 +349,11 @@ X9Sx988QWGSgGhmdvOsiE56rPXfSyF vagrant
 + cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
 + local script_name=service-account.shell
 + local remote_resource=platforms/vagrant/service-account.shell
-+ curl --silent https://raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/vagrant/service-account.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/service-account.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/vagrant/service-account.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
 + vagrant ssh -c 'bash -'
 
 * Creating Service Account ...
@@ -380,7 +382,21 @@ changed ownership of '/home/devops/.ssh' from vagrant:vagrant to devops:devops
 + local script_name=sudoers-privileges.shell
 + local remote_resource=ubuntu/modules/sudoers-privileges.shell
 + curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-privileges.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
 + vagrant ssh -c 'bash -'
+
+* Starting Sudoers Configuration ...
+
+devops  ALL=(ALL)  NOPASSWD: ALL
+mode of '/etc/sudoers.d/devops' changed from 0644 (rw-r--r--) to 0440 (r--r-----)
+
+-r--r----- 1 root root 33 Jan 15 21:15 /etc/sudoers.d/devops
+
+* Completed Sudoers Configuration!
+
 + check_status 0
 + status=0
 + [[ 0 -ne 0 ]]
@@ -430,7 +446,94 @@ so8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
 + local script_name=sudoers-autologin.shell
 + local remote_resource=ubuntu/modules/sudoers-autologin.shell
 + curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-autologin.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
 + vagrant ssh -c 'bash -'
+
+* Starting Sudoers Configuration ...
+
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  sshpass
+0 upgraded, 1 newly installed, 0 to remove and 0 not upgraded.
+Need to get 11.7 kB of archives.
+After this operation, 35.8 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
+debconf: unable to initialize frontend: Dialog
+debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
+debconf: falling back to frontend: Readline
+debconf: unable to initialize frontend: Readline
+debconf: (This frontend requires a controlling tty.)
+debconf: falling back to frontend: Teletype
+dpkg-preconfigure: unable to re-open stdin:
+Fetched 11.7 kB in 1s (16.9 kB/s)
+Selecting previously unselected package sshpass.
+(Reading database ... 44068 files and directories currently installed.)
+Preparing to unpack .../sshpass_1.09-1_amd64.deb ...
+Unpacking sshpass (1.09-1) ...
+Setting up sshpass (1.09-1) ...
+Processing triggers for man-db (2.10.2-1) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+Generating public/private rsa key pair.
+Your identification has been saved in /home/vagrant/.ssh/id_rsa
+Your public key has been saved in /home/vagrant/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:hhSEuz4y2061D9U5oA++sKo3Pmz7iiR+OKsuVof+f+8 devops-console
+The key's randomart image is:
++---[RSA 4096]----+
+|     oo          |
+|    .  .         |
+|     .. .        |
+|    .. o o .     |
+|    ..= S +      |
+|   o.+ *   .     |
+|.o+.+ + .        |
+|==O=oo + .       |
+|OOX%*oo.o oE     |
++----[SHA256]-----+
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 11 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+Received disconnect from 127.0.0.1 port 22:2: Too many authentication failures
+Disconnected from 127.0.0.1 port 22
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages will be REMOVED:
+  sshpass
+0 upgraded, 0 newly installed, 1 to remove and 0 not upgraded.
+After this operation, 35.8 kB disk space will be freed.
+(Reading database ... 44073 files and directories currently installed.)
+Removing sshpass (1.09-1) ...
+Processing triggers for man-db (2.10.2-1) ...
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+* Completed Sudoers Configuration!
+
 + check_status 0
 + status=0
 + [[ 0 -ne 0 ]]
@@ -511,7 +614,11 @@ Host vagrant--ubuntu-22.04
 + cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
 + local script_name=ubuntu-preinstall.shell
 + local remote_resource=ubuntu/modules/ubuntu-preinstall.shell
-+ curl --silent https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/ubuntu-preinstall.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/ubuntu-preinstall.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/ubuntu-preinstall.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
 + vagrant ssh -c 'bash -'
 
 * Starting Pre-Install ...
@@ -547,7 +654,7 @@ debconf: unable to initialize frontend: Readline
 debconf: (This frontend requires a controlling tty.)
 debconf: falling back to frontend: Teletype
 dpkg-preconfigure: unable to re-open stdin:
-Fetched 357 kB in 2s (183 kB/s)
+Fetched 357 kB in 1s (246 kB/s)
 Selecting previously unselected package libonig5:amd64.
 (Reading database ... 44068 files and directories currently installed.)
 Preparing to unpack .../libonig5_6.9.7.1-2build1_amd64.deb ...
@@ -592,7 +699,7 @@ debconf: unable to initialize frontend: Readline
 debconf: (This frontend requires a controlling tty.)
 debconf: falling back to frontend: Teletype
 dpkg-preconfigure: unable to re-open stdin:
-Fetched 2,788 B in 0s (11.1 kB/s)
+Fetched 2,788 B in 0s (11.0 kB/s)
 Selecting previously unselected package python-is-python3.
 (Reading database ... 44085 files and directories currently installed.)
 Preparing to unpack .../python-is-python3_3.9.2-2_all.deb ...
@@ -621,7 +728,11 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.
 + cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
 + local script_name=ubuntu-postinstall.shell
 + local remote_resource=ubuntu/modules/ubuntu-postinstall.shell
-+ curl --silent https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/ubuntu-postinstall.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/ubuntu-postinstall.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/ubuntu-postinstall.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
 + vagrant ssh -c 'bash -'
 
 * Starting Framework Deployment ...
