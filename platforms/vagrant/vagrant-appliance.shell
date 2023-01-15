@@ -25,6 +25,7 @@ export vagrant_projects="${HOME}/.vagrant.d";
 
 ## Target Vagrant Instance Location:
 export vagrant_location="${vagrant_projects}/sources/${vagrant_instance}";
+mkdir -p "${vagrant_location}";
 
 ## GitHub raw user content:
 export github_content='raw.githubusercontent.com';
