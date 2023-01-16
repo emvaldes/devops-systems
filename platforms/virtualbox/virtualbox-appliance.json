@@ -9,10 +9,12 @@
         ],
         "optional": [
             "account",
+            "configure",
             "create",
             "delete",
             "install",
             "password",
+            "provision",
             "patch",
             "start",
             "virtualbox"
@@ -20,9 +22,10 @@
         "examples": [
             "vm-name",
             "iso-file",
-            "install",
             "account",
             "password",
+            "provision",
+            "install",
             "patch"
         ],
         "info": {
@@ -55,6 +58,10 @@
             "query": "",
             "message": "Service Account (username: devops)"
         },
+        "configure": {
+            "query": "Configure Appliance",
+            "message": "Deploy Configuration Management"
+        },
         "create": {
             "query": "Create VBox Appliance",
             "message": "Create VBox appliance (hardware only)"
@@ -80,6 +87,10 @@
         "patch": {
             "query": "Patch Unattended Installation",
             "message": "Patching Unattended installation"
+        },
+        "provision": {
+            "query": "",
+            "message": "Infrastructure Provisioning (IaC)"
         },
         "start": {
             "query": "Launch VBox Appliance",
