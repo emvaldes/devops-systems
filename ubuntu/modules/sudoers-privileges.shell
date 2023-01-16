@@ -3,6 +3,8 @@
 
 function newline () { echo -e; return 0; };
 
+## {{ placeholder }}
+
 export privileges_logfile="/tmp/sudoers-privileges.log";
 cat /dev/null > ${privileges_logfile};
 
