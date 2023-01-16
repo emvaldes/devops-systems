@@ -92,8 +92,11 @@ function script_helper () {
       [[ ${#isbase64} -gt 0 ]] && example="${isbase64}";
       [[ $(( counter++ )) -gt 0 ]] && command+="${output_spacer}";
       command+="--${xitem}";
-      [[ ${#example} -gt 0 ]] && command+="=";
-      command+="'${example}' \\*";
+      if [[ ${#example} -gt 0 ]]; then
+              command+="=";
+              command+="'${example}' \\*";
+        else  command+=" \\*";
+      fi;
     done; command+=";\n";
     ## -------------------------------------------------------------------------
     if [[ ${wizard_mode} == 'true' ]]; then
