@@ -263,12 +263,6 @@ function vboxmanage_networking () {
 ## -----------------------------------------------------------------------------
 ## Objective: Configuring Sudoers Privileges
 function sudoers_privileges () {
-    local oIFS="${IFS}";
-    for xitem in "${@}"; do
-      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
-      [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
-    done; IFS="${oIFS}";
-    local oIFS="${IFS}"; IFS=$'\n';
     ## Enabling Passwordless Access
     export script_name="sudoers-privileges.shell";
     export remote_module="ubuntu/modules/${script_name}";
@@ -300,17 +294,15 @@ function sudoers_privileges () {
       else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
             return 1;
     fi;
-    unset script_name;
-    IFS="${oIFS}";
+    unset script_name remote_module;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Configuring Auto-Login Capabilities
 function sudoers_autologin () {
-    cd ${vagrant_location};
     local script_name="sudoers-autologin.shell";
-    local remote_resource="ubuntu/modules/${script_name}";
+    local remote_module="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vbox_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_module}
@@ -323,7 +315,7 @@ function sudoers_autologin () {
       else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
             return 1;
     fi;
-    unset script_name;
+    unset script_name remote_module;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
