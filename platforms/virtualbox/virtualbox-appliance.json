@@ -55,7 +55,7 @@
         },
         "account": {
             "value": "devops",
-            "query": "",
+            "query": "Service Account Username",
             "message": "Service Account (username: devops)"
         },
         "configure": {
@@ -81,7 +81,7 @@
         },
         "password": {
             "value": "devops",
-            "query": "",
+            "query": "Service Account Password",
             "message": "Service Account (password: devops)"
         },
         "patch": {
