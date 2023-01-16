@@ -274,29 +274,32 @@ function sudoers_privileges () {
     export remote_module="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vbox_temp}/${script_name} \
-         https://${github_content}/${github_repo}/master/${remote_module};
-   if [[ -e ${vagrant_temp}/${script_name} ]]; then
-           ## Creating a temporary file and adding these hacking-lines
-           echo -e "## Provisioning auto-configuration for passwordless sudo." \
-                 > ${vbox_temp}/insert-lines.file;
-           echo -en 'echo -e "'${devops_password}'\\n" ' \
-                 >> ${vbox_temp}/insert-lines.file;
-           echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
-                 >> ${vbox_temp}/insert-lines.file;
-           ## Inserting into the sudoers-privileges.shell file
-           ## the insert-lines.file’s content
-           sed -i '' "/## {{ placeholder }}$/ r ${vbox_temp}/insert-lines.file" \
-                     ${vbox_temp}/${script_name};
-           ## Removing placeholder entry to avoid recurrencies
-           sed -i '' '/## {{ placeholder }}/d' ${vbox_temp}/${script_name};
-           ## Listing applied configurations:
-           cat  ${vbox_temp}/${script_name};
-           ## Executing the sudoers-privileges.shell script
-           ssh ${vm_name} -C 'bash -s' \
-             < ${vbox_temp}/${script_name} 2>/dev/null;
-     else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
-           return 1;
-   fi;
+         https://${github_content}/${github_repo}/master/${remote_module}
+    while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    if [[ -e ${vagrant_temp}/${script_name} ]]; then
+            ## Creating a temporary file and adding these hacking-lines
+            echo -e "## Provisioning auto-configuration for passwordless sudo." \
+                  > ${vbox_temp}/insert-lines.file;
+            echo -en 'echo -e "'${devops_password}'\\n" ' \
+                  >> ${vbox_temp}/insert-lines.file;
+            echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
+                  >> ${vbox_temp}/insert-lines.file;
+            ## Inserting into the sudoers-privileges.shell file
+            ## the insert-lines.file’s content
+            sed -i '' "/## {{ placeholder }}$/ r ${vbox_temp}/insert-lines.file" \
+                      ${vbox_temp}/${script_name};
+            ## Removing placeholder entry to avoid recurrencies
+            sed -i '' '/## {{ placeholder }}/d' ${vbox_temp}/${script_name};
+            ## Listing applied configurations:
+            cat  ${vbox_temp}/${script_name};
+            ## Executing the sudoers-privileges.shell script
+            ssh ${vm_name} -C 'bash -s' \
+              < ${vbox_temp}/${script_name} 2>/dev/null;
+      else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+            return 1;
+    fi;
     IFS="${oIFS}";
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
@@ -308,8 +311,11 @@ function sudoers_autologin () {
     local script_name="sudoers-autologin.shell";
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
-         --output ${vagrant_temp}/${script_name} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         --output ${vbox_temp}/${script_name} \
+         https://${github_content}/${github_repo}/master/${remote_module}
+    while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
     if [[ -e ${vagrant_temp}/${script_name} ]]; then
             ssh ${vm_name} -C 'bash -s' \
               < ${vbox_temp}/${script_name} 2>/dev/null;
