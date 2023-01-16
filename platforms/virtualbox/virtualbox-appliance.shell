@@ -270,16 +270,16 @@ function vboxmanage_networking () {
 ## Objective: Configuring Sudoers Privileges
 function sudoers_privileges () {
     ## Enabling Passwordless Access
-    export script_name="sudoers-privileges.shell";
-    export remote_module="ubuntu/modules/${script_name}";
-    rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
+    local privileges_script="sudoers-privileges.shell";
+    local remote_module="ubuntu/modules/${privileges_script}";
+    rm -fv ${vbox_temp}/${privileges_script} 2>/dev/null;
     curl --silent \
-         --output ${vbox_temp}/${script_name} \
+         --output ${vbox_temp}/${privileges_script} \
          https://${github_content}/${github_repo}/master/${remote_module}
-    while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+    while [[ ! -e ${vbox_temp}/${privileges_script} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
-    if [[ -e ${vbox_temp}/${script_name} ]]; then
+    if [[ -e ${vbox_temp}/${privileges_script} ]]; then
             ## Creating a temporary file and adding these hacking-lines
             echo -e "## Provisioning auto-configuration for passwordless sudo." \
                   > ${vbox_temp}/insert-lines.file;
@@ -290,46 +290,44 @@ function sudoers_privileges () {
             ## Inserting into the sudoers-privileges.shell file
             ## the insert-lines.file’s content
             sed -i '' "/## {{ placeholder }}$/ r ${vbox_temp}/insert-lines.file" \
-                      ${vbox_temp}/${script_name};
+                      ${vbox_temp}/${privileges_script};
             ## Removing placeholder entry to avoid recurrencies
-            sed -i '' '/## {{ placeholder }}/d' ${vbox_temp}/${script_name};
+            sed -i '' '/## {{ placeholder }}/d' ${vbox_temp}/${privileges_script};
             ## Updating the serice-account placeholder
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                      ${vbox_temp}/${script_name};
+                      ${vbox_temp}/${privileges_script};
             ## Listing applied configurations:
-            cat  ${vbox_temp}/${script_name};
+            cat  ${vbox_temp}/${privileges_script};
             ## Executing the sudoers-privileges.shell script
             ssh ${vm_name} -C 'bash -s' \
-              < ${vbox_temp}/${script_name} 2>/dev/null;
-      else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+              < ${vbox_temp}/${privileges_script} 2>/dev/null;
+      else  echo -e "\nWarning: ${vbox_temp}/${privileges_script} is missing! ";
             return 1;
     fi;
-    unset script_name remote_module;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Configuring Auto-Login Capabilities
 function sudoers_autologin () {
-    local script_name="sudoers-autologin.shell";
-    local remote_module="ubuntu/modules/${script_name}";
-    rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
+    local autlogin_script="sudoers-autologin.shell";
+    local remote_module="ubuntu/modules/${autlogin_script}";
+    rm -fv ${vbox_temp}/${autlogin_script} 2>/dev/null;
     curl --silent \
-         --output ${vbox_temp}/${script_name} \
+         --output ${vbox_temp}/${autlogin_script} \
          https://${github_content}/${github_repo}/master/${remote_module}
-    while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+    while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
-    if [[ -e ${vbox_temp}/${script_name} ]]; then
+    if [[ -e ${vbox_temp}/${autlogin_script} ]]; then
             ## Updating the serice-account placeholder
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                      ${vbox_temp}/${script_name};
+                      ${vbox_temp}/${autlogin_script};
             ssh ${vm_name} -C 'bash -s' \
-              < ${vbox_temp}/${script_name} 2>/dev/null;
-      else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+              < ${vbox_temp}/${autlogin_script} 2>/dev/null;
+      else  echo -e "\nWarning: ${vbox_temp}/${autlogin_script} is missing! ";
             return 1;
     fi;
-    unset script_name remote_module;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
@@ -348,9 +346,8 @@ function validate_hostname () {
         | grep bridged \
         | sed -e 's|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\,\(.*\)$|\3|' \
         | fold -w2 \
-        | tr '\n' ':' \
-        | sed -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g' -e 's|\:$||' \
-        | tr '[[:upper:]]' '[[:lower:]]'
+        | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]'
+        | sed -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g' -e 's|\:$||'
       )";
     arpset=($(
         arp -a \
@@ -554,23 +551,23 @@ function virtualbox_appliance () {
             ## Configuring target-configs with custom settings.
             for target in ${targets[@]}; do
               ## Configuring each target with custom settings.
-              export script_name="patch-${target}";
-              export remote_resource="${virtualbox_platform}/${script_name}";
-              rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
+              export patch_template="patch-${target}";
+              export remote_resource="${virtualbox_platform}/${patch_template}";
+              rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
               curl --silent \
-                   --output ${vbox_temp}/${script_name} \
+                   --output ${vbox_temp}/${patch_template} \
                    https://${github_content}/${github_repo}/${remote_resource};
-              while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+              while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
                 echo -e '.'; sleep 1;
               done; echo -e;
-              if [[ -e ${vbox_temp}/${script_name} ]]; then
+              if [[ -e ${vbox_temp}/${patch_template} ]]; then
                       ## Updating the serice-account placeholder
                       sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                                ${vbox_temp}/${script_name};
+                                ${vbox_temp}/${patch_template};
                       ## Patching Pre-Seed Configurations:
                       patch ${vm_location}/Unattended-*-${each} \
-                          < ${vbox_temp}/${script_name};
-                else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+                          < ${vbox_temp}/${patch_template};
+                else  echo -e "\nWarning: ${vbox_temp}/${patch_template} is missing! ";
                       return 5;
               fi;
             done;
