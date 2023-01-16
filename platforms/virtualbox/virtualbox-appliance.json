@@ -31,6 +31,8 @@
             ],
             [
                 "vm-name",
+                "account",
+                "password",
                 "configure"
             ]
         ],
