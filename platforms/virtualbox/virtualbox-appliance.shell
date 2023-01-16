@@ -1,5 +1,14 @@
 #!/usr/bin/env bash
 
+# Functions: virtualbox_appliance
+#            vboxmanage_storage
+#            vboxmanage_configvm
+#            vboxmanage_multimedia
+#            vboxmanage_networking
+#            sudoers_privileges
+#            sudoers_autologin
+#            validate_hostname
+#
 # virtualbox-appliance.shell --help ;
 #
 # Required    --vm-name           VirtualBox appliance name and hostname
