@@ -205,7 +205,7 @@ function script_helper () {
             | jq --raw-output "${syntax}"
           )";
         [[ $(( counter++ )) -gt 0 ]] && echo -en "${options_spacer}";
-        echo -e "--${xitem}\t\t${message}";
+        echo -e "$( printf "% -20s" --${xitem} )${message}";
       done;
     done;
     declare -a helper=($(
@@ -224,7 +224,7 @@ function script_helper () {
           | jq --raw-output "${syntax}"
         )";
       echo -en "${options_spacer}";
-      echo -e "--${xitem}\t\t${message}";
+      echo -e "$( printf "% -20s" --${xitem} )${message}";
     done;
     ## -----------------------------------------------------------------
     usage_header="Usage:";
