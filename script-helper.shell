@@ -98,7 +98,7 @@ function script_helper () {
         example+="--${xitem}";
         if [[ ${#item_value} -gt 0 ]]; then
                 example+="=";
-                example+="'${item_value}' \\*";
+                example+="\"${item_value}\" \\*";
           else  example+=" \\*";
         fi;
       done; example+=";";
@@ -123,7 +123,7 @@ function script_helper () {
                 heading="${counter} -) ${question}: ";
                 read -p "${heading}" response;
                 [[ ${#response} -gt 0 ]] && {
-                    include=" --${xitem}='${response}'";
+                    include=" --${xitem}=\"${response}\"";
                     echo -e "    ${include}\n";
                     command+="${include}";
                   };
