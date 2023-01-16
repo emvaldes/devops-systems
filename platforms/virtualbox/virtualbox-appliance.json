@@ -20,13 +20,19 @@
             "virtualbox"
         ],
         "examples": [
-            "vm-name",
-            "iso-file",
-            "account",
-            "password",
-            "provision",
-            "install",
-            "patch"
+            [
+                "vm-name",
+                "iso-file",
+                "account",
+                "password",
+                "provision",
+                "install",
+                "patch"
+            ],
+            [
+                "vm-name",
+                "configure"
+            ]
         ],
         "info": {
             "service": {
