@@ -22,7 +22,7 @@ export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
 export devops_account='devops';
 export devops_password="${devops_account}";
 
-export script_file="$(pwd)/${0#*\/};";
+export script_file="$(pwd)/${0#*\/}";
 export script_name="$( basename ${script_file} )";
 
 ## -----------------------------------------------------------------------------
