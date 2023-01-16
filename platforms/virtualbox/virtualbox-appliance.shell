@@ -13,6 +13,7 @@
 #             --password          Service Account (password: devops)
 #             --provision         Infrastructure Provisioning (IaC)
 #             --patch             Patching Unattended installation
+#             --sshkey            Profile Auto-Login via SSH Public Key
 #             --start             Requesting to launch VBox Appliance
 #             --virtualbox        Provide VBox projects location
 #             --example           Display script's execution options
@@ -32,6 +33,9 @@
 # ;
 #
 # virtualbox-appliance.shell --vm-name='ubuntu-desktop' \
+#                            --account='devops' \
+#                            --password='devops' \
+#                            --sshkey='${HOME}/.ssh/id_rsa.pub' \
 #                            --configure \
 # ;
 
@@ -266,6 +270,7 @@ function sudoers_privileges () {
     ## Enabling Passwordless Access
     export script_name="sudoers-privileges.shell";
     export remote_module="ubuntu/modules/${script_name}";
+    rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
     curl --silent \
          --output ${vbox_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_module}
@@ -286,6 +291,9 @@ function sudoers_privileges () {
                       ${vbox_temp}/${script_name};
             ## Removing placeholder entry to avoid recurrencies
             sed -i '' '/## {{ placeholder }}/d' ${vbox_temp}/${script_name};
+            ## Updating the serice-account placeholder
+            sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                      ${vbox_temp}/${script_name};
             ## Listing applied configurations:
             cat  ${vbox_temp}/${script_name};
             ## Executing the sudoers-privileges.shell script
@@ -303,6 +311,7 @@ function sudoers_privileges () {
 function sudoers_autologin () {
     local script_name="sudoers-autologin.shell";
     local remote_module="ubuntu/modules/${script_name}";
+    rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
     curl --silent \
          --output ${vbox_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_module}
@@ -310,6 +319,9 @@ function sudoers_autologin () {
       echo -e '.'; sleep 1;
     done; echo -e;
     if [[ -e ${vbox_temp}/${script_name} ]]; then
+            ## Updating the serice-account placeholder
+            sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                      ${vbox_temp}/${script_name};
             ssh ${vm_name} -C 'bash -s' \
               < ${vbox_temp}/${script_name} 2>/dev/null;
       else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
@@ -325,15 +337,16 @@ function virtualbox_appliance () {
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
+      [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
+      [[ ${1#*\--} = "configure" ]] && local configuration='true';
       [[ ${1#*\--} = "create" ]] && local create_machine='true';
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
       [[ ${1#*\--} = "install" ]] && local unattended_install='true';
-      [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
       [[ ${1#*\--} = "provision" ]] && local provisioning='true';
-      [[ ${1#*\--} = "configure" ]] && local configuration='true';
+      [[ ${1#*\--} = "sshkey" ]] && local sshkey_access="${2}";
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
@@ -367,6 +380,12 @@ function virtualbox_appliance () {
         echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
         return 1;
       };
+    [[ ${#iso_filename} -eq 0 ]] && {
+        echo -e "\nWarning: No Installation ISO file was provided! \n";
+        ## Installation media (DVD ISO):
+        unattended_install='false';
+        return 1;
+      };
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
         echo -en "\nWarning: Using default ";
@@ -392,20 +411,14 @@ function virtualbox_appliance () {
         ## Cleaning existing location:
         ## rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
       };
-    [[ ${#iso_filename} -eq 0 ]] && {
-        echo -e "\nWarning: No Installation ISO file was provided! \n";
-        ## Installation media (DVD ISO):
-        unattended_install='false';
-        return 1;
-      };
-    ## Collecting Virtual Machinen OS Type:
-    declare -a vm_ostype="$(
-        VBoxManage list ostypes \
-        | egrep "^(ID:)([[:blank:]]*)(Ubuntu22.*)(LTS).*(64)$" \
-        | awk '{print $2}'
-      )";
     local vm_location="";
     if [[ ${unattended_install} == 'true' ]]; then
+            ## Collecting Virtual Machinen OS Type:
+            declare -a vm_ostype="$(
+                VBoxManage list ostypes \
+                | egrep "^(ID:)([[:blank:]]*)(Ubuntu22.*)(LTS).*(64)$" \
+                | awk '{print $2}'
+              )";
             ## Create the virtual machine.
             declare -a response=($(
                 VBoxManage createvm \
@@ -471,27 +484,53 @@ function virtualbox_appliance () {
         [[ ${patch_files} == 'true' ]] && {
             ## -----------------------------------------------------------------
             ## Configuring patch-pressed.cfg with custom settings.
+            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
             export script_name="patch-preseed.cfg";
             export remote_resource="${virtualbox_platform}/${script_name}";
             curl --silent \
                  --output ${vbox_temp}/${script_name} \
                  https://${github_content}/${github_repo}/${remote_resource};
-            ## Patching Pre-Seed Configurations:
-            patch ${vm_location}/Unattended-*-preseed.cfg \
-                < ${vbox_temp}/patch-preseed.cfg;
+            while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+              echo -e '.'; sleep 1;
+            done; echo -e;
+            if [[ -e ${vbox_temp}/${script_name} ]]; then
+                    ## Updating the serice-account placeholder
+                    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                              ${vbox_temp}/${script_name};
+                    ## Patching Pre-Seed Configurations:
+                    patch ${vm_location}/Unattended-*-preseed.cfg \
+                        < ${vbox_temp}/${script_name};
+              else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+                    return 1;
+            fi;
             ## -----------------------------------------------------------------
             ## Configuring patch-vboxpostinstall with custom settings.
+            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
             export script_name="patch-vboxpostinstall.sh";
             export remote_resource="${virtualbox_platform}/${script_name}";
             curl --silent \
                  --output ${vbox_temp}/${script_name} \
                  https://${github_content}/${github_repo}/${remote_resource};
-            ## Patching VBOX Post-Install Script:
-            patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
-                < ${vbox_temp}/patch-vboxpostinstall.sh;
+            while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+              echo -e '.'; sleep 1;
+            done; echo -e;
+            if [[ -e ${vbox_temp}/${script_name} ]]; then
+                    ## Updating the serice-account placeholder
+                    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                              ${vbox_temp}/${script_name};
+                    ## Patching VBOX Post-Install Script:
+                    patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
+                        < ${vbox_temp}/${script_name};
+              else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+                    return 1;
+            fi;
           };
       };
     [[ ${configuration} == 'true' ]] && {
+        ## Transfer SSH Access Key to guest
+        ssh-copy-id -i ${sshkey_access} \
+                    -o StrictHostKeyChecking=no \
+                    ${devops_account}@${vm_name};
         ## Enabling Passwordless Access
         sudoers_privileges;
         sudoers_autologin;
