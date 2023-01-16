@@ -3,7 +3,6 @@
 # virtualbox-appliance.shell --help ;
 #
 # Required    --vm-name           VirtualBox appliance name and hostname
-#             --iso-file          Installation ISO file location
 #             --account           Service Account (username: devops)
 #             --password          Service Account (password: devops)
 #             --sshkey            Profile Auto-Login via SSH Public Key
@@ -12,6 +11,7 @@
 #             --create            Create VBox appliance (hardware only)
 #             --delete            Shutdown & Destroy VBox appliance
 #             --install           Generate Auto-Install (unattended)
+#             --iso-file          Installation ISO file location
 #             --provision         Infrastructure Provisioning (IaC)
 #             --patch             Patching Unattended installation
 #             --start             Requesting to launch VBox Appliance
