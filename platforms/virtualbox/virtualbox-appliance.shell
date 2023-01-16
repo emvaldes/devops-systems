@@ -278,7 +278,7 @@ function sudoers_privileges () {
     ## Creating a temporary file and adding these hacking-lines
     echo -e "## Provisioning the deployment to auto-provide sudo's password." \
           > ${vbox_temp}/insert-lines.file;
-    echo -en 'echo -e "${devops_password}\\n" ' \
+    echo -en 'echo -e "'${devops_password}'\\n" ' \
           >> ${vbox_temp}/insert-lines.file;
     echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
           >> ${vbox_temp}/insert-lines.file;
