@@ -4,16 +4,16 @@
 #
 # Required    --vm-name           VirtualBox appliance name and hostname
 #             --iso-file          Installation ISO file location
+#             --account           Service Account (username: devops)
+#             --password          Service Account (password: devops)
+#             --sshkey            Profile Auto-Login via SSH Public Key
 #
-# Optional    --account           Service Account (username: devops)
-#             --configure         Deploy Configuration Management
+# Optional    --configure         Deploy Configuration Management
 #             --create            Create VBox appliance (hardware only)
 #             --delete            Shutdown & Destroy VBox appliance
 #             --install           Generate Auto-Install (unattended)
-#             --password          Service Account (password: devops)
 #             --provision         Infrastructure Provisioning (IaC)
 #             --patch             Patching Unattended installation
-#             --sshkey            Profile Auto-Login via SSH Public Key
 #             --start             Requesting to launch VBox Appliance
 #             --virtualbox        Provide VBox projects location
 #             --example           Display script's execution options
@@ -23,19 +23,20 @@
 #
 # Usage:
 #
-# virtualbox-appliance.shell --vm-name='ubuntu-desktop' \
-#                            --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
-#                            --account='devops' \
-#                            --password='devops' \
+# virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
+#                            --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
+#                            --account="devops" \
+#                            --password="devops" \
+#                            --sshkey="${HOME}/.ssh/id_rsa.pub" \
 #                            --provision \
 #                            --install \
 #                            --patch \
 # ;
 #
-# virtualbox-appliance.shell --vm-name='ubuntu-desktop' \
-#                            --account='devops' \
-#                            --password='devops' \
-#                            --sshkey='${HOME}/.ssh/id_rsa.pub' \
+# virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
+#                            --account="devops" \
+#                            --password="devops" \
+#                            --sshkey="${HOME}/.ssh/id_rsa.pub" \
 #                            --configure \
 # ;
 
