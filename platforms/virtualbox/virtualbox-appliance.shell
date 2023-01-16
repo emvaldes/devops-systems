@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 
+# virtualbox-appliance.shell --help ;
+#
+# Required    --vm-name           VirtualBox appliance name and hostname
+#             --iso-file          Installation ISO file location
+#
+# Optional    --account           Service Account (username: devops)
+#             --create            Create VBox appliance (hardware only)
+#             --delete            Shutdown & Destroy VBox appliance
+#             --install           Generate Auto-Install (unattended)
+#             --password          Service Account (password: devops)
+#             --patch             Patching Unattended installation
+#             --start             Requesting to launch VBox Appliance
+#             --virtualbox        Provide VBox projects location
+#             --example           Display script's execution options
+#             --wizard            Parse user-input to execute command
+#             --info              Project credits and online references
+#             --help              Show this help message and exits
+#
+# Usage:
+#
+# virtualbox-appliance.shell --vm-name='ubuntu-desktop' \
+#                            --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
+#                            --install \
+#                            --account='devops' \
+#                            --password='devops' \
+#                            --patch \
+# ;
+
 ## -----------------------------------------------------------------------------
 ## Reference: https://www.virtualbox.org/manual/UserManual.html
               #unattended-guest-install-example
