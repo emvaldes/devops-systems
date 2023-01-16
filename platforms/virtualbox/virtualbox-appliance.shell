@@ -278,7 +278,7 @@ function sudoers_privileges () {
     while [[ ! -e ${vbox_temp}/${script_name} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
-    if [[ -e ${vagrant_temp}/${script_name} ]]; then
+    if [[ -e ${vbox_temp}/${script_name} ]]; then
             ## Creating a temporary file and adding these hacking-lines
             echo -e "## Provisioning auto-configuration for passwordless sudo." \
                   > ${vbox_temp}/insert-lines.file;
@@ -317,7 +317,7 @@ function sudoers_autologin () {
     while [[ ! -e ${vbox_temp}/${script_name} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
-    if [[ -e ${vagrant_temp}/${script_name} ]]; then
+    if [[ -e ${vbox_temp}/${script_name} ]]; then
             ssh ${vm_name} -C 'bash -s' \
               < ${vbox_temp}/${script_name} 2>/dev/null;
       else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
