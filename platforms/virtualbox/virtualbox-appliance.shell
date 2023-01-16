@@ -286,6 +286,8 @@ function sudoers_privileges () {
     ## the insert-lines.file’s content
     sed -i '' '/\#\!\/usr\/bin\/env bash/ r ${vbox_temp}/insert-lines.file' \
         ${vbox_temp}/${script_name};
+    ## Listing applied configurations:
+    cat  ${vbox_temp}/${script_name};
     ## Executing the sudoers-privileges.shell script
     ssh ${vm_name} -C 'bash -s' \
       < ${vbox_temp}/${script_name} 2>/dev/null;
@@ -301,9 +303,9 @@ function sudoers_autologin () {
     local remote_resource="ubuntu/modules/${script_name}";
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
-         https://${github_content}/${github_repo}/master/${remote_resource} \
-    | vagrant ssh -c 'bash -';
-    check_status $?;
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    ssh ${vm_name} -C 'bash -s' \
+      < ${vbox_temp}/${script_name} 2>/dev/null;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
@@ -378,7 +380,7 @@ function virtualbox_appliance () {
         echo -en "\nWarning: Using default ";
         echo -e  "'${virtualbox}' projects path! \n";
         ## Cleaning existing location:
-        rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
+        ## rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
       };
     [[ ${#iso_filename} -eq 0 ]] && {
         echo -e "\nWarning: No Installation ISO file was provided! \n";
