@@ -13,11 +13,11 @@
  # GAs
 @@ -220,7 +224,8 @@
  MY_IGNORE_EXITCODE=
- log_command_in_target usermod -a -G vboxsf "devops"
+ log_command_in_target usermod -a -G vboxsf "{{ service-account }}"
 
 -
 +## emvaldes@hotmail.com
-+log_command_in_target usermod -a -G sudo "devops"
++log_command_in_target usermod -a -G sudo "{{ service-account }}"
 
  #
  # Test Execution Service.
