@@ -6,10 +6,12 @@
 #             --iso-file          Installation ISO file location
 #
 # Optional    --account           Service Account (username: devops)
+#             --configure         Deploy Configuration Management
 #             --create            Create VBox appliance (hardware only)
 #             --delete            Shutdown & Destroy VBox appliance
 #             --install           Generate Auto-Install (unattended)
 #             --password          Service Account (password: devops)
+#             --provision         Infrastructure Provisioning (IaC)
 #             --patch             Patching Unattended installation
 #             --start             Requesting to launch VBox Appliance
 #             --virtualbox        Provide VBox projects location
@@ -22,9 +24,10 @@
 #
 # virtualbox-appliance.shell --vm-name='ubuntu-desktop' \
 #                            --iso-file='ubuntu-22.04.1-desktop-amd64.iso' \
-#                            --install \
 #                            --account='devops' \
 #                            --password='devops' \
+#                            --provision \
+#                            --install \
 #                            --patch \
 # ;
 
@@ -313,6 +316,8 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
+      [[ ${1#*\--} = "provision" ]] && local provisioning='true';
+      [[ ${1#*\--} = "configure" ]] && local configuration='true';
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
@@ -337,24 +342,32 @@ function virtualbox_appliance () {
                             --info=${info_mode} \
               ;
               return 1;
-        else  echo -e "\nWarning: Script Helper was not found! \n";
+        else  echo -e "\nWarning: Script Helper was not found ! \n";
               return 2;
       fi;
     fi;
     ## Processing Function Input Parameters
     [[ ${#vm_name} -eq 0 ]] && {
-        echo -e "\nWarning: No Virtual Machine Name was provided! \n";
+        echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
         return 1;
       };
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
         echo -en "\nWarning: Using default ";
-        echo -e  "'${devops_account}' service account! \n";
+        echo -e  "'${devops_account}' service account ! \n";
       };
     [[ ${#devops_password} -eq 0 ]] && {
         export devops_password="${devops_account}";
         echo -en "\nWarning: Using default ";
-        echo -e  "'${devops_password}' account password! \n";
+        echo -e  "'${devops_password}' account password ! \n";
+      };
+    [[ ${#configuration} -eq 0 ]] && {
+        export configuration='false';
+        echo -en "\nWarning: Configuration ${provisioning} !\n ";
+      };
+    [[ ${#provisioning} -eq 0 ]] && {
+        export provisioning='false';
+        echo -en "\nWarning: Provisioning ${provisioning} !\n ";
       };
     [[ ${#virtualbox} -eq 0 ]] && {
         export virtualbox="${virtualbox_projects}";
@@ -399,29 +412,32 @@ function virtualbox_appliance () {
       else  vm_location="${virtualbox}/${vm_name}";
     fi;
     local vm_vboxfile="${vm_location}/${vm_name}.vbox";
-    ## Processing Virtual Machine Storage:
-    vboxmanage_storage --vm-name="${vm_name}" \
-                       --vm-location="${vm_location}" \
-                       --iso-file="${HOME}/Downloads/${iso_filename}" \
-    ; sleep 1;
-    ## Processing Virtual Machine Aditional Configurations
-    vboxmanage_configvm --vm-name="${vm_name}" \
-                        --memory='4096' \
-                        --cpus='4' \
-                        --vram='128' \
-    ; sleep 1;
-    ## Processing Virtual Machine Multimedia Configurations
-    vboxmanage_multimedia --vm-name="${vm_name}" \
-                          --resolution='1920x1080' \
-    ; sleep 1;
-    ## Processing Virtual Machine Networking Configurations:
-    vboxmanage_networking --vm-name="${vm_name}" \
-                          --nic-type='82545EM' \
-                          --bridged='1,en0: Ethernet' \
-                          --hostonly-network='2,HostNetwork' \
-                          --nat-network='3,NatNetwork' \
-                          --nat-only='4' \
-    ; sleep 1;
+    [[ ${provisioning} == 'true' ]] && {
+        ## Processing Virtual Machine Storage:
+        vboxmanage_storage --vm-name="${vm_name}" \
+                           --vm-location="${vm_location}" \
+                           --iso-file="${HOME}/Downloads/${iso_filename}" \
+        ; sleep 1;
+        ## Processing Virtual Machine Aditional Configurations
+        vboxmanage_configvm --vm-name="${vm_name}" \
+                            --memory='4096' \
+                            --cpus='4' \
+                            --vram='128' \
+        ; sleep 1;
+        ## Processing Virtual Machine Multimedia Configurations
+        vboxmanage_multimedia --vm-name="${vm_name}" \
+                              --resolution='1920x1080' \
+        ; sleep 1;
+        ## Processing Virtual Machine Networking Configurations:
+        vboxmanage_networking --vm-name="${vm_name}" \
+                              --nic-type='82545EM' \
+                              --bridged='1,en0: Ethernet' \
+                              --hostonly-network='2,HostNetwork' \
+                              --nat-network='3,NatNetwork' \
+                              --nat-only='4' \
+        ; sleep 1;
+      };
+    ## Unattended Installation
     [[ ${unattended_install} == 'true' ]] && {
         ## Generating VirtualBox Un-Attended Installation configurations:
         VBoxManage unattended install ${vm_name} \
@@ -458,8 +474,11 @@ function virtualbox_appliance () {
             patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
                 < ${vbox_temp}/patch-vboxpostinstall.sh;
           };
+      };
+    [[ ${configuration} == 'true' ]] && {
         ## Enabling Passwordless Access
         sudoers_privileges;
+        sudoers_autologin;
       };
     [[ ${start_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
