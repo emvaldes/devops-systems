@@ -300,6 +300,7 @@ function sudoers_privileges () {
       else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
             return 1;
     fi;
+    unset script_name;
     IFS="${oIFS}";
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
@@ -322,6 +323,7 @@ function sudoers_autologin () {
       else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
             return 1;
     fi;
+    unset script_name;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
 
