@@ -18,7 +18,7 @@ ssh-keygen -t rsa -b 4096 -C devops-console -f ~/.ssh/id_rsa -N '' <<<y \
 | tee -a "${autologin_logfile}";
 
 echo -e "${devops_account}" \
-| sshpass ssh-copy-id -o StrictHostKeyChecking=no localhost \
+| sshpass ssh-copy-id --option StrictHostKeyChecking=no localhost \
 | tee -a "${autologin_logfile}";
 
 rm -rfv ~/.ssh/ssh-copy-id* | tee -a "${autologin_logfile}";
