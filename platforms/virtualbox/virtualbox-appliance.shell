@@ -450,15 +450,16 @@ function virtualbox_appliance () {
         echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
         return 6;
       };
-    [[ ${#iso_filename} -eq 0 ]] && {
-              echo -e "\nWarning: No Installation ISO file was provided! \n";
-              ## Installation media (DVD ISO):
-              unattended_install='false';
-              return 7;
-        else  [[ ! -e ${iso_filename} ]] && {
-                  echo -e ""; return 8;
-                }
-      };
+    missing_isofile="\nWarning: No Installation ISO file was provided! \n";
+    if [[ ${#iso_filename} -eq 0 ]]; then
+            echo -e "${missing_isofile}";
+            ## Installation media (DVD ISO):
+            unattended_install='false';
+            return 7;
+      else  [[ ! -e ${iso_filename} ]] && {
+                echo -e "${missing_isofile}"; return 8;
+              };
+    fi;
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
         echo -en "\nWarning: Using default ";
