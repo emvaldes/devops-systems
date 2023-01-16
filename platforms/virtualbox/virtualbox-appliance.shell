@@ -486,7 +486,7 @@ function virtualbox_appliance () {
     [[ ${configuration} == 'true' ]] && {
         ## Enabling Passwordless Access
         sudoers_privileges;
-        ## sudoers_autologin;
+        sudoers_autologin;
       };
     [[ ${start_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
