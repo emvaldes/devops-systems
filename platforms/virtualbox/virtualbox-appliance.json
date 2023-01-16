@@ -16,6 +16,7 @@
             "password",
             "provision",
             "patch",
+            "sshkey",
             "start",
             "virtualbox"
         ],
@@ -33,6 +34,7 @@
                 "vm-name",
                 "account",
                 "password",
+                "sshkey",
                 "configure"
             ]
         ],
@@ -99,6 +101,11 @@
         "provision": {
             "query": "",
             "message": "Infrastructure Provisioning (IaC)"
+        },
+        "sshkey": {
+            "value": "${HOME}/.ssh/id_rsa.pub",
+            "query": "SSH Access Public Key",
+            "message": "Profile Auto-Login via SSH Public Key"
         },
         "start": {
             "query": "Launch VBox Appliance",
