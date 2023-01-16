@@ -12,7 +12,7 @@ echo -e "\n* Starting Sudoers Privileges ...\n" \
 | tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account
-export devops_account='devops';
+export devops_account='{{ service-account }}';
 
 ## Configuring Service Account passwordless access to sudo-requests
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
