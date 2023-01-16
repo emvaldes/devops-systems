@@ -574,7 +574,7 @@ function virtualbox_appliance () {
                       sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                                 ${vbox_temp}/${patch_template};
                       ## Patching Pre-Seed Configurations:
-                      patch ${vm_location}/Unattended-*-${each} \
+                      patch ${vm_location}/Unattended-*-${target} \
                           < ${vbox_temp}/${patch_template};
                 else  echo -e "\nWarning: ${vbox_temp}/${patch_template} is missing! ";
                       return 5;
