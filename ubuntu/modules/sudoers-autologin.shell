@@ -6,7 +6,7 @@ function newline () { echo -e; return 0; };
 export autologin_logfile="/tmp/sudoers-autologin.log";
 cat /dev/null > ${autologin_logfile};
 
-echo -e "\n* Starting Sudoers Configuration ...\n" \
+echo -e "\n* Starting Sudoers Auto-Login ...\n" \
 | tee -a "${autologin_logfile}";
 
 ## DevOps - Service Account
@@ -25,5 +25,5 @@ rm -rfv ~/.ssh/ssh-copy-id* | tee -a "${autologin_logfile}";
 sudo apt remove sshpass --yes | tee -a "${autologin_logfile}";
 sudo apt autoremove --yes | tee -a "${autologin_logfile}";
 
-echo -e "\n* Completed Sudoers Configuration! \n" \
+echo -e "\n* Completed Sudoers Auto-Login! \n" \
 | tee -a "${autologin_logfile}";
