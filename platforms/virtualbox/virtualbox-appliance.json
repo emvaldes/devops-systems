@@ -19,7 +19,11 @@
         ],
         "examples": [
             "vm-name",
-            "iso-file"
+            "iso-file",
+            "install",
+            "account",
+            "password",
+            "patch"
         ],
         "info": {
             "service": {
@@ -52,18 +56,15 @@
             "message": "Service Account (username: devops)"
         },
         "create": {
-            "value": "",
-            "query": "",
+            "query": "Create VBox Appliance",
             "message": "Create VBox appliance (hardware only)"
         },
         "delete": {
-            "value": "",
-            "query": "",
+            "query": "Destroy VBox Appliance",
             "message": "Shutdown & Destroy VBox appliance"
         },
         "install": {
-            "value": "",
-            "query": "",
+            "query": "Auto-Install Packages",
             "message": "Generate Auto-Install (unattended)"
         },
         "iso-file": {
@@ -77,19 +78,20 @@
             "message": "Service Account (password: devops)"
         },
         "patch": {
-            "value": "",
-            "query": "",
+            "query": "Patch Unattended Installation",
             "message": "Patching Unattended installation"
         },
         "start": {
-            "value": "",
-            "query": "",
+            "query": "Launch VBox Appliance",
             "message": "Requesting to launch VBox Appliance"
         },
         "virtualbox": {
             "value": "${HOME}/.virtualization/virtualbox",
             "query": "",
             "message": "Provide VBox projects location"
+        },
+        "verbose": {
+            "message": "Enabling output's verbosity"
         }
     },
     "helper": {
