@@ -16,14 +16,18 @@ export devops_account='devops';
 
 ## Configuring Service Account passwordless access to sudo-requests
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
+
+  ## Injecting Passwordless Configuration
   echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
        | sudo tee /etc/sudoers.d/${devops_account};
-       ## Service Account /etc/sudoers.d/ file-permissions
-   sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
-   | tee -a "${privileges_logfile}";
 
-   ## mode of '/etc/sudoers.d/devops' changed
-   ## from 0644 (rw-r--r--) to 0440 (r--r-----)
+  ## Service Account /etc/sudoers.d/ file-permissions
+  sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
+       | tee -a "${privileges_logfile}";
+
+  ## mode of '/etc/sudoers.d/devops' changed
+  ## from 0644 (rw-r--r--) to 0440 (r--r-----)
+
 fi;
 
 newline;
