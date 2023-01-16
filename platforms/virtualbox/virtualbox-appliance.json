@@ -29,7 +29,8 @@
                 "sshkey",
                 "provision",
                 "install",
-                "patch"
+                "patch",
+                "start"
             ],
             [
                 "vm-name",
