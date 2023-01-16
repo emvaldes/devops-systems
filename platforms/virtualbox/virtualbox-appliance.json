@@ -5,18 +5,18 @@
         },
         "required": [
             "vm-name",
-            "iso-file"
+            "iso-file",
+            "account",
+            "password",
+            "sshkey"
         ],
         "optional": [
-            "account",
             "configure",
             "create",
             "delete",
             "install",
-            "password",
             "provision",
             "patch",
-            "sshkey",
             "start",
             "virtualbox"
         ],
@@ -26,6 +26,7 @@
                 "iso-file",
                 "account",
                 "password",
+                "sshkey",
                 "provision",
                 "install",
                 "patch"
