@@ -76,31 +76,37 @@ function script_helper () {
     declare -a parameters=($( echo -e "${json_object}" \
         | jq '.params|keys[]' --raw-output
       ));  # echo -e "Optional: ${parameters[@]}";
-    local command='';
     ## -------------------------------------------------------------------------
-    declare -a usage_options=($( echo -e "${json_object}" \
-        | jq '.script.examples[]' --raw-output
-      ));
-    command="${script_filename} ";
-    counter=0;
-    for xitem in ${usage_options[@]}; do
-      syntax='.params."'${xitem}'"|select(.value!=null)|.value';
-      example="$(
-          echo -e "${json_object}" \
-          | jq --raw-output "${syntax}"
-        )";
-      isbase64="$( echo -en "${example}" | base64 -d )";
-      [[ ${#isbase64} -gt 0 ]] && example="${isbase64}";
-      [[ $(( counter++ )) -gt 0 ]] && command+="${output_spacer}";
-      command+="--${xitem}";
-      if [[ ${#example} -gt 0 ]]; then
-              command+="=";
-              command+="'${example}' \\*";
-        else  command+=" \\*";
-      fi;
-    done; command+=";\n";
+    total_examples=$( echo -e "${json_object}" | jq -r ".script.examples|length" );
+    declare -a examples=();
+    local example='';
+    for (( each=0 ; each < ${total_examples} ; each++ )); do
+      declare -a usage_options=($( echo -e "${json_object}" \
+          | jq ".script.examples[${each}][]" --raw-output
+        ));
+      example="${script_filename} ";
+      counter=0;
+      for xitem in ${usage_options[@]}; do
+        syntax='.params."'${xitem}'"|select(.value!=null)|.value';
+        item_value="$(
+            echo -e "${json_object}" \
+            | jq --raw-output "${syntax}"
+          )";
+        isbase64="$( echo -en "${item_value}" | base64 -d )";
+        [[ ${#isbase64} -gt 0 ]] && item_value="${isbase64}";
+        [[ $(( counter++ )) -gt 0 ]] && example+="${output_spacer}";
+        example+="--${xitem}";
+        if [[ ${#item_value} -gt 0 ]]; then
+                example+="=";
+                example+="'${item_value}' \\*";
+          else  example+=" \\*";
+        fi;
+      done; example+=";";
+      examples+=("${example}");
+    done;
     ## -------------------------------------------------------------------------
     if [[ ${wizard_mode} == 'true' ]]; then
+      local command='';
       echo -e "\n$(
           echo -e "${json_object}" \
           | jq --raw-output ".script.headers.interview"
@@ -141,11 +147,15 @@ function script_helper () {
     ## -------------------------------------------------------------------------
     if [[ ${example_mode} == 'true' ]]; then
       ## Listing command example:
-      echo -e "\n${command}" \
-         | sed -e 's|\([[:blank:]]\)\{2,\}||g' \
-               -e 's|\ \\\*\-\-| --|g' \
-               -e 's|\(\ \)\(\\\*\)\(;\)$|\1\3|' \
-      ;
+      index=1;  ## Indexing each example:
+      for each in ${examples[@]}; do
+        echo -e  "\nExample [$(( index++ ))]:";
+        echo -e  "${each}" \
+           | sed -e 's|\([[:blank:]]\)\{2,\}||g' \
+                 -e 's|\ \\\*\-\-| --|g' \
+                 -e 's|\(\ \)\(\\\*\)\(;\)$|\1\3|' \
+        ;
+      done; echo -e;
       return 3;
     fi;
     ## -------------------------------------------------------------------------
@@ -228,11 +238,13 @@ function script_helper () {
     done;
     ## -----------------------------------------------------------------
     usage_header="Usage:";
-     echo -en "\n${usage_header}\n\n";
-     echo -e  "${command}" | \
-      sed -e  's|\(\ \)\(\\\*\)\(\ \)\{2,\}|\1\\\n'${output_spacer}'|g' \
-          -e  's|\(\ \)\(\\\*\)\(\;\)$|\1\\\n\3|' \
-    ;
+    echo -en "\n${usage_header}\n\n";
+    for each in ${examples[@]}; do
+      echo -e   "${each}" \
+         | sed -e  's|\(\ \)\(\\\*\)\(\ \)\{2,\}|\1\\\n'${output_spacer}'|g' \
+               -e  's|\(\ \)\(\\\*\)\(\;\)$|\1\\\n\3|' \
+      ; echo -e;
+    done;
     # ${calling_script} --info;
     return 0;
   }; alias script-helper='script_helper';
