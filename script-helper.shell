@@ -45,10 +45,10 @@ function script_helper () {
     local script_filename="$( basename ${calling_script})";
     spanwidth="${#script_filename}";
     local output_spacer="$(
-        printf "% $(echo "${#script_name} + 1" | bc)s"
+        printf "% $(echo "${#script_filename} + 1" | bc)s"
       )";
     ## JSON source and object:
-    local json_file="${script_name%\.*}.json";
+    local json_file="${script_filename%\.*}.json";
     local json_object="$(
         jq --compact-output '' "${calling_script%\.*}.json"
       )";
@@ -71,6 +71,7 @@ function script_helper () {
     declare -a optional=($( echo -e "${json_object}" \
         | jq '.script.optional[]' --raw-output
       ));  # echo -e "Optional: ${optional[@]}";
+    # Aggregating Required + Optional sets
     declare -a options=( ${required[@]} ${optional[@]} );
     declare -a parameters=($( echo -e "${json_object}" \
         | jq '.params|keys[]' --raw-output
@@ -80,7 +81,7 @@ function script_helper () {
     declare -a usage_options=($( echo -e "${json_object}" \
         | jq '.script.examples[]' --raw-output
       ));
-    command="${script_name} ";
+    command="${script_filename} ";
     counter=0;
     for xitem in ${usage_options[@]}; do
       syntax='.params."'${xitem}'"|select(.value!=null)|.value';
@@ -133,7 +134,7 @@ function script_helper () {
       echo -e "\n> ${calling_script}${command} ;\n";
       read -p "Execute ? [Y/n] : " response;
       [[ 'Y|y' =~ ${response:0:1} ]] && {
-          eval $(pwd)/${script_name}${command} ;
+          eval $(pwd)/${script_filename}${command} ;
         };
       return 2;
     fi;
@@ -183,24 +184,37 @@ function script_helper () {
       return 4;
     fi;
     ## -------------------------------------------------------------------------
-    options_header="Options:  ";
-    echo -en "\n${options_header}";
-    options_spacer="$( printf "% ${#options_header}s" )";
-    counter=0;
-    for xitem in ${options[@]}; do
-      syntax='.params."'${xitem}'"|select(.message!=null)|.message';
-      message="$(
-          echo -e "${json_object}" \
-          | jq --raw-output "${syntax}"
-        )";
-      [[ $(( counter++ )) -gt 0 ]] && echo -en "${options_spacer}";
-      echo -e "--${xitem}\t\t${message}";
+    declare -a headers=(
+        "required:Required"
+        "optional:Optional"
+      );
+    for header in ${headers[@]}; do
+      keyset="${header%\:*}";
+      options_header="${header#*\:}";
+      echo -en "\n${options_header}    ";
+      options_spacer="$( printf "% $(echo "${#options_header} + 4" | bc)s" )";
+      case "${keyset}" in
+        required ) declare -a listing=(${required[@]}); ;;
+        optional ) declare -a listing=(${optional[@]}); ;;
+      esac;
+      counter=0;
+      for xitem in ${listing[@]}; do
+        syntax='.params."'${xitem}'"|select(.message!=null)|.message';
+        message="$(
+            echo -e "${json_object}" \
+            | jq --raw-output "${syntax}"
+          )";
+        [[ $(( counter++ )) -gt 0 ]] && echo -en "${options_spacer}";
+        echo -e "--${xitem}\t\t${message}";
+      done;
     done;
     declare -a helper=($(
         echo -e "${json_object}" \
         | jq --raw-output '.helper | keys[]' \
-        | sed -e 's|help$||' | sed '/^$/d' \
+        | sed -e 's|help$||' -e 's|info$||' \
+        | sed '/^$/d' \
       ));
+    helper+=("info");
     helper+=("help");
     # echo -e "${helper}";
     for xitem in ${helper[@]}; do
