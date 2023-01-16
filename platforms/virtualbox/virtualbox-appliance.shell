@@ -334,6 +334,68 @@ function sudoers_autologin () {
   }; alias sudoers-autologin='sudoers_autologin';
 
 ## -----------------------------------------------------------------------------
+function validate_hostname () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
+      [[ ${1#*\--} = "sshkey" ]] && local sshkey_access="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    ## Identifying the VirtualBox Instance's IP Address
+    bridged_interface="$(
+        VBoxManage showvminfo --details ${vm_name} \
+        | grep bridged \
+        | sed -e 's|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\,\(.*\)$|\3|' \
+        | fold -w2 \
+        | tr '\n' ':' \
+        | sed -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g' -e 's|\:$||' \
+        | tr '[[:upper:]]' '[[:lower:]]'
+      )";
+    arpset=($(
+        arp -a \
+          | grep ${vm_name} \
+          | cut -d' ' -f1 -f2 -f4 \
+          | uniq - \
+          | sed -e 's|\([()]\)||g'
+      ));
+    if [[ ${bridged_interface} == ${arpset[2]} ]]; then
+            local ipaddr="${arpset[1]}";
+      else  echo -e "\nWarning: ${vm_name} IP Address not found! ";
+            return 7;
+    fi;
+    ## Right-Padding IP Address
+    xipaddr="$( printf "% -20s" ${ipaddr})";
+    etc_hosts="/etc/hosts";
+    if [[ $( egrep -c "${vm_name}" ${etc_hosts} ) -eq 0 ]]; then
+            sudo sed -i '' \
+            "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${vm_name}.*\)$|${xipaddr}\3|" \
+            "${etc_hosts}";
+      else  echo -e "\n${xipaddr}${vm_name}" >> "${etc_hosts}";
+    fi;
+    ssh_config="${HOME}/.ssh/config";
+    if [[ $( egrep -c "Host ${vm_name}" ${ssh_config} ) -eq 0 ]]; then
+            declare -a config_block=();
+            config_block+=("\nHost ${vm_name}");
+            config_block+=("  AddKeysToAgent yes");
+            config_block+=("  HostName ${ipaddress}");
+            config_block+=("  User devops");
+            config_block+=("  StrictHostKeyChecking no");
+            config_block+=("  IdentityFile ${sshkey_access}");
+            for each in ${config_block[@]}; do
+              echo -e "${each}" >> ${ssh_config};
+            done;
+      else  ## Updating configuration block
+            local header="Host ${vm_name}";
+            local footer="IdentityFile .*";
+            sed -i '' \
+                "/${header}/,/${footer}/s/\(^.*HostName \)\(.*\)$/\1${ipaddr}/" \
+                ${ssh_config};
+    fi;
+    return 0;
+  }; alias validate-hostname='validate_hostname';
+
+## -----------------------------------------------------------------------------
 function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -380,13 +442,13 @@ function virtualbox_appliance () {
     ## Processing Function Input Parameters
     [[ ${#vm_name} -eq 0 ]] && {
         echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
-        return 1;
+        return 3;
       };
     [[ ${#iso_filename} -eq 0 ]] && {
         echo -e "\nWarning: No Installation ISO file was provided! \n";
         ## Installation media (DVD ISO):
         unattended_install='false';
-        return 1;
+        return 4;
       };
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
@@ -484,51 +546,39 @@ function virtualbox_appliance () {
                  --language=en \
         ;
         [[ ${patch_files} == 'true' ]] && {
+            declare -a targets=(
+                preseed.cfg
+                vboxpostinstall.sh
+              );
             ## -----------------------------------------------------------------
-            ## Configuring patch-pressed.cfg with custom settings.
-            export script_name="patch-preseed.cfg";
-            export remote_resource="${virtualbox_platform}/${script_name}";
-            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
-            curl --silent \
-                 --output ${vbox_temp}/${script_name} \
-                 https://${github_content}/${github_repo}/${remote_resource};
-            while [[ ! -e ${vbox_temp}/${script_name} ]]; do
-              echo -e '.'; sleep 1;
-            done; echo -e;
-            if [[ -e ${vbox_temp}/${script_name} ]]; then
-                    ## Updating the serice-account placeholder
-                    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                              ${vbox_temp}/${script_name};
-                    ## Patching Pre-Seed Configurations:
-                    patch ${vm_location}/Unattended-*-preseed.cfg \
-                        < ${vbox_temp}/${script_name};
-              else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
-                    return 1;
-            fi;
-            ## -----------------------------------------------------------------
-            ## Configuring patch-vboxpostinstall with custom settings.
-            export script_name="patch-vboxpostinstall.sh";
-            export remote_resource="${virtualbox_platform}/${script_name}";
-            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
-            curl --silent \
-                 --output ${vbox_temp}/${script_name} \
-                 https://${github_content}/${github_repo}/${remote_resource};
-            while [[ ! -e ${vbox_temp}/${script_name} ]]; do
-              echo -e '.'; sleep 1;
-            done; echo -e;
-            if [[ -e ${vbox_temp}/${script_name} ]]; then
-                    ## Updating the serice-account placeholder
-                    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                              ${vbox_temp}/${script_name};
-                    ## Patching VBOX Post-Install Script:
-                    patch ${vm_location}/Unattended-*-vboxpostinstall.sh \
-                        < ${vbox_temp}/${script_name};
-              else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
-                    return 1;
-            fi;
+            ## Configuring target-configs with custom settings.
+            for target in ${targets[@]}; do
+              ## Configuring each target with custom settings.
+              export script_name="patch-${target}";
+              export remote_resource="${virtualbox_platform}/${script_name}";
+              rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
+              curl --silent \
+                   --output ${vbox_temp}/${script_name} \
+                   https://${github_content}/${github_repo}/${remote_resource};
+              while [[ ! -e ${vbox_temp}/${script_name} ]]; do
+                echo -e '.'; sleep 1;
+              done; echo -e;
+              if [[ -e ${vbox_temp}/${script_name} ]]; then
+                      ## Updating the serice-account placeholder
+                      sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                                ${vbox_temp}/${script_name};
+                      ## Patching Pre-Seed Configurations:
+                      patch ${vm_location}/Unattended-*-${each} \
+                          < ${vbox_temp}/${script_name};
+                else  echo -e "\nWarning: ${vbox_temp}/${script_name} is missing! ";
+                      return 5;
+              fi;
+            done;
           };
       };
     [[ ${configuration} == 'true' ]] && {
+        validate_hostname --vm-name="${vm_name}" \
+                          --sshkey="${sshkey_access}";
         ## Transfer SSH Access Key to guest
         ssh-copy-id -i ${sshkey_access} \
                     -o StrictHostKeyChecking=no \
@@ -545,7 +595,7 @@ function virtualbox_appliance () {
         ## Starting VirtualBox Virtual Machine.
         VBoxManage controlvm ${vm_name} acpipowerbutton;
         VBoxManage unregistervm --delete ${vm_name};
-        return 10;
+        return 8;
       };
     IFS="${oIFS}";
     return 0;
