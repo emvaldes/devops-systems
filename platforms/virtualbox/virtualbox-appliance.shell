@@ -486,9 +486,9 @@ function virtualbox_appliance () {
         [[ ${patch_files} == 'true' ]] && {
             ## -----------------------------------------------------------------
             ## Configuring patch-pressed.cfg with custom settings.
-            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
             export script_name="patch-preseed.cfg";
             export remote_resource="${virtualbox_platform}/${script_name}";
+            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
             curl --silent \
                  --output ${vbox_temp}/${script_name} \
                  https://${github_content}/${github_repo}/${remote_resource};
@@ -507,9 +507,9 @@ function virtualbox_appliance () {
             fi;
             ## -----------------------------------------------------------------
             ## Configuring patch-vboxpostinstall with custom settings.
-            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
             export script_name="patch-vboxpostinstall.sh";
             export remote_resource="${virtualbox_platform}/${script_name}";
+            rm -fv ${vbox_temp}/${script_name} 2>/dev/null;
             curl --silent \
                  --output ${vbox_temp}/${script_name} \
                  https://${github_content}/${github_repo}/${remote_resource};
