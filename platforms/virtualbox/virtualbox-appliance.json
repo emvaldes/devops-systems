@@ -5,7 +5,6 @@
         },
         "required": [
             "vm-name",
-            "iso-file",
             "account",
             "password",
             "sshkey"
@@ -15,6 +14,7 @@
             "create",
             "delete",
             "install",
+            "iso-file",
             "provision",
             "patch",
             "start",
