@@ -30,6 +30,10 @@
 #                            --install \
 #                            --patch \
 # ;
+#
+# virtualbox-appliance.shell --vm-name='ubuntu-desktop' \
+#                            --configure \
+# ;
 
 ## -----------------------------------------------------------------------------
 ## Reference: https://www.virtualbox.org/manual/UserManual.html
