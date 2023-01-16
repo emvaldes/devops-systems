@@ -284,8 +284,8 @@ function sudoers_privileges () {
           >> ${vbox_temp}/insert-lines.file;
     ## Inserting into the sudoers-privileges.shell file
     ## the insert-lines.file’s content
-    sed -i '' '/\#\!\/usr\/bin\/env bash/ r ${vbox_temp}/insert-lines.file' \
-        ${vbox_temp}/${script_name};
+    sed -i '' "/## {{ placeholder }}$/ r ${vbox_temp}/insert-lines.file" \
+              ${vbox_temp}/${script_name};
     ## Listing applied configurations:
     cat  ${vbox_temp}/${script_name};
     ## Executing the sudoers-privileges.shell script
