@@ -14,6 +14,10 @@ export vagrant_instance="${vagrant_boxset##*\/}";
 [[ ${#3} -gt 0 ]] && export devops_sshkey="${3}" \
                   || export devops_sshkey='devnetops.pub';
 
+## Virtual Machine hostname
+[[ ${#3} -gt 0 ]] && export virtual_machine="${4}" \
+                  || export virtual_machine='devops-console';
+
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
 
@@ -301,7 +305,7 @@ function sudoers_autologin () {
                  ${vagrant_temp}/${autologin_script};
     check_status $?;
     ## Updating the virtual-machine placeholder
-    sed -i '' -e "s|{{ virtual-machine }}|${vagrant_instance}|" \
+    sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                  ${vagrant_temp}/${autologin_script};
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${autologin_script};
