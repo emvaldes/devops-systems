@@ -73,6 +73,8 @@ export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
 export devops_account='devops';
 export devops_password="${devops_account}";
 
+export virtual_machine="devops-console";
+
 export script_file="$(pwd)/${0#*\/}";
 export script_name="$( basename ${script_file} )";
 
@@ -355,6 +357,9 @@ function sudoers_autologin () {
             ## Updating the serice-account placeholder
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                       ${vbox_temp}/${autlogin_script};
+            ## Updating the virtual-machine placeholder
+            sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
+                      ${vbox_temp}/${autlogin_script};
             ssh ${vm_name} -C 'bash -s' \
               < ${vbox_temp}/${autlogin_script} 2>/dev/null;
       else  echo -e "\nWarning: ${vbox_temp}/${autlogin_script} is missing! ";
@@ -483,10 +488,11 @@ function virtualbox_appliance () {
       fi;
     fi;
     ## Processing Function Input Parameters
-    [[ ${#vm_name} -eq 0 ]] && {
-        echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
-        return 6;
-      };
+    if [[ ${#vm_name} -eq 0 ]]; then
+            echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
+            return 6;
+      else  export virtual_machine="${vm_name%\-*}-console";
+    fi;
     missing_isofile="\nWarning: No Installation ISO file was provided! \n";
     if [[ ${configure} == 'false' ]]; then
       if [[ ${#iso_filename} -eq 0 ]]; then
