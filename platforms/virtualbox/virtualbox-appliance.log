@@ -1,0 +1,1262 @@
+$ ./virtualbox-appliance.shell --help ;
+
+Required    --vm-name           VirtualBox appliance name and hostname
+            --account           Service Account (username: devops)
+            --password          Service Account (password: devops)
+            --ssh-key           Profile Auto-Login via SSH Public Key
+
+Optional    --configure         Deploy Configuration Management
+            --create            Create VBox appliance (hardware only)
+            --delete            Shutdown & Destroy VBox appliance
+            --install           Generate Auto-Install (unattended)
+            --iso-file          Installation ISO file location
+            --provision         Infrastructure Provisioning (IaC)
+            --patch             Patching Unattended installation
+            --start             Requesting to launch VBox Appliance
+            --virtualbox        Provide VBox projects location
+            --example           Display script's execution options
+            --wizard            Parse user-input to execute command
+            --info              Project credits and online references
+            --help              Show this help message and exits
+
+Usage:
+
+virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
+                           --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
+                           --account="devops" \
+                           --password="devops" \
+                           --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+                           --provision \
+                           --install \
+                           --patch \
+                           --start \
+;
+
+virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
+                           --account="devops" \
+                           --password="devops" \
+                           --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+                           --configure \
+;
+
+$ ./virtualbox-appliance.shell --example ;
+
+Example [1]:
+virtualbox-appliance.shell --vm-name="ubuntu-desktop" --iso-file="ubuntu-22.04.1-desktop-amd64.iso" --account="devops" --password="devops" --ssh-key="${HOME}/.ssh/id_rsa.pub" --provision --install --patch --start ;
+
+Example [2]:
+virtualbox-appliance.shell --vm-name="ubuntu-desktop" --account="devops" --password="devops" --ssh-key="${HOME}/.ssh/id_rsa.pub" --configure ;
+
+$ bash -x ./virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
+                                       --iso-file="~/Downloads/ubuntu-22.04.1-desktop-amd64.iso" \
+                                       --account="devops" \
+                                       --password="devops" \
+                                       --ssh-key="${HOME}/.ssh/devnetops.pub" \
+                                       --provision \
+                                       --install \
+                                       --patch \
+                                       --start \
+;
+
+  + export local_temp=/Users/emvaldes/.local/tmp
++ local_temp=/Users/emvaldes/.local/tmp
++ export vbox_temp=/Users/emvaldes/.local/tmp/vbox
++ vbox_temp=/Users/emvaldes/.local/tmp/vbox
++ mkdir -p /Users/emvaldes/.local/tmp/vbox
++ export github_content=raw.githubusercontent.com
++ github_content=raw.githubusercontent.com
++ export github_repo=emvaldes/devops-systems
++ github_repo=emvaldes/devops-systems
++ export virtualbox_projects=/Users/emvaldes/.virtualization/virtualbox
++ virtualbox_projects=/Users/emvaldes/.virtualization/virtualbox
++ export virtualbox_platform=master/platforms/virtualbox
++ virtualbox_platform=master/platforms/virtualbox
++ export iso_filename=ubuntu-22.04.1-desktop-amd64.iso
++ iso_filename=ubuntu-22.04.1-desktop-amd64.iso
++ export devops_account=devops
++ devops_account=devops
++ export devops_password=devops
++ devops_password=devops
++ export virtual_machine=devops-console
++ virtual_machine=devops-console
+++ pwd
++ export script_file=/Users/emvaldes/Repos/devops/systems/platforms/virtualbox/virtualbox-appliance.shell
++ script_file=/Users/emvaldes/Repos/devops/systems/platforms/virtualbox/virtualbox-appliance.shell
+++ basename /Users/emvaldes/Repos/devops/systems/platforms/virtualbox/virtualbox-appliance.shell
++ export script_name=virtualbox-appliance.shell
++ script_name=virtualbox-appliance.shell
++ alias check-status=check_status
++ alias vboxmanage-storage=vboxmanage_storage
++ alias vboxmanage-configvm=vboxmanage_configvm
++ alias vboxmanage-multimedia=vboxmanage_multimedia
++ alias vboxmanage-networking=vboxmanage_networking
++ alias sudoers-privileges=sudoers_privileges
++ alias sudoers-autologin=sudoers_autologin
++ alias vboxmanage-interface=vboxmanage_interface
++ alias virtualbox-appliance=virtualbox_appliance
++ virtualbox_appliance --vm-name=ubuntu-desktop '--iso-file=~/Downloads/ubuntu-22.04.1-desktop-amd64.iso' --account=devops --password=devops --ssh-key=/Users/emvaldes/.ssh/devnetops.pub --provision --install --patch --start
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \i\s\o\-\f\i\l\e ]]
++ [[ vm-name = \a\c\c\o\u\n\t ]]
++ [[ vm-name = \c\o\n\f\i\g\u\r\e ]]
++ [[ vm-name = \c\r\e\a\t\e ]]
++ [[ vm-name = \d\e\l\e\t\e ]]
++ [[ vm-name = \i\n\s\t\a\l\l ]]
++ [[ vm-name = \p\a\s\s\w\o\r\d ]]
++ [[ vm-name = \p\a\t\c\h ]]
++ [[ vm-name = \p\r\o\v\i\s\i\o\n ]]
++ [[ vm-name = \s\s\h\k\e\y ]]
++ [[ vm-name = \s\t\a\r\t ]]
++ [[ vm-name = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ vm-name = \h\e\l\p ]]
++ [[ vm-name = \e\x\a\m\p\l\e ]]
++ [[ vm-name = \w\i\z\a\r\d ]]
++ [[ vm-name = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e '--iso-file=~/Downloads/ubuntu-22.04.1-desktop-amd64.iso'
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set iso-file '~/Downloads/ubuntu-22.04.1-desktop-amd64.iso'
++ [[ iso-file = \v\m\-\n\a\m\e ]]
++ [[ iso-file = \i\s\o\-\f\i\l\e ]]
++ local 'iso_filename=~/Downloads/ubuntu-22.04.1-desktop-amd64.iso'
++ [[ iso-file = \a\c\c\o\u\n\t ]]
++ [[ iso-file = \c\o\n\f\i\g\u\r\e ]]
++ [[ iso-file = \c\r\e\a\t\e ]]
++ [[ iso-file = \d\e\l\e\t\e ]]
++ [[ iso-file = \i\n\s\t\a\l\l ]]
++ [[ iso-file = \p\a\s\s\w\o\r\d ]]
++ [[ iso-file = \p\a\t\c\h ]]
++ [[ iso-file = \p\r\o\v\i\s\i\o\n ]]
++ [[ iso-file = \s\s\h\k\e\y ]]
++ [[ iso-file = \s\t\a\r\t ]]
++ [[ iso-file = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ iso-file = \h\e\l\p ]]
++ [[ iso-file = \e\x\a\m\p\l\e ]]
++ [[ iso-file = \w\i\z\a\r\d ]]
++ [[ iso-file = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --account=devops
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set account devops
++ [[ account = \v\m\-\n\a\m\e ]]
++ [[ account = \i\s\o\-\f\i\l\e ]]
++ [[ account = \a\c\c\o\u\n\t ]]
++ local devops_account=devops
++ [[ account = \c\o\n\f\i\g\u\r\e ]]
++ [[ account = \c\r\e\a\t\e ]]
++ [[ account = \d\e\l\e\t\e ]]
++ [[ account = \i\n\s\t\a\l\l ]]
++ [[ account = \p\a\s\s\w\o\r\d ]]
++ [[ account = \p\a\t\c\h ]]
++ [[ account = \p\r\o\v\i\s\i\o\n ]]
++ [[ account = \s\s\h\k\e\y ]]
++ [[ account = \s\t\a\r\t ]]
++ [[ account = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ account = \h\e\l\p ]]
++ [[ account = \e\x\a\m\p\l\e ]]
++ [[ account = \w\i\z\a\r\d ]]
++ [[ account = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --password=devops
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set password devops
++ [[ password = \v\m\-\n\a\m\e ]]
++ [[ password = \i\s\o\-\f\i\l\e ]]
++ [[ password = \a\c\c\o\u\n\t ]]
++ [[ password = \c\o\n\f\i\g\u\r\e ]]
++ [[ password = \c\r\e\a\t\e ]]
++ [[ password = \d\e\l\e\t\e ]]
++ [[ password = \i\n\s\t\a\l\l ]]
++ [[ password = \p\a\s\s\w\o\r\d ]]
++ local devops_password=devops
++ [[ password = \p\a\t\c\h ]]
++ [[ password = \p\r\o\v\i\s\i\o\n ]]
++ [[ password = \s\s\h\k\e\y ]]
++ [[ password = \s\t\a\r\t ]]
++ [[ password = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ password = \h\e\l\p ]]
++ [[ password = \e\x\a\m\p\l\e ]]
++ [[ password = \w\i\z\a\r\d ]]
++ [[ password = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --ssh-key=/Users/emvaldes/.ssh/devnetops.pub
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set ssh-key /Users/emvaldes/.ssh/devnetops.pub
++ [[ ssh-key = \v\m\-\n\a\m\e ]]
++ [[ ssh-key = \i\s\o\-\f\i\l\e ]]
++ [[ ssh-key = \a\c\c\o\u\n\t ]]
++ [[ ssh-key = \c\o\n\f\i\g\u\r\e ]]
++ [[ ssh-key = \c\r\e\a\t\e ]]
++ [[ ssh-key = \d\e\l\e\t\e ]]
++ [[ ssh-key = \i\n\s\t\a\l\l ]]
++ [[ ssh-key = \p\a\s\s\w\o\r\d ]]
++ [[ ssh-key = \p\a\t\c\h ]]
++ [[ ssh-key = \p\r\o\v\i\s\i\o\n ]]
++ [[ ssh-key = \s\s\h\-\k\e\y ]]
++ local ssh-key_access=/Users/emvaldes/.ssh/devnetops.pub
++ [[ ssh-key = \s\t\a\r\t ]]
++ [[ ssh-key = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ ssh-key = \h\e\l\p ]]
++ [[ ssh-key = \e\x\a\m\p\l\e ]]
++ [[ ssh-key = \w\i\z\a\r\d ]]
++ [[ ssh-key = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --provision
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set provision
++ [[ provision = \v\m\-\n\a\m\e ]]
++ [[ provision = \i\s\o\-\f\i\l\e ]]
++ [[ provision = \a\c\c\o\u\n\t ]]
++ [[ provision = \c\o\n\f\i\g\u\r\e ]]
++ [[ provision = \c\r\e\a\t\e ]]
++ [[ provision = \d\e\l\e\t\e ]]
++ [[ provision = \i\n\s\t\a\l\l ]]
++ [[ provision = \p\a\s\s\w\o\r\d ]]
++ [[ provision = \p\a\t\c\h ]]
++ [[ provision = \p\r\o\v\i\s\i\o\n ]]
++ local provisioning=true
++ [[ provision = \s\s\h\k\e\y ]]
++ [[ provision = \s\t\a\r\t ]]
++ [[ provision = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ provision = \h\e\l\p ]]
++ [[ provision = \e\x\a\m\p\l\e ]]
++ [[ provision = \w\i\z\a\r\d ]]
++ [[ provision = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --install
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set install
++ [[ install = \v\m\-\n\a\m\e ]]
++ [[ install = \i\s\o\-\f\i\l\e ]]
++ [[ install = \a\c\c\o\u\n\t ]]
++ [[ install = \c\o\n\f\i\g\u\r\e ]]
++ [[ install = \c\r\e\a\t\e ]]
++ [[ install = \d\e\l\e\t\e ]]
++ [[ install = \i\n\s\t\a\l\l ]]
++ local unattended_install=true
++ [[ install = \p\a\s\s\w\o\r\d ]]
++ [[ install = \p\a\t\c\h ]]
++ [[ install = \p\r\o\v\i\s\i\o\n ]]
++ [[ install = \s\s\h\k\e\y ]]
++ [[ install = \s\t\a\r\t ]]
++ [[ install = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ install = \h\e\l\p ]]
++ [[ install = \e\x\a\m\p\l\e ]]
++ [[ install = \w\i\z\a\r\d ]]
++ [[ install = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --patch
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set patch
++ [[ patch = \v\m\-\n\a\m\e ]]
++ [[ patch = \i\s\o\-\f\i\l\e ]]
++ [[ patch = \a\c\c\o\u\n\t ]]
++ [[ patch = \c\o\n\f\i\g\u\r\e ]]
++ [[ patch = \c\r\e\a\t\e ]]
++ [[ patch = \d\e\l\e\t\e ]]
++ [[ patch = \i\n\s\t\a\l\l ]]
++ [[ patch = \p\a\s\s\w\o\r\d ]]
++ [[ patch = \p\a\t\c\h ]]
++ local patch_files=true
++ [[ patch = \p\r\o\v\i\s\i\o\n ]]
++ [[ patch = \s\s\h\k\e\y ]]
++ [[ patch = \s\t\a\r\t ]]
++ [[ patch = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ patch = \h\e\l\p ]]
++ [[ patch = \e\x\a\m\p\l\e ]]
++ [[ patch = \w\i\z\a\r\d ]]
++ [[ patch = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --start
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set start
++ [[ start = \v\m\-\n\a\m\e ]]
++ [[ start = \i\s\o\-\f\i\l\e ]]
++ [[ start = \a\c\c\o\u\n\t ]]
++ [[ start = \c\o\n\f\i\g\u\r\e ]]
++ [[ start = \c\r\e\a\t\e ]]
++ [[ start = \d\e\l\e\t\e ]]
++ [[ start = \i\n\s\t\a\l\l ]]
++ [[ start = \p\a\s\s\w\o\r\d ]]
++ [[ start = \p\a\t\c\h ]]
++ [[ start = \p\r\o\v\i\s\i\o\n ]]
++ [[ start = \s\s\h\k\e\y ]]
++ [[ start = \s\t\a\r\t ]]
++ local start_machine=true
++ [[ start = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ start = \h\e\l\p ]]
++ [[ start = \e\x\a\m\p\l\e ]]
++ [[ start = \w\i\z\a\r\d ]]
++ [[ start = \i\n\f\o ]]
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ 14 -eq 0 ]]
++ export virtual_machine=ubuntu-console
++ virtual_machine=ubuntu-console
++ missing_isofile='\nWarning: No Installation ISO file was provided! \n'
++ [[ true == \t\r\u\e ]]
++ [[ 44 -eq 0 ]]
+++ echo -e '~/Downloads/ubuntu-22.04.1-desktop-amd64.iso'
+++ sed -e 's|^\(~\)\(.*\)|/Users/emvaldes\2|'
++ local fixing_filepath=/Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
++ iso_filename=/Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
++ [[ ! -e /Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso ]]
++ [[ 6 -eq 0 ]]
++ [[ 6 -eq 0 ]]
++ [[ 0 -eq 0 ]]
++ export configuration=false
++ configuration=false
++ echo -en '\nWarning: Configuration true !\n '
+
+Warning: Configuration true !
+ + [[ 4 -eq 0 ]]
++ [[ 0 -eq 0 ]]
++ export virtualbox=/Users/emvaldes/.virtualization/virtualbox
++ virtualbox=/Users/emvaldes/.virtualization/virtualbox
++ echo -en '\nWarning: Using default '
+
+Warning: Using default + echo -e ''\''/Users/emvaldes/.virtualization/virtualbox'\'' projects path! \n'
+'/Users/emvaldes/.virtualization/virtualbox' projects path!
+
++ local vm_location=
++ [[ true == \t\r\u\e ]]
+++ VBoxManage list ostypes
+++ egrep '^(ID:)([[:blank:]]*)(Ubuntu22.*)(LTS).*(64)$'
+++ awk '{print $2}'
++ declare -a vm_ostype=Ubuntu22_LTS_64
+++ VBoxManage createvm --name ubuntu-desktop --ostype Ubuntu22_LTS_64 --register
++ response=('Virtual machine '\''ubuntu-desktop'\'' is created and registered.' 'UUID: 1c1d966f-55cc-49ff-b323-852c2167a076' 'Settings file: '\''/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox'\''')
++ declare -a response
++ vm_registration='Virtual machine '\''ubuntu-desktop'\'' is created and registered.'
++ vm_uuid=1c1d966f-55cc-49ff-b323-852c2167a076
+++ echo -e 'Settings file: '\''/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox'\'''
+++ sed -e 's|^\(Settings file: '\''\)\(.*\)\(\'\''\)$|\2|'
++ vm_settings=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox
+++ dirname /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox
++ vm_location=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop
+++ basename /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox
++ vm_vboxfile=ubuntu-desktop.vbox
++ local vm_vboxfile=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox
++ [[ true == \t\r\u\e ]]
++ vboxmanage_storage --vm-name=ubuntu-desktop --vm-location=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop --iso-file=/Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \i\s\o\-\f\i\l\e ]]
++ [[ vm-name = \v\m\-\l\o\c\a\t\i\o\n ]]
++ [[ vm-name = \v\o\l\u\m\e\-\s\i\z\e ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-location=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-location /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop
++ [[ vm-location = \v\m\-\n\a\m\e ]]
++ [[ vm-location = \i\s\o\-\f\i\l\e ]]
++ [[ vm-location = \v\m\-\l\o\c\a\t\i\o\n ]]
++ local vm_location=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop
++ [[ vm-location = \v\o\l\u\m\e\-\s\i\z\e ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --iso-file=/Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set iso-file /Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
++ [[ iso-file = \v\m\-\n\a\m\e ]]
++ [[ iso-file = \i\s\o\-\f\i\l\e ]]
++ local iso_filename=/Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
++ [[ iso-file = \v\m\-\l\o\c\a\t\i\o\n ]]
++ [[ iso-file = \v\o\l\u\m\e\-\s\i\z\e ]]
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ [[ 57 -eq 0 ]]
++ [[ 0 -eq 0 ]]
++ volume_size=25000
++ VBoxManage createhd --filename /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vdi --size 25000
+0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Medium created. UUID: 54d28688-86d0-4595-a3dc-621a3a722e8d
++ VBoxManage storagectl ubuntu-desktop --name 'SATA Controller' --add sata --controller IntelAHCI
++ VBoxManage storageattach ubuntu-desktop --storagectl 'SATA Controller' --port 0 --device 0 --type hdd --medium /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vdi
++ VBoxManage storagectl ubuntu-desktop --name 'IDE Controller' --add ide
++ VBoxManage storageattach ubuntu-desktop --storagectl 'IDE Controller' --port 1 --device 0 --type dvddrive --medium /Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
++ IFS='
+'
++ return 0
++ sleep 1
++ vboxmanage_configvm --vm-name=ubuntu-desktop --memory=4096 --cpus=4 --vram=128
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \c\p\u\s ]]
++ [[ vm-name = \m\e\m\o\r\y ]]
++ [[ vm-name = \v\r\a\m ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --memory=4096
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set memory 4096
++ [[ memory = \v\m\-\n\a\m\e ]]
++ [[ memory = \c\p\u\s ]]
++ [[ memory = \m\e\m\o\r\y ]]
++ local memory_size=4096
++ [[ memory = \v\r\a\m ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --cpus=4
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set cpus 4
++ [[ cpus = \v\m\-\n\a\m\e ]]
++ [[ cpus = \c\p\u\s ]]
++ local total_cpus=4
++ [[ cpus = \m\e\m\o\r\y ]]
++ [[ cpus = \v\r\a\m ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vram=128
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vram 128
++ [[ vram = \v\m\-\n\a\m\e ]]
++ [[ vram = \c\p\u\s ]]
++ [[ vram = \m\e\m\o\r\y ]]
++ [[ vram = \v\r\a\m ]]
++ local vram_size=128
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ VBoxManage modifyvm ubuntu-desktop --clipboard-mode=bidirectional --drag-and-drop=bidirectional
++ VBoxManage modifyvm ubuntu-desktop --memory 4096
++ VBoxManage modifyvm ubuntu-desktop --boot1 dvd --boot2 disk --boot3 none --boot4 none
++ VBoxManage modifyvm ubuntu-desktop --chipset=piix3 --mouse=usbmtscreenpluspad --ioapic=on --rtc-use-utc=on
++ VBoxManage modifyvm ubuntu-desktop --cpus=4 --cpu-execution-cap=100 --pae=off
++ VBoxManage modifyvm ubuntu-desktop --paravirt-provider=default --nested-paging=on
++ VBoxManage modifyvm ubuntu-desktop --vram 128 --monitor-count=1 --graphicscontroller=vmsvga --accelerate-3d=off
++ VBoxManage modifyvm ubuntu-desktop --usb-ehci=on
++ IFS='
+'
++ return 0
++ sleep 1
++ vboxmanage_multimedia --vm-name=ubuntu-desktop --resolution=1920x1080
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \f\i\l\e\-\n\a\m\e ]]
++ [[ vm-name = \f\r\a\m\e\-\r\a\t\e ]]
++ [[ vm-name = \r\e\s\o\l\u\t\i\o\n ]]
++ [[ vm-name = \v\i\d\e\o\-\q\u\a\l\i\t\y ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --resolution=1920x1080
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set resolution 1920x1080
++ [[ resolution = \v\m\-\n\a\m\e ]]
++ [[ resolution = \f\i\l\e\-\n\a\m\e ]]
++ [[ resolution = \f\r\a\m\e\-\r\a\t\e ]]
++ [[ resolution = \r\e\s\o\l\u\t\i\o\n ]]
++ local resolution=1920x1080
++ [[ resolution = \v\i\d\e\o\-\q\u\a\l\i\t\y ]]
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ [[ 0 -eq 0 ]]
++ recording=/Users/emvaldes/.virtualization/virtualbox/recordings/ubuntu-desktop-screen0.webm
++ [[ 0 -eq 0 ]]
++ frame_rate=30
++ [[ 0 -eq 0 ]]
++ video_quality=2048
++ [[ 0 -eq 0 ]]
++ audio_controller=ac97
++ VBoxManage modifyvm ubuntu-desktop --recording=on --recording-file=/Users/emvaldes/.virtualization/virtualbox/recordings/ubuntu-desktop-screen0.webm --recording-video-fps=30 --recording-video-res=1920x1080 --recording-video-rate=2048
++ VBoxManage modifyvm ubuntu-desktop --audio=default --audio-controller=ac97 --audio-in=on --audio-out=on
++ IFS='
+'
++ return 0
++ sleep 1
++ vboxmanage_networking --vm-name=ubuntu-desktop --nic-type=82545EM '--bridged=1,en0: Ethernet' --hostonly-network=2,HostNetwork --nat-network=3,NatNetwork --nat-only=4
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \b\r\i\d\g\e\d ]]
++ [[ vm-name = \h\o\s\t\o\n\l\y\-\n\e\t\w\o\r\k ]]
++ [[ vm-name = \n\a\t\-\n\e\t\w\o\r\k ]]
++ [[ vm-name = \n\a\t\-\o\n\l\y ]]
++ [[ vm-name = \n\i\c\-\t\y\p\e ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --nic-type=82545EM
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set nic-type 82545EM
++ [[ nic-type = \v\m\-\n\a\m\e ]]
++ [[ nic-type = \b\r\i\d\g\e\d ]]
++ [[ nic-type = \h\o\s\t\o\n\l\y\-\n\e\t\w\o\r\k ]]
++ [[ nic-type = \n\a\t\-\n\e\t\w\o\r\k ]]
++ [[ nic-type = \n\a\t\-\o\n\l\y ]]
++ [[ nic-type = \n\i\c\-\t\y\p\e ]]
++ local nic_type=82545EM
++ for xitem in "${@}"
++ IFS==
+++ echo -e '--bridged=1,en0: Ethernet'
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set bridged '1,en0: Ethernet'
++ [[ bridged = \v\m\-\n\a\m\e ]]
++ [[ bridged = \b\r\i\d\g\e\d ]]
++ local 'bridged_network=1,en0: Ethernet'
++ [[ bridged = \h\o\s\t\o\n\l\y\-\n\e\t\w\o\r\k ]]
++ [[ bridged = \n\a\t\-\n\e\t\w\o\r\k ]]
++ [[ bridged = \n\a\t\-\o\n\l\y ]]
++ [[ bridged = \n\i\c\-\t\y\p\e ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --hostonly-network=2,HostNetwork
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set hostonly-network 2,HostNetwork
++ [[ hostonly-network = \v\m\-\n\a\m\e ]]
++ [[ hostonly-network = \b\r\i\d\g\e\d ]]
++ [[ hostonly-network = \h\o\s\t\o\n\l\y\-\n\e\t\w\o\r\k ]]
++ local hostonly_network=2,HostNetwork
++ [[ hostonly-network = \n\a\t\-\n\e\t\w\o\r\k ]]
++ [[ hostonly-network = \n\a\t\-\o\n\l\y ]]
++ [[ hostonly-network = \n\i\c\-\t\y\p\e ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --nat-network=3,NatNetwork
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set nat-network 3,NatNetwork
++ [[ nat-network = \v\m\-\n\a\m\e ]]
++ [[ nat-network = \b\r\i\d\g\e\d ]]
++ [[ nat-network = \h\o\s\t\o\n\l\y\-\n\e\t\w\o\r\k ]]
++ [[ nat-network = \n\a\t\-\n\e\t\w\o\r\k ]]
++ local nat_network=3,NatNetwork
++ [[ nat-network = \n\a\t\-\o\n\l\y ]]
++ [[ nat-network = \n\i\c\-\t\y\p\e ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --nat-only=4
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set nat-only 4
++ [[ nat-only = \v\m\-\n\a\m\e ]]
++ [[ nat-only = \b\r\i\d\g\e\d ]]
++ [[ nat-only = \h\o\s\t\o\n\l\y\-\n\e\t\w\o\r\k ]]
++ [[ nat-only = \n\a\t\-\n\e\t\w\o\r\k ]]
++ [[ nat-only = \n\a\t\-\o\n\l\y ]]
++ local nat_only=4
++ [[ nat-only = \n\i\c\-\t\y\p\e ]]
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ [[ 15 -gt 0 ]]
++ trace_filename=/tmp/trace--bridged-network--ubuntu-desktop
++ index=1
++ interface='en0: Ethernet'
++ VBoxManage modifyvm ubuntu-desktop --nic1=bridged --nic-type1=82545EM '--bridge-adapter1=en0: Ethernet' --cable-connected1=on --nic-trace1=on --nic-trace-file1=/tmp/trace--bridged-network--ubuntu-desktop
++ [[ 13 -gt 0 ]]
++ trace_filename=/tmp/trace--hostonly-network--ubuntu-desktop
++ index=2
++ interface=HostNetwork
++ VBoxManage modifyvm ubuntu-desktop --nic2=hostonlynet --nic-type2=82545EM --host-only-net2=HostNetwork --cable-connected2=on --nic-trace2=on --nic-trace-file2=/tmp/trace--hostonly-network--ubuntu-desktop
++ [[ 12 -gt 0 ]]
++ trace_filename=/tmp/trace--nat-network--ubuntu-desktop
++ index=3
++ interface=NatNetwork
++ VBoxManage modifyvm ubuntu-desktop --nic3=natnetwork --nic-type3=82545EM --host-only-net3=NatNetwork --cable-connected3=on --nic-trace3=on --nic-trace-file3=/tmp/trace--nat-network--ubuntu-desktop
++ [[ 1 -gt 0 ]]
++ trace_filename=/tmp/trace--nat-only--ubuntu-desktop
++ index=4
++ VBoxManage modifyvm ubuntu-desktop --nic4=nat --nic-type4=82545EM --cable-connected4=on --nic-trace4=on --nic-trace-file4=/tmp/trace--nat-only--ubuntu-desktop
++ IFS='
+'
++ return 0
++ sleep 1
++ [[ true == \t\r\u\e ]]
++ VBoxManage unattended install ubuntu-desktop --iso=/Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso --user=devops --password=devops '--full-user-name=DevOps Engineer' --install-additions --locale=en_US --country=US --time-zone=utc --hostname=ubuntu-desktop.local --language=en
+VBoxManage: info: Preparing unattended installation of Ubuntu22_LTS_64 in machine 'ubuntu-desktop' (1c1d966f-55cc-49ff-b323-852c2167a076).
+VBoxManage: info: Using values:
+                           isoPath = /Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
+                              user = devops
+                          password = devops
+                      fullUserName = DevOps Engineer
+                        productKey =
+                  additionsIsoPath = /Applications/VirtualBox.app/Contents/MacOS/VBoxGuestAdditions.iso
+             installGuestAdditions = true
+              validationKitIsoPath =
+            installTestExecService = false
+                            locale = en_US
+                           country = US
+                          timeZone = utc
+                             proxy =
+                          hostname = ubuntu-desktop.local
+       packageSelectionAdjustments =
+                 auxiliaryBasePath = /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-
+                        imageIndex = 1
+                scriptTemplatePath = /Applications/VirtualBox.app/Contents/MacOS/UnattendedTemplates/ubuntu_preseed.cfg
+     postInstallScriptTemplatePath = /Applications/VirtualBox.app/Contents/MacOS/UnattendedTemplates/debian_postinstall.sh
+                postInstallCommand =
+      extraInstallKernelParameters =  auto=true preseed/file=/cdrom/preseed.cfg priority=critical quiet splash noprompt noshell automatic-ubiquity debian-installer/locale=en_US keyboard-configuration/layoutcode=us languagechooser/language-name=English localechooser/supported-locales=en_US.UTF-8 countrychooser/shortlist=US --
+                          language = en
+                  detectedOSTypeId = Ubuntu_64
+                 detectedOSVersion = 22.04.1 LTS "Jammy Jellyfish"
+                  detectedOSFlavor = Ubuntu
+               detectedOSLanguages = en-US
+                   detectedOSHints =
+VBoxManage: info: VM 'ubuntu-desktop' (1c1d966f-55cc-49ff-b323-852c2167a076) is ready to be started (e.g. VBoxManage startvm).
++ [[ true == \t\r\u\e ]]
++ targets=('preseed.cfg' 'vboxpostinstall.sh')
++ declare -a targets
++ for target in ${targets[@]}
++ export patch_template=patch-preseed.cfg
++ patch_template=patch-preseed.cfg
++ export remote_resource=master/platforms/virtualbox/patch-preseed.cfg
++ remote_resource=master/platforms/virtualbox/patch-preseed.cfg
++ rm -fv /Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg
++ curl --silent --output /Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg https://raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/virtualbox/patch-preseed.cfg
++ [[ ! -e /Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg ]]
++ echo -e
+
++ [[ -e /Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg ]]
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg
++ egrep -B10 -A10 'd-i passwd/user-default-groups string devops' /Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg
+--- ./default-preseed.cfg	2023-01-06 16:16:49
++++ ./custom-preseed.cfg	2023-01-06 16:15:12
+@@ -60,7 +60,7 @@
+ d-i passwd/root-password password devops
+ d-i passwd/root-password-again password devops
+ d-i user-setup/allow-password-weak boolean true
+-d-i passwd/user-default-groups string admin
++d-i passwd/user-default-groups string devops
+
+ # Grub
+ d-i grub-installer/grub2_instead_of_grub_legacy boolean true
++ patch /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-preseed.cfg
+patching file '/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-preseed.cfg'
++ egrep -B10 -A10 'log_command_in_target apt-get -y install openssh-server' /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-preseed.cfg
++ for target in ${targets[@]}
++ export patch_template=patch-vboxpostinstall.sh
++ patch_template=patch-vboxpostinstall.sh
++ export remote_resource=master/platforms/virtualbox/patch-vboxpostinstall.sh
++ remote_resource=master/platforms/virtualbox/patch-vboxpostinstall.sh
++ rm -fv /Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh
++ curl --silent --output /Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh https://raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/virtualbox/patch-vboxpostinstall.sh
++ [[ ! -e /Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh ]]
++ echo -e
+
++ [[ -e /Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh ]]
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh
++ egrep -B10 -A10 'd-i passwd/user-default-groups string devops' /Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh
++ patch /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-vboxpostinstall.sh
+patching file '/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-vboxpostinstall.sh'
++ egrep -B10 -A10 'log_command_in_target apt-get -y install openssh-server' /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-1c1d966f-55cc-49ff-b323-852c2167a076-vboxpostinstall.sh
+
+#
+# Packages needed for GAs.
+#
+echo "--------------------------------------------------" >> "${MY_LOGFILE}"
+echo '** Installing packages for building kernel modules...' | tee -a "${MY_LOGFILE}"
+log_command_in_target apt-get -y install build-essential
+log_command_in_target apt-get -y install linux-headers-$(uname -r)
+
+## emvaldes@hotmail.com
+log_command_in_target apt-get -y install openssh-server
+log_command_in_target systemctl enable ssh
+log_command_in_target systemctl status ssh
+
+#
+# GAs
+#
+
+echo "--------------------------------------------------" >> "${MY_LOGFILE}"
+echo '** Installing VirtualBox Guest Additions...' | tee -a "${MY_LOGFILE}"
+MY_IGNORE_EXITCODE=2  # returned if modules already loaded and reboot required.
++ [[ false == \t\r\u\e ]]
++ [[ true == \t\r\u\e ]]
++ VBoxManage startvm ubuntu-desktop
+Waiting for VM "ubuntu-desktop" to power on...
+VM "ubuntu-desktop" has been successfully started.
++ [[ '' == \t\r\u\e ]]
++ IFS='
+'
++ return 0
+0
+
+--------------------------------------------------------------------------------
+
+$ bash -x ./virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
+                                       --account="devops" \
+                                       --password="devops" \
+                                       --ssh-key="${HOME}/.ssh/devnetops.pub" \
+                                       --configure \
+;
+
++ export local_temp=/Users/emvaldes/.local/tmp
++ local_temp=/Users/emvaldes/.local/tmp
++ export vbox_temp=/Users/emvaldes/.local/tmp/vbox
++ vbox_temp=/Users/emvaldes/.local/tmp/vbox
++ mkdir -p /Users/emvaldes/.local/tmp/vbox
++ export github_content=raw.githubusercontent.com
++ github_content=raw.githubusercontent.com
++ export github_repo=emvaldes/devops-systems
++ github_repo=emvaldes/devops-systems
++ export virtualbox_projects=/Users/emvaldes/.virtualization/virtualbox
++ virtualbox_projects=/Users/emvaldes/.virtualization/virtualbox
++ export virtualbox_platform=master/platforms/virtualbox
++ virtualbox_platform=master/platforms/virtualbox
++ export iso_filename=ubuntu-22.04.1-desktop-amd64.iso
++ iso_filename=ubuntu-22.04.1-desktop-amd64.iso
++ export devops_account=devops
++ devops_account=devops
++ export devops_password=devops
++ devops_password=devops
++ export virtual_machine=devops-console
++ virtual_machine=devops-console
+++ pwd
++ export script_file=/Users/emvaldes/Repos/devops/systems/platforms/virtualbox/virtualbox-appliance.shell
++ script_file=/Users/emvaldes/Repos/devops/systems/platforms/virtualbox/virtualbox-appliance.shell
+++ basename /Users/emvaldes/Repos/devops/systems/platforms/virtualbox/virtualbox-appliance.shell
++ export script_name=virtualbox-appliance.shell
++ script_name=virtualbox-appliance.shell
++ alias check-status=check_status
++ alias vboxmanage-storage=vboxmanage_storage
++ alias vboxmanage-configvm=vboxmanage_configvm
++ alias vboxmanage-multimedia=vboxmanage_multimedia
++ alias vboxmanage-networking=vboxmanage_networking
++ alias sudoers-privileges=sudoers_privileges
++ alias sudoers-autologin=sudoers_autologin
++ alias vboxmanage-interface=vboxmanage_interface
++ alias virtualbox-appliance=virtualbox_appliance
++ virtualbox_appliance --vm-name=ubuntu-desktop --account=devops --password=devops --ssh-key=/Users/emvaldes/.ssh/devnetops.pub --configure
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \i\s\o\-\f\i\l\e ]]
++ [[ vm-name = \a\c\c\o\u\n\t ]]
++ [[ vm-name = \c\o\n\f\i\g\u\r\e ]]
++ [[ vm-name = \c\r\e\a\t\e ]]
++ [[ vm-name = \d\e\l\e\t\e ]]
++ [[ vm-name = \i\n\s\t\a\l\l ]]
++ [[ vm-name = \p\a\s\s\w\o\r\d ]]
++ [[ vm-name = \p\a\t\c\h ]]
++ [[ vm-name = \p\r\o\v\i\s\i\o\n ]]
++ [[ vm-name = \s\s\h\-\k\e\y ]]
++ [[ vm-name = \s\t\a\r\t ]]
++ [[ vm-name = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ vm-name = \h\e\l\p ]]
++ [[ vm-name = \e\x\a\m\p\l\e ]]
++ [[ vm-name = \w\i\z\a\r\d ]]
++ [[ vm-name = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --account=devops
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set account devops
++ [[ account = \v\m\-\n\a\m\e ]]
++ [[ account = \i\s\o\-\f\i\l\e ]]
++ [[ account = \a\c\c\o\u\n\t ]]
++ local devops_account=devops
++ [[ account = \c\o\n\f\i\g\u\r\e ]]
++ [[ account = \c\r\e\a\t\e ]]
++ [[ account = \d\e\l\e\t\e ]]
++ [[ account = \i\n\s\t\a\l\l ]]
++ [[ account = \p\a\s\s\w\o\r\d ]]
++ [[ account = \p\a\t\c\h ]]
++ [[ account = \p\r\o\v\i\s\i\o\n ]]
++ [[ account = \s\s\h\-\k\e\y ]]
++ [[ account = \s\t\a\r\t ]]
++ [[ account = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ account = \h\e\l\p ]]
++ [[ account = \e\x\a\m\p\l\e ]]
++ [[ account = \w\i\z\a\r\d ]]
++ [[ account = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --password=devops
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set password devops
++ [[ password = \v\m\-\n\a\m\e ]]
++ [[ password = \i\s\o\-\f\i\l\e ]]
++ [[ password = \a\c\c\o\u\n\t ]]
++ [[ password = \c\o\n\f\i\g\u\r\e ]]
++ [[ password = \c\r\e\a\t\e ]]
++ [[ password = \d\e\l\e\t\e ]]
++ [[ password = \i\n\s\t\a\l\l ]]
++ [[ password = \p\a\s\s\w\o\r\d ]]
++ local devops_password=devops
++ [[ password = \p\a\t\c\h ]]
++ [[ password = \p\r\o\v\i\s\i\o\n ]]
++ [[ password = \s\s\h\-\k\e\y ]]
++ [[ password = \s\t\a\r\t ]]
++ [[ password = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ password = \h\e\l\p ]]
++ [[ password = \e\x\a\m\p\l\e ]]
++ [[ password = \w\i\z\a\r\d ]]
++ [[ password = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --ssh-key=/Users/emvaldes/.ssh/devnetops.pub
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set ssh-key /Users/emvaldes/.ssh/devnetops.pub
++ [[ ssh-key = \v\m\-\n\a\m\e ]]
++ [[ ssh-key = \i\s\o\-\f\i\l\e ]]
++ [[ ssh-key = \a\c\c\o\u\n\t ]]
++ [[ ssh-key = \c\o\n\f\i\g\u\r\e ]]
++ [[ ssh-key = \c\r\e\a\t\e ]]
++ [[ ssh-key = \d\e\l\e\t\e ]]
++ [[ ssh-key = \i\n\s\t\a\l\l ]]
++ [[ ssh-key = \p\a\s\s\w\o\r\d ]]
++ [[ ssh-key = \p\a\t\c\h ]]
++ [[ ssh-key = \p\r\o\v\i\s\i\o\n ]]
++ [[ ssh-key = \s\s\h\-\k\e\y ]]
++ local sshkey_access=/Users/emvaldes/.ssh/devnetops.pub
++ [[ ssh-key = \s\t\a\r\t ]]
++ [[ ssh-key = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ ssh-key = \h\e\l\p ]]
++ [[ ssh-key = \e\x\a\m\p\l\e ]]
++ [[ ssh-key = \w\i\z\a\r\d ]]
++ [[ ssh-key = \i\n\f\o ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --configure
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set configure
++ [[ configure = \v\m\-\n\a\m\e ]]
++ [[ configure = \i\s\o\-\f\i\l\e ]]
++ [[ configure = \a\c\c\o\u\n\t ]]
++ [[ configure = \c\o\n\f\i\g\u\r\e ]]
++ local configuration=true
++ [[ configure = \c\r\e\a\t\e ]]
++ [[ configure = \d\e\l\e\t\e ]]
++ [[ configure = \i\n\s\t\a\l\l ]]
++ [[ configure = \p\a\s\s\w\o\r\d ]]
++ [[ configure = \p\a\t\c\h ]]
++ [[ configure = \p\r\o\v\i\s\i\o\n ]]
++ [[ configure = \s\s\h\-\k\e\y ]]
++ [[ configure = \s\t\a\r\t ]]
++ [[ configure = \v\i\r\t\u\a\l\b\o\x ]]
++ [[ configure = \h\e\l\p ]]
++ [[ configure = \e\x\a\m\p\l\e ]]
++ [[ configure = \w\i\z\a\r\d ]]
++ [[ configure = \i\n\f\o ]]
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ 14 -eq 0 ]]
++ export virtual_machine=ubuntu-console
++ virtual_machine=ubuntu-console
++ missing_isofile='\nWarning: No Installation ISO file was provided! \n'
++ [[ '' == \t\r\u\e ]]
++ [[ 6 -eq 0 ]]
++ [[ 6 -eq 0 ]]
++ [[ 4 -eq 0 ]]
++ [[ 0 -eq 0 ]]
++ export provisioning=false
++ provisioning=false
++ [[ 0 -eq 0 ]]
++ export virtualbox=/Users/emvaldes/.virtualization/virtualbox
++ virtualbox=/Users/emvaldes/.virtualization/virtualbox
++ local vm_location=
++ [[ '' == \t\r\u\e ]]
++ vm_location=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop
++ local vm_vboxfile=/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/ubuntu-desktop.vbox
++ [[ false == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ [[ true == \t\r\u\e ]]
++ vboxmanage_interface --vm-name=ubuntu-desktop --ssh-key=/Users/emvaldes/.ssh/devnetops.pub
++ local 'oIFS=
+'
++ for xitem in "${@}"
++ IFS==
+++ echo -e --vm-name=ubuntu-desktop
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set vm-name ubuntu-desktop
++ [[ vm-name = \v\m\-\n\a\m\e ]]
++ local vm_name=ubuntu-desktop
++ [[ vm-name = \i\n\t\e\r\f\a\c\e ]]
++ [[ vm-name = \h\o\s\t\n\a\m\e ]]
++ [[ vm-name = \s\s\h\-\k\e\y ]]
++ for xitem in "${@}"
++ IFS==
+++ echo -e --ssh-key=/Users/emvaldes/.ssh/devnetops.pub
+++ sed -e '1s|^\(-\)\{1,\}||'
++ set ssh-key /Users/emvaldes/.ssh/devnetops.pub
++ [[ ssh-key = \v\m\-\n\a\m\e ]]
++ [[ ssh-key = \i\n\t\e\r\f\a\c\e ]]
++ [[ ssh-key = \h\o\s\t\n\a\m\e ]]
++ [[ ssh-key = \s\s\h\-\k\e\y ]]
++ local sshkey_access=/Users/emvaldes/.ssh/devnetops.pub
++ IFS='
+'
++ local 'oIFS=
+'
++ IFS='
+'
++ [[ 14 -eq 0 ]]
++ [[ 0 -eq 0 ]]
++ local interface=Bridged
++ [[ 0 -eq 0 ]]
++ local hostname=
+++ VBoxManage showvminfo --details ubuntu-desktop
+++ grep bridged
+++ sed -e 's|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\''\)\(.*\)\('\''\,.*\)$|\3\n\5|'
++ showvminfo=('0800276A9A24' 'en0: Ethernet')
++ declare -a showvminfo
+++ echo -e 0800276A9A24
+++ fold -w2
+++ tr '\n' :
+++ tr '[[:upper:]]' '[[:lower:]]'
+++ sed -e 's|\:$||'
++ local bridged_macaddr=08:00:27:6a:9a:24
++ local bridged_interface=en0
+++ sudo arp-scan --localnet
+++ egrep 08:00:27:6a:9a:24
+++ sed -e 's|08:00:27:6a:9a:24|ubuntu-desktop|'
+++ tr '\t' '*'
+++ awk '-F*' '{print $1"\n"$2"\n"$3}'
++ listed=('192.168.0.155' 'ubuntu-desktop' 'PCS Systemtechnik GmbH')
++ declare -a listed
++ ipaddr=192.168.0.155
++ device='PCS Systemtechnik GmbH'
++ [[ 13 -gt 0 ]]
+++ printf '% -20s' 192.168.0.155
++ xipaddr='192.168.0.155       '
++ etc_hosts=/etc/hosts
+++ egrep -c ' ubuntu-desktop ' /etc/hosts
++ [[ 1 -gt 0 ]]
++ sudo sed -i '' 's|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(ubuntu-desktop.*\)$|192.168.0.155       \3|' /etc/hosts
+Password:
++ ssh_config=/Users/emvaldes/.ssh/config
+++ egrep -c 'Host ubuntu-desktop' /Users/emvaldes/.ssh/config
++ [[ 1 -eq 0 ]]
++ local 'header=Host ubuntu-desktop'
++ local 'footer=IdentityFile .*'
++ sed -i '' '/Host ubuntu-desktop/,/IdentityFile .*/s/\(^.*HostName \)\(.*\)$/\1192.168.0.155/' /Users/emvaldes/.ssh/config
++ IFS='
+'
++ return 0
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ ssh-copy-id -i /Users/emvaldes/.ssh/devnetops.pub -o StrictHostKeyChecking=no devops@ubuntu-desktop
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/Users/emvaldes/.ssh/devnetops.pub"
+/usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+Pseudo-terminal will not be allocated because stdin is not a terminal.
+devops@192.168.0.155's password:
+Authenticated to 192.168.0.155 ([192.168.0.155]:22) using "password".
+Transferred: sent 4792, received 3532 bytes, in 0.2 seconds
+Bytes per second: sent 21517.6, received 15859.8
+
+Number of key(s) added:        1
+
+Now try logging into the machine, with:   "ssh -o 'StrictHostKeyChecking=no' 'devops@ubuntu-desktop'"
+and check to make sure that only the key(s) you wanted were added.
+
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ sudoers_privileges
++ local privileges_script=sudoers-privileges.shell
++ local remote_module=ubuntu/modules/sudoers-privileges.shell
++ rm -fv /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
+/Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-privileges.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ [[ ! -e /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell ]]
++ echo -e
+
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ [[ -e /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell ]]
++ echo -e '## Provisioning auto-configuration for passwordless sudo.'
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ echo -en 'echo -e "devops\\n" '
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ echo -e '| sudo -S systemctl status ssh 2>&1>/dev/null'
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ sed -i '' '/## {{ placeholder }}$/ r /Users/emvaldes/.local/tmp/vbox/insert-lines.file' /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ sed -i '' '/## {{ placeholder }}/d' /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ cat /Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
+#!/usr/bin/env bash
+# Script: sudoers-privileges.shell
+
+function newline () { echo -e; return 0; };
+
+## Provisioning auto-configuration for passwordless sudo.
+echo -e "devops\n" | sudo -S systemctl status ssh 2>&1>/dev/null
+
+export privileges_logfile="/tmp/sudoers-privileges.log";
+cat /dev/null > ${privileges_logfile};
+
+echo -e "\n* Starting Sudoers Privileges ...\n" \
+| tee -a "${privileges_logfile}";
+
+## DevOps - Service Account
+export devops_account='devops';
+
+## Configuring Service Account passwordless access to sudo-requests
+if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
+        ## Injecting Passwordless Configuration
+        echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
+             | sudo tee /etc/sudoers.d/${devops_account};
+        ## Service Account /etc/sudoers.d/ file-permissions
+        sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
+             | tee -a "${privileges_logfile}";
+        ## mode of '/etc/sudoers.d/devops' changed
+        ## from 0644 (rw-r--r--) to 0440 (r--r-----)
+  else  echo -e "\nWarning: Sudoers Privileges already enabled! \n";
+        return 0;
+fi;
+
+newline;
+
+## Listing Service Account /etc/sudoers.d/ file-permissions
+sudo ls -al /etc/sudoers.d/${devops_account}\
+| tee -a "${privileges_logfile}";
+
+echo -e "\n* Completed Sudoers Privileges! \n" \
+| tee -a "${privileges_logfile}";
++ ssh ubuntu-desktop -C 'bash -s'
+[sudo] password for devops:
+* Starting Sudoers Privileges ...
+
+devops  ALL=(ALL)  NOPASSWD: ALL
+mode of '/etc/sudoers.d/devops' changed from 0644 (rw-r--r--) to 0440 (r--r-----)
+
+-r--r----- 1 root root 33 Jan 17 22:47 /etc/sudoers.d/devops
+
+* Completed Sudoers Privileges!
+
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ return 0
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ sudoers_autologin
++ local autlogin_script=sudoers-autologin.shell
++ local remote_module=ubuntu/modules/sudoers-autologin.shell
++ rm -fv /Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell
+/Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-autologin.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ [[ ! -e /Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell ]]
++ echo -e
+
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ [[ -e /Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell ]]
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ sed -i '' -e 's|{{ virtual-machine }}|ubuntu-console|' /Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ ssh ubuntu-desktop -C 'bash -s'
+
+* Starting Sudoers Auto-Login ...
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following NEW packages will be installed:
+  sshpass
+0 upgraded, 1 newly installed, 0 to remove and 245 not upgraded.
+Need to get 11.7 kB of archives.
+After this operation, 35.8 kB of additional disk space will be used.
+Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
+Fetched 11.7 kB in 0s (27.7 kB/s)
+Selecting previously unselected package sshpass.
+(Reading database ... 204232 files and directories currently installed.)
+Preparing to unpack .../sshpass_1.09-1_amd64.deb ...
+Unpacking sshpass (1.09-1) ...
+Setting up sshpass (1.09-1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Generating public/private rsa key pair.
+Your identification has been saved in /home/devops/.ssh/id_rsa
+Your public key has been saved in /home/devops/.ssh/id_rsa.pub
+The key fingerprint is:
+SHA256:BJy9+fbNoEgscc3vQ54nIzHwPQ5sJUU4jHXQyLnNolY ubuntu-console
+The key's randomart image is:
++---[RSA 4096]----+
+|     ..o =oBo    |
+|      o.o B.o    |
+|        .= *     |
+|      ..= E +    |
+|       +SB *     |
+|      . = X *    |
+|       + + @ *   |
+|        . o X +  |
+|           . =   |
++----[SHA256]-----+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following packages will be REMOVED:
+  sshpass
+0 upgraded, 0 newly installed, 1 to remove and 245 not upgraded.
+After this operation, 35.8 kB disk space will be freed.
+(Reading database ... 204237 files and directories currently installed.)
+Removing sshpass (1.09-1) ...
+Processing triggers for man-db (2.10.2-1) ...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+0 upgraded, 0 newly installed, 0 to remove and 245 not upgraded.
+
+* Completed Sudoers Auto-Login!
+
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ return 0
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ ssh ubuntu-desktop -C 'sudo systemctl status ssh'
+Authenticated to 192.168.0.155 ([192.168.0.155]:22) using "publickey".
+● ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enabled)
+     Active: active (running) since Tue 2023-01-17 22:25:44 UTC; 21min ago
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 861 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS)
+   Main PID: 876 (sshd)
+      Tasks: 1 (limit: 4625)
+     Memory: 6.0M
+        CPU: 911ms
+     CGroup: /system.slice/ssh.service
+             └─876 "sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups"
+
+Jan 17 22:47:30 ubuntu-desktop sshd[13448]: pam_unix(sshd:session): session opened for user devops(uid=1000) by (uid=0)
+Jan 17 22:47:30 ubuntu-desktop sshd[13448]: pam_unix(sshd:session): session closed for user devops
+Jan 17 22:47:31 ubuntu-desktop sshd[13606]: Accepted publickey for devops from 192.168.0.168 port 50581 ssh2: RSA SHA256:gcyl5gvESkOKr6aMRbT24TTt7MMliEQlwL2vuiwFI2E
+Jan 17 22:47:31 ubuntu-desktop sshd[13606]: pam_unix(sshd:session): session opened for user devops(uid=1000) by (uid=0)
+Jan 17 22:47:38 ubuntu-desktop sshd[14040]: Connection closed by authenticating user devops 127.0.0.1 port 33548 [preauth]
+Jan 17 22:47:38 ubuntu-desktop sshd[14047]: Connection closed by authenticating user devops 127.0.0.1 port 33560 [preauth]
+Jan 17 22:47:38 ubuntu-desktop sshd[14060]: error: maximum authentication attempts exceeded for devops from 127.0.0.1 port 33568 ssh2 [preauth]
+Jan 17 22:47:38 ubuntu-desktop sshd[14060]: Disconnecting authenticating user devops 127.0.0.1 port 33568: Too many authentication failures [preauth]
+Jan 17 22:47:44 ubuntu-desktop sshd[14354]: Accepted publickey for devops from 192.168.0.168 port 50583 ssh2: RSA SHA256:gcyl5gvESkOKr6aMRbT24TTt7MMliEQlwL2vuiwFI2E
+Jan 17 22:47:44 ubuntu-desktop sshd[14354]: pam_unix(sshd:session): session opened for user devops(uid=1000) by (uid=0)
+Connection to 192.168.0.155 closed.
+Transferred: sent 4300, received 4728 bytes, in 0.1 seconds
+Bytes per second: sent 47973.4, received 52748.4
++ check_status
++ status=
++ [[ '' -ne 0 ]]
++ return 2
++ [[ '' == \t\r\u\e ]]
++ [[ '' == \t\r\u\e ]]
++ IFS='
+'
++ return 0
