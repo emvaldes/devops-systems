@@ -617,7 +617,6 @@ function virtualbox_appliance () {
                     ${devops_account}@${vm_name};
         ## Remote SSH Access
         ssh ${vm_name} -C 'sudo systemctl status ssh';
-return 1;
         ## Enabling Passwordless Access
         sudoers_privileges;
         sudoers_autologin;
