@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Functions: virtualbox_appliance
+#            chedck_status
 #            vboxmanage_storage
 #            vboxmanage_configvm
 #            vboxmanage_multimedia
@@ -74,6 +75,28 @@ export devops_password="${devops_account}";
 
 export script_file="$(pwd)/${0#*\/}";
 export script_name="$( basename ${script_file} )";
+
+## -----------------------------------------------------------------------------
+## Objective: Parsing operational status for each event
+function check_status () {
+    status=${1};
+    if [[ ${status} -ne 0 ]]; then
+            user_input="$((counter++)) = Error was found. Continue [N/y]: ";
+            newline; read -t 15 -p "${user_input}" response;
+            if [[ ${#response} -gt 0 ]]; then
+                    selection="$(
+                        echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                      )";
+                    if [[ 'n' =~ "${selection:0:1}" ]]; then
+                            exit ${status};
+                      else  return 0;
+                    fi;
+              else  exit ${status};
+            fi;
+      else  return 0;
+    fi;
+    # return 0;
+  }; alias check-status='check_status';
 
 ## -----------------------------------------------------------------------------
 function vboxmanage_storage () {
