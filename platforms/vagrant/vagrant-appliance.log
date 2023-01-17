@@ -1,11 +1,64 @@
-$ export github_content='raw.githubusercontent.com';
-$ export github_repo='emvaldes/devops-systems';
+$ bash -x ./vagrant-appliance.shell ;
 
-$ export script_name="vagrant-appliance.shell";
-$ export remote_resource="platforms/vagrant/${script_name}";
-
-$ curl --silent https://${github_content}/${github_repo}/master/${remote_resource} | bash - ;
-
+  + [[ 0 -gt 0 ]]
++ export vagrant_boxset=bento/ubuntu-22.04
++ vagrant_boxset=bento/ubuntu-22.04
++ export vagrant_cloudset=bento
++ vagrant_cloudset=bento
++ export vagrant_instance=ubuntu-22.04
++ vagrant_instance=ubuntu-22.04
++ [[ 0 -gt 0 ]]
++ export devops_account=devops
++ devops_account=devops
++ [[ 0 -gt 0 ]]
++ export devops_sshkey=devnetops.pub
++ devops_sshkey=devnetops.pub
++ [[ 0 -gt 0 ]]
++ export virtual_machine=devops-console
++ virtual_machine=devops-console
++ export authorized_keys=/home/devops/.ssh/authorized_keys
++ authorized_keys=/home/devops/.ssh/authorized_keys
++ export vagrant_projects=/Users/emvaldes/.vagrant.d
++ vagrant_projects=/Users/emvaldes/.vagrant.d
++ mkdir -p /Users/emvaldes/.vagrant.d/sources
++ export vagrant_location=/Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ vagrant_location=/Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ mkdir -p /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ export github_content=raw.githubusercontent.com
++ github_content=raw.githubusercontent.com
++ export github_repo=emvaldes/devops-systems
++ github_repo=emvaldes/devops-systems
++ export local_temp=/Users/emvaldes/.local/tmp
++ local_temp=/Users/emvaldes/.local/tmp
++ export vagrant_temp=/Users/emvaldes/.local/tmp/vagrant
++ vagrant_temp=/Users/emvaldes/.local/tmp/vagrant
++ export vagrant_shared=/Users/emvaldes/.local/tmp/vagrant/shared
++ vagrant_shared=/Users/emvaldes/.local/tmp/vagrant/shared
++ mkdir -p /Users/emvaldes/.local/tmp/vagrant/shared
++ export counter=0
++ counter=0
++ alias check-status=check_status
++ alias vagrant-review=vagrant_review
++ alias vagrant-addbox=vagrant_addbox
++ alias vagrant-initbox=vagrant_initbox
++ alias patch-vagrantfile=patch_vagrantfile
++ alias vagrant-deploy=vagrant_deploy
++ alias vagrant-config=vagrant_config
++ alias vagrant-access=vagrant_access
++ alias service-account=service_account
++ alias sudoers-privileges=sudoers_privileges
++ alias transfer-credentials=transfer_credentials
++ alias sudoers-autologin=sudoers_autologin
++ alias service-access=service_access
++ alias config-section=config_section
++ alias preinst-package=preinst_package
++ alias postinst-package=postinst_package
++ alias destroy-appliance=destroy_appliance
++ alias vagrant-appliance=vagrant_appliance
++ vagrant_appliance
++ mkdir -pv /Users/emvaldes/.local/tmp/vagrant/shared
++ vagrant_review
++ tree -a /Users/emvaldes/.vagrant.d
 /Users/emvaldes/.vagrant.d
 ├── boxes
 ├── data
@@ -13,6 +66,7 @@ $ curl --silent https://${github_content}/${github_repo}/master/${remote_resourc
 │   ├── checkpoint_signature
 │   ├── fp-leases
 │   ├── lock.dotlock.lock
+│   ├── lock.machine-action-6533b421ab71ab7fcdc9e16e11e04fba.lock
 │   ├── machine-index
 │   │   ├── index
 │   │   └── index.lock
@@ -29,13 +83,34 @@ $ curl --silent https://${github_content}/${github_repo}/master/${remote_resourc
 │   └── ubuntu-22.04
 └── tmp
 
-13 directories, 9 files
+13 directories, 10 files
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant box list
 There are no installed boxes! Use `vagrant box add` to add some.
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
+++ vagrant box list
+++ grep -F bento/ubuntu-22.04
++ local existing=
++ [[ 0 -gt 0 ]]
++ return 0
++ vagrant_addbox
++ vagrant box add bento/ubuntu-22.04 --force --provider virtualbox
 ==> box: Loading metadata for box 'bento/ubuntu-22.04'
     box: URL: https://vagrantcloud.com/bento/ubuntu-22.04
 ==> box: Adding box 'bento/ubuntu-22.04' (v202212.11.0) for provider: virtualbox
     box: Downloading: https://vagrantcloud.com/bento/boxes/ubuntu-22.04/versions/202212.11.0/providers/virtualbox.box
 ==> box: Successfully added box 'bento/ubuntu-22.04' (v202212.11.0) for 'virtualbox'!
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ tree -a /Users/emvaldes/.vagrant.d/boxes
 /Users/emvaldes/.vagrant.d/boxes
 └── bento-VAGRANTSLASH-ubuntu-22.04
     ├── 202212.11.0
@@ -47,11 +122,36 @@ There are no installed boxes! Use `vagrant box add` to add some.
     └── metadata_url
 
 4 directories, 5 files
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant box list
 bento/ubuntu-22.04 (virtualbox, 202212.11.0)
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ vagrant_initbox
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ mkdir -p /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ [[ -e ./Vagrantfile ]]
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant init bento/ubuntu-22.04
 A `Vagrantfile` has been placed in this directory. You are now
 ready to `vagrant up` your first virtual environment! Please read
 the comments in the Vagrantfile as well as documentation on
 `vagrantup.com` for more information on using Vagrant.
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ tree -a /Users/emvaldes/.vagrant.d
 /Users/emvaldes/.vagrant.d
 ├── boxes
 │   └── bento-VAGRANTSLASH-ubuntu-22.04
@@ -67,6 +167,7 @@ the comments in the Vagrantfile as well as documentation on
 │   ├── checkpoint_signature
 │   ├── fp-leases
 │   ├── lock.dotlock.lock
+│   ├── lock.machine-action-6533b421ab71ab7fcdc9e16e11e04fba.lock
 │   ├── machine-index
 │   │   ├── index
 │   │   └── index.lock
@@ -84,9 +185,70 @@ the comments in the Vagrantfile as well as documentation on
 │       └── Vagrantfile
 └── tmp
 
-16 directories, 15 files
+16 directories, 16 files
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ patch_vagrantfile
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local patch_vagrantfile=patch-vagrantfile
++ local remote_resource=platforms/vagrant/patch-vagrantfile
++ rm -fv /Users/emvaldes/.local/tmp/vagrant/patch-vagrantfile
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/patch-vagrantfile https://raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/vagrant/patch-vagrantfile
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ [[ ! -e /Users/emvaldes/.local/tmp/vagrant/patch-vagrantfile ]]
++ echo -e
+
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ sed -i '' -e 's|{{ vagrant-shared }}|/Users/emvaldes/.local/tmp/vagrant/shared|' /Users/emvaldes/.local/tmp/vagrant/patch-vagrantfile
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ sed -i '' -e 's|{{ vagrant-instance }}|devops-console|' /Users/emvaldes/.local/tmp/vagrant/patch-vagrantfile
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ cat -n /Users/emvaldes/.local/tmp/vagrant/patch-vagrantfile
+     1	--- ./Vagrantfile         2023-01-08 15:16:11
+     2	+++ ./custom.vagrantfile  2023-01-08 15:30:15
+     3	@@ -67,4 +67,11 @@
+     4	   #   apt-get update
+     5	   #   apt-get install -y apache2
+     6	   # SHELL
+     7	+
+     8	+  config.vm.synced_folder "/Users/emvaldes/.local/tmp/vagrant/shared", "/shared"
+     9	+  config.vm.hostname = "devops-console"
+    10	+  config.vm.provider "virtualbox" do |console|
+    11	+    console.name = "devops-console"
+    12	+  end
+    13	+
+    14	 end
++ patch /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04/Vagrantfile
 patching file '/Users/emvaldes/.vagrant.d/sources/ubuntu-22.04/Vagrantfile'
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant validate
 Vagrantfile validated successfully.
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ vagrant_deploy
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ vagrant up
 Bringing machine 'default' up with 'virtualbox' provider...
 ==> default: Importing base box 'bento/ubuntu-22.04'...
 ==> default: Matching MAC address for NAT networking...
@@ -125,6 +287,11 @@ Bringing machine 'default' up with 'virtualbox' provider...
 ==> default: Mounting shared folders...
     default: /shared => /Users/emvaldes/.local/tmp/vagrant/shared
     default: /vagrant => /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ tree /Users/emvaldes/.vagrant.d/boxes/
 /Users/emvaldes/.vagrant.d/boxes/
 └── bento-VAGRANTSLASH-ubuntu-22.04
     ├── 202212.11.0
@@ -137,6 +304,14 @@ Bringing machine 'default' up with 'virtualbox' provider...
     └── metadata_url
 
 4 directories, 6 files
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ vagrant_config
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ vagrant status
 Current machine states:
 
 default                   running (virtualbox)
@@ -145,6 +320,11 @@ The VM is running. To stop this VM, you can run `vagrant halt` to
 shut it down forcefully, or you can run `vagrant suspend` to simply
 suspend the virtual machine. In either case, to restart it again,
 simply run `vagrant up`.
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh-config
 Host default
   HostName 127.0.0.1
   User vagrant
@@ -156,39 +336,76 @@ Host default
   IdentitiesOnly yes
   LogLevel FATAL
 
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ vagrant_access
++ local machine_configs=.vagrant/machines/default/virtualbox
++ cat /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04/.vagrant/machines/default/virtualbox/private_key
 -----BEGIN RSA PRIVATE KEY-----
-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
+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
 -----END RSA PRIVATE KEY-----
-ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDmyQ3zpXZn+KNCqmg+r49KmXO5GqSYf0
-iTJG/QOAqYWmOGM5GaCqW6zwZBNZU7p4EWXOltcL/rVxfEelnMqR+9jj5aQ/7Y5YHky7PO
-ecw8dVXoVZuL0r1Kwk5dDscaDiUSLxM12t4Yb3kEldgfYOSKKou5f8mkJjN4bkgAwPprcH
-htix0h+jlcl9PZjuJaGRShsSic9f9S3/TDQeiMeew4GuU/mRtea1QGq6DoM/JkXo1Ag+FE
-+cHLKLv3A3efTPbfcRCBJQWoYz6QRlLMIdGksoErPzzZm5IEp/5aBPx27CxJ/dicAAANYT
-CmVxlM/WJB7XXq37v/POExLaFcRewx vagrant
++ vagrant ssh -c 'fold -b -w 70 /home/vagrant/.ssh/authorized_keys'
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCnElpijy6zCu8wPQEmsRV39H1qP3BQMQ
+3YmjLJKIEIlvwWpdxdfk4pM/EYmFcCGWic+cZUAvcbZ9OWJPqPGZWZRGsFQlBSvQUCx8wE
+cJmJpUlS50OxcHrlyVSWbD1BeEl6EI9r3k8w1tJw8iKPE7VY1HQhCAFvcXPk+1SYz6tWFn
+korPLFEzbMmbchDMNR5RLa/t5Echmyb9YgDhxKXmfLNrywSjTQeLBetQiNBOxplR6kVTZS
+8CkH9hnU+1viEY5GeMaZfzVC4Sy/1akLPe+kVvd8a8nGJbqqzeSIFgIcJLgTUvc2TdDn47
+5UOMFzexN//n1lKF5TOCr5DejsEMRp vagrant
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ service_account
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local script_name=service-account.shell
++ local remote_resource=platforms/vagrant/service-account.shell
++ rm -fv /Users/emvaldes/.local/tmp/vagrant/service-account.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/service-account.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/vagrant/service-account.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ [[ ! -e /Users/emvaldes/.local/tmp/vagrant/service-account.shell ]]
++ echo -e
+
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vagrant/service-account.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'bash -'
 
 * Creating Service Account ...
 
@@ -206,32 +423,119 @@ changed ownership of '/home/devops/.ssh' from vagrant:vagrant to devops:devops
 
 * Completed Service Account!
 
-* Starting Sudoers Configuration ...
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ sudoers_privileges
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local privileges_script=sudoers-privileges.shell
++ local remote_resource=ubuntu/modules/sudoers-privileges.shell
++ rm -fv /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-privileges.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ [[ ! -e /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell ]]
++ echo -e
+
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vagrant/sudoers-privileges.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'bash -'
+
+* Starting Sudoers Privileges ...
 
 devops  ALL=(ALL)  NOPASSWD: ALL
 mode of '/etc/sudoers.d/devops' changed from 0644 (rw-r--r--) to 0440 (r--r-----)
 
--r--r----- 1 root root 33 Jan 15 21:52 /etc/sudoers.d/devops
+-r--r----- 1 root root 33 Jan 17 21:19 /etc/sudoers.d/devops
 
-* Completed Sudoers Configuration!
+* Completed Sudoers Privileges!
 
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ transfer_credentials
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ fold -b -w 70 /Users/emvaldes/.ssh/public/devnetops.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZD+9Rw8BheeVfhvujvDdsSnbgn1PBL4
 PQObRKq0IpEW59JXxAt2XG4WlbMnAkCU9MifE5Kl0MCVmKUEwmTY1un87Q+Wt1lC/thaVV
 22ABKbicO5TxYr0MRBiMO0fWN2KSjuxP1mIphzG7lNu45HNFkUShCbmo9QsO6JX0JlSOLV
 +4CYbW7Znae8pE6duC+P9jFIMsQzUf/hectSX1V5xiozDb/wrjxhSeT5UqF3VwbT7WH4UX
 X23MiAlL59F6sS4Xgs9j2Cc7DUY74pA5M3bChzJ7+bP8oTWvuvre6Qj8SXfo3QNvwbth7U
 so8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
++ cp -v /Users/emvaldes/.ssh/devnetops.pub /Users/emvaldes/.local/tmp/vagrant/shared
 /Users/emvaldes/.ssh/devnetops.pub -> /Users/emvaldes/.local/tmp/vagrant/shared/devnetops.pub
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'cat /shared/devnetops.pub | sudo tee /home/devops/.ssh/authorized_keys'
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZD+9Rw8BheeVfhvujvDdsSnbgn1PBL4PQObRKq0IpEW59JXxAt2XG4WlbMnAkCU9MifE5Kl0MCVmKUEwmTY1un87Q+Wt1lC/thaVV22ABKbicO5TxYr0MRBiMO0fWN2KSjuxP1mIphzG7lNu45HNFkUShCbmo9QsO6JX0JlSOLV+4CYbW7Znae8pE6duC+P9jFIMsQzUf/hectSX1V5xiozDb/wrjxhSeT5UqF3VwbT7WH4UXX23MiAlL59F6sS4Xgs9j2Cc7DUY74pA5M3bChzJ7+bP8oTWvuvre6Qj8SXfo3QNvwbth7Uso8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'sudo cat /home/devops/.ssh/authorized_keys | fold -b -w 70'
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZD+9Rw8BheeVfhvujvDdsSnbgn1PBL4
 PQObRKq0IpEW59JXxAt2XG4WlbMnAkCU9MifE5Kl0MCVmKUEwmTY1un87Q+Wt1lC/thaVV
 22ABKbicO5TxYr0MRBiMO0fWN2KSjuxP1mIphzG7lNu45HNFkUShCbmo9QsO6JX0JlSOLV
 +4CYbW7Znae8pE6duC+P9jFIMsQzUf/hectSX1V5xiozDb/wrjxhSeT5UqF3VwbT7WH4UX
 X23MiAlL59F6sS4Xgs9j2Cc7DUY74pA5M3bChzJ7+bP8oTWvuvre6Qj8SXfo3QNvwbth7U
 so8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ rm -v /Users/emvaldes/.local/tmp/vagrant/shared/devnetops.pub
 /Users/emvaldes/.local/tmp/vagrant/shared/devnetops.pub
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ sudoers_autologin
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local autologin_script=sudoers-autologin.shell
++ local remote_resource=ubuntu/modules/sudoers-autologin.shell
++ rm -fv /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-autologin.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ [[ ! -e /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell ]]
++ echo -e
 
-* Starting Sudoers Configuration ...
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ sed -i '' -e 's|{{ service-account }}|devops|' /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ sed -i '' -e 's|{{ virtual-machine }}|devops-console|' /Users/emvaldes/.local/tmp/vagrant/sudoers-autologin.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'bash -'
+
+* Starting Sudoers Auto-Login ...
+
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
@@ -250,9 +554,9 @@ debconf: falling back to frontend: Readline
 debconf: unable to initialize frontend: Readline
 debconf: (This frontend requires a controlling tty.)
 debconf: falling back to frontend: Teletype
-dpkg-preconfigure: unable to re-open stdin:
-Fetched 11.7 kB in 1s (14.8 kB/s)
+Fetched 11.7 kB in 0s (33.0 kB/s)
 Selecting previously unselected package sshpass.
+dpkg-preconfigure: unable to re-open stdin:
 (Reading database ... 44068 files and directories currently installed.)
 Preparing to unpack .../sshpass_1.09-1_amd64.deb ...
 Unpacking sshpass (1.09-1) ...
@@ -272,21 +576,22 @@ Generating public/private rsa key pair.
 Your identification has been saved in /home/vagrant/.ssh/id_rsa
 Your public key has been saved in /home/vagrant/.ssh/id_rsa.pub
 The key fingerprint is:
-SHA256:XHcVxhaFAsUytwI6Kv/JTilTd9g7fjkkMcC8mxbuG5k devops-console
+SHA256:floM5fhbkCnZREuUr1GdQTAjrop579G44QLkek7Cxrg devops-console
 The key's randomart image is:
 +---[RSA 4096]----+
-|       o  .+. .=*|
-|        = o + o+ |
-|       . +.+.oo  |
-|      o.o++...   |
-|     ..oS+o+     |
-|  . .. o=+...    |
-|   oo ooE oo .   |
-|    .= ..o .+    |
-|     o= .... .   |
+|         .=.++oo |
+|         +.o.oo  |
+|          =o     |
+|    .    O.o.    |
+|   o    S *o     |
+| +  oo o B..     |
+|. =.+.o = * .    |
+| o.o...o B o     |
+|E  o.  o* .      |
 +----[SHA256]-----+
+/usr/bin/ssh-copy-id: INFO: Source of key(s) to be installed: "/home/vagrant/.ssh/id_rsa.pub"
 /usr/bin/ssh-copy-id: INFO: attempting to log in with the new key(s), to filter out any that are already installed
-/usr/bin/ssh-copy-id: INFO: 14 key(s) remain to be installed -- if you are prompted now it is to install the new keys
+/usr/bin/ssh-copy-id: INFO: 1 key(s) remain to be installed -- if you are prompted now it is to install the new keys
 Received disconnect from 127.0.0.1 port 22:2: Too many authentication failures
 Disconnected from 127.0.0.1 port 22
 
@@ -310,18 +615,68 @@ Building dependency tree...
 Reading state information...
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 
-* Completed Sudoers Configuration!
+* Completed Sudoers Auto-Login!
 
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ service_access
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ cat /Users/emvaldes/.ssh/public/devnetops.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZD+9Rw8BheeVfhvujvDdsSnbgn1PBL4PQObRKq0IpEW59JXxAt2XG4WlbMnAkCU9MifE5Kl0MCVmKUEwmTY1un87Q+Wt1lC/thaVV22ABKbicO5TxYr0MRBiMO0fWN2KSjuxP1mIphzG7lNu45HNFkUShCbmo9QsO6JX0JlSOLV+4CYbW7Znae8pE6duC+P9jFIMsQzUf/hectSX1V5xiozDb/wrjxhSeT5UqF3VwbT7WH4UXX23MiAlL59F6sS4Xgs9j2Cc7DUY74pA5M3bChzJ7+bP8oTWvuvre6Qj8SXfo3QNvwbth7Uso8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ cp -v /Users/emvaldes/.ssh/devnetops.pub /Users/emvaldes/.local/tmp/vagrant/shared
 /Users/emvaldes/.ssh/devnetops.pub -> /Users/emvaldes/.local/tmp/vagrant/shared/devnetops.pub
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'cat /shared/devnetops.pub | sudo tee /home/devops/.ssh/authorized_keys'
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZD+9Rw8BheeVfhvujvDdsSnbgn1PBL4PQObRKq0IpEW59JXxAt2XG4WlbMnAkCU9MifE5Kl0MCVmKUEwmTY1un87Q+Wt1lC/thaVV22ABKbicO5TxYr0MRBiMO0fWN2KSjuxP1mIphzG7lNu45HNFkUShCbmo9QsO6JX0JlSOLV+4CYbW7Znae8pE6duC+P9jFIMsQzUf/hectSX1V5xiozDb/wrjxhSeT5UqF3VwbT7WH4UXX23MiAlL59F6sS4Xgs9j2Cc7DUY74pA5M3bChzJ7+bP8oTWvuvre6Qj8SXfo3QNvwbth7Uso8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'sudo cat /home/devops/.ssh/authorized_keys | fold -b -w 70'
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCZD+9Rw8BheeVfhvujvDdsSnbgn1PBL4
 PQObRKq0IpEW59JXxAt2XG4WlbMnAkCU9MifE5Kl0MCVmKUEwmTY1un87Q+Wt1lC/thaVV
 22ABKbicO5TxYr0MRBiMO0fWN2KSjuxP1mIphzG7lNu45HNFkUShCbmo9QsO6JX0JlSOLV
 +4CYbW7Znae8pE6duC+P9jFIMsQzUf/hectSX1V5xiozDb/wrjxhSeT5UqF3VwbT7WH4UX
 X23MiAlL59F6sS4Xgs9j2Cc7DUY74pA5M3bChzJ7+bP8oTWvuvre6Qj8SXfo3QNvwbth7U
 so8rtsXLEeOC2bGTMNoPokKfOW/Gvd devnetops
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ rm -v /Users/emvaldes/.local/tmp/vagrant/shared/devnetops.pub
 /Users/emvaldes/.local/tmp/vagrant/shared/devnetops.pub
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ config_section
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local 'private_sshkey=~/.ssh/private/devnetops'
++ local 'section_header=/Host vagrant--ubuntu-22.04'
++ sed -i '' '/Host vagrant--ubuntu-22.04/,/LogLevel FATAL/d' /Users/emvaldes/.ssh/config
++ sed -i '' '/^$/N;/^\n$/D' /Users/emvaldes/.ssh/config
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh-config
++ sed -e 's|Host default|Host vagrant--ubuntu-22.04|g' -e 's|\(User \)\(.*\)|\1devops|g' -e 's|\( IdentityFile \)\(.*\)|\1~/.ssh/private/devnetops|g'
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ egrep -A12 '^Host vagrant--ubuntu-22.04' /Users/emvaldes/.ssh/config
 Host vagrant--ubuntu-22.04
   HostName 127.0.0.1
   User devops
@@ -333,7 +688,32 @@ Host vagrant--ubuntu-22.04
   IdentitiesOnly yes
   LogLevel FATAL
 
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ preinst_package
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local script_name=ubuntu-preinstall.shell
++ local remote_resource=ubuntu/modules/ubuntu-preinstall.shell
++ rm -fv /Users/emvaldes/.local/tmp/vagrant/ubuntu-preinstall.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/ubuntu-preinstall.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/ubuntu-preinstall.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ [[ ! -e /Users/emvaldes/.local/tmp/vagrant/ubuntu-preinstall.shell ]]
++ echo -e
+
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'bash -'
+
 * Starting Pre-Install ...
+
 
 WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
 
@@ -365,7 +745,7 @@ debconf: unable to initialize frontend: Readline
 debconf: (This frontend requires a controlling tty.)
 debconf: falling back to frontend: Teletype
 dpkg-preconfigure: unable to re-open stdin:
-Fetched 357 kB in 1s (244 kB/s)
+Fetched 357 kB in 1s (538 kB/s)
 Selecting previously unselected package libonig5:amd64.
 (Reading database ... 44068 files and directories currently installed.)
 Preparing to unpack .../libonig5_6.9.7.1-2build1_amd64.deb ...
@@ -403,6 +783,8 @@ The following NEW packages will be installed:
 Need to get 2,788 B of archives.
 After this operation, 13.3 kB of additional disk space will be used.
 Get:1 http://us.archive.ubuntu.com/ubuntu jammy/main amd64 python-is-python3 all 3.9.2-2 [2,788 B]
+Fetched 2,788 B in 1s (3,350 B/s)
+Selecting previously unselected package python-is-python3.
 debconf: unable to initialize frontend: Dialog
 debconf: (Dialog frontend will not work on a dumb terminal, an emacs shell buffer, or without a controlling terminal.)
 debconf: falling back to frontend: Readline
@@ -410,8 +792,6 @@ debconf: unable to initialize frontend: Readline
 debconf: (This frontend requires a controlling tty.)
 debconf: falling back to frontend: Teletype
 dpkg-preconfigure: unable to re-open stdin:
-Fetched 2,788 B in 0s (11.0 kB/s)
-Selecting previously unselected package python-is-python3.
 (Reading database ... 44085 files and directories currently installed.)
 Preparing to unpack .../python-is-python3_3.9.2-2_all.deb ...
 Unpacking python-is-python3 (3.9.2-2) ...
@@ -430,10 +810,34 @@ No VM guests are running outdated hypervisor (qemu) binaries on this host.
 
 * Completed Pre-Install!
 
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ postinst_package
++ cd /Users/emvaldes/.vagrant.d/sources/ubuntu-22.04
++ local script_name=ubuntu-postinstall.shell
++ local remote_resource=ubuntu/modules/ubuntu-postinstall.shell
++ rm -fv /Users/emvaldes/.local/tmp/vagrant/ubuntu-postinstall.shell
++ curl --silent --output /Users/emvaldes/.local/tmp/vagrant/ubuntu-postinstall.shell https://raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/ubuntu-postinstall.shell
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ [[ ! -e /Users/emvaldes/.local/tmp/vagrant/ubuntu-postinstall.shell ]]
++ echo -e
+
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ vagrant ssh -c 'bash -'
+
 * Starting Framework Deployment ...
 
 Cloning into '/tmp/devops-systems'...
--rwxrwxr-x 1 vagrant vagrant 15601 Jan 15 21:53 ./packages.shell
+-rwxrwxr-x 1 vagrant vagrant 15601 Jan 17 21:20 ./packages.shell
 
 Loading: 'export2json.shell' module!
 
@@ -442,6 +846,7 @@ Loading: 'packages.list' Default Packages List!
 Using: 'packages.log' default Log file!
 Using: 'packages.json' default JSON file!
 Using: 'packages.report' default Report file!
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 1 -> 1
@@ -506,6 +911,7 @@ Installing: absent = 1 -> 1
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 3 -> 2
    Warning: apt-file package is not installed!
@@ -547,6 +953,7 @@ Installing: absent = 3 -> 2
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 5 -> 3
@@ -607,6 +1014,7 @@ Installing: absent = 5 -> 3
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 7 -> 4
    Warning: arp-scan package is not installed!
@@ -645,6 +1053,7 @@ Installing: absent = 7 -> 4
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 9 -> 5
@@ -695,6 +1104,7 @@ Installing: absent = 9 -> 5
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 11 -> 6
@@ -826,6 +1236,7 @@ Installing: absent = 11 -> 6
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 13 -> 7
    Warning: bmon package is not installed!
@@ -864,6 +1275,7 @@ Installing: absent = 13 -> 7
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 15 -> 8
@@ -908,6 +1320,7 @@ Installing: absent = 15 -> 8
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 17 -> 9
    Warning: bwctl-client package is not installed!
@@ -945,6 +1358,7 @@ Installing: absent = 17 -> 9
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 19 -> 10
@@ -987,6 +1401,7 @@ Installing: absent = 19 -> 10
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 21 -> 11
@@ -1120,6 +1535,7 @@ curl is already the newest version (7.81.0-1ubuntu1.6).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 25 -> 12
    Warning: dos2unix package is not installed!
@@ -1201,6 +1617,7 @@ ethtool is already the newest version (1:5.16-1).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 28 -> 13
    Warning: fping package is not installed!
@@ -1239,6 +1656,7 @@ Installing: absent = 28 -> 13
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 30 -> 14
@@ -1573,6 +1991,7 @@ gnupg is already the newest version (2.2.27-3ubuntu2.1).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 34 -> 15
    Warning: golang package is not installed!
@@ -1611,6 +2030,7 @@ Installing: absent = 34 -> 15
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 36 -> 16
    Warning: grepcidr package is not installed!
@@ -1644,6 +2064,7 @@ Installing: absent = 36 -> 16
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 38 -> 17
@@ -1797,6 +2218,7 @@ htop is already the newest version (3.0.5-7build2).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 42 -> 18
    Warning: ifstat package is not installed!
@@ -1830,6 +2252,7 @@ Installing: absent = 42 -> 18
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 44 -> 19
@@ -1868,6 +2291,7 @@ Installing: absent = 44 -> 19
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 46 -> 20
    Warning: ipcalc package is not installed!
@@ -1901,6 +2325,7 @@ Installing: absent = 46 -> 20
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 48 -> 21
@@ -2003,6 +2428,7 @@ iproute2 is already the newest version (5.15.0-1ubuntu2).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 51 -> 22
    Warning: iptraf-ng package is not installed!
@@ -2076,10 +2502,11 @@ jq is already the newest version (1.6-2.1ubuntu3).
         "jq/jammy,now 1.6-2.1ubuntu3 amd64 [installed]"
     ],
     "Timestamp": {
-        "date": "2023-01-15",
-        "time": "21:53:03"
+        "date": "2023-01-17",
+        "time": "21:19:59"
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 54 -> 23
@@ -2121,6 +2548,7 @@ Installing: absent = 54 -> 23
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 56 -> 24
@@ -2181,6 +2609,7 @@ Installing: absent = 56 -> 24
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 58 -> 25
@@ -2254,6 +2683,7 @@ Installing: absent = 58 -> 25
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 60 -> 26
    Warning: mtr package is not installed!
@@ -2303,6 +2733,7 @@ Installing: absent = 60 -> 26
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 62 -> 27
    Warning: netcat package is not installed!
@@ -2338,6 +2769,7 @@ Installing: absent = 62 -> 27
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 64 -> 28
@@ -2377,6 +2809,7 @@ Installing: absent = 64 -> 28
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 66 -> 29
    Warning: ngrep package is not installed!
@@ -2413,6 +2846,7 @@ Installing: absent = 66 -> 29
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 68 -> 30
@@ -2453,6 +2887,7 @@ Installing: absent = 68 -> 30
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 70 -> 31
@@ -2503,6 +2938,7 @@ Installing: absent = 70 -> 31
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 72 -> 32
    Warning: nload package is not installed!
@@ -2540,6 +2976,7 @@ Installing: absent = 72 -> 32
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 74 -> 33
@@ -2589,6 +3026,7 @@ Installing: absent = 74 -> 33
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 76 -> 34
@@ -2802,6 +3240,7 @@ openssh-server is already the newest version (1:8.9p1-3).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 79 -> 35
    Warning: parallel package is not installed!
@@ -2845,6 +3284,7 @@ Installing: absent = 79 -> 35
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 81 -> 36
@@ -2996,6 +3436,7 @@ psmisc is already the newest version (23.4-2build3).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 85 -> 37
    Warning: python3-venv package is not installed!
@@ -3079,8 +3520,8 @@ python-is-python3 is already the newest version (3.9.2-2).
         "python-is-python3/jammy,now 3.9.2-2 all [installed]"
     ],
     "Timestamp": {
-        "date": "2023-01-15",
-        "time": "21:53:04"
+        "date": "2023-01-17",
+        "time": "21:20:01"
     }
 }
 
@@ -3145,6 +3586,7 @@ screen is already the newest version (4.9.0-1).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 89 -> 38
    Warning: sipcalc package is not installed!
@@ -3178,6 +3620,7 @@ Installing: absent = 89 -> 38
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 91 -> 39
@@ -3220,6 +3663,7 @@ Installing: absent = 91 -> 39
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 93 -> 40
    Warning: speedometer package is not installed!
@@ -3258,6 +3702,7 @@ Installing: absent = 93 -> 40
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 95 -> 41
    Warning: speedtest-cli package is not installed!
@@ -3293,6 +3738,7 @@ Installing: absent = 95 -> 41
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 97 -> 42
@@ -3421,6 +3867,7 @@ telnet is already the newest version (0.17-44build1).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 101 -> 43
    Warning: tftpd-hpa package is not installed!
@@ -3474,6 +3921,7 @@ Installing: absent = 101 -> 43
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 103 -> 44
@@ -3537,6 +3985,7 @@ Installing: absent = 103 -> 44
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 105 -> 45
@@ -3656,6 +4105,7 @@ vim is already the newest version (2:8.2.3995-1ubuntu2.1).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 108 -> 46
    Warning: virtualenv package is not installed!
@@ -3745,6 +4195,7 @@ wget is already the newest version (1.21.2-2ubuntu1).
     }
 }
 
+
 --------------------------------------------------------------------------------
 Installing: absent = 111 -> 47
    Warning: zenity package is not installed!
@@ -3797,6 +4248,7 @@ Installing: absent = 111 -> 47
         "time": ""
     }
 }
+
 
 --------------------------------------------------------------------------------
 Installing: absent = 113 -> 48
@@ -3857,4 +4309,12 @@ Installing: absent = 113 -> 48
 
 Done.
 
+
 * Completed Framework Deployment!
+
++ check_status 0
++ status=0
++ [[ 0 -ne 0 ]]
++ return 0
++ return 0
++ return 0
