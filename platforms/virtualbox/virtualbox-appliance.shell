@@ -593,9 +593,15 @@ function virtualbox_appliance () {
                       ## Updating the serice-account placeholder
                       sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                                 ${vbox_temp}/${patch_template};
+                      egrep -B10 -A10 \
+                      "d-i passwd/user-default-groups string ${devops_account}" \
+                      ${vbox_temp}/${patch_template};
                       ## Patching Pre-Seed Configurations:
                       patch ${vm_location}/Unattended-*-${target} \
                           < ${vbox_temp}/${patch_template};
+                      egrep -B10 -A10 \
+                      "log_command_in_target apt-get -y install openssh-server" \
+                      ${vm_location}/Unattended-*-${target};
                 else  echo -e "\nWarning: ${vbox_temp}/${patch_template} is missing! ";
                       return 9;
               fi;
