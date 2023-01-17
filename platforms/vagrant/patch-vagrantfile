@@ -5,10 +5,10 @@
    #   apt-get install -y apache2
    # SHELL
 +
-+  config.vm.synced_folder "~/.local/tmp/vagrant/shared", "/shared"
-+  config.vm.hostname = "devops-console"
++  config.vm.synced_folder "{{ vagrant-shared }}", "/shared"
++  config.vm.hostname = "{{ vagrant-instance }}"
 +  config.vm.provider "virtualbox" do |console|
-+    console.name = "devops-console"
++    console.name = "{{ vagrant-instance }}"
 +  end
 +
  end
