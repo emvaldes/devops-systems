@@ -366,9 +366,9 @@ function vboxmanage_interface () {
       ));
     local bridged_macaddr="$(
         echo -e "${showvminfo[0]}" \
-        | fold -w2 \
-        | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
-        | sed -e 's|\:$||'
+           | fold -w2 \
+           | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
+           | sed -e 's|\:$||'
       )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
     local bridged_interface="${showvminfo[1]%\:*}";
     declare -a listed=($(
@@ -465,14 +465,16 @@ function virtualbox_appliance () {
         return 6;
       };
     missing_isofile="\nWarning: No Installation ISO file was provided! \n";
-    if [[ ${#iso_filename} -eq 0 ]]; then
-            echo -e "${missing_isofile}";
-            ## Installation media (DVD ISO):
-            unattended_install='false';
-            return 7;
-      else  [[ ! -e ${iso_filename} ]] && {
-                echo -e "${missing_isofile}"; return 8;
-              };
+    if [[ ${configure} == 'false' ]]; then
+      if [[ ${#iso_filename} -eq 0 ]]; then
+              echo -e "${missing_isofile}";
+              ## Installation media (DVD ISO):
+              unattended_install='false';
+              return 7;
+        else  [[ ! -e ${iso_filename} ]] && {
+                  echo -e "${missing_isofile}"; return 8;
+                };
+      fi;
     fi;
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
@@ -607,6 +609,9 @@ function virtualbox_appliance () {
         ssh-copy-id -i ${sshkey_access} \
                     -o StrictHostKeyChecking=no \
                     ${devops_account}@${vm_name};
+        ## Remote SSH Access
+        ssh ${vm_name} -C 'sudo systemctl status ssh';
+return 1;
         ## Enabling Passwordless Access
         sudoers_privileges;
         sudoers_autologin;
