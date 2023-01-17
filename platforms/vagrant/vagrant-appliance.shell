@@ -241,23 +241,23 @@ function service_account () {
 ## Objective: Configuring Sudoers Privileges
 function sudoers_privileges () {
     cd ${vagrant_location};
-    local script_name="sudoers-privileges.shell";
-    local remote_resource="ubuntu/modules/${script_name}";
-    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    local privileges_script="sudoers-privileges.shell";
+    local remote_resource="ubuntu/modules/${privileges_script}";
+    rm -fv ${vagrant_temp}/${privileges_script} 2>/dev/null;
     # check_status $?;
     curl --silent \
-         --output ${vagrant_temp}/${script_name} \
+         --output ${vagrant_temp}/${privileges_script} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+    while [[ ! -e ${vagrant_temp}/${privileges_script} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
     check_status $?;
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                 ${vagrant_temp}/${script_name};
+                 ${vagrant_temp}/${privileges_script};
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${privileges_script};
     check_status $?;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
@@ -284,27 +284,27 @@ function transfer_credentials () {
 ## Objective: Configuring Auto-Login Capabilities
 function sudoers_autologin () {
     cd ${vagrant_location};
-    local script_name="sudoers-autologin.shell";
-    local remote_resource="ubuntu/modules/${script_name}";
-    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    local autologin_script="sudoers-autologin.shell";
+    local remote_resource="ubuntu/modules/${autologin_script}";
+    rm -fv ${vagrant_temp}/${autologin_script} 2>/dev/null;
     # check_status $?;
     curl --silent \
-         --output ${vagrant_temp}/${script_name} \
+         --output ${vagrant_temp}/${autologin_script} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+    while [[ ! -e ${vagrant_temp}/${autologin_script} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
     check_status $?;
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                 ${vagrant_temp}/${script_name};
+                 ${vagrant_temp}/${autologin_script};
     check_status $?;
     ## Updating the virtual-machine placeholder
     sed -i '' -e "s|{{ virtual-machine }}|${vagrant_instance}|" \
-                 ${vagrant_temp}/${script_name};
+                 ${vagrant_temp}/${autologin_script};
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${autologin_script};
     check_status $?;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
