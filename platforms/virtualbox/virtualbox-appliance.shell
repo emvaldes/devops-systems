@@ -87,17 +87,18 @@ function check_status () {
             newline; read -t 15 -p "${user_input}" response;
             if [[ ${#response} -gt 0 ]]; then
                     selection="$(
-                        echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                        echo -e ${response} \
+                           | tr '[[:upper:]]' '[[:lower:]]'
                       )";
                     if [[ 'n' =~ "${selection:0:1}" ]]; then
                             exit ${status};
-                      else  return 0;
+                      else  return 1;
                     fi;
               else  exit ${status};
             fi;
-      else  return 0;
+      else  return 2;
     fi;
-    # return 0;
+    return 0;
   }; alias check-status='check_status';
 
 ## -----------------------------------------------------------------------------
@@ -119,29 +120,39 @@ function vboxmanage_storage () {
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
     VBoxManage createhd \
              --filename "${vm_location}/${vm_name}.vdi" \
-             --size ${volume_size};
+             --size ${volume_size} \
+    ;
+    check_status;
     ## Create a SATA storage controller and attach the virtual hard disk.
     VBoxManage storagectl ${vm_name} \
              --name "SATA Controller" \
              --add sata \
-             --controller IntelAHCI;
+             --controller IntelAHCI \
+    ;
+    check_status;
     VBoxManage storageattach ${vm_name} \
              --storagectl "SATA Controller" \
              --port 0 \
              --device 0 \
              --type hdd \
-             --medium "${vm_location}/${vm_name}.vdi";
+             --medium "${vm_location}/${vm_name}.vdi" \
+    ;
+    check_status;
     ## Create an IDE Storage Controller for a virtual DVD drive
     ## and attach a Linux installation ISO.
     VBoxManage storagectl ${vm_name} \
              --name "IDE Controller" \
-             --add ide;
+             --add ide \
+    ;
+    check_status;
     VBoxManage storageattach ${vm_name} \
              --storagectl "IDE Controller" \
              --port 1 \
              --device 0 \
              --type dvddrive \
-             --medium ${iso_filename};
+             --medium ${iso_filename} \
+    ;
+    check_status;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-storage='vboxmanage_storage';
@@ -160,44 +171,62 @@ function vboxmanage_configvm () {
     ## General -> Advanced:
     VBoxManage modifyvm ${vm_name} \
              --clipboard-mode=bidirectional \
-             --drag-and-drop=bidirectional;
+             --drag-and-drop=bidirectional \
+    ;
+    check_status;
     ## System -> Motherboard:
     VBoxManage modifyvm ${vm_name} \
-             --memory ${memory_size};
+             --memory ${memory_size} \
+    ;
+    check_status;
     ## Device Order (default: dvd+disk+...)
     VBoxManage modifyvm ${vm_name} \
              --boot1 dvd \
              --boot2 disk \
              --boot3 none \
-             --boot4 none;
+             --boot4 none \
+    ;
+    check_status;
     VBoxManage modifyvm ${vm_name} \
              --chipset=piix3 \
              --mouse=usbmtscreenpluspad \
              --ioapic=on \
-             --rtc-use-utc=on;
+             --rtc-use-utc=on \
+    ;
+    check_status;
     ## System -> Processor:
     VBoxManage modifyvm ${vm_name} \
              --cpus=${total_cpus} \
              --cpu-execution-cap=100 \
-             --pae=off;
+             --pae=off \
+    ;
+    check_status;
     ## System -> Acceleration:
     VBoxManage modifyvm ${vm_name} \
              --paravirt-provider=default \
-             --nested-paging=on;
+             --nested-paging=on \
+    ;
+    check_status;
     ## Display -> Screen:
     VBoxManage modifyvm ${vm_name} \
              --vram ${vram_size} \
              --monitor-count=1 \
              --graphicscontroller=vmsvga \
-             --accelerate-3d=off;
+             --accelerate-3d=off \
+    ;
+    check_status;
     # ## Ports -> Serial Ports:
     # VBoxManage modifyvm ${vm_name} \
     #          --uart1=0x3f8 5 \
     #          --uart-mode1="/tmp/vbox--${vm_name}" \
-    #          --uart-type1=16550a;
+    #          --uart-type1=16550a \
+    # ;
+    # check_status;
     ## Ports -> USB 2.0 (OHCI + EHCI) Controller
     VBoxManage modifyvm ${vm_name} \
-             --usb-ehci=on;
+             --usb-ehci=on \
+    ;
+    check_status;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-configvm='vboxmanage_configvm';
@@ -226,13 +255,17 @@ function vboxmanage_multimedia () {
              --recording-file=${recording} \
              --recording-video-fps=${frame_rate} \
              --recording-video-res=${resolution} \
-             --recording-video-rate=${video_quality};
+             --recording-video-rate=${video_quality} \
+    ;
+    check_status;
     ## Audio:
     VBoxManage modifyvm ${vm_name} \
              --audio=default \
              --audio-controller=${audio_controller} \
              --audio-in=on \
-             --audio-out=on;
+             --audio-out=on \
+    ;
+    check_status;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-multimedia='vboxmanage_multimedia';
@@ -260,7 +293,9 @@ function vboxmanage_networking () {
                  --bridge-adapter${index}="${interface}" \
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
-                 --nic-trace-file${index}=${trace_filename};
+                 --nic-trace-file${index}=${trace_filename} \
+        ;
+        check_status;
       };
     [[ "${#hostonly_network}" -gt 0 ]] && {
         trace_filename="/tmp/trace--hostonly-network--${vm_name}";
@@ -272,7 +307,9 @@ function vboxmanage_networking () {
                  --host-only-net${index}="${interface}" \
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
-                 --nic-trace-file${index}=${trace_filename};
+                 --nic-trace-file${index}=${trace_filename} \
+        ;
+        check_status;
       };
     [[ "${#nat_network}" -gt 0 ]] && {
         trace_filename="/tmp/trace--nat-network--${vm_name}";
@@ -284,7 +321,9 @@ function vboxmanage_networking () {
                  --host-only-net${index}="${interface}" \
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
-                 --nic-trace-file${index}=${trace_filename};
+                 --nic-trace-file${index}=${trace_filename} \
+        ;
+        check_status;
       };
     [[ ${#nat_only} -gt 0 ]] && {
         trace_filename="/tmp/trace--nat-only--${vm_name}";
@@ -294,7 +333,9 @@ function vboxmanage_networking () {
                  --nic-type${index}=${nic_type} \
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
-                 --nic-trace-file${index}=${trace_filename};
+                 --nic-trace-file${index}=${trace_filename} \
+        ;
+        check_status;
       };
     IFS="${oIFS}";
     return 0;
@@ -307,36 +348,46 @@ function sudoers_privileges () {
     local privileges_script="sudoers-privileges.shell";
     local remote_module="ubuntu/modules/${privileges_script}";
     rm -fv ${vbox_temp}/${privileges_script} 2>/dev/null;
+    # check_status;
     curl --silent \
          --output ${vbox_temp}/${privileges_script} \
-         https://${github_content}/${github_repo}/master/${remote_module}
+         https://${github_content}/${github_repo}/master/${remote_module};
+    check_status;
     while [[ ! -e ${vbox_temp}/${privileges_script} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
+    check_status;
     if [[ -e ${vbox_temp}/${privileges_script} ]]; then
             ## Creating a temporary file and adding these hacking-lines
             echo -e "## Provisioning auto-configuration for passwordless sudo." \
                   > ${vbox_temp}/insert-lines.file;
+            check_status;
             echo -en 'echo -e "'${devops_password}'\\n" ' \
                   >> ${vbox_temp}/insert-lines.file;
+            check_status;
             echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
                   >> ${vbox_temp}/insert-lines.file;
+            check_status;
             ## Inserting into the sudoers-privileges.shell file
             ## the insert-lines.file’s content
             sed -i '' "/## {{ placeholder }}$/ r ${vbox_temp}/insert-lines.file" \
                       ${vbox_temp}/${privileges_script};
+            check_status;
             ## Removing placeholder entry to avoid recurrencies
             sed -i '' '/## {{ placeholder }}/d' ${vbox_temp}/${privileges_script};
+            check_status;
             ## Updating the serice-account placeholder
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                       ${vbox_temp}/${privileges_script};
+            check_status;
             ## Listing applied configurations:
             cat  ${vbox_temp}/${privileges_script};
             ## Executing the sudoers-privileges.shell script
             ssh ${vm_name} -C 'bash -s' \
               < ${vbox_temp}/${privileges_script} 2>/dev/null;
+            check_status;
       else  echo -e "\nWarning: ${vbox_temp}/${privileges_script} is missing! ";
-            return 1;
+            return 3;
     fi;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
@@ -347,23 +398,29 @@ function sudoers_autologin () {
     local autlogin_script="sudoers-autologin.shell";
     local remote_module="ubuntu/modules/${autlogin_script}";
     rm -fv ${vbox_temp}/${autlogin_script} 2>/dev/null;
+    # check_status;
     curl --silent \
          --output ${vbox_temp}/${autlogin_script} \
-         https://${github_content}/${github_repo}/master/${remote_module}
+         https://${github_content}/${github_repo}/master/${remote_module};
+    check_status;
     while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
+    check_status;
     if [[ -e ${vbox_temp}/${autlogin_script} ]]; then
             ## Updating the serice-account placeholder
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                       ${vbox_temp}/${autlogin_script};
+            check_status;
             ## Updating the virtual-machine placeholder
             sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                       ${vbox_temp}/${autlogin_script};
+            check_status;
             ssh ${vm_name} -C 'bash -s' \
               < ${vbox_temp}/${autlogin_script} 2>/dev/null;
+            check_status;
       else  echo -e "\nWarning: ${vbox_temp}/${autlogin_script} is missing! ";
-            return 2;
+            return 4;
     fi;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
@@ -382,7 +439,7 @@ function vboxmanage_interface () {
     ## Define custom-parameter(s):
     [[ ${#vm_name} -eq 0 ]] && {
         echo -e "\nWarning: Missing VirtualBox Appliance Name! ";
-        return 1;
+        return 5;
       };
     [[ ${#interface} -eq 0 ]] && local interface="Bridged";
     [[ ${#hostname} -eq 0 ]] && local hostname="${appliance}";
@@ -417,7 +474,8 @@ function vboxmanage_interface () {
               sudo sed -i '' \
               "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${vm_name}.*\)$|${xipaddr}\3|" \
               "${etc_hosts}";
-        else  echo -e "\n${xipaddr}${vm_name}" | sudo tee -a "${etc_hosts}";
+        else  echo -e "\n${xipaddr}${vm_name}" \
+                 | sudo tee -a "${etc_hosts}";
       fi;
       ssh_config="${HOME}/.ssh/config";
       if [[ $( egrep -c "Host ${vm_name}" ${ssh_config} ) -eq 0 ]]; then
@@ -458,7 +516,7 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
       [[ ${1#*\--} = "provision" ]] && local provisioning='true';
-      [[ ${1#*\--} = "sshkey" ]] && local sshkey_access="${2}";
+      [[ ${1#*\--} = "ssh-key" ]] && local sshkey_access="${2}";
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
@@ -482,27 +540,32 @@ function virtualbox_appliance () {
                             --wizard=${wizard_mode} \
                             --info=${info_mode} \
               ;
-              return 4;
+              return 6;
         else  echo -e "\nWarning: Script Helper was not found ! \n";
-              return 5;
+              return 7;
       fi;
     fi;
     ## Processing Function Input Parameters
     if [[ ${#vm_name} -eq 0 ]]; then
             echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
-            return 6;
+            return 8;
       else  export virtual_machine="${vm_name%\-*}-console";
     fi;
     missing_isofile="\nWarning: No Installation ISO file was provided! \n";
-    if [[ ${configure} == 'false' ]]; then
+    if [[ ${unattended_install} == 'true' ]]; then
       if [[ ${#iso_filename} -eq 0 ]]; then
         echo -e "${missing_isofile}";
         ## Installation media (DVD ISO):
         unattended_install='false';
-        return 7;
+        return 9;
       fi;
+      local fixing_filepath="$(
+          echo -e "${iso_filename}" \
+             | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+        )";
+      iso_filename="${fixing_filepath}";
       [[ ! -e ${iso_filename} ]] && {
-          echo -e "${missing_isofile}"; return 8;
+          echo -e "${missing_isofile}"; return 10;
         };
     fi;
     [[ ${#devops_account} -eq 0 ]] && {
@@ -521,12 +584,12 @@ function virtualbox_appliance () {
       };
     [[ ${#provisioning} -eq 0 ]] && {
         export provisioning='false';
-        echo -en "\nWarning: Provisioning ${provisioning} !\n ";
+        # echo -en "\nWarning: Provisioning ${provisioning} !\n ";
       };
     [[ ${#virtualbox} -eq 0 ]] && {
         export virtualbox="${virtualbox_projects}";
-        echo -en "\nWarning: Using default ";
-        echo -e  "'${virtualbox}' projects path! \n";
+        # echo -en "\nWarning: Using default ";
+        # echo -e  "'${virtualbox}' projects path! \n";
         ## Cleaning existing location:
         ## rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
       };
@@ -552,7 +615,7 @@ function virtualbox_appliance () {
             ## Settings file: '${virttualbox}/***/***.vbox'
             vm_settings="$(
                 echo -e ${response[2]} \
-                | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
+                   | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
               )";
             ## Extracting Virtual Machine Location and VBox-file:
             vm_location="$( dirname "${vm_settings}" )";
@@ -565,17 +628,20 @@ function virtualbox_appliance () {
         vboxmanage_storage --vm-name="${vm_name}" \
                            --vm-location="${vm_location}" \
                            --iso-file="${iso_filename}" \
-        ; sleep 1;
+        ; check_status;
+        sleep 1;
         ## Processing Virtual Machine Aditional Configurations
         vboxmanage_configvm --vm-name="${vm_name}" \
                             --memory='4096' \
                             --cpus='4' \
                             --vram='128' \
-        ; sleep 1;
+        ; check_status;
+        sleep 1;
         ## Processing Virtual Machine Multimedia Configurations
         vboxmanage_multimedia --vm-name="${vm_name}" \
                               --resolution='1920x1080' \
-        ; sleep 1;
+        ; check_status;
+        sleep 1;
         ## Processing Virtual Machine Networking Configurations:
         vboxmanage_networking --vm-name="${vm_name}" \
                               --nic-type='82545EM' \
@@ -583,7 +649,8 @@ function virtualbox_appliance () {
                               --hostonly-network='2,HostNetwork' \
                               --nat-network='3,NatNetwork' \
                               --nat-only='4' \
-        ; sleep 1;
+        ; check_status;
+        sleep 1;
       };
     ## Unattended Installation
     [[ ${unattended_install} == 'true' ]] && {
@@ -600,6 +667,7 @@ function virtualbox_appliance () {
                  --hostname="${vm_name}.local" \
                  --language="en" \
         ;
+        check_status;
         [[ ${patch_files} == 'true' ]] && {
             declare -a targets=(
                 preseed.cfg
@@ -612,27 +680,34 @@ function virtualbox_appliance () {
               export patch_template="patch-${target}";
               export remote_resource="${virtualbox_platform}/${patch_template}";
               rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
+              # check_status;
               curl --silent \
                    --output ${vbox_temp}/${patch_template} \
                    https://${github_content}/${github_repo}/${remote_resource};
+              check_status;
               while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
                 echo -e '.'; sleep 1;
               done; echo -e;
+              check_status;
               if [[ -e ${vbox_temp}/${patch_template} ]]; then
                       ## Updating the serice-account placeholder
                       sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                                 ${vbox_temp}/${patch_template};
+                      check_status;
                       egrep -B10 -A10 \
                       "d-i passwd/user-default-groups string ${devops_account}" \
                       ${vbox_temp}/${patch_template};
+                      check_status;
                       ## Patching Pre-Seed Configurations:
                       patch ${vm_location}/Unattended-*-${target} \
                           < ${vbox_temp}/${patch_template};
+                      check_status;
                       egrep -B10 -A10 \
                       "log_command_in_target apt-get -y install openssh-server" \
                       ${vm_location}/Unattended-*-${target};
+                      check_status;
                 else  echo -e "\nWarning: ${vbox_temp}/${patch_template} is missing! ";
-                      return 9;
+                      return 11;
               fi;
             done;
           };
@@ -640,25 +715,33 @@ function virtualbox_appliance () {
     [[ ${configuration} == 'true' ]] && {
         vboxmanage_interface --vm-name="${vm_name}" \
                              --ssh-key="${sshkey_access}";
+        check_status;
         ## Transfer SSH Access Key to guest
         ssh-copy-id -i ${sshkey_access} \
                     -o StrictHostKeyChecking=no \
                     ${devops_account}@${vm_name};
-        ## Remote SSH Access
-        ssh ${vm_name} -C 'sudo systemctl status ssh';
+        check_status;
         ## Enabling Passwordless Access
         sudoers_privileges;
+        check_status;
         sudoers_autologin;
+        check_status;
+        ## Remote SSH Access
+        ssh ${vm_name} -C 'sudo systemctl status ssh';
+        check_status;
       };
     [[ ${start_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
         VBoxManage startvm ${vm_name};
+        check_status;
       };
     [[ ${delete_machine} == 'true' ]] && {
         ## Starting VirtualBox Virtual Machine.
         VBoxManage controlvm ${vm_name} acpipowerbutton;
+        check_status;
         VBoxManage unregistervm --delete ${vm_name};
-        return 10;
+        check_status;
+        return 12;
       };
     IFS="${oIFS}";
     return 0;
