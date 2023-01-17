@@ -62,7 +62,7 @@
     "params": {
         "vm-name": {
             "value": "ubuntu-desktop",
-            "query": "",
+            "query": "VirtualBox Appliance name",
             "message": "VirtualBox appliance name and hostname"
         },
         "account": {
@@ -88,7 +88,7 @@
         },
         "iso-file": {
             "value": "ubuntu-22.04.1-desktop-amd64.iso",
-            "query": "",
+            "query": "Installation ISO file location",
             "message": "Installation ISO file location"
         },
         "password": {
@@ -115,7 +115,7 @@
         },
         "virtualbox": {
             "value": "${HOME}/.virtualization/virtualbox",
-            "query": "",
+            "query": "Provide VBox projects location",
             "message": "Provide VBox projects location"
         },
         "verbose": {
