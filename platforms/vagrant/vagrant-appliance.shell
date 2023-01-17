@@ -35,15 +35,18 @@ export github_repo='emvaldes/devops-systems';
 ## Temporary folder/container:
 export local_temp="${HOME}/.local/tmp";
 export vagrant_temp="${local_temp}/vagrant";
+export vagrant_shared="${vagrant_temp}/shared";
 
 ## Constructing a Vagrant Shared folder to exchange content
-mkdir -p "${vagrant_temp}/shared";
+mkdir -p "${vagrant_shared}";
 
 ## Events status counter:
 export counter=0;
 
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Parsing operational status for each event
 function check_status () {
     status=${1};
     if [[ ${status} -ne 0 ]]; then
@@ -135,9 +138,15 @@ function patch_vagrantfile () {
     cd ${vagrant_location};
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="platforms/vagrant/${patch_vagrantfile}";
+    rm -fv ${vagrant_temp}/${patch_vagrantfile} 2>/dev/null;
+    # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${patch_vagrantfile} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vagrant_temp}/${patch_vagrantfile} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
     check_status $?;
     # cat ${vagrant_temp}/${patch_vagrantfile};
     # --- ./Vagrantfile         2023-01-08 15:16:11
@@ -147,14 +156,22 @@ function patch_vagrantfile () {
     #    #   apt-get install -y apache2
     #    # SHELL
     # +
-    # +  config.vm.synced_folder "~/.local/tmp/vagrant/shared", "/shared"
-    # +  config.vm.hostname = "devops-console"
+    # +  config.vm.synced_folder "{{ vagrant-shared }}", "/shared"
+    # +  config.vm.hostname = "{{ vagrant-instance }}"
     # +  config.vm.provider "virtualbox" do |console|
-    # +    console.name = "devops-console"
+    # +    console.name = "{{ vagrant-instance }}"
     # +  end
     # +
     #  end
+    ## Updating the vagrant-shared placeholder
+    sed -i '' -e "s|{{ vagrant-shared }}|${vagrant_shared}|" \
+                 ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
+    ## Updating the vagrant-instance placeholder
+    sed -i '' -e "s|{{ vagrant-instance }}|${vagrant_instance}|" \
+                 ${vagrant_temp}/${patch_vagrantfile};
+    check_status $?;
+    cat -n ${vagrant_temp}/${patch_vagrantfile};
     patch ${vagrant_location}/Vagrantfile < ${vagrant_temp}/patch-vagrantfile;
     check_status $?;
     vagrant validate;
@@ -201,9 +218,19 @@ function service_account () {
     cd ${vagrant_location};
     local script_name="service-account.shell";
     local remote_resource="platforms/vagrant/${script_name}";
+    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ## Updating the service-account placeholder
+    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                 ${vagrant_temp}/${script_name};
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
@@ -216,9 +243,19 @@ function sudoers_privileges () {
     cd ${vagrant_location};
     local script_name="sudoers-privileges.shell";
     local remote_resource="ubuntu/modules/${script_name}";
+    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ## Updating the service-account placeholder
+    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                 ${vagrant_temp}/${script_name};
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
@@ -230,7 +267,7 @@ function sudoers_privileges () {
 function transfer_credentials () {
     cd ${vagrant_location};
     fold -b -w 70 ${HOME}/.ssh/public/${devops_sshkey};
-    cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_temp}/shared/;
+    cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_shared};
     check_status $?;
     vagrant ssh -c \
             "cat /shared/${devops_sshkey} | sudo tee ${authorized_keys}";
@@ -249,9 +286,23 @@ function sudoers_autologin () {
     cd ${vagrant_location};
     local script_name="sudoers-autologin.shell";
     local remote_resource="ubuntu/modules/${script_name}";
+    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ## Updating the service-account placeholder
+    sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                 ${vagrant_temp}/${script_name};
+    check_status $?;
+    ## Updating the virtual-machine placeholder
+    sed -i '' -e "s|{{ virtual-machine }}|${vagrant_instance}|" \
+                 ${vagrant_temp}/${script_name};
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
@@ -264,7 +315,7 @@ function service_access () {
     cd ${vagrant_location};
     cat ${HOME}/.ssh/public/${devops_sshkey};
     check_status $?;
-    cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_temp}/shared/;
+    cp -v ${HOME}/.ssh/${devops_sshkey} ${vagrant_shared};
     check_status $?;
     vagrant ssh -c \
             "cat /shared/${devops_sshkey} | sudo tee ${authorized_keys}";
@@ -304,9 +355,15 @@ function preinst_package () {
     cd ${vagrant_location};
     local script_name="ubuntu-preinstall.shell";
     local remote_resource="ubuntu/modules/${script_name}";
+    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
@@ -319,9 +376,15 @@ function postinst_package () {
     cd ${vagrant_location};
     local script_name="ubuntu-postinstall.shell";
     local remote_resource="ubuntu/modules/${script_name}";
+    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_name} \
          https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
     check_status $?;
@@ -340,7 +403,7 @@ function destroy_appliance () {
 ## -----------------------------------------------------------------------------
 ## Objective: Deploy Vagrant Appliance
 function vagrant_appliance () {
-    mkdir -pv ${vagrant_temp}/shared;
+    mkdir -pv ${vagrant_shared};
     vagrant_review;
     vagrant_addbox;
     vagrant_initbox;
