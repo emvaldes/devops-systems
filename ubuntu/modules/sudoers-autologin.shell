@@ -14,7 +14,7 @@ export devops_account='{{ service-account }}';
 
 sudo apt install sshpass --yes | tee -a "${autologin_logfile}";
 
-ssh-keygen -t rsa -b 4096 -C devops-console -f ~/.ssh/id_rsa -N '' <<<y \
+ssh-keygen -t rsa -b 4096 -C {{ virtual-machine }} -f ~/.ssh/id_rsa -N '' <<<y \
 | tee -a "${autologin_logfile}";
 
 echo -e "${devops_account}" \
