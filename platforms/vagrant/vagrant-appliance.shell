@@ -126,7 +126,10 @@ function vagrant_addbox () {
 function vagrant_initbox () {
     cd ${vagrant_location};
     mkdir -p ${vagrant_location} && cd $_;
-    [[ -e ./Vagrantfile ]] && rm -fv ./Vagrantfile;
+    if [[ -e ./Vagrantfile ]]; then
+      echo -e "\nWarning: Vagrantfile already exists! \n";
+      rm -fv ./Vagrantfile 2>/dev/null;
+    fi;
     check_status $?;
     vagrant init ${vagrant_boxset};
     check_status $?;
