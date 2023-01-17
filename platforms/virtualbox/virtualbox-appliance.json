@@ -7,7 +7,7 @@
             "vm-name",
             "account",
             "password",
-            "sshkey"
+            "ssh-key"
         ],
         "optional": [
             "configure",
@@ -26,7 +26,7 @@
                 "iso-file",
                 "account",
                 "password",
-                "sshkey",
+                "ssh-key",
                 "provision",
                 "install",
                 "patch",
@@ -36,7 +36,7 @@
                 "vm-name",
                 "account",
                 "password",
-                "sshkey",
+                "ssh-key",
                 "configure"
             ]
         ],
@@ -104,7 +104,7 @@
             "query": "",
             "message": "Infrastructure Provisioning (IaC)"
         },
-        "sshkey": {
+        "ssh-key": {
             "value": "${HOME}/.ssh/id_rsa.pub",
             "query": "SSH Access Public Key",
             "message": "Profile Auto-Login via SSH Public Key"
