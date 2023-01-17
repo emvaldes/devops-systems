@@ -496,14 +496,14 @@ function virtualbox_appliance () {
     missing_isofile="\nWarning: No Installation ISO file was provided! \n";
     if [[ ${configure} == 'false' ]]; then
       if [[ ${#iso_filename} -eq 0 ]]; then
-              echo -e "${missing_isofile}";
-              ## Installation media (DVD ISO):
-              unattended_install='false';
-              return 7;
-        else  [[ ! -e ${iso_filename} ]] && {
-                  echo -e "${missing_isofile}"; return 8;
-                };
+        echo -e "${missing_isofile}";
+        ## Installation media (DVD ISO):
+        unattended_install='false';
+        return 7;
       fi;
+      [[ ! -e ${iso_filename} ]] && {
+          echo -e "${missing_isofile}"; return 8;
+        };
     fi;
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
