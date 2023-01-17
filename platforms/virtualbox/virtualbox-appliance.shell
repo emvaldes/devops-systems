@@ -15,7 +15,7 @@
 # Required    --vm-name           VirtualBox appliance name and hostname
 #             --account           Service Account (username: devops)
 #             --password          Service Account (password: devops)
-#             --sshkey            Profile Auto-Login via SSH Public Key
+#             --ssh-key           Profile Auto-Login via SSH Public Key
 #
 # Optional    --configure         Deploy Configuration Management
 #             --create            Create VBox appliance (hardware only)
@@ -37,7 +37,7 @@
 #                            --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
 #                            --account="devops" \
 #                            --password="devops" \
-#                            --sshkey="${HOME}/.ssh/id_rsa.pub" \
+#                            --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 #                            --provision \
 #                            --install \
 #                            --patch \
@@ -47,7 +47,7 @@
 # virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
 #                            --account="devops" \
 #                            --password="devops" \
-#                            --sshkey="${HOME}/.ssh/id_rsa.pub" \
+#                            --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 #                            --configure \
 # ;
 
