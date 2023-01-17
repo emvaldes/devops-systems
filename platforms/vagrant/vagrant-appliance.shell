@@ -173,7 +173,7 @@ function patch_vagrantfile () {
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
     ## Updating the vagrant-instance placeholder
-    sed -i '' -e "s|{{ vagrant-instance }}|${vagrant_instance}|" \
+    sed -i '' -e "s|{{ vagrant-instance }}|${virtual_machine}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
     cat -n ${vagrant_temp}/${patch_vagrantfile};
