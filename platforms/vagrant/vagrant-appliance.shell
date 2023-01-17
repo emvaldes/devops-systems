@@ -126,6 +126,7 @@ function vagrant_addbox () {
 function vagrant_initbox () {
     cd ${vagrant_location};
     mkdir -p ${vagrant_location} && cd $_;
+    [[ -e ./Vagrantfile ]] && rm -fv ./Vagrantfile;
     check_status $?;
     vagrant init ${vagrant_boxset};
     check_status $?;
