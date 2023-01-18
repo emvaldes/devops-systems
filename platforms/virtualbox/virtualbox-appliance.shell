@@ -844,7 +844,7 @@ function virtualbox_appliance () {
         ## Remote SSH Access
         ssh ${vm_name} -C 'sudo systemctl status ssh' 2>/dev/null;
         check_status;
-        echo -e "\Warning: Disabling Service Account password! ";
+        echo -e "\nWarning: Disabling Service Account password! ";
         ssh ${vm_name} -C "ssh sudo passwd --delete ${devops_account}";
         check_status;
       };
