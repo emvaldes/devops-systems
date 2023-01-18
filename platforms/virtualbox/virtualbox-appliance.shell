@@ -368,7 +368,7 @@ function vboxmanage_interface () {
     ## Define custom-parameter(s):
     [[ ${#vm_name} -eq 0 ]] && {
         echo -e "\nWarning: Missing VirtualBox Appliance Name! ";
-        return 5;
+        return 3;
       };
     [[ ${#interface} -eq 0 ]] && local interface="Bridged";
     [[ ${#hostname} -eq 0 ]] && local hostname="${appliance}";
@@ -496,7 +496,7 @@ function sudoers_privileges () {
               < ${vbox_temp}/${privileges_script} 2>/dev/null;
             check_status;
       else  echo -e "\nWarning: ${vbox_temp}/${privileges_script} is missing! ";
-            return 3;
+            return 4;
     fi;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
@@ -529,7 +529,7 @@ function sudoers_autologin () {
               < ${vbox_temp}/${autlogin_script} 2>/dev/null;
             check_status;
       else  echo -e "\nWarning: ${vbox_temp}/${autlogin_script} is missing! ";
-            return 4;
+            return 5;
     fi;
     return 0;
   }; alias sudoers-autologin='sudoers_autologin';
@@ -648,26 +648,31 @@ function virtualbox_appliance () {
     ## Processing Function Input Parameters
     if [[ ${#vm_name} -eq 0 ]]; then
       user_input="Virtual Machine name: ";
-      newline; read -t 15 -p "${user_input}" response;
+      newline; read -p "${user_input}" response;
       if [[ ${#response} -gt 0 ]]; then
               export vm_name="$(
                   echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
                 )";
         else  echo -e "\nWarning: Unable to continue! \n";
-              return 1;
+              return 8;
       fi;
     fi;
     ## Virtual Machine hostname
     [[ ${#virtual_machine} -eq 0 ]] && \
        export virtual_machine="devops-console";
-    missing_isofile="\nWarning: No Installation ISO file was provided! \n";
+    missing_isofile="\nWarning: No Installation ISO file was provided! ";
     ## e.g.: ubuntu-22.04.1-desktop-amd64.iso
     if [[ ${unattended_install} == 'true' ]]; then
       if [[ ${#iso_filename} -eq 0 ]]; then
         echo -e "${missing_isofile}";
         ## Installation media (DVD ISO):
-        unattended_install='false';
-        return 9;
+        user_input="Installation ISO location: ";
+        newline; read -p "${user_input}" iso_filename;
+        if [[ ${#iso_filename} -eq 0 ]]; then
+          echo -e "\nWarning: Unable to continue! \n";
+          unattended_install='false';
+          return 9;
+        fi;
       fi;
       local fixing_filepath="$(
           echo -e "${iso_filename}" \
@@ -675,7 +680,8 @@ function virtualbox_appliance () {
         )";
       iso_filename="${fixing_filepath}";
       [[ ! -e ${iso_filename} ]] && {
-          echo -e "${missing_isofile}"; return 10;
+          echo -e "${missing_isofile}";
+          return 10;
         };
     fi;
     [[ ${#devops_account} -eq 0 ]] && {
