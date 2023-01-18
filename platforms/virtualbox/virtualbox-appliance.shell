@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Functions: virtualbox_appliance
+#            newline
 #            chedck_status
 #            vboxmanage_storage
 #            vboxmanage_configvm
@@ -56,7 +57,25 @@
               #unattended-guest-install-example
 ## -----------------------------------------------------------------------------
 
-export local_temp="${HOME}/.local/tmp";
+export script_file="$(pwd)/${0#*\/}";
+export script_name="$( basename ${script_file} )";
+
+export user_local="${HOME}/.local";
+mkdir -p "${user_local}";
+
+## -----------------------------------------------------------------------------
+## Objective: Default Appplication Parameters
+
+## Default Service Account:
+[[ ${#2} -gt 0 ]] && export devops_account="${2}" \
+                  || export devops_account='devops';
+
+export devops_password="${devops_account}";
+
+## -----------------------------------------------------------------------------
+## Objective: System Pre-Requirements
+
+export local_temp="${user_local}/tmp";
 export vbox_temp="${local_temp}/vbox";
 
 mkdir -p "${vbox_temp}";
@@ -64,19 +83,21 @@ mkdir -p "${vbox_temp}";
 ## Description: Constructing GitHub URI (raw user content)
 export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
+export virtualbox_platform='master/platforms/virtualbox';
+
+## -----------------------------------------------------------------------------
+## Objective: Script & Environment Variables
 
 export virtualbox_projects="${HOME}/.virtualization/virtualbox";
 
-export virtualbox_platform='master/platforms/virtualbox';
 export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
-
-export devops_account='devops';
-export devops_password="${devops_account}";
 
 export virtual_machine="devops-console";
 
-export script_file="$(pwd)/${0#*\/}";
-export script_name="$( basename ${script_file} )";
+## Events status counter:
+export counter=0;
+
+function newline () { echo -e; return 0; };
 
 ## -----------------------------------------------------------------------------
 ## Objective: Parsing operational status for each event
