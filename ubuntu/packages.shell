@@ -172,7 +172,7 @@ function packages_ubuntu () {
                 ## Installing package depending on its manager (APT, SNAP)
                 status=;
                 case "${installer}" in
-                   apt ) sudo apt  install ${package} --yes \
+                   apt ) sudo apt install ${package} --yes \
                               | tee "${installed_tools}/${package}.log";
                          status=$?; ;;
                   snap ) sudo snap install ${package} ${installer/snap /} \
