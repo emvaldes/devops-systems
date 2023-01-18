@@ -143,7 +143,7 @@ function packages_ubuntu () {
                    | egrep -v "Listing... Done" | egrep -w "^${package}.*"
                  )";
 
-echo -e "$( printf '*%.0s' {1..100} )";
+echo -e "$( printf '?%.0s' {1..100} )";
 echo -e "Package Status: ${package_status}";
 
                status=$?; ;;
@@ -178,8 +178,8 @@ echo -e "Package Status: ${package_status}";
                 case "${installer}" in
                    apt )
 
-                         echo -e "$( printf '*%.0s' {1..100} )";
-                         echo -e "Installing ${package} now!";
+echo -e "$( printf '+%.0s' {1..100} )";
+echo -e "Installing ${package} now!";
 
                          sudo apt install ${package} --yes \
                               | tee "${installed_tools}/${package}.log";
@@ -196,8 +196,8 @@ echo -e "Package Status: ${package_status}";
               case "${installer}" in
                  apt )
 
-                       echo -e "$( printf '*%.0s' {1..100} )";
-                       echo -e "Listing Installed: ${package}";
+echo -e "$( printf '~%.0s' {1..100} )";
+echo -e "Listing Installed: ${package}";
 
                        package_status="$(
                            apt list --installed ${package} 2>/dev/null \
@@ -216,8 +216,8 @@ echo -e "Package Status: ${package_status}";
               case "${installer}" in
                  apt )
 
-                       echo -e "$( printf '*%.0s' {1..100} )";
-                       echo -e "Upgrading Package: ${package}";
+echo -e "$( printf '#%.0s' {1..100} )";
+echo -e "Upgrading Package: ${package}";
 
                        ## Upgrading package only if it's already installed.
                        sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
@@ -264,8 +264,8 @@ echo -e "Package Status: ${package_status}";
         case "${installer}" in
            apt )
 
-                 echo -e "$( printf '*%.0s' {1..100} )";
-                 echo -e "Installed Package: ${package}";
+echo -e "$( printf '@%.0s' {1..100} )";
+echo -e "Installed Package: ${package}";
 
                  ## Processing APT-Installed Packages:
                  export2json --package="${package}" \
