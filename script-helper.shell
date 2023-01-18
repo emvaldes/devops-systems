@@ -18,10 +18,14 @@
 #                         --info=${info_mode} \
 #           ;
 #           return 1;
-#     else  echo -e "\nWarning: Script Helper was not found! \n";
+#     else  newline;
+#           echo -e "Warning: Script Helper was not found! ";
+#           newline;
 #           return 2;
 #   fi;
 # fi;
+
+function newline () { echo -e; return 0; };
 
 function script_helper () {
     ## -------------------------------------------------------------------------
@@ -107,10 +111,12 @@ function script_helper () {
     ## -------------------------------------------------------------------------
     if [[ ${wizard_mode} == 'true' ]]; then
       local command='';
-      echo -e "\n$(
+      newline;
+      echo -e "$(
           echo -e "${json_object}" \
           | jq --raw-output ".script.headers.interview"
-        ):\n";
+        ):";
+      newline;
       local question=''; counter=0;
       for xitem in ${options[@]}; do
         (( ++counter ));
@@ -124,7 +130,8 @@ function script_helper () {
                 read -p "${heading}" response;
                 [[ ${#response} -gt 0 ]] && {
                     include=" --${xitem}=\"${response}\"";
-                    echo -e "    ${include}\n";
+                    echo -e "    ${include}";
+                    newline;
                     command+="${include}";
                   };
           else  ## Parsing non-parameterized options:
@@ -132,12 +139,13 @@ function script_helper () {
                 read -p "${heading}" response;
                 [[ 'Y|y' =~ ${response:0:1} ]] && {
                     include=" --${xitem}";
-                    echo -e "    ${include}\n";
+                    echo -e "    ${include}";
+                    newline;
                     command+="${include}";
                   };
         fi;
       done;
-      echo -e "\n> ${calling_script}${command} ;\n";
+      newline; echo -e "> ${calling_script}${command} ;"; newline;
       read -p "Execute ? [Y/n] : " response;
       [[ 'Y|y' =~ ${response:0:1} ]] && {
           eval $(pwd)/${script_filename}${command} ;
@@ -149,7 +157,8 @@ function script_helper () {
       ## Listing command example:
       index=1;  ## Indexing each example:
       for each in ${examples[@]}; do
-        echo -e  "\nExample [$(( index++ ))]:";
+        newline;
+        echo -e  "Example [$(( index++ ))]:";
         echo -e  "${each}" \
            | sed -e 's|\([[:blank:]]\)\{2,\}||g' \
                  -e 's|\ \\\*\-\-| --|g' \
@@ -172,14 +181,16 @@ function script_helper () {
       );
       echo -en "GitHub Project: ";
       echo -e  "https://${github_id}/${github_domain}/${github_repo}";
-      echo -e  "        Source: /${github_path}\n";
+      echo -e  "        Source: /${github_path}";
+      newline;
       ## Generating Team properties:
       ## export team_[id,name]
       eval $( echo -e "${references}" \
         | jq -r ".team|to_entries" \
         | jq -r "map(\"export team_\(.key)='\(.value|tostring)'\")|.[]"
       );
-      echo -e  "  Team: ${team_name}\n";
+      echo -e  "  Team: ${team_name}";
+      newline;
       ## Generating DevOps properties:
       ## export devops_[name,email]
       total_users=$( echo -e "${references}" | jq -r ".devops|length" );
@@ -201,7 +212,8 @@ function script_helper () {
     for header in ${headers[@]}; do
       keyset="${header%\:*}";
       options_header="${header#*\:}";
-      echo -en "\n${options_header}    ";
+      newline;
+      echo -en "${options_header}    ";
       options_spacer="$( printf "% $(echo "${#options_header} + 4" | bc)s" )";
       case "${keyset}" in
         required ) declare -a listing=(${required[@]}); ;;
@@ -238,7 +250,9 @@ function script_helper () {
     done;
     ## -----------------------------------------------------------------
     usage_header="Usage:";
-    echo -en "\n${usage_header}\n\n";
+    newline;
+    echo -en "${usage_header}";
+    newline; newline;
     for each in ${examples[@]}; do
       echo -e   "${each}" \
          | sed -e  's|\(\ \)\(\\\*\)\(\ \)\{2,\}|\1\\\n'${output_spacer}'|g' \

@@ -6,9 +6,14 @@ function newline () { echo -e; return 0; };
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};
 
-echo -e "\nNotice: Starting Framework Deployment ...\n" | tee -a "${postinstall_logfile}";
+newline;
+echo -e "Notice: Starting Framework Deployment ..." \
+   | tee -a "${postinstall_logfile}";
 
-echo -e "\nNotice: Cloning GitHub Public Repository ...";
+newline;
+echo -e "Notice: Cloning GitHub Public Repository ..." \
+   | tee -a "${postinstall_logfile}";
+
 git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems;
 
 ## Changing directory to cloned repository.
@@ -17,7 +22,12 @@ cd /tmp/devops-systems/ubuntu && ls -al ./packages.shell;
 ## Notice: Unless the --install parameter is provided
 ##         there will be no package installed.
 
-echo -e "\nNotice: Executing Packages Installation ...";
+newline;
+echo -e "Notice: Executing Packages Installation ..." \
+   | tee -a "${postinstall_logfile}";
+
 bash ./packages.shell --install | tee ./packages.log;
 
-echo -e "\nNotice: Completed Framework Deployment! " | tee -a "${postinstall_logfile}";
+newline;
+echo -e "Notice: Completed Framework Deployment! " \
+   | tee -a "${postinstall_logfile}";

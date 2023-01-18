@@ -11,6 +11,8 @@
 ## [cloud tools]:     aws-iam-authenticator, awscli, saml2aws
 ## [hashicorp]:       boundary, consul, nomad, packer, terraform, vagrant, vault, waypoint
 
+function newline () { echo -e; return 0; };
+
 ## -----------------------------------------------------------------------------
 function packages_ubuntu () {
     local oIFS="${IFS}";
@@ -44,9 +46,11 @@ function packages_ubuntu () {
       );
     for module in ${modules[@]}; do
       if [[ -e $(pwd)/${module} ]]; then
-              echo -e "Loading: '${module}' module!\n ";
+              echo -e "Loading: '${module}' module! ";
+              newline;
               source $(pwd)/${module};
-        else  echo -e "\nWarning: Module '${module}' is not found! \n";
+        else  newline;
+              echo -e "Warning: Module '${module}' is not found! ";
               return 99;
       fi;
     done;
@@ -61,9 +65,11 @@ function packages_ubuntu () {
     if [[ ${#pkgs_listing} -eq 0 ]]; then
             local pkgs_listing='packages.list';
             ## Loading Packages Listing
-            echo -e "Loading: '${pkgs_listing}' Default Packages List!\n ";
+            echo -e "Loading: '${pkgs_listing}' Default Packages List! ";
+            newline;
             source "${script_path}/${pkgs_listing}";
-      else  echo -e "Loading: Custom Packages List!\n ";
+      else  echo -e "Loading: Custom Packages List! ";
+            newline;
             declare -a packages=( ${pkgs_listing[@]} );
             for package in ${packages[@]}; do echo -e "${package}"; done;
     fi;
@@ -80,11 +86,13 @@ function packages_ubuntu () {
         echo -e "Using: '${report_filename}' default Report file! ";
       };
     if [[ ${install_packages} == 'true' ]]; then
-            echo -e "\nInstalling: Marked Packages! ";
+            newline;
+            echo -e "Installing: Marked Packages! ";
       else  install_packages='false';
     fi;
     if [[ ${#import_filename} -gt 0 ]]; then
-            echo -e "\nImporting: '${import_filename}' custom file! ";
+            newline;
+            echo -e "Importing: '${import_filename}' custom file! ";
             import_report='true';
       else  import_report='false';
     fi;
@@ -155,7 +163,8 @@ function packages_ubuntu () {
       ## Evaluating APT Installed output
       if [[ $result == 'absent' ]]; then
               ## Package is not installed.
-              echo -e "\n--------------------------------------------------------------------------------";
+              newline;
+              echo -e "--------------------------------------------------------------------------------";
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
               echo -e "   Warning: ${package} package is not installed! ";
               echo -e "--------------------------------------------------------------------------------";
@@ -239,10 +248,11 @@ function packages_ubuntu () {
       fi;
       ## Determine if processing package-report
       if [[ ${skip_report} == 'false' ]]; then
-        echo -e "\n--------------------------------------------------------------------------------";
+        newline;
+        echo -e "--------------------------------------------------------------------------------";
         echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
         echo -e "   Package: ${package_status}";
-        echo -e "--------------------------------------------------------------------------------\n";
+        echo -e "--------------------------------------------------------------------------------";
         # echo -e "${package}" >> ${installed};
         case "${installer}" in
            apt ) ## Processing APT-Installed Packages:
@@ -266,7 +276,7 @@ function packages_ubuntu () {
     rm -rf ${reports_cache} 2>/dev/null;
     ## Exporting Installed Packages (name, version) ino LIST file.
     jq '.[] | "\(.Package) -> \(.Version)"' --raw-output ${jsonfile} > ${reportfile};
-    echo -e "\nDone.\n";
+    newline; echo -e "Done."; newline;
     IFS="${oIFS}";
     return 0;
   }; alias packages-ubuntu='packages_ubuntu';
@@ -303,7 +313,8 @@ function packages_ubuntu.help () {
             ## -------------------------------------------------------------------------
             declare -a required=();
             required+=("--install\t: Install Packages List.");
-            echo -e "\nRequired: ${required[0]}";
+            newline;
+            echo -e "Required: ${required[0]}";
             required=("${required[@]:1}");
             for xline in ${required[@]}; do
               echo -e "${spanner}${xline}";
@@ -315,13 +326,17 @@ function packages_ubuntu.help () {
             optional+=("--log-file\t: Default Process log-file.");
             optional+=("--pkgs-list\t: Custom Packages List.");
             optional+=("--report-file\t: Installed Packages report file.");
-            echo -e "\nOptional: ${optional[0]}";
+            newline;
+            echo -e "Optional: ${optional[0]}";
             optional=("${optional[@]:1}");
             for xline in ${optional[@]}; do
               echo -e "$( printf "% 10s" )${xline}";
             done;
             ## -----------------------------------------------------------------
-            echo -en "\nUsage:\n\n${help_caller/_/-} ";
+            newline;
+            echo -en "Usage:";
+            newline; newline;
+            echo -en "${help_caller/_/-} ";
             counter=0; aligned='';
             for xline in ${usage[@]}; do
               stubset='false';
@@ -336,11 +351,15 @@ function packages_ubuntu.help () {
               done;
               [[ ${stubset} == 'false' ]] && echo -e "${aligned}${xline}";
               ((counter++));
-            done; echo -e ";\n";
+            done;
+            echo -e ";";
+            newline;
       else  ## Listing command example:
-            echo -en "\n${help_caller/_/-} ";
+            newline;
+            echo -en "${help_caller/_/-} ";
             echo -e "${usage[*]}" | sed -e 's/\ \\$//g' | tr '\n' ' ';
-            echo -e ";\n";
+            echo -e ";";
+            newline;
     fi;
     ## -------------------------------------------------------------------------
     # local script_location="blob/${virtualbox_platform}";

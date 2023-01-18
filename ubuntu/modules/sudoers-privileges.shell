@@ -8,33 +8,45 @@ function newline () { echo -e; return 0; };
 export privileges_logfile="/tmp/sudoers-privileges.log";
 cat /dev/null > ${privileges_logfile};
 
-echo -e "\nNotice: Starting Sudoers Privileges ...\n" \
-| tee -a "${privileges_logfile}";
+newline;
+echo -e "Notice: Starting Sudoers Privileges ..." \
+   | tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account
 export devops_account='{{ service-account }}';
 
 ## Configuring Service Account passwordless access to sudo-requests
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
+
         ## Injecting Passwordless Configuration
-        echo -e "\nWarning: Generating ${devops_account} Passwordless syntax ...";
+        newline;
+        echo -e "Warning: Generating ${devops_account} Passwordless syntax ..." \
+           | tee -a "${privileges_logfile}";
         echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
-             | sudo tee /etc/sudoers.d/${devops_account};
+           | sudo tee /etc/sudoers.d/${devops_account};
         ## Service Account /etc/sudoers.d/ file-permissions
-        echo -e "\nWarning: Correcting ${devops_account} file permissions! ";
+        newline;
+        echo -e "Warning: Correcting ${devops_account} file permissions! " \
+           | tee -a "${privileges_logfile}";
         sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
-             | tee -a "${privileges_logfile}";
+           | tee -a "${privileges_logfile}";
         ## mode of '/etc/sudoers.d/devops' changed
         ## from 0644 (rw-r--r--) to 0440 (r--r-----)
-  else  echo -e "\nWarning: Sudoers Privileges already enabled! \n";
+
+  else  newline;
+        echo -e "Warning: Sudoers Privileges already enabled! " \
+           | tee -a "${privileges_logfile}";
         return 0;
+
 fi;
 
 newline;
+echo -e "Notice: Listing ${devops_account} file permissions! " \
+   | tee -a "${privileges_logfile}";
 
-echo -e "\nNotice: Listing ${devops_account} file permissions! ";
 sudo ls -al /etc/sudoers.d/${devops_account}\
 | tee -a "${privileges_logfile}";
 
-echo -e "\nNotice: Completed Sudoers Privileges! " \
-| tee -a "${privileges_logfile}";
+newline;
+echo -e "Notice: Completed Sudoers Privileges! " \
+   | tee -a "${privileges_logfile}";

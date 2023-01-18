@@ -161,7 +161,9 @@ function vagrant_initbox () {
     cd ${vagrant_location};
     mkdir -p ${vagrant_location} && cd $_;
     if [[ -e ./Vagrantfile ]]; then
-      echo -e "\nWarning: Vagrantfile already exists! \n";
+      newline;
+      echo -e "Warning: Vagrantfile already exists! ";
+      newline;
       rm -fv ./Vagrantfile 2>/dev/null;
     fi;
     check_status $?;
@@ -486,7 +488,9 @@ function vagrant_appliance () {
                             --info=${info_mode} \
               ;
               return 6;
-        else  echo -e "\nWarning: Script Helper was not found ! \n";
+        else  newline;
+              echo -e "Warning: Script Helper was not found! ";
+              newline;
               return 7;
       fi;
     fi;
@@ -501,7 +505,9 @@ function vagrant_appliance () {
                 export vagrant_boxset="$(
                     echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
                   )";
-          else  echo -e "\nWarning: Unable to continue! \n";
+          else  newline;
+                echo -e "Warning: Unable to continue! ";
+                newline;
                 return 1;
         fi;
       };

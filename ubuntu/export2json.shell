@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+function newline () { echo -e; return 0; };
+
 function export2json () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -143,7 +145,7 @@ function export2json () {
     # echo -e;
     echo -e "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
     ## -------------------------------------------------------------------------
-    # echo -e "\nDone.\n";
+    # newline; echo -e "Done."; newline;
     IFS="${oIFS}";
     return 0;
   };

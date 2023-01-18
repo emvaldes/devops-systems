@@ -6,16 +6,23 @@ function newline () { echo -e; return 0; };
 export autologin_logfile="/tmp/sudoers-autologin.log";
 cat /dev/null > ${autologin_logfile};
 
-echo -e "\nNotice: Starting Sudoers Auto-Login ...\n" \
-| tee -a "${autologin_logfile}";
+newline;
+echo -e "Notice: Starting Sudoers Auto-Login ..." \
+   | tee -a "${autologin_logfile}";
 
 ## DevOps - Service Account
 export devops_account='{{ service-account }}';
 
-echo -e "\nWarning: Selectively Installing SSH Pass! ";
+newline;
+echo -e "Warning: Selectively Installing SSH Pass! " \
+   | tee -a "${autologin_logfile}";
+
 sudo apt install sshpass --yes | tee -a "${autologin_logfile}";
 
-echo -e "\nNotice: Auto-Generating SSH Access Keys! ";
+newline;
+echo -e "Notice: Auto-Generating SSH Access Keys! " \
+   | tee -a "${autologin_logfile}";
+
 export sshkey_fileset="${HOME}/.ssh/id_rsa";
 ssh-keygen -t rsa \
            -b 4096 \
@@ -24,21 +31,34 @@ ssh-keygen -t rsa \
            -N '' <<<y \
 | tee -a "${autologin_logfile}";
 
-echo -e "\nNotice: Copying SSH ID to authorized-keys file! "
+newline;
+echo -e "Notice: Copying SSH ID to authorized-keys file! " \
+   | tee -a "${autologin_logfile}";
+
 echo -e "${devops_account}" \
-| sshpass ssh-copy-id -i ${sshkey_fileset} \
-                      -o StrictHostKeyChecking=no \
-                      localhost \
-| tee -a "${autologin_logfile}";
+   | sshpass ssh-copy-id -i ${sshkey_fileset} \
+                         -o StrictHostKeyChecking=no \
+                            localhost \
+   | tee -a "${autologin_logfile}";
 
 ## Performing basic housecleaning
-rm -rfv ~/.ssh/ssh-copy-id* | tee -a "${autologin_logfile}";
-
-echo -e "\nNotice: Removing SSH Pass tool! ";
-sudo apt remove sshpass --yes | tee -a "${autologin_logfile}";
-
-echo -e "\nNotice: Perfoming Auto-Remove operations! ";
-sudo apt autoremove --yes | tee -a "${autologin_logfile}";
-
-echo -e "\nNotice: Completed Sudoers Auto-Login! " \
+rm -rfv ${HOME}/.ssh/ssh-copy-id* \
 | tee -a "${autologin_logfile}";
+
+newline;
+echo -e "Notice: Removing SSH Pass tool! " \
+   | tee -a "${autologin_logfile}";
+
+sudo apt remove sshpass --yes \
+| tee -a "${autologin_logfile}";
+
+newline;
+echo -e "Notice: Perfoming Auto-Remove operations! " \
+   | tee -a "${autologin_logfile}";
+
+sudo apt autoremove --yes \
+| tee -a "${autologin_logfile}";
+
+newline;
+echo -e "Notice: Completed Sudoers Auto-Login! " \
+   | tee -a "${autologin_logfile}";
