@@ -16,8 +16,8 @@
 #            sudoers_autologin
 #            service_access
 #            config_section
-#            preinst_package
-#            postinst_package
+#            preinst_packages
+#            postinst_packages
 #            destroy_appliance
 #            vagrant_appliance
 #
@@ -392,7 +392,7 @@ function config_section () {
 
 ## -----------------------------------------------------------------------------
 ## Objective: Pre-Installing Core Packages
-function preinst_package () {
+function preinst_packages () {
     cd ${vagrant_location};
     local script_filename="ubuntu-preinstall.shell";
     local remote_resource="ubuntu/modules/${script_filename}";
@@ -409,11 +409,11 @@ function preinst_package () {
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
     check_status $?;
     return 0;
-  }; alias preinst-package='preinst_package';
+  }; alias preinst-packages='preinst_packages';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Post-Installing Core Packages
-function postinst_package () {
+function postinst_packages () {
     cd ${vagrant_location};
     local script_filename="ubuntu-postinstall.shell";
     local remote_resource="ubuntu/modules/${script_filename}";
@@ -430,7 +430,7 @@ function postinst_package () {
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
     check_status $?;
     return 0;
-  }; alias postinst-package='postinst_package';
+  }; alias postinst-packages='postinst_packages';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Destroying Vagrant Box (ubuntu)
@@ -557,8 +557,8 @@ function vagrant_appliance () {
     config_section;             ## Adding SSH Configuration Section
     ## -------------------------------------------------------------------------
     ## Objective: Guest Configuration modules
-    preinst_package;            ## Pre-Installing Core Packages
-    postinst_package;           ## Post-Installing Core Packages
+    preinst_packages;           ## Pre-Installing Core Packages
+    postinst_packages;          ## Post-Installing Core Packages
     ## destroy_machine;
     return 0;
   }; alias vagrant-appliance='vagrant_appliance';
