@@ -310,13 +310,14 @@ function transfer_credentials () {
     fold -b -w 70 ${devops_sshkey};
     cp -v ${devops_sshkey} ${vagrant_shared};
     check_status $?;
+    local sshkey_filename="$( basename ${devops_sshkey} )";
     vagrant ssh -c \
-            "cat /shared/${devops_sshkey} | sudo tee ${authorized_keys}";
+            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
     check_status $?;
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
-    rm -v ${vagrant_shared}/${devops_sshkey};
+    rm -v ${vagrant_shared}/${sshkey_filename};
     check_status $?;
     return 0;
   }; alias transfer-credentials='transfer_credentials';
@@ -358,13 +359,14 @@ function service_access () {
     check_status $?;
     cp -v ${devops_sshkey} ${vagrant_shared};
     check_status $?;
+    local sshkey_filename="$( basename ${devops_sshkey} )";
     vagrant ssh -c \
-            "cat /shared/${devops_sshkey} | sudo tee ${authorized_keys}";
+            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
     check_status $?;
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
-    rm -v ${vagrant_shared}/${devops_sshkey};
+    rm -v ${vagrant_shared}/${sshkey_filename};
     check_status $?;
     return 0;
   }; alias service-access='service_access';
