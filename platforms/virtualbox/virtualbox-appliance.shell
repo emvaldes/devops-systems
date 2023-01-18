@@ -17,17 +17,20 @@
 #             --account           Service Account (username: devops)
 #             --password          Service Account (password: devops)
 #
-# Optional    --configure         Deploy Configuration Management
+# Optional    --appliance         Virtual Machine name
+#             --cache             Deployment resources location
+#             --configure         Deploy Configuration Management
 #             --create            Create VBox appliance (hardware only)
 #             --delete            Shutdown & Destroy VBox appliance
 #             --deploy            Generate Auto-Install (unattended)
 #             --install           Install Default DevOps Packages
 #             --iso-file          Installation ISO file location
 #             --packages          Install Custom DevOps Packages
-#             --provision         Infrastructure Provisioning (IaC)
 #             --patch             Patching Unattended installation
+#             --projects          Provide VBox projects location
+#             --provision         Infrastructure Provisioning (IaC)
+#             --ssh-key           Profile Auto-Login via SSH Public Key
 #             --start             Requesting to launch VBox Appliance
-#             --virtualbox        Provide VBox projects location
 #             --example           Display script's execution options
 #             --wizard            Parse user-input to execute command
 #             --info              Project credits and online references
@@ -36,9 +39,9 @@
 # Usage:
 #
 # virtualbox-appliance.shell --vm-name="ubuntu-desktop" \
-#                            --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
 #                            --account="devops" \
 #                            --password="devops" \
+#                            --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
 #                            --provision \
 #                            --deploy \
 #                            --patch \
@@ -70,35 +73,16 @@ export user_local="${HOME}/.local";
 mkdir -p "${user_local}";
 
 ## -----------------------------------------------------------------------------
-## Objective: Default Appplication Parameters
-
-## Default Service Account:
-[[ ${#2} -gt 0 ]] && export devops_account="${2}" \
-                  || export devops_account='devops';
-
-export devops_password="${devops_account}";
-
-## -----------------------------------------------------------------------------
 ## Objective: System Pre-Requirements
-
-export local_temp="${user_local}/tmp";
-export vbox_temp="${local_temp}/vbox";
-
-mkdir -p "${vbox_temp}";
 
 ## Description: Constructing GitHub URI (raw user content)
 export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
+
 export virtualbox_platform='master/platforms/virtualbox';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
-
-export virtualbox_projects="${HOME}/.virtualization/virtualbox";
-
-export iso_filename='ubuntu-22.04.1-desktop-amd64.iso';
-
-export virtual_machine="devops-console";
 
 ## Events status counter:
 export counter=0;
@@ -271,7 +255,7 @@ function vboxmanage_multimedia () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     [[ ${#recording} -eq 0 ]] && {
-        recording="${virtualbox}/recordings/${vm_name}-screen0.webm";
+        recording="${virtualbox_projects}/recordings/${vm_name}-screen0.webm";
       }
     [[ ${#frame_rate} -eq 0 ]] && frame_rate='30';
     [[ ${#video_quality} -eq 0 ]] && video_quality='2048';
@@ -575,8 +559,13 @@ function virtualbox_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      ## Required Parameters:
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
+      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
+      ## Optional Parameters:
+      [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
+      [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
       [[ ${1#*\--} = "configure" ]] && local configuration='true';
       [[ ${1#*\--} = "create" ]] && local create_machine='true';
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
@@ -584,16 +573,16 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "install" ]] && local install_packages='true';
       [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
-      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
+      [[ ${1#*\--} = "projects" ]] && local virtualbox_projects="${2}";
       [[ ${1#*\--} = "provision" ]] && local provisioning='true';
       [[ ${1#*\--} = "ssh-key" ]] && local sshkey_access="${2}";
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
-      [[ ${1#*\--} = "virtualbox" ]] && local virtualbox="${2}";
-      [[ ${1#*\--} = "help" ]] && local assistance='true';
+      ## Assistance Parameters:
       [[ ${1#*\--} = "example" ]] && local example_mode='true';
       [[ ${1#*\--} = "wizard" ]] && local wizard_mode='true';
       [[ ${1#*\--} = "info" ]] && local info_mode='true';
+      [[ ${1#*\--} = "help" ]] && local assistance='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     ## Prividing operational assistance (helper)
@@ -616,13 +605,41 @@ function virtualbox_appliance () {
               return 7;
       fi;
     fi;
+    ## -------------------------------------------------------------------------
+    ## Objective: System Operational Requirements
+    [[ ${#user_local} -eq 0 ]] && {
+        export user_local="${HOME}/.local";
+        mkdir -p "${user_local}";
+      };
+    ## Temporary folder/container:
+    export local_temp="${user_local}/tmp";
+    export vbox_temp="${local_temp}/vbox";
+    export vbox_shared="${vbox_temp}/shared";
+    ## Constructing a Vagrant Shared folder to exchange content
+    mkdir -p "${vbox_shared}";
+    ## Target VirtualBox Home folder:
+    [[ ${#virtualbox_projects} -eq 0 ]] && {
+        export virtualbox_projects="${HOME}/.virtualization/virtualbox";
+        mkdir -p "${virtualbox_projects}";
+      };
+    ## -------------------------------------------------------------------------
     ## Processing Function Input Parameters
     if [[ ${#vm_name} -eq 0 ]]; then
-            echo -e "\nWarning: No Virtual Machine Name was provided ! \n";
-            return 8;
-      else  export virtual_machine="${vm_name%\-*}-console";
+      user_input="Virtual Machine name: ";
+      newline; read -t 15 -p "${user_input}" response;
+      if [[ ${#response} -gt 0 ]]; then
+              export vm_name="$(
+                  echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                )";
+        else  echo -e "\nWarning: Unable to continue! \n";
+              return 1;
+      fi;
     fi;
+    ## Virtual Machine hostname
+    [[ ${#virtual_machine} -eq 0 ]] && \
+       export virtual_machine="devops-console";
     missing_isofile="\nWarning: No Installation ISO file was provided! \n";
+    ## e.g.: ubuntu-22.04.1-desktop-amd64.iso
     if [[ ${unattended_install} == 'true' ]]; then
       if [[ ${#iso_filename} -eq 0 ]]; then
         echo -e "${missing_isofile}";
@@ -651,18 +668,11 @@ function virtualbox_appliance () {
       };
     [[ ${#configuration} -eq 0 ]] && {
         export configuration='false';
-        echo -en "\nWarning: Configuration ${provisioning} !\n ";
+        ## echo -en "\nWarning: Configuration ${provisioning} !\n ";
       };
     [[ ${#provisioning} -eq 0 ]] && {
         export provisioning='false';
         # echo -en "\nWarning: Provisioning ${provisioning} !\n ";
-      };
-    [[ ${#virtualbox} -eq 0 ]] && {
-        export virtualbox="${virtualbox_projects}";
-        # echo -en "\nWarning: Using default ";
-        # echo -e  "'${virtualbox}' projects path! \n";
-        ## Cleaning existing location:
-        ## rm -rfv ${virtualbox}/${vm_name} 2>/dev/null;
       };
     local vm_location="";
     if [[ ${unattended_install} == 'true' ]]; then
@@ -691,7 +701,7 @@ function virtualbox_appliance () {
             ## Extracting Virtual Machine Location and VBox-file:
             vm_location="$( dirname "${vm_settings}" )";
             vm_vboxfile="$( basename "${vm_settings}" )";
-      else  vm_location="${virtualbox}/${vm_name}";
+      else  vm_location="${virtualbox_projects}/${vm_name}";
     fi;
     local vm_vboxfile="${vm_location}/${vm_name}.vbox";
     [[ ${provisioning} == 'true' ]] && {
@@ -828,3 +838,8 @@ function virtualbox_appliance () {
   }; alias virtualbox-appliance='virtualbox_appliance';
 
 virtualbox_appliance ${@}
+
+## -------------------------------------------------------------------------
+## Objective: Script & Environment Variables
+## SSH Access authorized keys:
+## export authorized_keys="/home/${devops_account}/.ssh/authorized_keys";
