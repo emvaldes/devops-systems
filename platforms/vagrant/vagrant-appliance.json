@@ -5,30 +5,32 @@
         },
         "required": [
             "account",
+            "password",
             "boxset",
             "instance",
-            "password",
             "ssh-key"
         ],
         "optional": [
+            "appliance",
             "cache",
             "location",
+            "packages",
             "projects",
             "shared"
         ],
         "examples": [
             [
                 "account",
+                "password",
                 "boxset",
                 "instance",
-                "password",
                 "ssh-key"
             ],
             [
                 "account",
+                "password",
                 "boxset",
                 "instance",
-                "password",
                 "ssh-key",
                 "cache",
                 "location",
@@ -61,20 +63,34 @@
             "query": "Service Account Username",
             "message": "Service Account (username: devops)"
         },
+        "password": {
+            "value": "devops",
+            "query": "Service Account Password",
+            "message": "Service Account (password: devops)"
+        },
         "boxset": {
             "value": "bento/ubuntu-22.04",
             "query": "Vagrant Cloud Box",
             "message": "Provide Vagrant cloud boxes"
         },
-        "cache": {
-            "value": "~/.local",
-            "query": "Local Cache location",
-            "message": "Deployment resources location"
-        },
         "instance": {
             "value": "ubuntu-22.04",
             "query": "Virtual Machine Profile",
             "message": "Virtual Machine profile"
+        },
+        "ssh-key": {
+            "value": "${HOME}/.ssh/id_rsa.pub",
+            "query": "SSH Access Public Key",
+            "message": "Profile SSH Access (Public Key)"
+        },
+        "appliance": {
+            "query": "Virtual Machine name",
+            "message": "Virtual Machine name"
+        },
+        "cache": {
+            "value": "~/.local",
+            "query": "Local Cache location",
+            "message": "Deployment resources location"
         },
         "location": {
             "value": "~/.vagrant.d/sources/ubuntu-22.04",
@@ -86,11 +102,6 @@
             "query": "Install Custom Packages",
             "message": "Install Custom DevOps Packages"
         },
-        "password": {
-            "value": "devops",
-            "query": "Service Account Password",
-            "message": "Service Account (password: devops)"
-        },
         "projects": {
             "value": "~/.vagrant.d",
             "query": "Target Vagrant Projects",
@@ -100,11 +111,6 @@
             "value": "~/.local/tmp/shared",
             "query": "System Shared Content",
             "message": "System Shared Content"
-        },
-        "ssh-key": {
-            "value": "${HOME}/.ssh/id_rsa.pub",
-            "query": "SSH Access Public Key",
-            "message": "Profile SSH Access (Public Key)"
         },
         "verbose": {
             "message": "Enabling output's verbosity"
