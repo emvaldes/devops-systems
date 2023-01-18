@@ -12,19 +12,32 @@ echo -e "\n* Starting Sudoers Auto-Login ...\n" \
 ## DevOps - Service Account
 export devops_account='{{ service-account }}';
 
+echo -e "\nWarning: Selectively Installing SSH Pass! ";
 sudo apt install sshpass --yes | tee -a "${autologin_logfile}";
 
-ssh-keygen -t rsa -b 4096 -C {{ virtual-machine }} -f ~/.ssh/id_rsa -N '' <<<y \
+echo -e "\nNotice: Auto-Generating SSH Access Keys! ";
+export sshkey_fileset="${HOME}/.ssh/id_rsa";
+ssh-keygen -t rsa \
+           -b 4096 \
+           -C {{ virtual-machine }} \
+           -f ${sshkey_fileset} \
+           -N '' <<<y \
 | tee -a "${autologin_logfile}";
 
+echo -e "\nNotice: Copying SSH ID to authorized-keys file! "
 echo -e "${devops_account}" \
-| sshpass ssh-copy-id -i ~/.ssh/id_rsa \
+| sshpass ssh-copy-id -i ${sshkey_fileset} \
                       -o StrictHostKeyChecking=no \
                       localhost \
 | tee -a "${autologin_logfile}";
 
+## Performing basic housecleaning
 rm -rfv ~/.ssh/ssh-copy-id* | tee -a "${autologin_logfile}";
+
+echo -e "\nNotice: Removing SSH Pass tool! ";
 sudo apt remove sshpass --yes | tee -a "${autologin_logfile}";
+
+echo -e "\nNotice: Perfoming Auto-Remove operations! ";
 sudo apt autoremove --yes | tee -a "${autologin_logfile}";
 
 echo -e "\n* Completed Sudoers Auto-Login! \n" \
