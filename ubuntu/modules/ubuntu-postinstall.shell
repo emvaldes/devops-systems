@@ -13,6 +13,6 @@ git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems;
 cd /tmp/devops-systems/ubuntu && ls -al ./packages.shell;
 
 ## Executing Packages Installation.
-bash -x ./packages.shell | tee ./packages.log;
+bash -x ./packages.shell --install | tee ./packages.log;
 
 echo -e "\n* Completed Framework Deployment! \n" | tee -a "${postinstall_logfile}";

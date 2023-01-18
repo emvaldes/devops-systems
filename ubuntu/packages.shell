@@ -144,7 +144,7 @@ function packages_ubuntu () {
                  )";
 
 echo -e "$( printf '?%.0s' {1..100} )";
-echo -e "Package Status: ${package_status}";
+echo -e "Is Package Installed: ${package_status}";
 
                status=$?; ;;
         snap ) package_status="$(
@@ -163,7 +163,7 @@ echo -e "Package Status: ${package_status}";
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
               echo -e "   Warning: ${package} package is not installed! ";
               echo -e "--------------------------------------------------------------------------------";
-	      ## Conditioning Package Installation based on explicit request
+	            ## Conditioning Package Installation based on explicit request
               if [[ ${install_packages} == 'true' ]]; then
                 ## Configuring Package Instation Reports path
                 ## Legacy structure: local location="${reports}/${dateset}/${timeset}";
