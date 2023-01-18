@@ -24,13 +24,15 @@
 # vagrant-appliance.shell --help ;
 #
 # Required    --account           Service Account (username: devops)
+#             --password          Service Account (password: devops)
 #             --boxset            Provide Vagrant cloud boxes
 #             --instance          Virtual Machine profile
-#             --password          Service Account (password: devops)
 #             --ssh-key           Profile SSH Access (Public Key)
 #
-# Optional    --cache             Deployment resources location
+# Optional    --appliance         Virtual Machine name
+#             --cache             Deployment resources location
 #             --location          Virtual Machine Location
+#             --packages          Install Custom DevOps Packages
 #             --projects          Target Vagrant projects
 #             --shared            System Shared Content
 #             --example           Display script's execution options
@@ -41,16 +43,16 @@
 # Usage:
 #
 # vagrant-appliance.shell --account="devops" \
+#                         --password="devops" \
 #                         --boxset="bento/ubuntu-22.04" \
 #                         --instance="ubuntu-22.04" \
-#                         --password="devops" \
 #                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 # ;
 #
 # vagrant-appliance.shell --account="devops" \
+#                         --password="devops" \
 #                         --boxset="bento/ubuntu-22.04" \
 #                         --instance="ubuntu-22.04" \
-#                         --password="devops" \
 #                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 #                         --cache="~/.local" \
 #                         --location="~/.vagrant.d/sources/ubuntu-22.04" \
@@ -449,21 +451,24 @@ function vagrant_appliance () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      ## Required Parameters:
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
-      [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
+      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "boxset" ]] && local vagrant_boxset="${2}";
-      [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
       [[ ${1#*\--} = "instance" ]] && local vagrant_instance="${2}";
+      [[ ${1#*\--} = "ssh-key" ]] && local devops_sshkey="${2}";
+      ## Optional Parameters:
+      [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
+      [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
       [[ ${1#*\--} = "location" ]] && local vagrant_location="${2}";
       [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
-      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "projects" ]] && local vagrant_projects="${2}";
       [[ ${1#*\--} = "shared" ]] && local vagrant_shared="${2}";
-      [[ ${1#*\--} = "ssh-key" ]] && local devops_sshkey="${2}";
-      [[ ${1#*\--} = "help" ]] && local assistance='true';
+      ## Assistance Parameters:
       [[ ${1#*\--} = "example" ]] && local example_mode='true';
       [[ ${1#*\--} = "wizard" ]] && local wizard_mode='true';
       [[ ${1#*\--} = "info" ]] && local info_mode='true';
+      [[ ${1#*\--} = "help" ]] && local assistance='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     ## Prividing operational assistance (helper)
