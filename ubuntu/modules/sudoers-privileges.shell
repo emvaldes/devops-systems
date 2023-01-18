@@ -17,9 +17,11 @@ export devops_account='{{ service-account }}';
 ## Configuring Service Account passwordless access to sudo-requests
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
         ## Injecting Passwordless Configuration
+        echo -e "\nWarning: Generating ${devops_account} Passwordless syntax ...";
         echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
              | sudo tee /etc/sudoers.d/${devops_account};
         ## Service Account /etc/sudoers.d/ file-permissions
+        echo -e "\nWarning: Correcting ${devops_account} file permissions! ";
         sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
              | tee -a "${privileges_logfile}";
         ## mode of '/etc/sudoers.d/devops' changed
@@ -30,7 +32,7 @@ fi;
 
 newline;
 
-## Listing Service Account /etc/sudoers.d/ file-permissions
+echo -e "\Notice: Listing ${devops_account} file permissions! ";
 sudo ls -al /etc/sudoers.d/${devops_account}\
 | tee -a "${privileges_logfile}";
 
