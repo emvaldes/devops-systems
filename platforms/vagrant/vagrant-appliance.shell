@@ -1,48 +1,80 @@
 #!/usr/bin/env bash
 
-[[ ${#1} -gt 0 ]] && export vagrant_boxset="${1}" \
-                  || export vagrant_boxset='bento/ubuntu-22.04';
+# Functions: vagrant_appliance
+#            newline
+#            check_status
+#            vagrant_review
+#            vagrant_addbox
+#            vagrant_initbox
+#            patch_vagrantfile
+#            vagrant_deploy
+#            vagrant_config
+#            vagrant_access
+#            service_account
+#            sudoers_privileges
+#            transfer_credentials
+#            sudoers_autologin
+#            service_access
+#            config_section
+#            preinst_package
+#            postinst_package
+#            destroy_appliance
+#            vagrant_appliance
+#
+# vagrant-appliance.shell --help ;
+#
+# Required    --account           Service Account (username: devops)
+#             --boxset            Provide Vagrant cloud boxes
+#             --instance          Virtual Machine profile
+#             --password          Service Account (password: devops)
+#             --ssh-key           Profile SSH Access (Public Key)
+#
+# Optional    --cache             Deployment resources location
+#             --location          Virtual Machine Location
+#             --projects          Target Vagrant projects
+#             --shared            System Shared Content
+#             --example           Display script's execution options
+#             --wizard            Parse user-input to execute command
+#             --info              Project credits and online references
+#             --help              Show this help message and exits
+#
+# Usage:
+#
+# vagrant-appliance.shell --account="devops" \
+#                         --boxset="bento/ubuntu-22.04" \
+#                         --instance="ubuntu-22.04" \
+#                         --password="devops" \
+#                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+# ;
+#
+# vagrant-appliance.shell --account="devops" \
+#                         --boxset="bento/ubuntu-22.04" \
+#                         --instance="ubuntu-22.04" \
+#                         --password="devops" \
+#                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+#                         --cache="~/.local" \
+#                         --location="~/.vagrant.d/sources/ubuntu-22.04" \
+#                         --projects="~/.vagrant.d" \
+#                         --shared="~/.local/tmp/shared" \
+# ;
 
-export vagrant_cloudset="${vagrant_boxset%%\/*}";
-export vagrant_instance="${vagrant_boxset##*\/}";
+export script_file="$(pwd)/${0#*\/}";
+export script_name="$( basename ${script_file} )";
 
-## Default Service Account:
-[[ ${#2} -gt 0 ]] && export devops_account="${2}" \
-                  || export devops_account='devops';
-
-## DevNetOps framework credentials:
-[[ ${#3} -gt 0 ]] && export devops_sshkey="${3}" \
-                  || export devops_sshkey='devnetops.pub';
-
-## Virtual Machine hostname
-[[ ${#3} -gt 0 ]] && export virtual_machine="${4}" \
-                  || export virtual_machine='devops-console';
+export user_local="${HOME}/.local";
+mkdir -p "${user_local}";
 
 ## -----------------------------------------------------------------------------
-## Objective: Script & Environment Variables
+## Objective: System Pre-Requirements
 
-## SSH Access authorized keys:
-export authorized_keys="/home/${devops_account}/.ssh/authorized_keys";
-
-## Target Vagrant Home folder:
-export vagrant_projects="${HOME}/.vagrant.d";
-mkdir -p "${vagrant_projects}/sources";
-
-## Target Vagrant Instance Location:
-export vagrant_location="${vagrant_projects}/sources/${vagrant_instance}";
-mkdir -p "${vagrant_location}";
-
-## GitHub raw user content:
+## Description: Constructing GitHub URI (raw user content)
 export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
-## Temporary folder/container:
-export local_temp="${HOME}/.local/tmp";
-export vagrant_temp="${local_temp}/vagrant";
-export vagrant_shared="${vagrant_temp}/shared";
+export vagrant_platform='master/platforms/vagrant';
 
-## Constructing a Vagrant Shared folder to exchange content
-mkdir -p "${vagrant_shared}";
+## -----------------------------------------------------------------------------
+## Objective: Script & Environment Variables
 
 ## Events status counter:
 export counter=0;
@@ -74,6 +106,7 @@ function check_status () {
 ## -----------------------------------------------------------------------------
 ## Objective: Reviewing existing Vagrant Infrastructure
 function vagrant_review () {
+    local index=0;
     tree -a ${vagrant_projects};
     check_status $?;
     vagrant box list;
@@ -82,7 +115,7 @@ function vagrant_review () {
         vagrant box list | grep -F "${vagrant_boxset}"
       )";
     if [[ ${#existing} -gt 0 ]]; then
-      user_input="$((counter++)) = ${vagrant_boxset} was found. Destroy [N/y]: ";
+      user_input="$((index++)) = ${vagrant_boxset} was found. Destroy [N/y]: ";
       newline; read -t 15 -p "${user_input}" response;
       if [[ ${#response} -gt 0 ]]; then
               newline; read -t 30 -p "${user_input}" response;
@@ -180,7 +213,7 @@ function patch_vagrantfile () {
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
     cat -n ${vagrant_temp}/${patch_vagrantfile};
-    patch ${vagrant_location}/Vagrantfile < ${vagrant_temp}/patch-vagrantfile;
+    patch ${vagrant_location}/Vagrantfile < ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
     vagrant validate;
     check_status $?;
@@ -224,23 +257,23 @@ function vagrant_access () {
 ## Objective: Creating Service Account Script
 function service_account () {
     cd ${vagrant_location};
-    local script_name="service-account.shell";
-    local remote_resource="platforms/vagrant/${script_name}";
-    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    local script_filename="service-account.shell";
+    local remote_resource="platforms/vagrant/${script_filename}";
+    rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
-         --output ${vagrant_temp}/${script_name} \
+         --output ${vagrant_temp}/${script_filename} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+    while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
     check_status $?;
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                 ${vagrant_temp}/${script_name};
+                 ${vagrant_temp}/${script_filename};
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
     check_status $?;
     return 0;
   }; alias service-account='service_account';
@@ -283,7 +316,7 @@ function transfer_credentials () {
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
-    rm -v ${vagrant_temp}/shared/${devops_sshkey};
+    rm -v ${vagrant_shared}/${devops_sshkey};
     check_status $?;
     return 0;
   }; alias transfer-credentials='transfer_credentials';
@@ -331,7 +364,7 @@ function service_access () {
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
-    rm -v ${vagrant_temp}/shared/${devops_sshkey};
+    rm -v ${vagrant_shared}/${devops_sshkey};
     check_status $?;
     return 0;
   }; alias service-access='service_access';
@@ -361,19 +394,19 @@ function config_section () {
 ## Objective: Pre-Installing Core Packages
 function preinst_package () {
     cd ${vagrant_location};
-    local script_name="ubuntu-preinstall.shell";
-    local remote_resource="ubuntu/modules/${script_name}";
-    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    local script_filename="ubuntu-preinstall.shell";
+    local remote_resource="ubuntu/modules/${script_filename}";
+    rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
-         --output ${vagrant_temp}/${script_name} \
+         --output ${vagrant_temp}/${script_filename} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+    while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
     check_status $?;
     return 0;
   }; alias preinst-package='preinst_package';
@@ -382,19 +415,19 @@ function preinst_package () {
 ## Objective: Post-Installing Core Packages
 function postinst_package () {
     cd ${vagrant_location};
-    local script_name="ubuntu-postinstall.shell";
-    local remote_resource="ubuntu/modules/${script_name}";
-    rm -fv ${vagrant_temp}/${script_name} 2>/dev/null;
+    local script_filename="ubuntu-postinstall.shell";
+    local remote_resource="ubuntu/modules/${script_filename}";
+    rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
-         --output ${vagrant_temp}/${script_name} \
+         --output ${vagrant_temp}/${script_filename} \
          https://${github_content}/${github_repo}/master/${remote_resource};
     check_status $?;
-    while [[ ! -e ${vagrant_temp}/${script_name} ]]; do
+    while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
     done; echo -e;
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_name};
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
     check_status $?;
     return 0;
   }; alias postinst-package='postinst_package';
@@ -411,27 +444,126 @@ function destroy_appliance () {
 ## -----------------------------------------------------------------------------
 ## Objective: Deploy Vagrant Appliance
 function vagrant_appliance () {
-    mkdir -pv ${vagrant_shared};
-    vagrant_review;
-    vagrant_addbox;
-    vagrant_initbox;
-    patch_vagrantfile;
-    vagrant_deploy;
-    vagrant_config;
-    vagrant_access;
-    service_account;
-    sudoers_privileges;
-    transfer_credentials;
-    sudoers_autologin;
-    service_access;
-    config_section;
-    preinst_package;
-    postinst_package;
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
+      [[ ${1#*\--} = "boxset" ]] && local vagrant_boxset="${2}";
+      [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
+      [[ ${1#*\--} = "instance" ]] && local vagrant_instance="${2}";
+      [[ ${1#*\--} = "location" ]] && local vagrant_location="${2}";
+      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
+      [[ ${1#*\--} = "projects" ]] && local vagrant_projects="${2}";
+      [[ ${1#*\--} = "shared" ]] && local vagrant_shared="${2}";
+      [[ ${1#*\--} = "ssh-key" ]] && local devops_sshkey="${2}";
+      [[ ${1#*\--} = "help" ]] && local assistance='true';
+      [[ ${1#*\--} = "example" ]] && local example_mode='true';
+      [[ ${1#*\--} = "wizard" ]] && local wizard_mode='true';
+      [[ ${1#*\--} = "info" ]] && local info_mode='true';
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    ## Prividing operational assistance (helper)
+    if [[ ( ${assistance} == 'true' )   || \
+          ( ${example_mode} == 'true' ) || \
+          ( ${wizard_mode} == 'true' )  || \
+          ( ${info_mode} == 'true' )
+      ]]; then
+      ## JSON source and object:
+      local script_helper="${HOME}/.local/bin/script-helper.shell";
+      if [[ -e ${script_helper} ]]; then
+              source ${script_helper};
+              script_helper --caller="${script_file}" \
+                            --example=${example_mode} \
+                            --wizard=${wizard_mode} \
+                            --info=${info_mode} \
+              ;
+              return 6;
+        else  echo -e "\nWarning: Script Helper was not found ! \n";
+              return 7;
+      fi;
+    fi;
+    ## -------------------------------------------------------------------------
+    ## Objective: Default Appplication Parameters
+    ## Reference: https://app.vagrantup.com/boxes/search
+    [[ ${#vagrant_boxset} -eq 0 ]] && {
+        ## e.g.: bento/ubuntu-22.04
+        user_input="Source Vagrant Cloud: ";
+        newline; read -t 15 -p "${user_input}" response;
+        if [[ ${#response} -gt 0 ]]; then
+                export vagrant_boxset="$(
+                    echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                  )";
+          else  echo -e "\nWarning: Unable to continue! \n";
+                return 1;
+        fi;
+      };
+    export vagrant_cloudset="${vagrant_boxset%%\/*}";
+    export vagrant_instance="${vagrant_boxset##*\/}";
+    ## Default Service Account:
+    [[ ${#devops_account} -eq 0 ]] && export devops_account='devops';
+    ## DevNetOps framework credentials:
+    [[ ${#devops_sshkey} -eq 0 ]] && export devops_sshkey='devnetops.pub';
+    ## Virtual Machine hostname
+    [[ ${#virtual_machine} -eq 0 ]] && \
+       export virtual_machine="${vagrant_instance%\-*}-console";
+    ## -------------------------------------------------------------------------
+    ## Objective: System Operational Requirements
+    [[ ${#user_local} -eq 0 ]] && {
+        export user_local="${HOME}/.local";
+        mkdir -p "${user_local}";
+      };
+    ## Temporary folder/container:
+    export local_temp="${user_local}/tmp";
+    export vagrant_temp="${local_temp}/vagrant";
+    export vagrant_shared="${vagrant_temp}/shared";
+    ## Constructing a Vagrant Shared folder to exchange content
+    mkdir -p "${vagrant_shared}";
+    ## -------------------------------------------------------------------------
+    ## Objective: Script & Environment Variables
+    ## SSH Access authorized keys:
+    export authorized_keys="/home/${devops_account}/.ssh/authorized_keys";
+    ## Target Vagrant Home folder:
+    [[ ${#vagrant_projects} -eq 0 ]] && {
+        export vagrant_projects="${HOME}/.vagrant.d";
+        mkdir -p "${vagrant_projects}/sources";
+      };
+    ## Target Vagrant Instance Location:
+    export vagrant_location="${vagrant_projects}/sources/${vagrant_instance}";
+    mkdir -p "${vagrant_location}";
+    ## -------------------------------------------------------------------------
+    ## Objective: Initialization modules
+    vagrant_review;             ## Reviewing existing Vagrant Infrastructure
+    vagrant_addbox;             ## Adding Vagrant Box (e.g.: bento/ubuntu-22.04)
+    vagrant_initbox;            ## Initializing Vagrant Box (review)
+    ## -------------------------------------------------------------------------
+    ## Objective: Infrastructure Deployment modules
+    patch_vagrantfile;          ## Patching Vagrant Box (Vagrantfile)
+    vagrant_deploy;             ## Deploying Vagrant Box Appliance
+    ## -------------------------------------------------------------------------
+    ## Objective: Accessibility Configuration modules
+    vagrant_config;             ## Reviewing Vagrant Box Configuration
+    vagrant_access;             ## Validating Vagrant Box Credentials
+    ## -------------------------------------------------------------------------
+    ## Objective: User Account modules
+    service_account;            ## Creating Service Account Script
+    sudoers_privileges;         ## Configuring Sudoers Privileges
+    transfer_credentials;       ## Transferring Access Credentials
+    ## -------------------------------------------------------------------------
+    ## Objective: User Login modules
+    sudoers_autologin;          ## Configuring Auto-Login Capabilities
+    service_access;             ## Transferring SSH Access Credentials
+    ## -------------------------------------------------------------------------
+    ## Objective: Host Configuration modules
+    config_section;             ## Adding SSH Configuration Section
+    ## -------------------------------------------------------------------------
+    ## Objective: Guest Configuration modules
+    preinst_package;            ## Pre-Installing Core Packages
+    postinst_package;           ## Post-Installing Core Packages
     ## destroy_machine;
     return 0;
   }; alias vagrant-appliance='vagrant_appliance';
 
-vagrant_appliance;
+vagrant_appliance "${@}";
 
 ## Reviewing Remote Execution (vagrant)
 ## vagrant ssh -c "systemctl status ssh" 2>/dev/null;
