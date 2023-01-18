@@ -831,7 +831,7 @@ function virtualbox_appliance () {
         vboxmanage_interface --vm-name="${vm_name}" \
                              --ssh-key="${sshkey_access}";
         check_status;
-        ## Transfer SSH Access Key to guest
+        echo -e "\nNotice: Transferring SSH Access Key to Guest System ...";
         ssh-copy-id -i ${sshkey_access} \
                     -o StrictHostKeyChecking=no \
                     ${devops_account}@${vm_name};

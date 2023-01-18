@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Script: ubuntu-postinstall.shell
 
+function newline () { echo -e; return 0; };
+
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};
 
-echo -e "\n* Starting Framework Deployment ...\n" | tee -a "${postinstall_logfile}";
+echo -e "\nNotice: Starting Framework Deployment ...\n" | tee -a "${postinstall_logfile}";
 
 echo -e "\nNotice: Cloning GitHub Public Repository ...";
 git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems;
@@ -18,4 +20,4 @@ cd /tmp/devops-systems/ubuntu && ls -al ./packages.shell;
 echo -e "\nNotice: Executing Packages Installation ...";
 bash ./packages.shell --install | tee ./packages.log;
 
-echo -e "\n* Completed Framework Deployment! \n" | tee -a "${postinstall_logfile}";
+echo -e "\nNotice: Completed Framework Deployment! " | tee -a "${postinstall_logfile}";

@@ -1,10 +1,12 @@
 #!/usr/bin/env bash
 # Script: ubuntu-preinstall.shell
 
+function newline () { echo -e; return 0; };
+
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
-echo -e "\n* Starting Pre-Install ...\n" | tee -a "${preinstall_logfile}";
+echo -e "\nNotice: Starting Pre-Install ...\n" | tee -a "${preinstall_logfile}";
 
 echo -e "\nNotice: Installing and Configuring Git CLI ...";
 sudo apt install git --yes | tee -a "${preinstall_logfile}";
@@ -13,4 +15,4 @@ echo -e "\nNotice: Installing and Configuring additional packages ...";
 sudo apt install jq --yes | tee -a "${preinstall_logfile}";
 sudo apt install python-is-python3 --yes | tee -a "${preinstall_logfile}";
 
-echo -e "\n* Completed Pre-Install! \n" | tee -a "${preinstall_logfile}";
+echo -e "\nNotice: Completed Pre-Install! " | tee -a "${preinstall_logfile}";

@@ -8,7 +8,7 @@ function newline () { echo -e; return 0; };
 export privileges_logfile="/tmp/sudoers-privileges.log";
 cat /dev/null > ${privileges_logfile};
 
-echo -e "\n* Starting Sudoers Privileges ...\n" \
+echo -e "\nNotice: Starting Sudoers Privileges ...\n" \
 | tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account
@@ -32,9 +32,9 @@ fi;
 
 newline;
 
-echo -e "\Notice: Listing ${devops_account} file permissions! ";
+echo -e "\nNotice: Listing ${devops_account} file permissions! ";
 sudo ls -al /etc/sudoers.d/${devops_account}\
 | tee -a "${privileges_logfile}";
 
-echo -e "\n* Completed Sudoers Privileges! \n" \
+echo -e "\nNotice: Completed Sudoers Privileges! " \
 | tee -a "${privileges_logfile}";
