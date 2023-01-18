@@ -488,7 +488,7 @@ function postinst_packages () {
       echo -e '.'; sleep 1;
     done; echo -e;
     check_status $?;
-    ssh ${vm_name} -C 'bash -s' \
+    ssh ${vm_name} -C 'bash -' \
       < ${vbox_temp}/${script_filename} 2>/dev/null;
     check_status $?;
     return 0;
