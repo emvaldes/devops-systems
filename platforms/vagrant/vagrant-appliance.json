@@ -1,0 +1,122 @@
+{
+    "script": {
+        "headers": {
+            "interview": "Please, answer the following questions"
+        },
+        "required": [
+            "account",
+            "boxset",
+            "instance",
+            "password",
+            "ssh-key"
+        ],
+        "optional": [
+            "cache",
+            "location",
+            "projects",
+            "shared"
+        ],
+        "examples": [
+            [
+                "account",
+                "boxset",
+                "instance",
+                "password",
+                "ssh-key"
+            ],
+            [
+              "account",
+              "boxset",
+              "instance",
+              "password",
+              "ssh-key",
+              "cache",
+              "location",
+              "projects",
+              "shared"
+            ]
+        ],
+        "info": {
+            "service": {
+                "id": "github.com",
+                "domain": "emvaldes",
+                "repo": "devops-systems",
+                "path": "blob/master/platforms/vagrant/vagrant-appliance.shell"
+            },
+            "team": {
+                "id": "dcs",
+                "name": "DevOps & Cloud Services"
+            },
+            "devops": [
+                {
+                    "name": "Eduardo Valdes",
+                    "email": "emvaldes@hotmail.com"
+                }
+            ]
+        }
+    },
+    "params": {
+        "account": {
+            "value": "devops",
+            "query": "Service Account Username",
+            "message": "Service Account (username: devops)"
+        },
+        "boxset": {
+            "value": "bento/ubuntu-22.04",
+            "query": "Vagrant Cloud Box",
+            "message": "Provide Vagrant cloud boxes"
+        },
+        "cache": {
+            "value": "~/.local",
+            "query": "Local Cache location",
+            "message": "Deployment resources location"
+        },
+        "instance": {
+            "value": "ubuntu-22.04",
+            "query": "Virtual Machine Profile",
+            "message": "Virtual Machine profile"
+        },
+        "location": {
+            "value": "~/.vagrant.d/sources/ubuntu-22.04",
+            "query": "Virtual Machine Location",
+            "message": "Virtual Machine Location"
+        },
+        "password": {
+            "value": "devops",
+            "query": "Service Account Password",
+            "message": "Service Account (password: devops)"
+        },
+        "projects": {
+            "value": "~/.vagrant.d",
+            "query": "Target Vagrant Projects",
+            "message": "Target Vagrant projects"
+        },
+        "shared": {
+            "value": "~/.local/tmp/shared",
+            "query": "System Shared Content",
+            "message": "System Shared Content"
+        },
+        "ssh-key": {
+            "value": "${HOME}/.ssh/id_rsa.pub",
+            "query": "SSH Access Public Key",
+            "message": "Profile SSH Access (Public Key)"
+        },
+        "verbose": {
+            "message": "Enabling output's verbosity"
+        }
+    },
+    "helper": {
+        "help": {
+            "message": "Show this help message and exits"
+        },
+        "info": {
+            "message": "Project credits and online references"
+        },
+        "example": {
+            "message": "Display script's execution options"
+        },
+        "wizard": {
+            "message": "Parse user-input to execute command"
+        }
+    }
+}
