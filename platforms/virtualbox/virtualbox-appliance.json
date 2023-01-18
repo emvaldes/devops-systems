@@ -13,8 +13,10 @@
             "configure",
             "create",
             "delete",
+            "deploy",
             "install",
             "iso-file",
+            "packages",
             "provision",
             "patch",
             "start",
@@ -28,7 +30,7 @@
                 "password",
                 "ssh-key",
                 "provision",
-                "install",
+                "deploy",
                 "patch",
                 "start"
             ],
@@ -37,6 +39,7 @@
                 "account",
                 "password",
                 "ssh-key",
+                "install",
                 "configure"
             ]
         ],
@@ -82,14 +85,22 @@
             "query": "Destroy VBox Appliance",
             "message": "Shutdown & Destroy VBox appliance"
         },
-        "install": {
-            "query": "Auto-Install Packages",
+        "deploy": {
+            "query": "Deploy Infrastructure",
             "message": "Generate Auto-Install (unattended)"
+        },
+        "install": {
+            "query": "Install Default Packages",
+            "message": "Install Default DevOps Packages"
         },
         "iso-file": {
             "value": "ubuntu-22.04.1-desktop-amd64.iso",
             "query": "Installation ISO file location",
             "message": "Installation ISO file location"
+        },
+        "packages": {
+            "query": "Install Custom Packages",
+            "message": "Install Custom DevOps Packages"
         },
         "password": {
             "value": "devops",
