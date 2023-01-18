@@ -25,15 +25,15 @@
                 "ssh-key"
             ],
             [
-              "account",
-              "boxset",
-              "instance",
-              "password",
-              "ssh-key",
-              "cache",
-              "location",
-              "projects",
-              "shared"
+                "account",
+                "boxset",
+                "instance",
+                "password",
+                "ssh-key",
+                "cache",
+                "location",
+                "projects",
+                "shared"
             ]
         ],
         "info": {
