@@ -9,6 +9,8 @@
             "password"
         ],
         "optional": [
+            "appliance",
+            "cache",
             "configure",
             "create",
             "delete",
@@ -16,17 +18,18 @@
             "install",
             "iso-file",
             "packages",
-            "provision",
             "patch",
-            "start",
-            "virtualbox"
+            "projects",
+            "provision",
+            "ssh-key",
+            "start"
         ],
         "examples": [
             [
                 "vm-name",
-                "iso-file",
                 "account",
                 "password",
+                "iso-file",
                 "provision",
                 "deploy",
                 "patch",
@@ -76,6 +79,20 @@
             "query": "Service Account Username",
             "message": "Service Account (username: devops)"
         },
+        "password": {
+            "value": "devops",
+            "query": "Service Account Password",
+            "message": "Service Account (password: devops)"
+        },
+        "appliance": {
+            "query": "Virtual Machine name",
+            "message": "Virtual Machine name"
+        },
+        "cache": {
+            "value": "~/.local",
+            "query": "Local Cache location",
+            "message": "Deployment resources location"
+        },
         "configure": {
             "query": "Configure Appliance",
             "message": "Deploy Configuration Management"
@@ -106,17 +123,17 @@
             "query": "Install Custom Packages",
             "message": "Install Custom DevOps Packages"
         },
-        "password": {
-            "value": "devops",
-            "query": "Service Account Password",
-            "message": "Service Account (password: devops)"
-        },
         "patch": {
             "query": "Patch Unattended Installation",
             "message": "Patching Unattended installation"
         },
+        "projects": {
+            "value": "${HOME}/.virtualization/virtualbox",
+            "query": "Provide VBox projects location",
+            "message": "Provide VBox projects location"
+        },
         "provision": {
-            "query": "",
+            "query": "Provision Infrastructure",
             "message": "Infrastructure Provisioning (IaC)"
         },
         "ssh-key": {
@@ -127,11 +144,6 @@
         "start": {
             "query": "Launch VBox Appliance",
             "message": "Requesting to launch VBox Appliance"
-        },
-        "virtualbox": {
-            "value": "${HOME}/.virtualization/virtualbox",
-            "query": "Provide VBox projects location",
-            "message": "Provide VBox projects location"
         },
         "verbose": {
             "message": "Enabling output's verbosity"
