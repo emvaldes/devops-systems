@@ -81,6 +81,11 @@
             "query": "Virtual Machine Location",
             "message": "Virtual Machine Location"
         },
+        "packages": {
+            "value": "/tmp/packages.list",
+            "query": "Install Custom Packages",
+            "message": "Install Custom DevOps Packages"
+        },
         "password": {
             "value": "devops",
             "query": "Service Account Password",
