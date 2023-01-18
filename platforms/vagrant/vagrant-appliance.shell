@@ -1,25 +1,24 @@
 #!/usr/bin/env bash
 
 # Functions: vagrant_appliance
-#            newline
 #            check_status
-#            vagrant_review
-#            vagrant_addbox
-#            vagrant_initbox
+#            config_section
+#            destroy_appliance
+#            newline
 #            patch_vagrantfile
-#            vagrant_deploy
-#            vagrant_config
-#            vagrant_access
+#            postinst_packages
+#            preinst_packages
+#            service_access
 #            service_account
+#            sudoers_autologin
 #            sudoers_privileges
 #            transfer_credentials
-#            sudoers_autologin
-#            service_access
-#            config_section
-#            preinst_packages
-#            postinst_packages
-#            destroy_appliance
-#            vagrant_appliance
+#            vagrant_access
+#            vagrant_addbox
+#            vagrant_config
+#            vagrant_deploy
+#            vagrant_initbox
+#            vagrant_review
 #
 # vagrant-appliance.shell --help ;
 #

@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 
 # Functions: virtualbox_appliance
-#            newline
 #            chedck_status
-#            vboxmanage_storage
+#            newline
+#            postinst_packages
+#            preinst_packages
+#            sudoers_autologin
+#            sudoers_privileges
 #            vboxmanage_configvm
+#            vboxmanage_interface
 #            vboxmanage_multimedia
 #            vboxmanage_networking
-#            sudoers_privileges
-#            sudoers_autologin
-#            validate_hostname
+#            vboxmanage_storage
 #
 # virtualbox-appliance.shell --help ;
 #
@@ -837,7 +839,7 @@ function virtualbox_appliance () {
         ssh ${vm_name} -C 'sudo systemctl status ssh';
         check_status;
         echo -e "\Warning: Disabling Service Account password! ";
-        ssh ${vm_name} -C "ssh sudo passwd -d ${devops_account}";
+        ssh ${vm_name} -C "ssh sudo passwd --delete ${devops_account}";
         check_status;
       };
     [[ ${install_packages} == 'true' ]] && {
