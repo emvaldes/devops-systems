@@ -353,6 +353,102 @@ function vboxmanage_networking () {
   }; alias vboxmanage-networking='vboxmanage_networking';
 
 ## -----------------------------------------------------------------------------
+function vboxmanage_interface () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
+      [[ ${1#*\--} = "interface" ]] && local interface="${2}";
+      [[ ${1#*\--} = "hostname" ]] && local hostname="${2}";
+      [[ ${1#*\--} = "ssh-key" ]] && local sshkey_access="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    ## Define custom-parameter(s):
+    [[ ${#vm_name} -eq 0 ]] && {
+        echo -e "\nWarning: Missing VirtualBox Appliance Name! ";
+        return 5;
+      };
+    [[ ${#interface} -eq 0 ]] && local interface="Bridged";
+    [[ ${#hostname} -eq 0 ]] && local hostname="${appliance}";
+    ## Identifying the VirtualBox Instance's IP Address
+    declare -a showvminfo=($(
+        VBoxManage showvminfo --details ${vm_name} \
+        | grep bridged \
+        | sed -e "s|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\)\(.*\)\('\,.*\)$|\3\n\5|"
+      ));
+    local bridged_macaddr="$(
+        echo -e "${showvminfo[0]}" \
+           | fold -w2 \
+           | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
+           | sed -e 's|\:$||'
+      )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
+    local bridged_interface="${showvminfo[1]%\:*}";
+    local localnet="${HOME}/.localnet";
+    echo -e "\nExecuting ARP Scanning ... -> ${localnet} : ";
+    ## Required to avoid any manual scanning
+    sudo arp-scan --localnet | tee ${localnet};
+    declare -a listed=($(
+        egrep "${bridged_macaddr}" ${localnet} \
+        | sed -e "s|${bridged_macaddr}|${vm_name}|" \
+        | tr '\t' '*' | awk -F'*' '{print $1"\n"$2"\n"$3}'
+      ));
+    # for each in ${listed[@]}; do echo -e "${each}"; done;
+    local ipaddr="${listed[0]}";
+    local device="${listed[2]}";
+    ## System Configuration files
+    local etc_hosts="/etc/hosts";
+    local ssh_config="${HOME}/.ssh/config";
+    local known_hosts="${HOME}/.ssh/known_hosts";
+    ## Processing valid IP Address
+    if [[ ${#ipaddr} -gt 0 ]]; then
+      ## Right-Padding IP Address
+      local xipaddr="$( printf "% -20s" ${ipaddr})";
+      local custom_message=" Record in ${etc_hosts} file! ";
+      if [[ $( egrep -c " ${vm_name} " ${etc_hosts} ) -gt 0 ]]; then
+              echo -e "\nWarning: Updating ${custom_message}";
+              sudo sed -i '' \
+              "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${vm_name}.*\)$|${xipaddr}\3|" \
+              "${etc_hosts}";
+        else  echo -e "\nNotice: Appending ${custom_message}";
+              echo -e "\n${xipaddr}${vm_name}" \
+                 | sudo tee -a "${etc_hosts}";
+      fi;
+      local custom_message=" Record in ${ssh_config} file! ";
+      if [[ $( egrep -c "Host ${vm_name}" ${ssh_config} ) -eq 0 ]]; then
+              echo -e "\nUpdating ${custom_message}";
+              declare -a config_block=();
+              config_block+=("\nHost ${vm_name}");
+              config_block+=("  AddKeysToAgent yes");
+              config_block+=("  HostName ${ipaddress}");
+              config_block+=("  User devops");
+              config_block+=("  StrictHostKeyChecking no");
+              config_block+=("  IdentityFile ${sshkey_access}");
+              for each in ${config_block[@]}; do
+                echo -e "${each}" >> ${ssh_config};
+              done;
+        else  ## Updating configuration block
+              echo -e "\nUpdating ${custom_message}";
+              local header="Host ${vm_name}";
+              local footer="IdentityFile .*";
+              sed -i '' \
+                  "/${header}/,/${footer}/s/\(^.*HostName \)\(.*\)$/\1${ipaddr}/" \
+                  ${ssh_config};
+      fi;
+      ## Listing SSH Configuration block
+      egrep --fixed-strings \
+            --before-context=1 \
+            --after-context=6 \
+            "Host ${vm_name}" ${ssh_config};
+    fi;
+    ## Removing/Purging host's legacy entries
+    sed -i '' /^$(
+        grep 'ubuntu-desktop' ${etc_hosts} | cut -d' ' -f1
+      ).*/d ${known_hosts} ;
+    IFS="${oIFS}";
+    return 0;
+  }; alias vboxmanage-interface='vboxmanage_interface';
+
+## -----------------------------------------------------------------------------
 ## Objective: Configuring Sudoers Privileges
 function sudoers_privileges () {
     ## Enabling Passwordless Access
@@ -477,82 +573,6 @@ function postinst_packages () {
     check_status $?;
     return 0;
   }; alias postinst-packages='postinst_packages';
-
-## -----------------------------------------------------------------------------
-function vboxmanage_interface () {
-    local oIFS="${IFS}";
-    for xitem in "${@}"; do
-      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
-      [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
-      [[ ${1#*\--} = "interface" ]] && local interface="${2}";
-      [[ ${1#*\--} = "hostname" ]] && local hostname="${2}";
-      [[ ${1#*\--} = "ssh-key" ]] && local sshkey_access="${2}";
-    done; IFS="${oIFS}";
-    local oIFS="${IFS}"; IFS=$'\n';
-    ## Define custom-parameter(s):
-    [[ ${#vm_name} -eq 0 ]] && {
-        echo -e "\nWarning: Missing VirtualBox Appliance Name! ";
-        return 5;
-      };
-    [[ ${#interface} -eq 0 ]] && local interface="Bridged";
-    [[ ${#hostname} -eq 0 ]] && local hostname="${appliance}";
-    ## Identifying the VirtualBox Instance's IP Address
-    declare -a showvminfo=($(
-        VBoxManage showvminfo --details ${vm_name} \
-        | grep bridged \
-        | sed -e "s|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\)\(.*\)\('\,.*\)$|\3\n\5|"
-      ));
-    local bridged_macaddr="$(
-        echo -e "${showvminfo[0]}" \
-           | fold -w2 \
-           | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
-           | sed -e 's|\:$||'
-      )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
-    local bridged_interface="${showvminfo[1]%\:*}";
-    declare -a listed=($(
-        ## Required to avoid any manual scanning
-        sudo arp-scan --localnet \
-        | egrep "${bridged_macaddr}" \
-        | sed -e "s|${bridged_macaddr}|${vm_name}|" \
-        | tr '\t' '*' | awk -F'*' '{print $1"\n"$2"\n"$3}'
-      ));
-    # for each in ${listed[@]}; do echo -e "${each}"; done;
-    ipaddr="${listed[0]}";
-    device="${listed[2]}";
-    if [[ ${#ipaddr} -gt 0 ]]; then
-      ## Right-Padding IP Address
-      xipaddr="$( printf "% -20s" ${ipaddr})";
-      etc_hosts="/etc/hosts";
-      if [[ $( egrep -c " ${vm_name} " ${etc_hosts} ) -gt 0 ]]; then
-              sudo sed -i '' \
-              "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${vm_name}.*\)$|${xipaddr}\3|" \
-              "${etc_hosts}";
-        else  echo -e "\n${xipaddr}${vm_name}" \
-                 | sudo tee -a "${etc_hosts}";
-      fi;
-      ssh_config="${HOME}/.ssh/config";
-      if [[ $( egrep -c "Host ${vm_name}" ${ssh_config} ) -eq 0 ]]; then
-              declare -a config_block=();
-              config_block+=("\nHost ${vm_name}");
-              config_block+=("  AddKeysToAgent yes");
-              config_block+=("  HostName ${ipaddress}");
-              config_block+=("  User devops");
-              config_block+=("  StrictHostKeyChecking no");
-              config_block+=("  IdentityFile ${sshkey_access}");
-              for each in ${config_block[@]}; do
-                echo -e "${each}" >> ${ssh_config};
-              done;
-        else  ## Updating configuration block
-              local header="Host ${vm_name}";
-              local footer="IdentityFile .*";
-              sed -i '' \
-                  "/${header}/,/${footer}/s/\(^.*HostName \)\(.*\)$/\1${ipaddr}/" \
-                  ${ssh_config};
-      fi;
-    fi;
-    IFS="${oIFS}";
-    return 0;
-  }; alias vboxmanage-interface='vboxmanage_interface';
 
 ## -----------------------------------------------------------------------------
 function virtualbox_appliance () {
@@ -777,7 +797,9 @@ function virtualbox_appliance () {
                       sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                                 ${vbox_temp}/${patch_template};
                       check_status;
-                      egrep -B10 -A10 \
+                      egrep --fixed-strings \
+                            --before-context=10 \
+                            --after-context=10 \
                       "d-i passwd/user-default-groups string ${devops_account}" \
                       ${vbox_temp}/${patch_template};
                       check_status;
@@ -785,7 +807,9 @@ function virtualbox_appliance () {
                       patch ${vm_location}/Unattended-*-${target} \
                           < ${vbox_temp}/${patch_template};
                       check_status;
-                      egrep -B10 -A10 \
+                      egrep --fixed-strings \
+                            --before-context=10 \
+                            --after-context=10 \
                       "log_command_in_target apt-get -y install openssh-server" \
                       ${vm_location}/Unattended-*-${target};
                       check_status;
@@ -811,6 +835,9 @@ function virtualbox_appliance () {
         check_status;
         ## Remote SSH Access
         ssh ${vm_name} -C 'sudo systemctl status ssh';
+        check_status;
+        echo -e "\Warning: Disabling Service Account password! ";
+        ssh ${vm_name} -C "ssh sudo passwd -d ${devops_account}";
         check_status;
       };
     [[ ${install_packages} == 'true' ]] && {
