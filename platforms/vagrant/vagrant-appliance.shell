@@ -450,10 +450,12 @@ function vagrant_appliance () {
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
+      [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "boxset" ]] && local vagrant_boxset="${2}";
       [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
       [[ ${1#*\--} = "instance" ]] && local vagrant_instance="${2}";
       [[ ${1#*\--} = "location" ]] && local vagrant_location="${2}";
+      [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "projects" ]] && local vagrant_projects="${2}";
       [[ ${1#*\--} = "shared" ]] && local vagrant_shared="${2}";
