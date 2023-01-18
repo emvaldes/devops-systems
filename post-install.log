@@ -2,7 +2,7 @@ To run a command as administrator (user "root"), use "sudo <command>".
 See "man sudo_root" for details.
 
 $ sudo apt install openssh-server --yes ;
-[sudo] password for devops: 
+[sudo] password for devops:
 
 Reading package lists... Done
 Building dependency tree... Done
@@ -23,7 +23,7 @@ Get:1 http://us.archive.ubuntu.com/ubuntu jammy/main amd64 openssh-sftp-server a
 Get:2 http://us.archive.ubuntu.com/ubuntu jammy/main amd64 openssh-server amd64 1:8.9p1-3 [434 kB]
 Get:3 http://us.archive.ubuntu.com/ubuntu jammy/main amd64 ncurses-term all 6.3-2 [267 kB]
 Get:4 http://us.archive.ubuntu.com/ubuntu jammy/main amd64 ssh-import-id all 5.11-0ubuntu1 [10.1 kB]
-Fetched 751 kB in 2s (317 kB/s)     
+Fetched 751 kB in 2s (317 kB/s)
 Preconfiguring packages ...
 Selecting previously unselected package openssh-sftp-server.
 (Reading database ... 201744 files and directories currently installed.)
@@ -61,7 +61,7 @@ $ sudo systemctl enable ssh ;
 Synchronizing state of ssh.service with SysV service script with /lib/systemd/systemd-sysv-install.
 Executing: /lib/systemd/systemd-sysv-install enable ssh
 
-$ sudo systemctl status ssh ;
+$ sudo systemctl status ssh 2>/dev/null;
 
 ● ssh.service - OpenBSD Secure Shell server
      Loaded: loaded (/lib/systemd/system/ssh.service; enabled; vendor preset: enabled)
@@ -94,7 +94,7 @@ The following NEW packages will be installed:
 Need to get 11.7 kB of archives.
 After this operation, 35.8 kB of additional disk space will be used.
 Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
-Fetched 11.7 kB in 1s (17.0 kB/s)  
+Fetched 11.7 kB in 1s (17.0 kB/s)
 Selecting previously unselected package sshpass.
 (Reading database ... 204620 files and directories currently installed.)
 Preparing to unpack .../sshpass_1.09-1_amd64.deb ...
@@ -191,7 +191,7 @@ The following NEW packages will be installed:
 Need to get 204 kB of archives.
 After this operation, 819 kB of additional disk space will be used.
 Get:1 http://us.archive.ubuntu.com/ubuntu jammy/main amd64 net-tools amd64 1.60+git20181103.0eebece-1ubuntu5 [204 kB]
-Fetched 204 kB in 1s (220 kB/s)   
+Fetched 204 kB in 1s (220 kB/s)
 Selecting previously unselected package net-tools.
 (Reading database ... 204610 files and directories currently installed.)
 Preparing to unpack .../net-tools_1.60+git20181103.0eebece-1ubuntu5_amd64.deb ...
