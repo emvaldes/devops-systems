@@ -21,8 +21,10 @@
 # Optional    --configure         Deploy Configuration Management
 #             --create            Create VBox appliance (hardware only)
 #             --delete            Shutdown & Destroy VBox appliance
-#             --install           Generate Auto-Install (unattended)
+#             --deploy            Generate Auto-Install (unattended)
+#             --install           Install Default DevOps Packages
 #             --iso-file          Installation ISO file location
+#             --packages          Install Custom DevOps Packages
 #             --provision         Infrastructure Provisioning (IaC)
 #             --patch             Patching Unattended installation
 #             --start             Requesting to launch VBox Appliance
@@ -40,7 +42,7 @@
 #                            --password="devops" \
 #                            --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 #                            --provision \
-#                            --install \
+#                            --deploy \
 #                            --patch \
 #                            --start \
 # ;
@@ -49,6 +51,7 @@
 #                            --account="devops" \
 #                            --password="devops" \
 #                            --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+#                            --install \
 #                            --configure \
 # ;
 
@@ -447,6 +450,48 @@ function sudoers_autologin () {
   }; alias sudoers-autologin='sudoers_autologin';
 
 ## -----------------------------------------------------------------------------
+## Objective: Pre-Installing Core Packages
+function preinst_packages () {
+    local script_filename="ubuntu-preinstall.shell";
+    local remote_resource="ubuntu/modules/${script_filename}";
+    rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
+    # check_status $?;
+    curl --silent \
+         --output ${vbox_temp}/${script_filename} \
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ssh ${vm_name} -C 'bash -s' \
+      < ${vbox_temp}/${script_filename} 2>/dev/null;
+    check_status $?;
+    return 0;
+  }; alias preinst-packages='preinst_packages';
+
+## -----------------------------------------------------------------------------
+## Objective: Post-Installing Core Packages
+function postinst_packages () {
+    local script_filename="ubuntu-postinstall.shell";
+    local remote_resource="ubuntu/modules/${script_filename}";
+    rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
+    # check_status $?;
+    curl --silent \
+         --output ${vbox_temp}/${script_filename} \
+         https://${github_content}/${github_repo}/master/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ssh ${vm_name} -C 'bash -s' \
+      < ${vbox_temp}/${script_filename} 2>/dev/null;
+    check_status $?;
+    return 0;
+  }; alias postinst-packages='postinst_packages';
+
+## -----------------------------------------------------------------------------
 function vboxmanage_interface () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -528,12 +573,14 @@ function virtualbox_appliance () {
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
-      [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
       [[ ${1#*\--} = "configure" ]] && local configuration='true';
       [[ ${1#*\--} = "create" ]] && local create_machine='true';
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
-      [[ ${1#*\--} = "install" ]] && local unattended_install='true';
+      [[ ${1#*\--} = "deploy" ]] && local unattended_install='true';
+      [[ ${1#*\--} = "install" ]] && local install_packages='true';
+      [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
+      [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
       [[ ${1#*\--} = "provision" ]] && local provisioning='true';
@@ -689,6 +736,8 @@ function virtualbox_appliance () {
                  --language="en" \
         ;
         check_status;
+        ## Pre-Configuring patching files
+        local patch_files='true';
         [[ ${patch_files} == 'true' ]] && {
             declare -a targets=(
                 preseed.cfg
@@ -749,6 +798,13 @@ function virtualbox_appliance () {
         check_status;
         ## Remote SSH Access
         ssh ${vm_name} -C 'sudo systemctl status ssh';
+        check_status;
+      };
+    [[ ${install_packages} == 'true' ]] && {
+        ## Installing DevOps Packages.
+        preinst_packages;
+        check_status;
+        postinst_packages;
         check_status;
       };
     [[ ${start_machine} == 'true' ]] && {
