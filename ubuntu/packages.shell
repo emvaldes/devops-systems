@@ -142,6 +142,10 @@ function packages_ubuntu () {
                    apt list --installed ${package} 2>/dev/null \
                    | egrep -v "Listing... Done" | egrep -w "^${package}.*"
                  )";
+
+echo -e "$( printf '*%.0s' {1..100} )";
+echo -e "Package Status: ${package_status}";
+
                status=$?; ;;
         snap ) package_status="$(
                   snap list ${package} | egrep -w "^${package}.*"
@@ -172,7 +176,12 @@ function packages_ubuntu () {
                 ## Installing package depending on its manager (APT, SNAP)
                 status=;
                 case "${installer}" in
-                   apt ) sudo apt install ${package} --yes \
+                   apt )
+
+                         echo -e "$( printf '*%.0s' {1..100} )";
+                         echo -e "Installing ${package} now!";
+
+                         sudo apt install ${package} --yes \
                               | tee "${installed_tools}/${package}.log";
                          status=$?; ;;
                   snap ) sudo snap install ${package} ${installer/snap /} \
@@ -185,7 +194,12 @@ function packages_ubuntu () {
               ## Collecting Package Details (Specs)
               status=;
               case "${installer}" in
-                 apt ) package_status="$(
+                 apt )
+
+                       echo -e "$( printf '*%.0s' {1..100} )";
+                       echo -e "Listing Installed: ${package}";
+
+                       package_status="$(
                            apt list --installed ${package} 2>/dev/null \
                            | egrep -v "Listing... Done" | egrep -w "^${package}.*"
                          )";
@@ -200,7 +214,12 @@ function packages_ubuntu () {
         else  ## Identify Package Upgrade Capabilities
               status=;
               case "${installer}" in
-                 apt ) ## Upgrading package only if it's already installed.
+                 apt )
+
+                       echo -e "$( printf '*%.0s' {1..100} )";
+                       echo -e "Upgrading Package: ${package}";
+
+                       ## Upgrading package only if it's already installed.
                        sudo apt-get --only-upgrade install ${package} --yes 2>/dev/null ;
                        status=$?; ;;
                 snap ) status=$?; ;;
@@ -243,7 +262,12 @@ function packages_ubuntu () {
         echo -e "--------------------------------------------------------------------------------\n";
         # echo -e "${package}" >> ${installed};
         case "${installer}" in
-           apt ) ## Processing APT-Installed Packages:
+           apt )
+
+                 echo -e "$( printf '*%.0s' {1..100} )";
+                 echo -e "Installed Package: ${package}";
+
+                 ## Processing APT-Installed Packages:
                  export2json --package="${package}" \
                              --location="${xpath}";
                  ;;
