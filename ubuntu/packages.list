@@ -24,22 +24,22 @@ declare -a postinstalled=(
     python-is-python3
   );
 
-declare -a awscloud=(
-    awscli
-    aws-iam-authenticator
-    saml2aws
-  );
-
-declare -a hashicorp=(
-    boundary
-    consul
-    nomad
-    packer
-    terraform
-    vagrant
-    vault
-    waypoint
-  );
+# declare -a awscloud=(
+#     awscli
+#     aws-iam-authenticator
+#     saml2aws
+#   );
+#
+# declare -a hashicorp=(
+#     boundary
+#     consul
+#     nomad
+#     packer
+#     terraform
+#     vagrant
+#     vault
+#     waypoint
+#   );
 
 ## Disabling until SNAP is integrated.
 ## "atom:snap --classic"
