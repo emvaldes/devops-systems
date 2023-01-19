@@ -393,17 +393,17 @@ function config_section () {
     cd ${vagrant_location};
     local private_sshkey="${devops_sshkey/.pub/}";
     ## Purging configuration block if it already exists
-    local section_header="/Host vagrant--${vagrant_instance}";
+    local section_header="/Host ${virtual_machine}";
     sed -i '' "${section_header}/,/LogLevel FATAL/d" ${HOME}/.ssh/config;
     sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config;
     check_status $?;
     vagrant ssh-config \
-          | sed -e "s|Host default|Host vagrant--${vagrant_instance}|g" \
+          | sed -e "s|Host default|Host ${virtual_machine}|g" \
                 -e "s|\(User \)\(.*\)|\1${devops_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
     >> ${HOME}/.ssh/config;
     check_status $?;
-    egrep -A12 "^Host vagrant--${vagrant_instance}" ${HOME}/.ssh/config;
+    egrep -A12 "^Host ${virtual_machine}" ${HOME}/.ssh/config;
     check_status $?;
     return 0;
   }; alias config-section='config_section';
@@ -469,7 +469,6 @@ function vagrant_appliance () {
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "boxset" ]] && local vagrant_boxset="${2}";
-      [[ ${1#*\--} = "instance" ]] && local vagrant_instance="${2}";
       [[ ${1#*\--} = "ssh-key" ]] && local devops_sshkey="${2}";
       ## Optional Parameters:
       [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
@@ -526,13 +525,13 @@ function vagrant_appliance () {
       };
     export vagrant_cloudset="${vagrant_boxset%%\/*}";
     export vagrant_instance="${vagrant_boxset##*\/}";
+    ## Virtual Machine hostname
+    [[ ${#virtual_machine} -eq 0 ]] && \
+       export virtual_machine="${vagrant_instance%\-*}-${timestamp}";
     ## Default Service Account:
     [[ ${#devops_account} -eq 0 ]] && export devops_account='devops';
     ## DevNetOps framework credentials:
     [[ ${#devops_sshkey} -eq 0 ]] && export devops_sshkey="${HOME}/.ssh/id_rsa.pub";
-    ## Virtual Machine hostname
-    [[ ${#virtual_machine} -eq 0 ]] && \
-       export virtual_machine="${vagrant_instance%\-*}-console";
     ## -------------------------------------------------------------------------
     ## Objective: System Operational Requirements
     [[ ${#user_local} -eq 0 ]] && {
@@ -552,10 +551,10 @@ function vagrant_appliance () {
     ## Target Vagrant Home folder:
     [[ ${#vagrant_projects} -eq 0 ]] && {
         export vagrant_projects="${HOME}/.vagrant.d";
-        mkdir -p "${vagrant_projects}/sources";
       };
+    export vagrant_sources="${vagrant_projects}/sources";
     ## Target Vagrant Instance Location:
-    export vagrant_location="${vagrant_projects}/sources/${vagrant_instance}";
+    export vagrant_location="${vagrant_sources}/${vagrant_instance}/${virtual_machine}";
     mkdir -p "${vagrant_location}";
     ## -------------------------------------------------------------------------
     ## Objective: Initialization modules
