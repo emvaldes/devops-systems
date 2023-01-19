@@ -6,7 +6,8 @@
         "required": [
             "vm-name",
             "account",
-            "password"
+            "password",
+            "secret"
         ],
         "optional": [
             "appliance",
@@ -28,7 +29,7 @@
             [
                 "vm-name",
                 "account",
-                "password",
+                "secret",
                 "iso-file",
                 "provision",
                 "deploy",
@@ -38,7 +39,7 @@
             [
                 "vm-name",
                 "account",
-                "password",
+                "secret",
                 "ssh-key",
                 "configure",
                 "install"
@@ -81,6 +82,11 @@
         },
         "password": {
             "value": "devops",
+            "query": "Service Account Password",
+            "message": "Service Account (password: devops)"
+        },
+        "secret": {
+            "value": "~/.devops.secret",
             "query": "Service Account Password",
             "message": "Service Account (password: devops)"
         },
