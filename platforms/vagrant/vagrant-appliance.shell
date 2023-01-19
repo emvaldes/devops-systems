@@ -73,6 +73,7 @@ export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
 export vagrant_platform='master/platforms/vagrant';
+export ubuntu_modules='ubuntu/modules';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
@@ -181,12 +182,12 @@ function vagrant_initbox () {
 function patch_vagrantfile () {
     cd ${vagrant_location};
     local patch_vagrantfile="patch-vagrantfile";
-    local remote_resource="platforms/vagrant/${patch_vagrantfile}";
+    local remote_resource="${vagrant_platform}/${patch_vagrantfile}";
     rm -fv ${vagrant_temp}/${patch_vagrantfile} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${patch_vagrantfile} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${patch_vagrantfile} ]]; do
       echo -e '.'; sleep 1;
@@ -261,12 +262,12 @@ function vagrant_access () {
 function service_account () {
     cd ${vagrant_location};
     local script_filename="service-account.shell";
-    local remote_resource="platforms/vagrant/${script_filename}";
+    local remote_resource="${vagrant_platform}/${script_filename}";
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_filename} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
@@ -286,12 +287,12 @@ function service_account () {
 function sudoers_privileges () {
     cd ${vagrant_location};
     local privileges_script="sudoers-privileges.shell";
-    local remote_resource="ubuntu/modules/${privileges_script}";
+    local remote_resource="${ubuntu_modules}/${privileges_script}";
     rm -fv ${vagrant_temp}/${privileges_script} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${privileges_script} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${privileges_script} ]]; do
       echo -e '.'; sleep 1;
@@ -330,12 +331,12 @@ function transfer_credentials () {
 function sudoers_autologin () {
     cd ${vagrant_location};
     local autologin_script="sudoers-autologin.shell";
-    local remote_resource="ubuntu/modules/${autologin_script}";
+    local remote_resource="${ubuntu_modules}/${autologin_script}";
     rm -fv ${vagrant_temp}/${autologin_script} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${autologin_script} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${autologin_script} ]]; do
       echo -e '.'; sleep 1;
@@ -400,12 +401,12 @@ function config_section () {
 function preinst_packages () {
     cd ${vagrant_location};
     local script_filename="ubuntu-preinstall.shell";
-    local remote_resource="ubuntu/modules/${script_filename}";
+    local remote_resource="${ubuntu_modules}/${script_filename}";
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_filename} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
@@ -421,12 +422,12 @@ function preinst_packages () {
 function postinst_packages () {
     cd ${vagrant_location};
     local script_filename="ubuntu-postinstall.shell";
-    local remote_resource="ubuntu/modules/${script_filename}";
+    local remote_resource="${ubuntu_modules}/${script_filename}";
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vagrant_temp}/${script_filename} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
