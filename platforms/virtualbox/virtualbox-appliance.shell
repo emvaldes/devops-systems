@@ -591,20 +591,32 @@ function postinst_packages () {
 ## -----------------------------------------------------------------------------
 function virtualbox_appliance () {
     local oIFS="${IFS}";
+    local ignore_password='false';
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       ## Required Parameters:
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
-      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
+      [[ ${1#*\--} = "password" ]] && {
+          if [[ ${ignore_password} == 'false' ]]; then
+            local devops_password="${2}";
+            local password_option="--password=";
+            password_option+='"'${devops_password}'"';
+          fi;
+        };
       [[ ${1#*\--} = "secret" ]] && {
           local devops_passwdfile="$(
               echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
             )";
           if [[ -e "${devops_passwdfile}" ]]; then
-            export devops_password="$(
-                cat "${devops_passwdfile}"
-              )";
+                  local devops_password="$(
+                      cat "${devops_passwdfile}"
+                    )";
+                  local password_option="--password-file=";
+                  password_option+='"'${devops_passwdfile}'"';
+                  ignore_password='true';
+            else  newline;
+                  echo -e "Warning: Password File was not found! ";
           fi;
         };
       ## Optional Parameters:
@@ -615,7 +627,12 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
       [[ ${1#*\--} = "deploy" ]] && local unattended_install='true';
       [[ ${1#*\--} = "install" ]] && local install_packages='true';
-      [[ ${1#*\--} = "iso-file" ]] && local iso_filename="${2}";
+      [[ ${1#*\--} = "iso-file" ]] && {
+          local iso_filename="$(
+              echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+            )";
+          [[ ! -e ${iso_filename} ]] && unset iso_filename;
+        };
       [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
       [[ ${1#*\--} = "projects" ]] && local virtualbox_projects="${2}";
@@ -686,31 +703,32 @@ function virtualbox_appliance () {
     ## Virtual Machine hostname
     [[ ${#virtual_machine} -eq 0 ]] && \
        export virtual_machine="devops-console";
-    missing_isofile="\nWarning: No Installation ISO file was provided! ";
     ## e.g.: ubuntu-22.04.1-desktop-amd64.iso
     if [[ ${unattended_install} == 'true' ]]; then
+      ## Processing ISO filename (location)
+      local missing_isofile="Warning: No Installation ISO file was provided! ";
       if [[ ${#iso_filename} -eq 0 ]]; then
-        echo -e "${missing_isofile}";
-        ## Installation media (DVD ISO):
-        user_input="Installation ISO location: ";
-        newline; read -p "${user_input}" iso_filename;
-        if [[ ${#iso_filename} -eq 0 ]]; then
-          newline;
-          echo -e "Warning: Unable to continue! ";
-          newline;
-          unattended_install='false';
-          return 9;
-        fi;
+              echo -e "${missing_isofile}";
+              ## Installation media (DVD ISO):
+              user_input="Installation ISO location: ";
+              newline; read -p "${user_input}" iso_filename;
+              local fixing_filepath="$(
+                  echo -e "${iso_filename}" \
+                     | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+                )";
+              iso_filename="${fixing_filepath}";
+              if [[ ${#iso_filename} -eq 0 ]]; then
+                newline;
+                echo -e "Warning: Unable to continue! ";
+                newline;
+                return 9;
+              fi;
+        else  [[ ! -e ${iso_filename} ]] && {
+                  newline;
+                  echo -e "${missing_isofile}";
+                  return 10;
+                };
       fi;
-      local fixing_filepath="$(
-          echo -e "${iso_filename}" \
-             | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
-        )";
-      iso_filename="${fixing_filepath}";
-      [[ ! -e ${iso_filename} ]] && {
-          echo -e "${missing_isofile}";
-          return 10;
-        };
     fi;
     [[ ${#devops_account} -eq 0 ]] && {
         export devops_account='devops';
@@ -803,7 +821,7 @@ function virtualbox_appliance () {
         VBoxManage unattended install ${vm_name} \
                  --iso="${iso_filename}" \
                  --user="${devops_account}" \
-                 --password="${devops_account}" \
+                 ${password_option} \
                  --full-user-name="DevOps Engineer" \
                  --install-additions \
                  --locale="en_US" \
@@ -847,15 +865,27 @@ function virtualbox_appliance () {
                       "d-i passwd/user-default-groups string ${devops_account}" \
                       ${vbox_temp}/${patch_template};
                       check_status;
+                      ## Purging any unwanted references
+                      declare -a replacing=();
+                      replacing+=("d-i passwd/username string ");
+                      replacing+=("log_command_in_target usermod -a -G vboxsf ");
+                      echo -e "Notice: Correcting presets (${patch_template})";
+                      for replace in ${replacing[@]}; do
+                        sed -i '' "s|^\(${replace}\)\(.*\)$|\1{{ service-account }}|" \
+                        ${vm_location}/Unattended-*-${target}
+                      done;
                       ## Patching Pre-Seed Configurations:
                       patch ${vm_location}/Unattended-*-${target} \
                           < ${vbox_temp}/${patch_template};
                       check_status;
-                      egrep --fixed-strings \
-                            --before-context=10 \
-                            --after-context=10 \
-                      "log_command_in_target apt-get -y install openssh-server" \
-                      ${vm_location}/Unattended-*-${target};
+                      echo -e "Notice: Listing modifications (${patch_template})";
+                      for replace in ${replacing[@]}; do
+                        newline;
+                        egrep --fixed-strings \
+                              --before-context=10 \
+                              --after-context=10 \
+                        "${replace}" ${vm_location}/Unattended-*-${target};
+                      done;
                       check_status;
                 else  newline;
                       echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
