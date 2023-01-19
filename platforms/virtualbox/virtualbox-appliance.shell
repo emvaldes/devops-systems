@@ -597,6 +597,16 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "vm-name" ]] && local vm_name="${2}";
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
       [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
+      [[ ${1#*\--} = "secret" ]] && {
+          local devops_passwdfile="$(
+              echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+            )";
+          if [[ -e "${devops_passwdfile}" ]]; then
+            export devops_password="$(
+                cat "${devops_passwdfile}"
+              )";
+          fi;
+        };
       ## Optional Parameters:
       [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
