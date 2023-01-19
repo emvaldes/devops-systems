@@ -6,9 +6,9 @@
    # SHELL
 +
 +  config.vm.synced_folder "{{ vagrant-shared }}", "/shared"
-+  config.vm.hostname = "{{ vagrant-instance }}"
++  config.vm.hostname = "{{ virtual-machine }}"
 +  config.vm.provider "virtualbox" do |console|
-+    console.name = "{{ vagrant-instance }}"
++    console.name = "{{ virtual-machine }}"
 +  end
 +
  end
