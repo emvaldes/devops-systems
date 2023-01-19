@@ -68,11 +68,25 @@
               #unattended-guest-install-example
 ## -----------------------------------------------------------------------------
 
+## Execution timestamp:
+export timestamp="$( date +"%y%m%d%H%M%S" )";
+
 export script_file="$(pwd)/${0#*\/}";
 export script_name="$( basename ${script_file} )";
 
 export user_local="${HOME}/.local";
 mkdir -p "${user_local}";
+
+## -----------------------------------------------------------------------------
+## Objective: Environment Functions
+
+function newline () { echo -e; return 0; };
+
+## Random Password:
+function password () {
+    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
+    return 0;
+  };
 
 ## -----------------------------------------------------------------------------
 ## Objective: System Pre-Requirements
@@ -86,20 +100,10 @@ export virtualbox_platform='master/platforms/virtualbox';
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
 
-## Random Password:
-function password () {
-    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
-    return 0;
-  };
 export root_password="$(password)";
-
-## Execution timestamp:
-export timestamp="$( date +"%y%m%d%H%M%S" )";
 
 ## Events status counter:
 export counter=0;
-
-function newline () { echo -e; return 0; };
 
 ## -----------------------------------------------------------------------------
 ## Objective: Parsing operational status for each event
