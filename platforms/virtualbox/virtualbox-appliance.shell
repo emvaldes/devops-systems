@@ -86,6 +86,16 @@ export virtualbox_platform='master/platforms/virtualbox';
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
 
+## Random Password:
+function password () {
+    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
+    return 0;
+  };
+export root_password="$(password)";
+
+## Execution timestamp:
+export timestamp="$( date +"%y%m%d%H%M%S" )";
+
 ## Events status counter:
 export counter=0;
 
@@ -133,11 +143,14 @@ function vboxmanage_storage () {
       };
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
+    newline;
+    echo -e "Creating Medium (Hard Drive: *.vdi)";
     VBoxManage createhd \
              --filename "${vm_location}/${vm_name}.vdi" \
              --size ${volume_size} \
     ;
     check_status;
+    newline;
     ## Create a SATA storage controller and attach the virtual hard disk.
     VBoxManage storagectl ${vm_name} \
              --name "SATA Controller" \
@@ -601,7 +614,7 @@ function virtualbox_appliance () {
           if [[ ${ignore_password} == 'false' ]]; then
             local devops_password="${2}";
             local password_option="--password=";
-            password_option+='"'${devops_password}'"';
+            password_option+="${devops_password}";
           fi;
         };
       [[ ${1#*\--} = "secret" ]] && {
@@ -613,7 +626,7 @@ function virtualbox_appliance () {
                       cat "${devops_passwdfile}"
                     )";
                   local password_option="--password-file=";
-                  password_option+='"'${devops_passwdfile}'"';
+                  password_option+="${devops_passwdfile}";
                   ignore_password='true';
             else  newline;
                   echo -e "Warning: Password File was not found! ";
@@ -694,10 +707,11 @@ function virtualbox_appliance () {
               export vm_name="$(
                   echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
                 )";
-        else  newline;
-              echo -e "Warning: Unable to continue! ";
+        else  ## Generating devops-(timestamp) name
+              local vm_name="devops-${timestamp}";
               newline;
-              return 8;
+              echo -e "Warning: Appliance's name [${vm_name}] timestamp-based! ";
+              newline;
       fi;
     fi;
     ## Virtual Machine hostname
@@ -738,11 +752,11 @@ function virtualbox_appliance () {
         newline;
       };
     [[ ${#devops_password} -eq 0 ]] && {
-        export devops_password="${devops_account}";
-        newline;
-        echo -en "Warning: Using default ";
-        echo -e  "'${devops_password}' account password! ";
-        newline;
+        export devops_password="$(password)";
+        # newline;
+        # echo -en "Warning: Using default ";
+        # echo -e  "'${devops_password}' account password! ";
+        # newline;
       };
     [[ ${#configuration} -eq 0 ]] && {
         export configuration='false';
@@ -814,10 +828,19 @@ function virtualbox_appliance () {
                               --nat-only='4' \
         ; check_status;
         sleep 1;
+        ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
+        VBoxManage sharedfolder add ${vm_name} \
+                              --name=shared \
+                              --hostpath=/tmp/shared \
+                              --automount \
+                              --auto-mount-point=/shared \
+        ; check_status;
+        sleep 1;
       };
     ## Unattended Installation
     [[ ${unattended_install} == 'true' ]] && {
-        ## Generating VirtualBox Un-Attended Installation configurations:
+        newline;
+        echo -e "Generating VirtualBox Un-Attended Installation";
         VBoxManage unattended install ${vm_name} \
                  --iso="${iso_filename}" \
                  --user="${devops_account}" \
@@ -832,7 +855,6 @@ function virtualbox_appliance () {
         ;
         check_status;
         ## Pre-Configuring patching files
-        local patch_files='true';
         [[ ${patch_files} == 'true' ]] && {
             declare -a targets=(
                 preseed.cfg
@@ -854,42 +876,52 @@ function virtualbox_appliance () {
                 echo -e '.'; sleep 1;
               done; echo -e;
               check_status;
-              if [[ -e ${vbox_temp}/${patch_template} ]]; then
-                      ## Updating the serice-account placeholder
-                      sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                                ${vbox_temp}/${patch_template};
-                      check_status;
-                      egrep --fixed-strings \
-                            --before-context=10 \
-                            --after-context=10 \
-                      "d-i passwd/user-default-groups string ${devops_account}" \
-                      ${vbox_temp}/${patch_template};
-                      check_status;
-                      ## Purging any unwanted references
-                      declare -a replacing=();
-                      replacing+=("d-i passwd/username string ");
-                      replacing+=("log_command_in_target usermod -a -G vboxsf ");
-                      echo -e "Notice: Correcting presets (${patch_template})";
-                      for replace in ${replacing[@]}; do
-                        sed -i '' "s|^\(${replace}\)\(.*\)$|\1{{ service-account }}|" \
-                        ${vm_location}/Unattended-*-${target}
-                      done;
-                      ## Patching Pre-Seed Configurations:
-                      patch ${vm_location}/Unattended-*-${target} \
-                          < ${vbox_temp}/${patch_template};
-                      check_status;
-                      echo -e "Notice: Listing modifications (${patch_template})";
-                      for replace in ${replacing[@]}; do
-                        newline;
-                        egrep --fixed-strings \
-                              --before-context=10 \
-                              --after-context=10 \
-                        "${replace}" ${vm_location}/Unattended-*-${target};
-                      done;
-                      check_status;
-                else  newline;
-                      echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
-                      return 11;
+              if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
+                newline;
+                echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
+                return 11;
+              fi;
+              ## Correcting auto-generated presets
+              if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
+                sed -i '' \
+                    -e 's|^\(.*/username string \)\(.*\)$|\1{{ service-account }}|g' \
+                    -e 's|^\(.*/user-password.*password \)\(.*\)$|\1{{ devops-password }}|g' \
+                    -e 's|^\(.*/root-password.*password \)\(.*\)$|\1{{ root-password }}|g' \
+                    -e 's|^\(.*/user-default-groups string \)\(.*\)$|\1sudo|g' \
+                    ${vm_location}/Unattended-*-${target};
+                check_status;
+                sed -i '' \
+                    -e "s|{{ service-account }}|${devops_account}|g" \
+                    -e "s|{{ devops-password }}|${devops_password}|g" \
+                    -e "s|{{ root-password }}|${root_password}|g" \
+                    ${vm_location}/Unattended-*-${target};
+                check_status;
+                newline;
+                echo -e "Notice: Listing modifications (${patch_template})";
+                egrep --before-context=2 \
+                      --after-context=2 \
+                "^d-i passwd/.*$" ${vm_location}/Unattended-*-${target} \
+                | sed -e "s|${devops_password}|***|" \
+                      -e "s|${root_password}|***|";
+              fi;
+              if [[ ${patch_template} == 'patch-vboxpostinstall.sh' ]]; then
+                local target_entry="usermod -a -G vboxsf ";
+                sed -i '' \
+                    -e "s|^\(.*${target_entry}\)\(.*\)$|\1\"{{ service-account }}\"|" \
+                    ${vm_location}/Unattended-*-${target};
+                ## Patching Pre-Seed Configurations:
+                patch ${vm_location}/Unattended-*-${target} \
+                    < ${vbox_temp}/${patch_template};
+                check_status;
+                sed -i '' \
+                    -e "s|{{ service-account }}|${devops_account}|g" \
+                    ${vm_location}/Unattended-*-${target};
+                check_status;
+                newline;
+                echo -e "Notice: Listing modifications (${patch_template})";
+                egrep --before-context=22 \
+                      --after-context=4 \
+                "^.*usermod -a -G vboxsf .*$" ${vm_location}/Unattended-*-${target};
               fi;
             done;
           };
