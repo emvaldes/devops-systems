@@ -25,11 +25,10 @@
 # Required    --account           Service Account (username: devops)
 #             --password          Service Account (password: devops)
 #             --boxset            Provide Vagrant cloud boxes
-#             --instance          Virtual Machine profile
+#             --instance          Virtual Machine instance name
 #             --ssh-key           Profile SSH Access (Public Key)
 #
-# Optional    --appliance         Virtual Machine name
-#             --cache             Deployment resources location
+# Optional    --cache             Deployment resources location
 #             --location          Virtual Machine Location
 #             --packages          Install Custom DevOps Packages
 #             --projects          Target Vagrant projects
@@ -44,14 +43,13 @@
 # vagrant-appliance.shell --account="devops" \
 #                         --password="devops" \
 #                         --boxset="bento/ubuntu-22.04" \
-#                         --instance="ubuntu-22.04" \
+#                         --instance="ubuntu-230118191348" \
 #                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 # ;
 #
 # vagrant-appliance.shell --account="devops" \
 #                         --password="devops" \
 #                         --boxset="bento/ubuntu-22.04" \
-#                         --instance="ubuntu-22.04" \
 #                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 #                         --cache="~/.local" \
 #                         --location="~/.vagrant.d/sources/ubuntu-22.04" \
@@ -214,9 +212,9 @@ function patch_vagrantfile () {
     #    # SHELL
     # +
     # +  config.vm.synced_folder "{{ vagrant-shared }}", "/shared"
-    # +  config.vm.hostname = "{{ vagrant-instance }}"
+    # +  config.vm.hostname = "{{ virtual-machine }}"
     # +  config.vm.provider "virtualbox" do |console|
-    # +    console.name = "{{ vagrant-instance }}"
+    # +    console.name = "{{ virtual-machine }}"
     # +  end
     # +
     #  end
@@ -224,8 +222,8 @@ function patch_vagrantfile () {
     sed -i '' -e "s|{{ vagrant-shared }}|${vagrant_shared}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
-    ## Updating the vagrant-instance placeholder
-    sed -i '' -e "s|{{ vagrant-instance }}|${virtual_machine}|" \
+    ## Updating the virtual-machine placeholder
+    sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
     cat -n ${vagrant_temp}/${patch_vagrantfile};
@@ -471,7 +469,7 @@ function vagrant_appliance () {
       [[ ${1#*\--} = "boxset" ]] && local vagrant_boxset="${2}";
       [[ ${1#*\--} = "ssh-key" ]] && local devops_sshkey="${2}";
       ## Optional Parameters:
-      [[ ${1#*\--} = "appliance" ]] && local virtual_machine="${2}";
+      [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
       [[ ${1#*\--} = "location" ]] && local vagrant_location="${2}";
       [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";

@@ -7,10 +7,10 @@
             "account",
             "password",
             "boxset",
+            "instance",
             "ssh-key"
         ],
         "optional": [
-            "appliance",
             "cache",
             "location",
             "packages",
@@ -71,15 +71,15 @@
             "query": "Vagrant Cloud Box",
             "message": "Provide Vagrant cloud boxes"
         },
+        "instance": {
+            "value": "ubuntu-230118191348",
+            "query": "Virtual Machine name",
+            "message": "Virtual Machine instance name"
+        },
         "ssh-key": {
             "value": "${HOME}/.ssh/id_rsa.pub",
             "query": "SSH Access Public Key",
             "message": "Profile SSH Access (Public Key)"
-        },
-        "appliance": {
-            "value": "ubuntu-230118191348",
-            "query": "Virtual Machine name",
-            "message": "Virtual Machine name"
         },
         "cache": {
             "value": "~/.local",
