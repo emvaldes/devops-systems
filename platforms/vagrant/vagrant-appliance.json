@@ -7,7 +7,6 @@
             "account",
             "password",
             "boxset",
-            "instance",
             "ssh-key"
         ],
         "optional": [
@@ -30,7 +29,6 @@
                 "account",
                 "password",
                 "boxset",
-                "instance",
                 "ssh-key",
                 "cache",
                 "location",
@@ -73,17 +71,13 @@
             "query": "Vagrant Cloud Box",
             "message": "Provide Vagrant cloud boxes"
         },
-        "instance": {
-            "value": "ubuntu-22.04",
-            "query": "Virtual Machine Profile",
-            "message": "Virtual Machine profile"
-        },
         "ssh-key": {
             "value": "${HOME}/.ssh/id_rsa.pub",
             "query": "SSH Access Public Key",
             "message": "Profile SSH Access (Public Key)"
         },
         "appliance": {
+            "value": "ubuntu-230118191348",
             "query": "Virtual Machine name",
             "message": "Virtual Machine name"
         },
