@@ -96,6 +96,7 @@ export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
 export virtualbox_platform='master/platforms/virtualbox';
+export ubuntu_modules='ubuntu/modules';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
@@ -481,12 +482,12 @@ function vboxmanage_interface () {
 function sudoers_privileges () {
     ## Enabling Passwordless Access
     local privileges_script="sudoers-privileges.shell";
-    local remote_module="ubuntu/modules/${privileges_script}";
+    local remote_module="${ubuntu_modules}/${privileges_script}";
     rm -fv ${vbox_temp}/${privileges_script} 2>/dev/null;
     # check_status;
     curl --silent \
          --output ${vbox_temp}/${privileges_script} \
-         https://${github_content}/${github_repo}/master/${remote_module};
+         https://${github_content}/${github_repo}/${remote_module};
     check_status;
     while [[ ! -e ${vbox_temp}/${privileges_script} ]]; do
       echo -e '.'; sleep 1;
@@ -533,12 +534,12 @@ function sudoers_privileges () {
 ## Objective: Configuring Auto-Login Capabilities
 function sudoers_autologin () {
     local autlogin_script="sudoers-autologin.shell";
-    local remote_module="ubuntu/modules/${autlogin_script}";
+    local remote_module="${ubuntu_modules}/${autlogin_script}";
     rm -fv ${vbox_temp}/${autlogin_script} 2>/dev/null;
     # check_status;
     curl --silent \
          --output ${vbox_temp}/${autlogin_script} \
-         https://${github_content}/${github_repo}/master/${remote_module};
+         https://${github_content}/${github_repo}/${remote_module};
     check_status;
     while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
       echo -e '.'; sleep 1;
@@ -567,12 +568,12 @@ function sudoers_autologin () {
 ## Objective: Pre-Installing Core Packages
 function preinst_packages () {
     local script_filename="ubuntu-preinstall.shell";
-    local remote_resource="ubuntu/modules/${script_filename}";
+    local remote_resource="${ubuntu_modules}/${script_filename}";
     rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vbox_temp}/${script_filename} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
@@ -588,12 +589,12 @@ function preinst_packages () {
 ## Objective: Post-Installing Core Packages
 function postinst_packages () {
     local script_filename="ubuntu-postinstall.shell";
-    local remote_resource="ubuntu/modules/${script_filename}";
+    local remote_resource="${ubuntu_modules}/${script_filename}";
     rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     curl --silent \
          --output ${vbox_temp}/${script_filename} \
-         https://${github_content}/${github_repo}/master/${remote_resource};
+         https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
       echo -e '.'; sleep 1;
