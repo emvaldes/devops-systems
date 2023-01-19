@@ -87,8 +87,8 @@
         },
         "secret": {
             "value": "~/.devops.secret",
-            "query": "Service Account Password",
-            "message": "Service Account (password: devops)"
+            "query": "Service Account Password File",
+            "message": "Secrets Password File (disable --password)"
         },
         "appliance": {
             "query": "Virtual Machine name",
