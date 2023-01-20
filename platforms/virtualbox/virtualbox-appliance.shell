@@ -16,8 +16,7 @@ function load_modules () {
       fi;
     done;
     return 0;
-  }; alias load-modules='load_modules';
-load_modules;
+  }; load_modules;
 
 ## -----------------------------------------------------------------------------
 function virtualbox_appliance () {
