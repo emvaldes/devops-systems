@@ -23,7 +23,6 @@
 # vagrant-appliance.shell --help ;
 #
 # Required    --account           Service Account (username: devops)
-#             --password          Service Account (password: devops)
 #             --boxset            Provide Vagrant cloud boxes
 #             --instance          Virtual Machine instance name
 #             --ssh-key           Profile SSH Access (Public Key)
@@ -41,14 +40,12 @@
 # Usage:
 #
 # vagrant-appliance.shell --account="devops" \
-#                         --password="devops" \
 #                         --boxset="bento/ubuntu-22.04" \
 #                         --instance="ubuntu-230118191348" \
 #                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 # ;
 #
 # vagrant-appliance.shell --account="devops" \
-#                         --password="devops" \
 #                         --boxset="bento/ubuntu-22.04" \
 #                         --ssh-key="${HOME}/.ssh/id_rsa.pub" \
 #                         --cache="~/.local" \
@@ -85,7 +82,7 @@ export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
 export vagrant_platform='master/platforms/vagrant';
-export ubuntu_modules='ubuntu/modules';
+export ubuntu_modules='master/ubuntu/modules';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
@@ -465,11 +462,10 @@ function vagrant_appliance () {
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       ## Required Parameters:
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
-      [[ ${1#*\--} = "password" ]] && local devops_password="${2}";
       [[ ${1#*\--} = "boxset" ]] && local vagrant_boxset="${2}";
+      [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "ssh-key" ]] && local devops_sshkey="${2}";
       ## Optional Parameters:
-      [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
       [[ ${1#*\--} = "location" ]] && local vagrant_location="${2}";
       [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
