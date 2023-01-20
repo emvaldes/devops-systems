@@ -96,8 +96,10 @@ function script_helper () {
             echo -e "${json_object}" \
             | jq --raw-output "${syntax}"
           )";
-        isbase64="$( echo -en "${item_value}" | base64 --decode 2>>/dev/null )";
-        [[ ${#isbase64} -gt 0 ]] && item_value="${isbase64}";
+        isbase64="$( echo -n "${item_value}" | base64 --decode )";
+        ## Invalid Output in MacOS (silent/empty) but Linux (verbose)
+        invalid_output=$?;
+        [[ ${invalid_output} -eq 0 ]] && item_value="${isbase64}";
         [[ $(( counter++ )) -gt 0 ]] && example+="${output_spacer}";
         example+="--${xitem}";
         if [[ ${#item_value} -gt 0 ]]; then
