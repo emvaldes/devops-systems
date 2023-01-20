@@ -3,7 +3,7 @@
 function load_modules () {
     declare -a xfiles=(
         'devops-tools.shell'
-        'user-profile.shell'
+        'user-manage.shell'
         'vbox-manage.shell'
       );
     local resources="$(pwd)/resources/";
