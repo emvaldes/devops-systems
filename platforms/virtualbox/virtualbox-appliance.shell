@@ -872,10 +872,10 @@ function virtualbox_appliance () {
         shared_folders --name="shared" \
                        --host-path="/tmp/shared" \
                        --guest-path="/shared";
-        # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /tmp/deploy)
+        # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /deploy)
         shared_folders --name="deploy" \
                        --host-path="/tmp/deploy" \
-                       --guest-path="/tmp/deploy";
+                       --guest-path="/deploy";
       };
     ## Unattended Installation
     [[ ${unattended_install} == 'true' ]] && {
@@ -928,8 +928,10 @@ function virtualbox_appliance () {
               fi;
               local system_configuration="${instance_location}/Unattended-*-${target}";
               ## Creating symlink for shorter output:
-              ln -s ${system_configuration} \
-                    ${instance_location}/${patch_template};
+              local active_location="$(pwd)";
+              cd ${instance_location};
+              ln -s ./Unattended-*-${target} ./${patch_template};
+              cd "${active_location}" 2>/dev/null;
               ## Correcting auto-generated presets
               if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
                 sed -i '' \
