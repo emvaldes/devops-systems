@@ -96,7 +96,7 @@ export github_content='raw.githubusercontent.com';
 export github_repo='emvaldes/devops-systems';
 
 export virtualbox_platform='master/platforms/virtualbox';
-export ubuntu_modules='ubuntu/modules';
+export ubuntu_modules='master/ubuntu/modules';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Script & Environment Variables
