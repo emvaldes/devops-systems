@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+
+## -----------------------------------------------------------------------------
+## Objective: Environment Functions
+
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
+function newline () { echo -e; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Random Password Generator (32 length)
+function password () {
+    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
+    return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Parsing operational status for each event
+function check_status () {
+    status=${1};
+    if [[ ${status} -ne 0 ]]; then
+            user_input="$((counter++)) = Error was found. Continue [N/y]: ";
+            newline; read -t 15 -p "${user_input}" response;
+            if [[ ${#response} -gt 0 ]]; then
+                    selection="$(
+                        echo -e ${response} \
+                           | tr '[[:upper:]]' '[[:lower:]]'
+                      )";
+                    if [[ 'n' =~ "${selection:0:1}" ]]; then
+                            exit ${status};
+                      else  return 1;
+                    fi;
+              else  exit ${status};
+            fi;
+      else  return 2;
+    fi;
+    return 0;
+  }; alias check-status='check_status';
+
+## -----------------------------------------------------------------------------
+## Objective: Pre-Installing Core Packages
+function preinst_packages () {
+    local script_filename="ubuntu-preinstall.shell";
+    local remote_resource="${ubuntu_modules}/${script_filename}";
+    rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
+    # check_status $?;
+    curl --silent \
+         --output ${vbox_temp}/${script_filename} \
+         https://${github_content}/${github_repo}/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ssh ${virtual_machine} -C 'bash -s' \
+      < ${vbox_temp}/${script_filename} 2>/dev/null;
+    check_status $?;
+    return 0;
+  }; alias preinst-packages='preinst_packages';
+
+## -----------------------------------------------------------------------------
+## Objective: Post-Installing Core Packages
+function postinst_packages () {
+    local script_filename="ubuntu-postinstall.shell";
+    local remote_resource="${ubuntu_modules}/${script_filename}";
+    rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
+    # check_status $?;
+    curl --silent \
+         --output ${vbox_temp}/${script_filename} \
+         https://${github_content}/${github_repo}/${remote_resource};
+    check_status $?;
+    while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status $?;
+    ssh ${virtual_machine} -C 'bash -s' \
+      < ${vbox_temp}/${script_filename} 2>/dev/null;
+    check_status $?;
+    return 0;
+  }; alias postinst-packages='postinst_packages';
+
+## -----------------------------------------------------------------------------
+## Objective: Configuring Network Interfaces
+function vboxmanage_interface () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
+      [[ ${1#*\--} = "interface" ]] && local interface="${2}";
+      [[ ${1#*\--} = "hostname" ]] && local hostname="${2}";
+      [[ ${1#*\--} = "ssh-key" ]] && local sshkey_access="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    ## Define custom-parameter(s):
+    [[ ${#virtual_machine} -eq 0 ]] && {
+        newline;
+        echo -e "Warning: Missing VirtualBox Appliance Name! ";
+        newline;
+        return 3;
+      };
+    [[ ${#interface} -eq 0 ]] && local interface="Bridged";
+    [[ ${#hostname} -eq 0 ]] && local hostname="${virtual_machine}";
+    ## Identifying the VirtualBox virtual_machine's IP Address
+    declare -a showvminfo=($(
+        VBoxManage showvminfo --details ${virtual_machine} \
+        | grep bridged \
+        | sed -e "s|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\)\(.*\)\('\,.*\)$|\3\n\5|"
+      ));
+    local bridged_macaddr="$(
+        echo -e "${showvminfo[0]}" \
+           | fold -w2 \
+           | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
+           | sed -e 's|\:$||'
+      )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
+    local bridged_interface="${showvminfo[1]%\:*}";
+    local localnet="${HOME}/.localnet";
+    newline;
+    echo -e "Executing ARP Scanning ... -> ${localnet} : ";
+    ## Required to avoid any manual scanning
+    sudo arp-scan --localnet | tee ${localnet};
+    declare -a listed=($(
+        egrep "${bridged_macaddr}" ${localnet} \
+        | sed -e "s|${bridged_macaddr}|${virtual_machine}|" \
+        | tr '\t' '*' | awk -F'*' '{print $1"\n"$2"\n"$3}'
+      ));
+    # for each in ${listed[@]}; do echo -e "${each}"; done;
+    local ipaddr="${listed[0]}";
+    local device="${listed[2]}";
+    ## System Configuration files
+    local etc_hosts="/etc/hosts";
+    local ssh_config="${HOME}/.ssh/config";
+    local known_hosts="${HOME}/.ssh/known_hosts";
+    ## Processing valid IP Address
+    if [[ ${#ipaddr} -gt 0 ]]; then
+      ## Right-Padding IP Address
+      local xipaddr="$( printf "% -20s" ${ipaddr})";
+      local custom_message=" Record in ${etc_hosts} file! ";
+      if [[ $( egrep -c " ${virtual_machine} " ${etc_hosts} ) -gt 0 ]]; then
+              newline;
+              echo -e "Warning: Updating ${custom_message}";
+              newline;
+              sudo sed -i '' \
+              "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${virtual_machine}.*\)$|${xipaddr}\3|" \
+              "${etc_hosts}";
+        else  newline;
+              echo -e "Notice: Appending ${custom_message}";
+              newline;
+              echo -e "${xipaddr}${virtual_machine}" \
+                 | sudo tee -a "${etc_hosts}";
+      fi;
+      local custom_message=" Record in ${ssh_config} file! ";
+      if [[ $( egrep -c "Host ${virtual_machine}" ${ssh_config} ) -eq 0 ]]; then
+              newline;
+              echo -e "Updating ${custom_message}";
+              declare -a config_block=();
+              config_block+=("\nHost ${virtual_machine}");
+              config_block+=("  AddKeysToAgent yes");
+              config_block+=("  HostName ${ipaddress}");
+              config_block+=("  User devops");
+              config_block+=("  StrictHostKeyChecking no");
+              config_block+=("  IdentityFile ${sshkey_access}");
+              for each in ${config_block[@]}; do
+                echo -e "${each}" >> ${ssh_config};
+              done;
+        else  ## Updating configuration block
+              newline;
+              echo -e "Updating ${custom_message}";
+              local header="Host ${virtual_machine}";
+              local footer="IdentityFile .*";
+              sed -i '' \
+                  "/${header}/,/${footer}/s/\(^.*HostName \)\(.*\)$/\1${ipaddr}/" \
+                  ${ssh_config};
+      fi;
+      ## Listing SSH Configuration block
+      egrep --fixed-strings \
+            --before-context=1 \
+            --after-context=6 \
+            "Host ${virtual_machine}" ${ssh_config};
+    fi;
+    ## Removing/Purging host's legacy entries
+    sed -i '' /^$(
+        grep 'ubuntu-desktop' ${etc_hosts} | cut -d' ' -f1
+      ).*/d ${known_hosts} ;
+    IFS="${oIFS}";
+    return 0;
+  }; alias vboxmanage-interface='vboxmanage_interface';
