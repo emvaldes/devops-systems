@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+
+## -----------------------------------------------------------------------------
+## Objective: System Pre-Requirements
+
+## Description: Constructing GitHub URI (raw user content)
+export github_content='raw.githubusercontent.com';
+export github_repo='emvaldes/devops-systems';
+
+export virtualbox_platform='master/platforms/virtualbox';
+export ubuntu_modules='master/ubuntu/modules';
+
+## -----------------------------------------------------------------------------
+## Objective: Script & Environment Variables
+
+## Execution timestamp:
+export timestamp="$( date +"%y%m%d%H%M%S" )";
+
+export script_file="$(pwd)/${0#*\/}";
+export script_name="$( basename ${script_file} )";
+
+export user_local="${HOME}/.local";
+mkdir -p "${user_local}";
+
+export root_password="$(password)";
+
+## Events status counter:
+export counter=0;
