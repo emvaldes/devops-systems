@@ -4,13 +4,12 @@
             "interview": "Please, answer the following questions"
         },
         "required": [
-            "vm-name",
+            "instance",
             "account",
             "password",
             "secret"
         ],
         "optional": [
-            "appliance",
             "cache",
             "configure",
             "create",
@@ -27,7 +26,7 @@
         ],
         "examples": [
             [
-                "vm-name",
+                "instance",
                 "account",
                 "secret",
                 "iso-file",
@@ -37,7 +36,7 @@
                 "start"
             ],
             [
-                "vm-name",
+                "instance",
                 "account",
                 "secret",
                 "ssh-key",
@@ -45,7 +44,7 @@
                 "install"
             ],
             [
-                "vm-name",
+                "instance",
                 "install",
                 "packages"
             ]
@@ -70,7 +69,7 @@
         }
     },
     "params": {
-        "vm-name": {
+        "instance": {
             "value": "ubuntu-desktop",
             "query": "VirtualBox Appliance name",
             "message": "VirtualBox appliance name and hostname"
@@ -89,10 +88,6 @@
             "value": "~/.devops.secret",
             "query": "Service Account Password File",
             "message": "Secrets Password File (disable --password)"
-        },
-        "appliance": {
-            "query": "Virtual Machine name",
-            "message": "Virtual Machine name"
         },
         "cache": {
             "value": "~/.local",
