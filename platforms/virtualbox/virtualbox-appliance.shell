@@ -389,6 +389,7 @@ function vboxmanage_interface () {
     [[ ${#virtual_machine} -eq 0 ]] && {
         newline;
         echo -e "Warning: Missing VirtualBox Appliance Name! ";
+        newline;
         return 3;
       };
     [[ ${#interface} -eq 0 ]] && local interface="Bridged";
@@ -431,6 +432,7 @@ function vboxmanage_interface () {
       if [[ $( egrep -c " ${virtual_machine} " ${etc_hosts} ) -gt 0 ]]; then
               newline;
               echo -e "Warning: Updating ${custom_message}";
+              newline;
               sudo sed -i '' \
               "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${virtual_machine}.*\)$|${xipaddr}\3|" \
               "${etc_hosts}";
@@ -525,6 +527,7 @@ function sudoers_privileges () {
             check_status;
       else  newline;
             echo -e "Warning: ${vbox_temp}/${privileges_script} is missing! ";
+            newline;
             return 4;
     fi;
     return 0;
@@ -559,6 +562,7 @@ function sudoers_autologin () {
             check_status;
       else  newline;
             echo -e "Warning: ${vbox_temp}/${autlogin_script} is missing! ";
+            newline;
             return 5;
     fi;
     return 0;
@@ -607,6 +611,36 @@ function postinst_packages () {
   }; alias postinst-packages='postinst_packages';
 
 ## -----------------------------------------------------------------------------
+## Objective: Provision a deployment repository (Guest)
+##            A manual step to be performed by the end-user at the Host
+function shared_folders () {
+    local oIFS="${IFS}";
+    for xitem in "${@}"; do
+      IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
+      [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
+      [[ ${1#*\--} = "name" ]] && local share_name="${2}";
+      [[ ${1#*\--} = "host-path" ]] && local host_path="${2}";
+      [[ ${1#*\--} = "guest-path" ]] && local guest_path="${2}";
+    done; IFS="${oIFS}";
+    local oIFS="${IFS}"; IFS=$'\n';
+    if [[ -e ${host_path} ]]; then
+            ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
+            VBoxManage sharedfolder add ${virtual_machine} \
+                                  --name="${share_name}" \
+                                  --hostpath="${host_path}" \
+                                  --automount \
+                                  --auto-mount-point=${guest_path} \
+            ; check_status;
+            sleep 1;
+      else  newline;
+            echo -e "Warning: Host-Path does not exist! ";
+            newline;
+            return 6;
+    fi;
+    return 0;
+  }; alias shared-folders='shared_folders';
+
+## -----------------------------------------------------------------------------
 function virtualbox_appliance () {
     local oIFS="${IFS}";
     local ignore_password='false';
@@ -635,6 +669,7 @@ function virtualbox_appliance () {
                   ignore_password='true';
             else  newline;
                   echo -e "Warning: Password File was not found! ";
+                  newline;
           fi;
         };
       ## Optional Parameters:
@@ -679,11 +714,11 @@ function virtualbox_appliance () {
                             --wizard=${wizard_mode} \
                             --info=${info_mode} \
               ;
-              return 6;
+              return 7;
         else  newline;
               echo -e "Warning: Script Helper was not found ! ";
               newline;
-              return 7;
+              return 8;
       fi;
     fi;
     ## -------------------------------------------------------------------------
@@ -833,18 +868,21 @@ function virtualbox_appliance () {
                               --nat-only='4' \
         ; check_status;
         sleep 1;
-        ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
-        VBoxManage sharedfolder add ${virtual_machine} \
-                              --name=shared \
-                              --hostpath=/tmp/shared \
-                              --automount \
-                              --auto-mount-point=/shared \
-        ; check_status;
-        sleep 1;
+        # ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
+        shared_folders --name="shared" \
+                       --host-path="/tmp/shared" \
+                       --guest-path="/shared";
+        # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /tmp/deploy)
+        shared_folders --name="deploy" \
+                       --host-path="/tmp/deploy" \
+                       --guest-path="/tmp/deploy";
       };
     ## Unattended Installation
     [[ ${unattended_install} == 'true' ]] && {
-        rm -fv ${instance_location}/Unattended-* ;
+        ## Listing any existing Unattended* files
+        ls -al ${instance_location}/Unattended-* 2>/dev/null;
+        ## Removing any existing Unattended* files
+        rm -fv ${instance_location}/Unattended-* 2>/dev/null;
         newline;
         echo -e "Generating VirtualBox Un-Attended Installation";
         VBoxManage unattended install ${virtual_machine} \
@@ -885,8 +923,13 @@ function virtualbox_appliance () {
               if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
                 newline;
                 echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
+                newline;
                 return 11;
               fi;
+              local system_configuration="${instance_location}/Unattended-*-${target}";
+              ## Creating symlink for shorter output:
+              ln -s ${system_configuration} \
+                    ${instance_location}/${patch_template};
               ## Correcting auto-generated presets
               if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
                 sed -i '' \
@@ -894,19 +937,19 @@ function virtualbox_appliance () {
                     -e 's|^\(.*/user-password.*password \)\(.*\)$|\1{{ devops-password }}|g' \
                     -e 's|^\(.*/root-password.*password \)\(.*\)$|\1{{ root-password }}|g' \
                     -e 's|^\(.*/user-default-groups string \)\(.*\)$|\1sudo|g' \
-                    ${instance_location}/Unattended-*-${target};
+                    ${system_configuration};
                 check_status;
                 sed -i '' \
                     -e "s|{{ service-account }}|${devops_account}|g" \
                     -e "s|{{ devops-password }}|${devops_password}|g" \
                     -e "s|{{ root-password }}|${root_password}|g" \
-                    ${instance_location}/Unattended-*-${target};
+                    ${system_configuration};
                 check_status;
                 newline;
                 echo -e "Notice: Listing modifications (${patch_template})";
                 egrep --before-context=2 \
                       --after-context=2 \
-                "^d-i passwd/.*$" ${instance_location}/Unattended-*-${target} \
+                "^d-i passwd/.*$" ${instance_location}/${patch_template} \
                 | sed -e "s|${devops_password}|***|" \
                       -e "s|${root_password}|***|";
               fi;
@@ -914,20 +957,20 @@ function virtualbox_appliance () {
                 local target_entry="usermod -a -G vboxsf ";
                 sed -i '' \
                     -e "s|^\(.*${target_entry}\)\(.*\)$|\1\"{{ service-account }}\"|" \
-                    ${instance_location}/Unattended-*-${target};
+                    ${system_configuration};
                 ## Patching Pre-Seed Configurations:
-                patch ${instance_location}/Unattended-*-${target} \
+                patch ${system_configuration} \
                     < ${vbox_temp}/${patch_template};
                 check_status;
                 sed -i '' \
                     -e "s|{{ service-account }}|${devops_account}|g" \
-                    ${instance_location}/Unattended-*-${target};
+                    ${system_configuration};
                 check_status;
                 newline;
                 echo -e "Notice: Listing modifications (${patch_template})";
                 egrep --before-context=22 \
                       --after-context=4 \
-                "^.*usermod -a -G vboxsf .*$" ${instance_location}/Unattended-*-${target};
+                "^.*usermod -a -G vboxsf .*$" ${instance_location}/${patch_template};
               fi;
             done;
           };
@@ -952,6 +995,7 @@ function virtualbox_appliance () {
         check_status;
         newline;
         echo -e "Warning: Disabling Service Account password! ";
+        newline;
         ssh ${virtual_machine} -C "ssh sudo passwd --delete ${devops_account}";
         check_status;
       };
