@@ -5,7 +5,6 @@
         },
         "required": [
             "account",
-            "password",
             "boxset",
             "instance",
             "ssh-key"
@@ -20,14 +19,12 @@
         "examples": [
             [
                 "account",
-                "password",
                 "boxset",
                 "instance",
                 "ssh-key"
             ],
             [
                 "account",
-                "password",
                 "boxset",
                 "ssh-key",
                 "cache",
@@ -60,11 +57,6 @@
             "value": "devops",
             "query": "Service Account Username",
             "message": "Service Account (username: devops)"
-        },
-        "password": {
-            "value": "devops",
-            "query": "Service Account Password",
-            "message": "Service Account (password: devops)"
         },
         "boxset": {
             "value": "bento/ubuntu-22.04",
