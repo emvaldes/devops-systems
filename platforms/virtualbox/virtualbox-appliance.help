@@ -1,17 +1,5 @@
-Functions: virtualbox_appliance
-           chedck_status
-           newline
-           postinst_packages
-           preinst_packages
-           sudoers_autologin
-           sudoers_privileges
-           vboxmanage_configvm
-           vboxmanage_interface
-           vboxmanage_multimedia
-           vboxmanage_networking
-           vboxmanage_storage
 
-virtualbox-appliance.shell --help ;
+$ virtualbox-appliance.shell --help ;
 
 Required    --instance          VirtualBox appliance name and hostname
             --account           Service Account (username: devops)
