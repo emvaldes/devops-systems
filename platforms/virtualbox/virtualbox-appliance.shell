@@ -309,9 +309,6 @@ function virtualbox_appliance () {
               local system_configuration="${instance_location}/Unattended-*-${target}";
               ## Creating symlink for shorter output:
               local active_location="$(pwd)";
-              cd ${instance_location};
-              ln -s ./Unattended-*-${target} ./${patch_template};
-              cd "${active_location}" 2>/dev/null;
               ## Correcting auto-generated presets
               if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
                 sed -i '' \
@@ -348,6 +345,12 @@ function virtualbox_appliance () {
                     -e "s|{{ service-account }}|${devops_account}|g" \
                     ${system_configuration};
                 check_status;
+                cd ${instance_location};
+                ## Warning: The creation of this local symlink has to occur after
+                ##          patching is performed. Otherwise this will happen:
+                ## Reversed (or previously applied) patch detected!  Assume -R? [y] y
+                ln -s ./Unattended-*-${target} ./${patch_template};
+                cd "${active_location}" 2>/dev/null;
                 newline;
                 echo -e "Notice: Listing modifications (${patch_template})";
                 egrep --before-context=22 \
