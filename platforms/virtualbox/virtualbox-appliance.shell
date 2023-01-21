@@ -7,7 +7,6 @@ function load_modules () {
         'vbox-manage.shell'
       );
     local resources="$(pwd)/resources/";
-    source ${resources}/*.variables 2>/dev/null;
     for xfile in "${xfiles[@]}"; do
       target="${resources}${xfile}";
       if [[ -e ${target} ]]; then source ${target};
@@ -15,6 +14,7 @@ function load_modules () {
               exit 1;
       fi;
     done;
+    source ${resources}/*.variables 2>/dev/null;
     return 0;
   }; load_modules;
 
