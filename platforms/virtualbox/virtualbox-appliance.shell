@@ -387,10 +387,10 @@ function virtualbox_appliance () {
         for target in ${targets[@]}; do
           ## Warning: The creation of this local symlink has to occur after
           ##          patching is performed. Otherwise it seems to break.
-          ln -s ./Unattended-*-${target} ./patch-${target};
-          echo -e "Warning: Removing patched-file duplicates (e.g.: *.orig) ...";
+          ln -fsv ./Unattended-*-${target} ./patch-${target};
           newline;
-          rm -v ./Unattended-*-${target}.orig 2>/dev/null;
+          echo -e "Warning: Removing patched-file duplicates (e.g.: *.orig) ...";
+          rm -fv ./Unattended-*-${target}.orig 2>/dev/null;
           newline;
         done;
         cd "${active_location}" 2>/dev/null;
