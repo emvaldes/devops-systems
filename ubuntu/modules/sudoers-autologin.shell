@@ -8,7 +8,7 @@ function newline () { echo -e; return 0; };
 export autologin_logfile="/tmp/sudoers-autologin.log";
 cat /dev/null > ${autologin_logfile};
 
-newline; echo -e "Notice: Starting Sudoers Auto-Login ..." \
+echo -e "Notice: Starting Sudoers Auto-Login ..." \
 | tee -a "${autologin_logfile}";
 
 ## DevOps - Service Account
@@ -16,6 +16,7 @@ export devops_account='{{ service-account }}';
 
 newline; echo -e "Warning: Selectively Installing SSH Pass! " \
 | tee -a "${autologin_logfile}";
+newline;
 
 ## This allows to run SSH using the keyboard-interactive password authentication
 ## mode, but in a non-interactive way. SSH uses direct TTY access to ensure that
@@ -28,7 +29,8 @@ sudo apt install sshpass --yes | tee -a "${autologin_logfile}";
 
 newline;
 echo -e "Notice: Auto-Generating SSH Access Keys! " \
-   | tee -a "${autologin_logfile}";
+| tee -a "${autologin_logfile}";
+newline;
 
 export sshkey_fileset="${HOME}/.ssh/id_rsa";
 ssh-keygen -t rsa \
@@ -57,6 +59,7 @@ rm -rfv ${HOME}/.ssh/ssh-copy-id* \
 
 newline; echo -e "Notice: Removing SSH Pass tool! " \
 | tee -a "${autologin_logfile}";
+newline;
 
 ## Removing this tool as mentioned before
 sudo apt remove sshpass --yes \
@@ -64,6 +67,7 @@ sudo apt remove sshpass --yes \
 
 newline; echo -e "Notice: Perfoming Auto-Remove operations! " \
 | tee -a "${autologin_logfile}";
+newline;
 
 ## autoremove (apt-get(8)) autoremove is used to remove packages that were
 ## automatically installed to satisfy dependencies for other packages and
@@ -74,11 +78,13 @@ sudo apt autoremove --yes \
 
 newline; echo -e "Warning: Disabling Service Account password! ";
 | tee -a "${autologin_logfile}";
+newline;
 
 ## Removing Service Account password
-## passwd: password expiry information changed.
+## Warning: This will disable the GUI login's behavior (passwordless)
 sudo passwd --delete ${devops_account} \
 | tee -a "${autologin_logfile}";
+## passwd: password expiry information changed.
 
 newline; echo -e "Notice: Completed Sudoers Auto-Login! " \
 | tee -a "${autologin_logfile}";

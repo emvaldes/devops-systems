@@ -10,7 +10,7 @@ function newline () { echo -e; return 0; };
 export privileges_logfile="/tmp/sudoers-privileges.log";
 cat /dev/null > ${privileges_logfile};
 
-newline; echo -e "Notice: Starting Sudoers Privileges ..." \
+echo -e "Notice: Starting Sudoers Privileges ..." \
 | tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account

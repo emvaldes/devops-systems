@@ -157,6 +157,7 @@ function network_access () {
     local localnet="${HOME}/.localnet";
     newline;
     echo -e "Executing ARP Scanning ... -> ${localnet} : ";
+    newline;
     ## Required to avoid any manual scanning
     sudo arp-scan --localnet | tee ${localnet};
     declare -a listed=($(
@@ -229,7 +230,6 @@ function network_access () {
       ## Listing /etc/hosts current configuration
       newline;
       cat "${etc_hosts}";
-      newline;
       local custom_message=" Record in ${ssh_config} file! ";
       if [[ $( egrep -c "Host ${virtual_machine}" ${ssh_config} ) -eq 0 ]]; then
               newline;

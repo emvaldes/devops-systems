@@ -28,6 +28,11 @@ function sudoers_autologin () {
             sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                       ${vbox_temp}/${autlogin_script};
             check_status;
+            echo -e "Listing ${autlogin_script} configurations ...";
+            newline;
+            cat  ${vbox_temp}/${autlogin_script};
+            echo -e "Executing the ${autlogin_script} script ...";
+            newline;
             ssh ${virtual_machine} -C 'bash -s' \
               < ${vbox_temp}/${autlogin_script} 2>/dev/null;
             check_status;
@@ -79,9 +84,11 @@ function sudoers_privileges () {
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                       ${vbox_temp}/${privileges_script};
             check_status;
-            ## Listing applied configurations:
+            echo -e "Listing ${privileges_script} configurations ...";
+            newline;
             cat  ${vbox_temp}/${privileges_script};
-            ## Executing the sudoers-privileges.shell script
+            echo -e "Executing the ${privileges_script} script ...";
+            newline;
             ssh ${virtual_machine} -C 'bash -s' \
               < ${vbox_temp}/${privileges_script} 2>/dev/null;
             check_status;

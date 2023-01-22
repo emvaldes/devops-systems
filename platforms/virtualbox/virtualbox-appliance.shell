@@ -284,7 +284,6 @@ function virtualbox_appliance () {
       ls -al ${instance_location}/Unattended-* 2>/dev/null;
       ## Removing any existing Unattended* files
       rm -fv ${instance_location}/Unattended-* 2>/dev/null;
-      newline;
       echo -e "Generating VirtualBox Un-Attended Installation";
       newline;
       VBoxManage unattended install ${virtual_machine} \
@@ -351,7 +350,6 @@ function virtualbox_appliance () {
                 -e "s|{{ root-password }}|${root_password}|g" \
                 ${system_configuration};
             check_status;
-            newline;
             echo -e "Notice: Listing modifications (${patch_template})";
             egrep --before-context=2 \
                   --after-context=2 \
@@ -388,13 +386,16 @@ function virtualbox_appliance () {
           ## Warning: The creation of this local symlink has to occur after
           ##          patching is performed. Otherwise it seems to break.
           ln -fsv ./Unattended-*-${target} ./patch-${target};
-          newline;
-          echo -e "Warning: Removing patched-file duplicates (e.g.: *.orig) ...";
-          rm -fv ./Unattended-*-${target}.orig 2>/dev/null;
-          newline;
         done;
+        newline;
+        echo -e "Warning: Removing patched-file duplicates (e.g.: *.orig) ...";
+        newline;
+        rm -fv ./Unattended-*-${target}.orig 2>/dev/null;
+        newline;
         cd "${active_location}" 2>/dev/null;
       fi;
+      echo -e "Completed! ";
+      newline;
     fi;
     if [[ ${configuration} == 'true' ]]; then
       ## Identifying the VirtualBox virtual_machine's IP Address
@@ -455,6 +456,8 @@ function virtualbox_appliance () {
         if [[ ${#check_hostexist[@]} -gt 0 ]]; then
           ## -H -R hostname : Removes all hashed hosts (keys) belonging to
           ## hostname from a known_hosts file.
+          echo -e "Warning: Purging any ${ipaddr} existing records ...";
+          newline;
           ssh-keygen -R ${ipaddr};
         fi;
         newline;
@@ -490,18 +493,9 @@ function virtualbox_appliance () {
         ## Enabling Passwordless Access
         sudoers_privileges;
         check_status;
+        ## Enabling Auto-Login Access
         sudoers_autologin;
         check_status;
-        ## Remote SSH Access
-        ssh ${virtual_machine} -C \
-          "sudo systemctl status ssh" 2>/dev/null;
-        check_status;
-        # newline;
-        # echo -e "Warning: Disabling Service Account password! ";
-        # newline;
-        # ssh ${virtual_machine} -C \
-        #   "ssh sudo passwd --delete ${devops_account}";
-        # check_status;
       fi;
     fi;
     if [[ ${install_packages} == 'true' ]]; then
