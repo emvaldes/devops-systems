@@ -144,26 +144,26 @@ function virtualbox_appliance () {
       ## Processing ISO filename (location)
       local missing_isofile="Warning: No Installation ISO file was provided! ";
       if [[ ${#iso_filename} -eq 0 ]]; then
-              echo -e "${missing_isofile}";
-              ## Installation media (DVD ISO):
-              user_input="Installation ISO location: ";
-              newline; read -p "${user_input}" iso_filename;
-              local fixing_filepath="$(
-                  echo -e "${iso_filename}" \
-                     | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
-                )";
-              iso_filename="${fixing_filepath}";
-              if [[ ${#iso_filename} -eq 0 ]]; then
-                newline;
-                echo -e "Warning: Unable to continue! ";
-                newline;
-                return 3;
-              fi;
-        else  if [[ ! -e ${iso_filename} ]]; then
-                newline;
-                echo -e "${missing_isofile}";
-                return 4;
-              fi;
+        echo -e "${missing_isofile}";
+        ## Installation media (DVD ISO):
+        user_input="Installation ISO location: ";
+        newline; read -p "${user_input}" iso_filename;
+        local fixing_filepath="$(
+            echo -e "${iso_filename}" \
+               | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+          )";
+        iso_filename="${fixing_filepath}";
+        if [[ ${#iso_filename} -eq 0 ]]; then
+          newline;
+          echo -e "Warning: Unable to continue! ";
+          newline;
+          return 3;
+        fi;
+      fi;
+      if [[ ! -e ${iso_filename} ]]; then
+        newline;
+        echo -e "${missing_isofile}";
+        return 4;
       fi;
     fi;
     if [[ ${#devops_account} -eq 0 ]]; then
