@@ -173,12 +173,12 @@ function script_helper () {
                  -e 's|\ \\\*\-\-| --|g' \
                  -e 's|\(\ \)\(\\\*\)\(;\)$|\1\3|' \
         ;
-      done; echo -e;
+      done; newline;
       return 3;
     fi;
     ## -------------------------------------------------------------------------
     if [[ ${info_mode} == 'true' ]]; then
-      echo -e;
+      newline;
       declare -a references="$( echo -e "${json_object}" \
           | jq --compact-output '.script.info'
         )";
@@ -210,7 +210,7 @@ function script_helper () {
         );
         echo -e  "DevOps: ${devops_name} <${devops_email}>"
       done;
-      echo -e;
+      newline;
       return 4;
     fi;
     ## -------------------------------------------------------------------------
@@ -266,7 +266,7 @@ function script_helper () {
       echo -e   "${each}" \
          | sed -e  's|\(\ \)\(\\\*\)\(\ \)\{2,\}|\1\\\n'${output_spacer}'|g' \
                -e  's|\(\ \)\(\\\*\)\(\;\)$|\1\\\n\3|' \
-      ; echo -e;
+      ; newline;
     done;
     # ${calling_script} --info;
     return 0;

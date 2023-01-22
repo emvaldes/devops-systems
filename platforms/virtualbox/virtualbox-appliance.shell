@@ -319,7 +319,7 @@ function virtualbox_appliance () {
               check_status;
               while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
                 echo -e '.'; sleep 1;
-              done; echo -e;
+              done; newline;
               check_status;
               if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
                 newline;
@@ -453,7 +453,7 @@ function virtualbox_appliance () {
                 check_status;
                 while [[ ! -e ${vbox_temp}/${expect_template} ]]; do
                   echo -e '.'; sleep 1;
-                done; echo -e;
+                done; newline;
                 check_status;
                 if [[ ! -e ${vbox_temp}/${expect_template} ]]; then
                   newline;

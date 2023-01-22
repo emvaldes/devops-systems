@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
 ## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
+function newline () { echo -e; return 0; };
+
+## -----------------------------------------------------------------------------
 ## Objective: Configuring Auto-Login Capabilities
 function sudoers_autologin () {
     local autlogin_script="sudoers-autologin.shell";
@@ -13,7 +17,7 @@ function sudoers_autologin () {
     check_status;
     while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
       echo -e '.'; sleep 1;
-    done; echo -e;
+    done; newline;
     check_status;
     if [[ -e ${vbox_temp}/${autlogin_script} ]]; then
             ## Updating the serice-account placeholder
@@ -49,7 +53,7 @@ function sudoers_privileges () {
     check_status;
     while [[ ! -e ${vbox_temp}/${privileges_script} ]]; do
       echo -e '.'; sleep 1;
-    done; echo -e;
+    done; newline;
     check_status;
     if [[ -e ${vbox_temp}/${privileges_script} ]]; then
             insert_lines="${vbox_temp}/insert-lines.file";

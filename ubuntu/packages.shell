@@ -36,7 +36,7 @@ function packages_ubuntu () {
       packages_ubuntu.help --caller=${FUNCNAME} --example=${example};
       return 0;
     fi;
-    echo -e;
+    newline;
     timestamp="$(date +"%y%m%d%H%M%S")";
     dateset="${timestamp:0:6}";
     timeset="${timestamp:6:6}";
@@ -145,7 +145,7 @@ function packages_ubuntu () {
       ## Identifying if package is already installed.
       local status=;
       case "${installer}" in
-         apt ) echo -e;
+         apt ) newline;
                package_status="$(
                    apt list --installed ${package} 2>/dev/null \
                    | egrep -v "Listing... Done" | egrep -w "^${package}.*"
