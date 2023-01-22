@@ -29,6 +29,5 @@ echo -e "Notice: Executing Packages Installation ..." \
 
 bash ./packages.shell --install | tee ./packages.log;
 
-newline;
 echo -e "Notice: Completed Framework Deployment! " \
    | tee -a "${postinstall_logfile}";
