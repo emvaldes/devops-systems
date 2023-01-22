@@ -1,6 +1,41 @@
 #!/usr/bin/env bash
 
 ## -----------------------------------------------------------------------------
+## Objective: Configuring Auto-Login Capabilities
+function sudoers_autologin () {
+    local autlogin_script="sudoers-autologin.shell";
+    local remote_module="${ubuntu_modules}/${autlogin_script}";
+    rm -fv ${vbox_temp}/${autlogin_script} 2>/dev/null;
+    # check_status;
+    curl --silent \
+         --output ${vbox_temp}/${autlogin_script} \
+         https://${github_content}/${github_repo}/${remote_module};
+    check_status;
+    while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
+      echo -e '.'; sleep 1;
+    done; echo -e;
+    check_status;
+    if [[ -e ${vbox_temp}/${autlogin_script} ]]; then
+            ## Updating the serice-account placeholder
+            sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
+                      ${vbox_temp}/${autlogin_script};
+            check_status;
+            ## Updating the virtual-machine placeholder
+            sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
+                      ${vbox_temp}/${autlogin_script};
+            check_status;
+            ssh ${virtual_machine} -C 'bash -s' \
+              < ${vbox_temp}/${autlogin_script} 2>/dev/null;
+            check_status;
+      else  newline;
+            echo -e "Warning: ${vbox_temp}/${autlogin_script} is missing! ";
+            newline;
+            return 5;
+    fi;
+    return 0;
+  }; alias sudoers-autologin='sudoers_autologin';
+
+## -----------------------------------------------------------------------------
 ## Objective: Configuring Sudoers Privileges
 function sudoers_privileges () {
     ## Enabling Passwordless Access
@@ -53,38 +88,3 @@ function sudoers_privileges () {
     fi;
     return 0;
   }; alias sudoers-privileges='sudoers_privileges';
-
-## -----------------------------------------------------------------------------
-## Objective: Configuring Auto-Login Capabilities
-function sudoers_autologin () {
-    local autlogin_script="sudoers-autologin.shell";
-    local remote_module="${ubuntu_modules}/${autlogin_script}";
-    rm -fv ${vbox_temp}/${autlogin_script} 2>/dev/null;
-    # check_status;
-    curl --silent \
-         --output ${vbox_temp}/${autlogin_script} \
-         https://${github_content}/${github_repo}/${remote_module};
-    check_status;
-    while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
-      echo -e '.'; sleep 1;
-    done; echo -e;
-    check_status;
-    if [[ -e ${vbox_temp}/${autlogin_script} ]]; then
-            ## Updating the serice-account placeholder
-            sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                      ${vbox_temp}/${autlogin_script};
-            check_status;
-            ## Updating the virtual-machine placeholder
-            sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
-                      ${vbox_temp}/${autlogin_script};
-            check_status;
-            ssh ${virtual_machine} -C 'bash -s' \
-              < ${vbox_temp}/${autlogin_script} 2>/dev/null;
-            check_status;
-      else  newline;
-            echo -e "Warning: ${vbox_temp}/${autlogin_script} is missing! ";
-            newline;
-            return 5;
-    fi;
-    return 0;
-  }; alias sudoers-autologin='sudoers_autologin';
