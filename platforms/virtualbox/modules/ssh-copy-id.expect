@@ -1,0 +1,4 @@
+spawn ssh-copy-id -i {{ sshkey_access }} -o StrictHostKeyChecking=no {{ devops_account }}@{{ network_address }}
+expect "{{ devops_account }}@{{ network_address }}'s password: "
+send "{{ devops_password }}\r"
+interact
