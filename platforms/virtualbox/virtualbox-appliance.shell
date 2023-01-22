@@ -358,6 +358,7 @@ function virtualbox_appliance () {
               ## Warning: The creation of this local symlink has to occur after
               ##          patching is performed. Otherwise it seems to break.
               ln -s ./Unattended-*-${target} ./patch-${target};
+              rm -v ./Unattended-*-${target}.orig 2>/dev/null;
             done;
             cd "${active_location}" 2>/dev/null;
           };
