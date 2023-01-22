@@ -8,9 +8,8 @@ function newline () { echo -e; return 0; };
 export privileges_logfile="/tmp/sudoers-privileges.log";
 cat /dev/null > ${privileges_logfile};
 
-newline;
-echo -e "Notice: Starting Sudoers Privileges ..." \
-   | tee -a "${privileges_logfile}";
+newline; echo -e "Notice: Starting Sudoers Privileges ..." \
+| tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account
 export devops_account='{{ service-account }}';
@@ -19,34 +18,34 @@ export devops_account='{{ service-account }}';
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
 
         ## Injecting Passwordless Configuration
-        newline;
-        echo -e "Warning: Generating ${devops_account} Passwordless syntax ..." \
-           | tee -a "${privileges_logfile}";
+        ## Warning: This is not recommended! sudo permissions should be granted
+        ##          in a per-command basis limiting the scope of granted rights.
+        newline; echo -e "Warning: Granting un-restricted execution rights ..." \
+        | tee -a "${privileges_logfile}";
+
         echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
-           | sudo tee /etc/sudoers.d/${devops_account};
+        | sudo tee /etc/sudoers.d/${devops_account};
+
+        newline; echo -e "Warning: Correcting ${devops_account} file permissions! " \
+        | tee -a "${privileges_logfile}";
+
         ## Service Account /etc/sudoers.d/ file-permissions
-        newline;
-        echo -e "Warning: Correcting ${devops_account} file permissions! " \
-           | tee -a "${privileges_logfile}";
         sudo chmod -v 0440 /etc/sudoers.d/${devops_account} \
-           | tee -a "${privileges_logfile}";
+        | tee -a "${privileges_logfile}";
         ## mode of '/etc/sudoers.d/devops' changed
         ## from 0644 (rw-r--r--) to 0440 (r--r-----)
 
-  else  newline;
-        echo -e "Warning: Sudoers Privileges already enabled! " \
-           | tee -a "${privileges_logfile}";
+  else  newline; echo -e "Warning: Sudoers Privileges already enabled! " \
+        | tee -a "${privileges_logfile}";
         return 0;
 
 fi;
 
-newline;
-echo -e "Notice: Listing ${devops_account} file permissions! " \
-   | tee -a "${privileges_logfile}";
+newline; echo -e "Notice: Listing ${devops_account} file permissions! " \
+| tee -a "${privileges_logfile}";
 
 sudo ls -al /etc/sudoers.d/${devops_account}\
 | tee -a "${privileges_logfile}";
 
-newline;
-echo -e "Notice: Completed Sudoers Privileges! " \
-   | tee -a "${privileges_logfile}";
+newline; echo -e "Notice: Completed Sudoers Privileges! " \
+| tee -a "${privileges_logfile}";
