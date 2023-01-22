@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Script: ubuntu-preinstall.shell
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 export preinstall_logfile="/tmp/preinstall.log";

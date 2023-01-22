@@ -25,6 +25,8 @@
 #   fi;
 # fi;
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 function script_helper () {

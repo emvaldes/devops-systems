@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Script: sudoers-autologin.shell
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 export autologin_logfile="/tmp/sudoers-autologin.log";

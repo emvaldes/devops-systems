@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Script: ubuntu-postinstall.shell
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 export postinstall_logfile="/tmp/postinstall.log";

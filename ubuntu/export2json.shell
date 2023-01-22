@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 function export2json () {

@@ -66,6 +66,8 @@ mkdir -p "${user_local}";
 ## -----------------------------------------------------------------------------
 ## Objective: Environment Functions
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 ## Random Password:

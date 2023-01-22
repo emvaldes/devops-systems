@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 # Script: sudoers-privileges.shell
 
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
 ## {{ placeholder }}
