@@ -120,8 +120,8 @@ function valid_number () {
   }; alias valid-digit='is_digit';
 
 ## -----------------------------------------------------------------------------
-## Objective: Configuring Network Interfaces
-function vboxmanage_interface () {
+## Objective: Configuring Access Capabilities
+function network_access () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
@@ -207,7 +207,10 @@ function vboxmanage_interface () {
           egrep -c "^.*${virtual_machine}.*$" ${etc_hosts}
         )";
       if [[ ${update_record} -gt 0 ]]; then
-              if [[ ${update_record} -gt 0 ]]; then
+              local exact_match=$(
+                  egrep -c "^${ipaddr}.*${virtual_machine}.*$" ${etc_hosts}
+                );
+              if [[ ${exact_match} -eq 0 ]]; then
                 local regex='^';
                 regex+='\([0-9\.]\)\{1,\}\([[:blank:]]*\)';
                 regex+="\(${virtual_machine}.*\)";
@@ -262,4 +265,4 @@ function vboxmanage_interface () {
     #   ).*/d ${known_hosts} ;
     IFS="${oIFS}";
     return 0;
-  }; alias vboxmanage-interface='vboxmanage_interface';
+  }; alias network-access='network_access';
