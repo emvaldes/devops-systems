@@ -17,11 +17,12 @@ export devops_account='{{ service-account }}';
 ## Configuring Service Account passwordless access to sudo-requests
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
 
+        newline; echo -e "Warning: Granting un-restricted execution rights ..." \
+        | tee -a "${privileges_logfile}";
+
         ## Injecting Passwordless Configuration
         ## Warning: This is not recommended! sudo permissions should be granted
         ##          in a per-command basis limiting the scope of granted rights.
-        newline; echo -e "Warning: Granting un-restricted execution rights ..." \
-        | tee -a "${privileges_logfile}";
 
         echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
         | sudo tee /etc/sudoers.d/${devops_account};
