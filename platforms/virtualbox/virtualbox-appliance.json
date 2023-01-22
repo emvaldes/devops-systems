@@ -130,8 +130,8 @@
         },
         "projects": {
             "value": "${HOME}/.virtualization/virtualbox",
-            "query": "Provide VBox projects location",
-            "message": "Provide VBox projects location"
+            "query": "VBox projects location",
+            "message": "Provides VBox projects location"
         },
         "provision": {
             "query": "Provision Infrastructure",
