@@ -31,6 +31,7 @@ function sudoers_autologin () {
             echo -e "Listing ${autlogin_script} configurations ...";
             newline;
             cat  ${vbox_temp}/${autlogin_script};
+            newline;
             echo -e "Executing the ${autlogin_script} script ...";
             newline;
             ssh ${virtual_machine} -C 'bash -s' \

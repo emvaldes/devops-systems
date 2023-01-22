@@ -8,7 +8,6 @@ function newline () { echo -e; return 0; };
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};
 
-newline;
 echo -e "Notice: Starting Framework Deployment ..." \
    | tee -a "${postinstall_logfile}";
 

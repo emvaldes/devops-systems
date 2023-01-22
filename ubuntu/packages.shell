@@ -165,11 +165,11 @@ function packages_ubuntu () {
       ## Evaluating APT Installed output
       if [[ $result == 'absent' ]]; then
               ## Package is not installed.
-              newline;
               echo -e "--------------------------------------------------------------------------------";
               echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
               echo -e "   Warning: ${package} package is not installed! ";
               echo -e "--------------------------------------------------------------------------------";
+              newline;
 	            ## Conditioning Package Installation based on explicit request
               if [[ ${install_packages} == 'true' ]]; then
                 ## Configuring Package Instation Reports path
@@ -255,6 +255,7 @@ function packages_ubuntu () {
         echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
         echo -e "   Package: ${package_status}";
         echo -e "--------------------------------------------------------------------------------";
+        newline;
         # echo -e "${package}" >> ${installed};
         case "${installer}" in
            apt ) ## Processing APT-Installed Packages:
