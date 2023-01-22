@@ -72,6 +72,9 @@ newline; echo -e "Notice: Perfoming Auto-Remove operations! " \
 sudo apt autoremove --yes \
 | tee -a "${autologin_logfile}";
 
+newline; echo -e "Warning: Disabling Service Account password! ";
+| tee -a "${autologin_logfile}";
+
 ## Removing Service Account password
 ## passwd: password expiry information changed.
 sudo passwd --delete ${devops_account} \
