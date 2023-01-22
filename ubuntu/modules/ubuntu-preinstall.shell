@@ -8,6 +8,27 @@ function newline () { echo -e; return 0; };
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
+newline; echo -e "Warning: APT Updating System! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+sudo apt update --yes \
+| tee -a "${autologin_logfile}";
+
+newline; echo -e "Warning: APT Upgrading System! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+sudo apt upgrade --yes \
+| tee -a "${autologin_logfile}";
+
+newline; echo -e "Warning: APT Autoremove Packages! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+sudo apt autoremove --yes \
+| tee -a "${autologin_logfile}";
+
 echo -e "Notice: Starting Pre-Install ..." \
 | tee -a "${preinstall_logfile}";
 
