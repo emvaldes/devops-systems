@@ -279,112 +279,112 @@ function virtualbox_appliance () {
       #                          --guest-path="/deploy";
     fi;
     ## Unattended Installation
-    [[ ${unattended_install} == 'true' ]] && {
-        ## Listing any existing Unattended* files
-        ls -al ${instance_location}/Unattended-* 2>/dev/null;
-        ## Removing any existing Unattended* files
-        rm -fv ${instance_location}/Unattended-* 2>/dev/null;
-        newline;
-        echo -e "Generating VirtualBox Un-Attended Installation";
-        VBoxManage unattended install ${virtual_machine} \
-                 --iso="${iso_filename}" \
-                 --user="${devops_account}" \
-                 ${password_option} \
-                 --full-user-name="DevOps Engineer" \
-                 --install-additions \
-                 --locale="en_US" \
-                 --country="US" \
-                 --time-zone="utc" \
-                 --hostname="${virtual_machine}.local" \
-                 --language="en" \
-        ;
-        check_status;
-        ## Pre-Configuring patching files
-        [[ ${patch_files} == 'true' ]] && {
-            declare -a targets=(
-                preseed.cfg
-                vboxpostinstall.sh
-              );
-            ## -----------------------------------------------------------------
-            ## Configuring target-configs with custom settings.
-            for target in ${targets[@]}; do
-              ## Configuring each target with custom settings.
-              export patch_template="patch-${target}";
-              export remote_resource="${virtualbox_platform}/modules/${patch_template}";
-              rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
-              # check_status;
-              curl --silent \
-                   --output ${vbox_temp}/${patch_template} \
-                   https://${github_content}/${github_repo}/${remote_resource};
-              check_status;
-              while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
-                echo -e '.'; sleep 1;
-              done; newline;
-              check_status;
-              if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
-                newline;
-                echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
-                newline;
-                return 6;
-              fi;
-              local system_configuration="${instance_location}/Unattended-*-${target}";
-              ## Creating symlink for shorter output:
-              local active_location="$(pwd)";
-              ## Correcting auto-generated presets
-              if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
-                sed -i '' \
-                    -e 's|^\(.*/username string \)\(.*\)$|\1{{ service-account }}|g' \
-                    -e 's|^\(.*/user-password.*password \)\(.*\)$|\1{{ devops-password }}|g' \
-                    -e 's|^\(.*/root-password.*password \)\(.*\)$|\1{{ root-password }}|g' \
-                    -e 's|^\(.*/user-default-groups string \)\(.*\)$|\1sudo|g' \
-                    ${system_configuration};
-                check_status;
-                sed -i '' \
-                    -e "s|{{ service-account }}|${devops_account}|g" \
-                    -e "s|{{ devops-password }}|${devops_password}|g" \
-                    -e "s|{{ root-password }}|${root_password}|g" \
-                    ${system_configuration};
-                check_status;
-                newline;
-                echo -e "Notice: Listing modifications (${patch_template})";
-                egrep --before-context=2 \
-                      --after-context=2 \
-                "^d-i passwd/.*$" ${system_configuration} \
-                | sed -e "s|${devops_password}|***|" \
-                      -e "s|${root_password}|***|";
-              fi;
-              if [[ ${patch_template} == 'patch-vboxpostinstall.sh' ]]; then
-                local target_entry="usermod -a -G vboxsf ";
-                sed -i '' \
-                    -e "s|^\(.*${target_entry}\)\(.*\)$|\1\"{{ service-account }}\"|" \
-                    ${system_configuration};
-                ## Patching Deployment Configurations:
-                ##  Warning: Reversed (or previously applied) patch detected!
-                ##           Assume -R? [y] y
-                ## Solution: --batch suppresses questions and some assumptions.
-                patch --batch \
-                      ${system_configuration} < ${vbox_temp}/${patch_template};
-                check_status;
-                sed -i '' \
-                    -e "s|{{ service-account }}|${devops_account}|g" \
-                    ${system_configuration};
-                check_status;
-                echo -e "Notice: Listing modifications (${patch_template})";
-                egrep --before-context=22 \
-                      --after-context=4 \
-                "^.*usermod -a -G vboxsf .*$" ${system_configuration};
-              fi;
-            done;
-            cd ${instance_location};
-            for target in ${targets[@]}; do
-              ## Warning: The creation of this local symlink has to occur after
-              ##          patching is performed. Otherwise it seems to break.
-              ln -s ./Unattended-*-${target} ./patch-${target};
-              rm -v ./Unattended-*-${target}.orig 2>/dev/null;
-            done;
-            cd "${active_location}" 2>/dev/null;
-          };
-      };
+    if [[ ${unattended_install} == 'true' ]]; then
+      ## Listing any existing Unattended* files
+      ls -al ${instance_location}/Unattended-* 2>/dev/null;
+      ## Removing any existing Unattended* files
+      rm -fv ${instance_location}/Unattended-* 2>/dev/null;
+      newline;
+      echo -e "Generating VirtualBox Un-Attended Installation";
+      VBoxManage unattended install ${virtual_machine} \
+               --iso="${iso_filename}" \
+               --user="${devops_account}" \
+               ${password_option} \
+               --full-user-name="DevOps Engineer" \
+               --install-additions \
+               --locale="en_US" \
+               --country="US" \
+               --time-zone="utc" \
+               --hostname="${virtual_machine}.local" \
+               --language="en" \
+      ;
+      check_status;
+      ## Pre-Configuring patching files
+      if [[ ${patch_files} == 'true' ]]; then
+        declare -a targets=(
+            preseed.cfg
+            vboxpostinstall.sh
+          );
+        ## -----------------------------------------------------------------
+        ## Configuring target-configs with custom settings.
+        for target in ${targets[@]}; do
+          ## Configuring each target with custom settings.
+          export patch_template="patch-${target}";
+          export remote_resource="${virtualbox_platform}/modules/${patch_template}";
+          rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
+          # check_status;
+          curl --silent \
+               --output ${vbox_temp}/${patch_template} \
+               https://${github_content}/${github_repo}/${remote_resource};
+          check_status;
+          while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
+            echo -e '.'; sleep 1;
+          done; newline;
+          check_status;
+          if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
+            newline;
+            echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
+            newline;
+            return 6;
+          fi;
+          local system_configuration="${instance_location}/Unattended-*-${target}";
+          ## Creating symlink for shorter output:
+          local active_location="$(pwd)";
+          ## Correcting auto-generated presets
+          if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
+            sed -i '' \
+                -e 's|^\(.*/username string \)\(.*\)$|\1{{ service-account }}|g' \
+                -e 's|^\(.*/user-password.*password \)\(.*\)$|\1{{ devops-password }}|g' \
+                -e 's|^\(.*/root-password.*password \)\(.*\)$|\1{{ root-password }}|g' \
+                -e 's|^\(.*/user-default-groups string \)\(.*\)$|\1sudo|g' \
+                ${system_configuration};
+            check_status;
+            sed -i '' \
+                -e "s|{{ service-account }}|${devops_account}|g" \
+                -e "s|{{ devops-password }}|${devops_password}|g" \
+                -e "s|{{ root-password }}|${root_password}|g" \
+                ${system_configuration};
+            check_status;
+            newline;
+            echo -e "Notice: Listing modifications (${patch_template})";
+            egrep --before-context=2 \
+                  --after-context=2 \
+            "^d-i passwd/.*$" ${system_configuration} \
+            | sed -e "s|${devops_password}|***|" \
+                  -e "s|${root_password}|***|";
+          fi;
+          if [[ ${patch_template} == 'patch-vboxpostinstall.sh' ]]; then
+            local target_entry="usermod -a -G vboxsf ";
+            sed -i '' \
+                -e "s|^\(.*${target_entry}\)\(.*\)$|\1\"{{ service-account }}\"|" \
+                ${system_configuration};
+            ## Patching Deployment Configurations:
+            ##  Warning: Reversed (or previously applied) patch detected!
+            ##           Assume -R? [y] y
+            ## Solution: --batch suppresses questions and some assumptions.
+            patch --batch \
+                  ${system_configuration} < ${vbox_temp}/${patch_template};
+            check_status;
+            sed -i '' \
+                -e "s|{{ service-account }}|${devops_account}|g" \
+                ${system_configuration};
+            check_status;
+            echo -e "Notice: Listing modifications (${patch_template})";
+            egrep --before-context=22 \
+                  --after-context=4 \
+            "^.*usermod -a -G vboxsf .*$" ${system_configuration};
+          fi;
+        done;
+        cd ${instance_location};
+        for target in ${targets[@]}; do
+          ## Warning: The creation of this local symlink has to occur after
+          ##          patching is performed. Otherwise it seems to break.
+          ln -s ./Unattended-*-${target} ./patch-${target};
+          rm -v ./Unattended-*-${target}.orig 2>/dev/null;
+        done;
+        cd "${active_location}" 2>/dev/null;
+      fi;
+    fi;
     [[ ${configuration} == 'true' ]] && {
         ## Identifying the VirtualBox virtual_machine's IP Address
         ## Warning: If Virtual Machine name is not valid this will fail.
