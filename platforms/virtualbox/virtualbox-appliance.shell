@@ -198,9 +198,13 @@ function virtualbox_appliance () {
               sshkey_access="${fixing_filepath}";
             fi;
             if [[ ! -e ${sshkey_access} ]]; then
-              newline;
-              echo -e "${missing_sshkey}";
-              return 5;
+                    newline;
+                    echo -e "${missing_sshkey}";
+                    return 5;
+              else  newline;
+                    echo -e "Notice: Listing '${sshkey_access}' fingerprint ...";
+                    ssh-keygen -l -v -f "${sshkey_access}" ;
+                    newline;
             fi;
     fi;
     if [[ ${#provisioning} -eq 0 ]]; then
@@ -460,7 +464,6 @@ function virtualbox_appliance () {
           newline;
           ssh-keygen -R ${ipaddr};
         fi;
-        newline;
         echo -e "Notice: Copying the SSH Access Key to Guest System ...";
         ## Configuring each target with custom settings.
         export expect_template="ssh-copy-id.expect";
