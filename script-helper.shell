@@ -128,16 +128,16 @@ function script_helper () {
           | jq --raw-output ".script.headers.interview"
         ):";
       newline;
-      local question=''; counter=0;
+      local question=''; indexer=0;
       for xitem in ${options[@]}; do
-        (( ++counter ));
+        (( ++indexer ));
         syntax='.params."'${xitem}'"|select(.value!=null)|.query';
         question="$(
             echo -e "${json_object}" \
             | jq --raw-output "${syntax}"
           )";
         if [[ ${#question} -gt 0 ]]; then
-                heading="${counter} -) ${question}: ";
+                heading="${indexer} -) ${question}: ";
                 read -p "${heading}" response;
                 if [[ ${#response} -gt 0 ]]; then
                         include=" --${xitem}=\"${response}\"";
@@ -147,7 +147,7 @@ function script_helper () {
                   else  newline;
                 fi;
           else  ## Parsing non-parameterized options:
-                heading="${counter} -) Include '${xitem}' [Y/n] : ";
+                heading="${indexer} -) Include '${xitem}' [Y/n] : ";
                 read -p "${heading}" response;
                 if [[ 'Y|y' =~ ${response:0:1} ]]; then
                         include=" --${xitem}";
