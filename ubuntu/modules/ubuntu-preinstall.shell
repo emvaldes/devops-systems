@@ -8,27 +8,26 @@ function newline () { echo -e; return 0; };
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
-newline;
 echo -e "Notice: Starting Pre-Install ..." \
-   | tee -a "${preinstall_logfile}";
-
-newline;
-echo -e "Notice: Installing and Configuring Git CLI ..." \
-   | tee -a "${preinstall_logfile}";
-
-sudo apt install git --yes \
 | tee -a "${preinstall_logfile}";
 
-newline;
-echo -e "Notice: Installing and Configuring additional packages ..." \
-   | tee -a "${preinstall_logfile}";
+declare -a packages=(
+    curl
+    git
+    jq
+    python-is-python3
+  );
 
-sudo apt install jq --yes \
+for package in ${packages[@]}; do
+
+  newline; echo -e "Notice: Installing ${package} package ..." \
+  | tee -a "${preinstall_logfile}";
+  newline;
+
+  sudo apt install ${package} --yes \
+  | tee -a "${preinstall_logfile}";
+
+done;
+
+newline; echo -e "Notice: Completed Pre-Install! " \
 | tee -a "${preinstall_logfile}";
-
-sudo apt install python-is-python3 --yes \
-| tee -a "${preinstall_logfile}";
-
-newline;
-echo -e "Notice: Completed Pre-Install! " \
-   | tee -a "${preinstall_logfile}";
