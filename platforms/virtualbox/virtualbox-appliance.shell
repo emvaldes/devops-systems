@@ -27,29 +27,29 @@ function virtualbox_appliance () {
       ## Required Parameters:
       [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "account" ]] && local devops_account="${2}";
-      [[ ${1#*\--} = "password" ]] && {
-          if [[ ${ignore_password} == 'false' ]]; then
-            local devops_password="${2}";
-            local password_option="--password=";
-            password_option+="${devops_password}";
-          fi;
-        };
-      [[ ${1#*\--} = "secret" ]] && {
-          local devops_passwdfile="$(
-              echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
-            )";
-          if [[ -e "${devops_passwdfile}" ]]; then
-                  local devops_password="$(
-                      cat "${devops_passwdfile}"
-                    )";
-                  local password_option="--password-file=";
-                  password_option+="${devops_passwdfile}";
-                  ignore_password='true';
-            else  newline;
-                  echo -e "Warning: Password File was not found! ";
-                  newline;
-          fi;
-        };
+      if [[ ${1#*\--} = "password" ]]; then
+        if [[ ${ignore_password} == 'false' ]]; then
+          local devops_password="${2}";
+          local password_option="--password=";
+          password_option+="${devops_password}";
+        fi;
+      fi;
+      if [[ ${1#*\--} = "secret" ]]; then
+        local devops_passwdfile="$(
+            echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+          )";
+        if [[ -e "${devops_passwdfile}" ]]; then
+                local devops_password="$(
+                    cat "${devops_passwdfile}"
+                  )";
+                local password_option="--password-file=";
+                password_option+="${devops_passwdfile}";
+                ignore_password='true';
+          else  newline;
+                echo -e "Warning: Password File was not found! ";
+                newline;
+        fi;
+      fi;
       ## Optional Parameters:
       [[ ${1#*\--} = "instance" ]] && local virtual_machine="${2}";
       [[ ${1#*\--} = "cache" ]] && local user_local="${2}";
@@ -58,21 +58,21 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "delete" ]] && local delete_machine='true';
       [[ ${1#*\--} = "deploy" ]] && local unattended_install='true';
       [[ ${1#*\--} = "install" ]] && local install_packages='true';
-      [[ ${1#*\--} = "iso-file" ]] && {
-          local iso_filename="$(
-              echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
-            )";
-          [[ ! -e ${iso_filename} ]] && unset iso_filename;
-        };
+      if [[ ${1#*\--} = "iso-file" ]]; then
+        local iso_filename="$(
+            echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+          )";
+        [[ ! -e ${iso_filename} ]] && unset iso_filename;
+      fi;
       [[ ${1#*\--} = "packages" ]] && local custom_packages="${2}";
       [[ ${1#*\--} = "patch" ]] && local patch_files='true';
       [[ ${1#*\--} = "projects" ]] && local virtualbox_projects="${2}";
       [[ ${1#*\--} = "provision" ]] && local provisioning='true';
-      [[ ${1#*\--} = "ssh-key" ]] && {
-          local sshkey_access="$(
-              echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
-            )";
-        };
+      if [[ ${1#*\--} = "ssh-key" ]]; then
+        local sshkey_access="$(
+            echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+          )";
+      fi;
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       ## Assistance Parameters:
       [[ ${1#*\--} = "example" ]] && local example_mode='true';
@@ -105,10 +105,10 @@ function virtualbox_appliance () {
     fi;
     ## -------------------------------------------------------------------------
     ## Objective: System Operational Requirements
-    [[ ${#user_local} -eq 0 ]] && {
-        export user_local="${HOME}/.local";
-        mkdir -p "${user_local}";
-      };
+    if [[ ${#user_local} -eq 0 ]]; then
+      export user_local="${HOME}/.local";
+      mkdir -p "${user_local}";
+    fi;
     ## Temporary folder/container:
     export local_temp="${user_local}/tmp";
     export vbox_temp="${local_temp}/vbox";
@@ -116,10 +116,10 @@ function virtualbox_appliance () {
     ## Constructing a Vagrant Shared folder to exchange content
     mkdir -p "${vbox_shared}";
     ## Target VirtualBox Home folder:
-    [[ ${#virtualbox_projects} -eq 0 ]] && {
-        export virtualbox_projects="${HOME}/.virtualization/virtualbox";
-        mkdir -p "${virtualbox_projects}";
-      };
+    if [[ ${#virtualbox_projects} -eq 0 ]]; then
+      export virtualbox_projects="${HOME}/.virtualization/virtualbox";
+      mkdir -p "${virtualbox_projects}";
+    fi;
     ## -------------------------------------------------------------------------
     ## Processing Function Input Parameters
     if [[ ${#virtual_machine} -eq 0 ]]; then
@@ -159,27 +159,27 @@ function virtualbox_appliance () {
                 newline;
                 return 3;
               fi;
-        else  [[ ! -e ${iso_filename} ]] && {
-                  newline;
-                  echo -e "${missing_isofile}";
-                  return 4;
-                };
+        else  if [[ ! -e ${iso_filename} ]]; then
+                newline;
+                echo -e "${missing_isofile}";
+                return 4;
+              fi;
       fi;
     fi;
-    [[ ${#devops_account} -eq 0 ]] && {
-        export devops_account='devops';
-        newline;
-        echo -en "Warning: Using default ";
-        echo -e  "'${devops_account}' service account! ";
-        newline;
-      };
-    [[ ${#devops_password} -eq 0 ]] && {
-        export devops_password="$(password)";
-        newline;
-        echo -en "Warning: Using custom ";
-        echo -e  "'${devops_password}' account password! ";
-        newline;
-      };
+    if [[ ${#devops_account} -eq 0 ]]; then
+      export devops_account='devops';
+      newline;
+      echo -en "Warning: Using default ";
+      echo -e  "'${devops_account}' service account! ";
+      newline;
+    fi;
+    if [[ ${#devops_password} -eq 0 ]]; then
+      export devops_password="$(password)";
+      newline;
+      echo -en "Warning: Using custom ";
+      echo -e  "'${devops_password}' account password! ";
+      newline;
+    fi;
     if [[ ${#configuration} -eq 0 ]]; then
             export configuration='false';
             ## newline;
@@ -203,12 +203,12 @@ function virtualbox_appliance () {
               return 5;
             fi;
     fi;
-    [[ ${#provisioning} -eq 0 ]] && {
-        export provisioning='false';
-        # newline;
-        # echo -en "Warning: Provisioning ${provisioning} ! ";
-        # newline;
-      };
+    if [[ ${#provisioning} -eq 0 ]]; then
+      export provisioning='false';
+      # newline;
+      # echo -en "Warning: Provisioning ${provisioning} ! ";
+      # newline;
+    fi;
     local instance_location="";
     if [[ ${unattended_install} == 'true' ]]; then
             ## Collecting Virtual Machinen OS Type:
@@ -231,7 +231,7 @@ function virtualbox_appliance () {
             ## Settings file: '${virttualbox}/***/***.vbox'
             instance_settings="$(
                 echo -e ${response[2]} \
-                   | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
+                | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
               )";
             ## Extracting Virtual Machine Location and VBox-file:
             instance_location="$( dirname "${instance_settings}" )";
@@ -239,45 +239,45 @@ function virtualbox_appliance () {
       else  instance_location="${virtualbox_projects}/${virtual_machine}";
     fi;
     local instance_vboxfile="${instance_location}/${virtual_machine}.vbox";
-    [[ ${provisioning} == 'true' ]] && {
-        ## Processing Virtual Machine Storage:
-        vboxmanage_storage --vm-name="${virtual_machine}" \
-                           --location="${instance_location}" \
-                           --iso-file="${iso_filename}" \
-        ; check_status;
-        sleep 1;
-        ## Processing Virtual Machine Aditional Configurations
-        vboxmanage_configvm --vm-name="${virtual_machine}" \
-                            --memory='4096' \
-                            --cpus='4' \
-                            --vram='128' \
-        ; check_status;
-        sleep 1;
-        ## Processing Virtual Machine Multimedia Configurations
-        vboxmanage_multimedia --vm-name="${virtual_machine}" \
-                              --resolution='1920x1080' \
-        ; check_status;
-        sleep 1;
-        ## Processing Virtual Machine Networking Configurations:
-        vboxmanage_networking --vm-name="${virtual_machine}" \
-                              --nic-type='82545EM' \
-                              --bridged='1,en0: Ethernet' \
-                              --hostonly-network='2,HostNetwork' \
-                              --nat-network='3,NatNetwork' \
-                              --nat-only='4' \
-        ; check_status;
-        sleep 1;
-        ## Objective: Provision a deployment repository (Guest)
-        ##            A manual step to be performed by the end-user at the Host
-        # ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
-        vboxmanage_sharedfolders --name="shared" \
-                                 --host-path="/tmp/shared" \
-                                 --guest-path="/shared";
-        # # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /deploy)
-        # vboxmanage_sharedfolders --name="deploy" \
-        #                          --host-path="/tmp/deploy" \
-        #                          --guest-path="/deploy";
-      };
+    if [[ ${provisioning} == 'true' ]]; then
+      ## Processing Virtual Machine Storage:
+      vboxmanage_storage --vm-name="${virtual_machine}" \
+                         --location="${instance_location}" \
+                         --iso-file="${iso_filename}" \
+      ; check_status;
+      sleep 1;
+      ## Processing Virtual Machine Aditional Configurations
+      vboxmanage_configvm --vm-name="${virtual_machine}" \
+                          --memory='4096' \
+                          --cpus='4' \
+                          --vram='128' \
+      ; check_status;
+      sleep 1;
+      ## Processing Virtual Machine Multimedia Configurations
+      vboxmanage_multimedia --vm-name="${virtual_machine}" \
+                            --resolution='1920x1080' \
+      ; check_status;
+      sleep 1;
+      ## Processing Virtual Machine Networking Configurations:
+      vboxmanage_networking --vm-name="${virtual_machine}" \
+                            --nic-type='82545EM' \
+                            --bridged='1,en0: Ethernet' \
+                            --hostonly-network='2,HostNetwork' \
+                            --nat-network='3,NatNetwork' \
+                            --nat-only='4' \
+      ; check_status;
+      sleep 1;
+      ## Objective: Provision a deployment repository (Guest)
+      ##            A manual step to be performed by the end-user at the Host
+      # ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
+      vboxmanage_sharedfolders --name="shared" \
+                               --host-path="/tmp/shared" \
+                               --guest-path="/shared";
+      # # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /deploy)
+      # vboxmanage_sharedfolders --name="deploy" \
+      #                          --host-path="/tmp/deploy" \
+      #                          --guest-path="/deploy";
+    fi;
     ## Unattended Installation
     [[ ${unattended_install} == 'true' ]] && {
         ## Listing any existing Unattended* files
