@@ -375,7 +375,9 @@ function virtualbox_appliance () {
                 -e "s|{{ service-account }}|${devops_account}|g" \
                 ${system_configuration};
             check_status;
+            newline;
             echo -e "Notice: Listing modifications (${patch_template})";
+            newline;
             egrep --before-context=22 \
                   --after-context=4 \
             "^.*usermod -a -G vboxsf .*$" ${system_configuration};
@@ -386,7 +388,10 @@ function virtualbox_appliance () {
           ## Warning: The creation of this local symlink has to occur after
           ##          patching is performed. Otherwise it seems to break.
           ln -s ./Unattended-*-${target} ./patch-${target};
+          echo -e "Warning: Removing patched-file duplicates (e.g.: *.orig) ...";
+          newline;
           rm -v ./Unattended-*-${target}.orig 2>/dev/null;
+          newline;
         done;
         cd "${active_location}" 2>/dev/null;
       fi;
