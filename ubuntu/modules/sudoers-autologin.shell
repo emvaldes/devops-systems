@@ -8,6 +8,27 @@ function newline () { echo -e; return 0; };
 export autologin_logfile="/tmp/sudoers-autologin.log";
 cat /dev/null > ${autologin_logfile};
 
+newline; echo -e "Warning: APT Updating System! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+sudo apt update --yes \
+| tee -a "${autologin_logfile}";
+
+newline; echo -e "Warning: APT Upgrading System! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+sudo apt upgrade --yes \
+| tee -a "${autologin_logfile}";
+
+newline; echo -e "Warning: APT Autoremove Packages! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+sudo apt autoremove --yes \
+| tee -a "${autologin_logfile}";
+
 echo -e "Notice: Starting Sudoers Auto-Login ..." \
 | tee -a "${autologin_logfile}";
 
