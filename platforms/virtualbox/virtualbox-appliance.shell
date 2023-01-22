@@ -286,6 +286,7 @@ function virtualbox_appliance () {
       rm -fv ${instance_location}/Unattended-* 2>/dev/null;
       newline;
       echo -e "Generating VirtualBox Un-Attended Installation";
+      newline;
       VBoxManage unattended install ${virtual_machine} \
                --iso="${iso_filename}" \
                --user="${devops_account}" \
