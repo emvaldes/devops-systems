@@ -228,7 +228,7 @@ function vboxmanage_storage () {
       };
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
-    newline; echo -e "Creating Medium (Hard Drive: *.vdi)";
+    newline; echo -e "Creating Medium (Hard Drive: *.vdi)"; newline;
     VBoxManage createhd \
              --filename "${instance_location}/${virtual_machine}.vdi" \
              --size ${volume_size} \
