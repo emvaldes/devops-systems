@@ -203,8 +203,8 @@ function virtualbox_appliance () {
                     return 5;
               else  newline;
                     echo -e "Notice: Listing '${sshkey_access}' fingerprint ...";
-                    ssh-keygen -l -v -f "${sshkey_access}" ;
                     newline;
+                    ssh-keygen -l -v -f "${sshkey_access}" ;
             fi;
     fi;
     if [[ ${#provisioning} -eq 0 ]]; then
