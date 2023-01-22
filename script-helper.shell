@@ -13,7 +13,7 @@
 #   if [[ -e ${script_helper} ]]; then
 #           source ${script_helper};
 #           script_helper --caller="${script_file}" \
-#                         --example=${example_mode} \
+#                         --examples=${example_mode} \
 #                         --wizard=${wizard_mode} \
 #                         --info=${info_mode} \
 #           ;

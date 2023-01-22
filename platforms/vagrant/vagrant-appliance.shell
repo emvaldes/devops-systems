@@ -474,7 +474,7 @@ function vagrant_appliance () {
       [[ ${1#*\--} = "projects" ]] && local vagrant_projects="${2}";
       [[ ${1#*\--} = "shared" ]] && local vagrant_shared="${2}";
       ## Assistance Parameters:
-      [[ ${1#*\--} = "example" ]] && local example_mode='true';
+      [[ ${1#*\--} = "examples" ]] && local example_mode='true';
       [[ ${1#*\--} = "wizard" ]] && local wizard_mode='true';
       [[ ${1#*\--} = "info" ]] && local info_mode='true';
       [[ ${1#*\--} = "help" ]] && local assistance='true';
@@ -491,7 +491,7 @@ function vagrant_appliance () {
       if [[ -e ${script_helper} ]]; then
               source ${script_helper};
               script_helper --caller="${script_file}" \
-                            --example=${example_mode} \
+                            --examples=${example_mode} \
                             --wizard=${wizard_mode} \
                             --info=${info_mode} \
               ;

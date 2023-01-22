@@ -75,7 +75,7 @@ function virtualbox_appliance () {
       fi;
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
       ## Assistance Parameters:
-      [[ ${1#*\--} = "example" ]] && local example_mode='true';
+      [[ ${1#*\--} = "examples" ]] && local example_mode='true';
       [[ ${1#*\--} = "wizard" ]] && local wizard_mode='true';
       [[ ${1#*\--} = "info" ]] && local info_mode='true';
       [[ ${1#*\--} = "help" ]] && local assistance='true';
@@ -92,7 +92,7 @@ function virtualbox_appliance () {
       if [[ -e ${script_helper} ]]; then
               source ${script_helper};
               script_helper --caller="${script_file}" \
-                            --example=${example_mode} \
+                            --examples=${example_mode} \
                             --wizard=${wizard_mode} \
                             --info=${info_mode} \
               ;

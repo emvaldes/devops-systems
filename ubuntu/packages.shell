@@ -29,7 +29,7 @@ function packages_ubuntu () {
         };
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
-      [[ ${1#*\--} = "example" ]] && local example='true';
+      [[ ${1#*\--} = "examples" ]] && local example='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     if [[ ( ${assistance} == 'true' ) || \
@@ -289,7 +289,7 @@ function packages_ubuntu.help () {
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "caller" ]] && local help_caller="${2}";
-      [[ ${1#*\--} = "example" ]] && local example="${2}";
+      [[ ${1#*\--} = "examples" ]] && local example="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     [[ ${#example} -eq 0 ]] && { local example='false'; };

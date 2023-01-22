@@ -11,7 +11,7 @@ function export2json () {
       [[ ${1#*\--} = "package" ]] && local package="${2}";
       [[ ${1#*\--} = "location" ]] && local xpath="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
-      [[ ${1#*\--} = "example" ]] && local example='true';
+      [[ ${1#*\--} = "examples" ]] && local example='true';
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     if [[ ( ${assistance} == 'true' ) || \
