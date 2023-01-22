@@ -85,7 +85,7 @@
             "message": "Service Account (password: devops)"
         },
         "secret": {
-            "value": "~/.devops.secret",
+            "value": "~/.secrets/ devops.secret",
             "query": "Service Account Password File",
             "message": "Secrets Password File (disable --password)"
         },
