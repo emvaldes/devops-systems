@@ -204,6 +204,7 @@ function virtualbox_appliance () {
               else  newline;
                     echo -e "Notice: Listing '${sshkey_access}' fingerprint ...";
                     newline;
+                    ssh-keygen -l -E md5 -f "${sshkey_access}" ;
                     ssh-keygen -l -v -f "${sshkey_access}" ;
             fi;
     fi;
