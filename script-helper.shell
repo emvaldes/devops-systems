@@ -139,28 +139,31 @@ function script_helper () {
         if [[ ${#question} -gt 0 ]]; then
                 heading="${counter} -) ${question}: ";
                 read -p "${heading}" response;
-                [[ ${#response} -gt 0 ]] && {
-                    include=" --${xitem}=\"${response}\"";
-                    echo -e "    ${include}";
-                    newline;
-                    command+="${include}";
-                  };
+                if [[ ${#response} -gt 0 ]]; then
+                        include=" --${xitem}=\"${response}\"";
+                        echo -e "    ${include}";
+                        newline;
+                        command+="${include}";
+                  else  newline;
+                fi;
           else  ## Parsing non-parameterized options:
                 heading="${counter} -) Include '${xitem}' [Y/n] : ";
                 read -p "${heading}" response;
-                [[ 'Y|y' =~ ${response:0:1} ]] && {
-                    include=" --${xitem}";
-                    echo -e "    ${include}";
-                    newline;
-                    command+="${include}";
-                  };
+                if [[ 'Y|y' =~ ${response:0:1} ]]; then
+                        include=" --${xitem}";
+                        echo -e "    ${include}";
+                        newline;
+                        command+="${include}";
+                  else  newline;
+                fi;
         fi;
       done;
       newline; echo -e "> ${calling_script}${command} ;"; newline;
       read -p "Execute ? [Y/n] : " response;
-      [[ 'Y|y' =~ ${response:0:1} ]] && {
-          eval $(pwd)/${script_filename}${command} ;
-        };
+      if [[ 'Y|y' =~ ${response:0:1} ]]; then
+              eval $(pwd)/${script_filename}${command} ;
+        else  newline;
+      fi;
       return 2;
     fi;
     ## -------------------------------------------------------------------------
