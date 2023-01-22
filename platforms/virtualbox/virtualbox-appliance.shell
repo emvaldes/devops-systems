@@ -319,8 +319,9 @@ function virtualbox_appliance () {
           check_status;
           while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
             echo -e '.'; sleep 1;
-          done; newline;
+          done;
           check_status;
+          newline;
           if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
             newline;
             echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
@@ -463,8 +464,9 @@ function virtualbox_appliance () {
         check_status;
         while [[ ! -e ${vbox_temp}/${expect_template} ]]; do
           echo -e '.'; sleep 1;
-        done; newline;
+        done;
         check_status;
+        newline;
         if [[ ! -e ${vbox_temp}/${expect_template} ]]; then
           newline;
           echo -e "Warning: ${vbox_temp}/${expect_template} is missing! ";
