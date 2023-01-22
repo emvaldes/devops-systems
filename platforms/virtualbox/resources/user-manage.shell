@@ -87,6 +87,7 @@ function sudoers_privileges () {
             echo -e "Listing ${privileges_script} configurations ...";
             newline;
             cat  ${vbox_temp}/${privileges_script};
+            newline;
             echo -e "Executing the ${privileges_script} script ...";
             newline;
             ssh ${virtual_machine} -C 'bash -s' \
