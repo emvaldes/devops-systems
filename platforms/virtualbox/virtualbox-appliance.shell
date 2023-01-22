@@ -332,11 +332,15 @@ function virtualbox_appliance () {
           local active_location="$(pwd)";
           ## Correcting auto-generated presets
           if [[ ${patch_template} == 'patch-preseed.cfg' ]]; then
+            user_string="username string";
+            user_passwd="user-password.*password";
+            root_passwd="root-password.*password";
+            user_defaults="user-default-groups string";
             sed -i '' \
-                -e 's|^\(.*/username string \)\(.*\)$|\1{{ service-account }}|g' \
-                -e 's|^\(.*/user-password.*password \)\(.*\)$|\1{{ devops-password }}|g' \
-                -e 's|^\(.*/root-password.*password \)\(.*\)$|\1{{ root-password }}|g' \
-                -e 's|^\(.*/user-default-groups string \)\(.*\)$|\1sudo|g' \
+                -e "s|^\(.*/${user_string} \)\(.*\)$|\1{{ service-account }}|g" \
+                -e "s|^\(.*/${user_passwd} \)\(.*\)$|\1{{ devops-password }}|g" \
+                -e "s|^\(.*/${root_passwd} \)\(.*\)$|\1{{ root-password }}|g" \
+                -e "s|^\(.*/${user_defaults} \)\(.*\)$|\1sudo|g" \
                 ${system_configuration};
             check_status;
             sed -i '' \
@@ -385,131 +389,133 @@ function virtualbox_appliance () {
         cd "${active_location}" 2>/dev/null;
       fi;
     fi;
-    [[ ${configuration} == 'true' ]] && {
-        ## Identifying the VirtualBox virtual_machine's IP Address
-        ## Warning: If Virtual Machine name is not valid this will fail.
-        ##          VBoxManage: error: Could not find a registered machine named ...
-        local status=0;
-        declare -a machine_details=($(
-            VBoxManage showvminfo --details ${virtual_machine} \
-            | grep bridged;
-            echo -e ${?};
+    if [[ ${configuration} == 'true' ]]; then
+      ## Identifying the VirtualBox virtual_machine's IP Address
+      ## Warning: If Virtual Machine name is not valid this will fail.
+      ##          VBoxManage: error: Could not find a registered machine named ...
+      local status=0;
+      declare -a machine_details=($(
+          VBoxManage showvminfo --details ${virtual_machine} \
+          | grep bridged;
+          echo -e ${?};
+        ));
+      # newline; echo -e "Bridged Network:\n${machine_details[@]}";
+      if [[ ${machine_details[-1]} -gt 0 ]]; then
+        newline;
+        echo -e "Warning: Virtual Machine is invalid! ";
+        newline;
+        return 7;
+      fi;
+      if [[ ${machine_details[-1]} -eq 0 ]]; then
+        local regex='^';
+        regex+='\(NIC.*\)\(MAC\:\ \)';
+        regex+='\([a-zA-Z0-9]*\)';
+        regex+="\(\,.*Bridged.*\'\)";
+        regex+='\(.*\)';
+        regex+="\(\'\,.*\)";
+        regex+='$';
+        declare -a bridged_network=($(
+            echo -e "${machine_details[@]}" \
+               | sed -e "s|${regex}|\3\n\5|"
           ));
-        # newline; echo -e "Bridged Network:\n${machine_details[@]}";
-        if [[ ${machine_details[-1]} -eq 0 ]]; then
-                local regex='^';
-                regex+='\(NIC.*\)\(MAC\:\ \)';
-                regex+='\([a-zA-Z0-9]*\)';
-                regex+="\(\,.*Bridged.*\'\)";
-                regex+='\(.*\)';
-                regex+="\(\'\,.*\)";
-                regex+='$';
-                declare -a bridged_network=($(
-                    echo -e "${machine_details[@]}" \
-                       | sed -e "s|${regex}|\3\n\5|"
-                  ));
-                local bridged_macaddr="$(
-                    echo -e "${bridged_network[0]}" \
-                       | fold -w2 \
-                       | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
-                       | sed -e 's|\:$||'
-                  )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
-                # newline; echo -e "Bridged MAC Address: ${bridged_macaddr}";
-                local bridged_interface="${bridged_network[1]%\:*}";
-                # newline; echo -e "Bridged Interface: ${bridged_interface}";
-                network_access --vm-name="${virtual_machine}" \
-                               --ssh-key="${sshkey_access}" \
-                               --mac-addr="${bridged_macaddr}" \
-                ; check_status;
-                # newline; echo -e "IP Address: ${ipaddr}";
-                ## -------------------------------------------------------------
-                ## Note: I have hashed my ~/.ssh/known_hosts file.
-                #        $ ssh-keygen -H ;
-                # /Users/emvaldes/.ssh/known_hosts updated.
-                # Original contents retained as /Users/emvaldes/.ssh/known_hosts.old
-                # WARNING: /Users/emvaldes/.ssh/known_hosts.old contains unhashed entries
-                # Delete this file to ensure privacy of hostnames
-                ## -------------------------------------------------------------
-                ## -H -F hostname : Search for the hashed specified hostname in
-                ## a known_hosts file, listing any occurrences found.
-                declare -a check_hostexist=($(
-                    ssh-keygen -H -F ${ipaddr}
-                  ));
-                if [[ ${#check_hostexist[@]} -gt 0 ]]; then
-                  ## -H -R hostname : Removes all hashed hosts (keys) belonging to
-                  ## hostname from a known_hosts file.
-                  ssh-keygen -R ${ipaddr};
-                fi;
-                newline;
-                echo -e "Notice: Copying the SSH Access Key to Guest System ...";
-                ## Configuring each target with custom settings.
-                export expect_template="ssh-copy-id.expect";
-                export remote_resource="${virtualbox_platform}/modules/${expect_template}";
-                rm -fv ${vbox_temp}/${expect_template} 2>/dev/null;
-                # check_status;
-                curl --silent \
-                     --output ${vbox_temp}/${expect_template} \
-                     https://${github_content}/${github_repo}/${remote_resource};
-                check_status;
-                while [[ ! -e ${vbox_temp}/${expect_template} ]]; do
-                  echo -e '.'; sleep 1;
-                done; newline;
-                check_status;
-                if [[ ! -e ${vbox_temp}/${expect_template} ]]; then
-                  newline;
-                  echo -e "Warning: ${vbox_temp}/${expect_template} is missing! ";
-                  newline;
-                  return 7;
-                fi;
-                $(which expect) -c "$(
-                    cat ${vbox_temp}/${expect_template} \
-                    | sed -e "s|{{ sshkey_access }}|${sshkey_access}|g" \
-                          -e "s|{{ devops_account }}|${devops_account}|g" \
-                          -e "s|{{ network_address }}|${ipaddr}|g" \
-                          -e "s|{{ devops_password }}|${devops_password}|g"
-                  )";
-                check_status;
-                ## Enabling Passwordless Access
-                sudoers_privileges;
-                check_status;
-                sudoers_autologin;
-                check_status;
-                ## Remote SSH Access
-                ssh ${virtual_machine} -C \
-                  "sudo systemctl status ssh" 2>/dev/null;
-                check_status;
-                newline;
-                echo -e "Warning: Disabling Service Account password! ";
-                newline;
-                ssh ${virtual_machine} -C \
-                  "ssh sudo passwd --delete ${devops_account}";
-                check_status;
-          else  newline;
-                echo -e "Warning: Virtual Machine is invalid! ";
-                newline;
-                return 8;
+        local bridged_macaddr="$(
+            echo -e "${bridged_network[0]}" \
+               | fold -w2 \
+               | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
+               | sed -e 's|\:$||'
+          )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
+        # newline; echo -e "Bridged MAC Address: ${bridged_macaddr}";
+        local bridged_interface="${bridged_network[1]%\:*}";
+        # newline; echo -e "Bridged Interface: ${bridged_interface}";
+        network_access --vm-name="${virtual_machine}" \
+                       --ssh-key="${sshkey_access}" \
+                       --mac-addr="${bridged_macaddr}" \
+        ; check_status;
+        # newline; echo -e "IP Address: ${ipaddr}";
+        ## -------------------------------------------------------------
+        ## Note: I have hashed my ~/.ssh/known_hosts file.
+        #        $ ssh-keygen -H ;
+        # /Users/emvaldes/.ssh/known_hosts updated.
+        # Original contents retained as /Users/emvaldes/.ssh/known_hosts.old
+        # WARNING: /Users/emvaldes/.ssh/known_hosts.old contains unhashed entries
+        # Delete this file to ensure privacy of hostnames
+        ## -------------------------------------------------------------
+        ## -H -F hostname : Search for the hashed specified hostname in
+        ## a known_hosts file, listing any occurrences found.
+        declare -a check_hostexist=($(
+            ssh-keygen -H -F ${ipaddr}
+          ));
+        if [[ ${#check_hostexist[@]} -gt 0 ]]; then
+          ## -H -R hostname : Removes all hashed hosts (keys) belonging to
+          ## hostname from a known_hosts file.
+          ssh-keygen -R ${ipaddr};
         fi;
-      };
-    [[ ${install_packages} == 'true' ]] && {
-        ## Installing DevOps Packages.
-        preinst_packages;
+        newline;
+        echo -e "Notice: Copying the SSH Access Key to Guest System ...";
+        ## Configuring each target with custom settings.
+        export expect_template="ssh-copy-id.expect";
+        export remote_resource="${virtualbox_platform}/modules/${expect_template}";
+        rm -fv ${vbox_temp}/${expect_template} 2>/dev/null;
+        # check_status;
+        curl --silent \
+             --output ${vbox_temp}/${expect_template} \
+             https://${github_content}/${github_repo}/${remote_resource};
         check_status;
-        postinst_packages;
+        while [[ ! -e ${vbox_temp}/${expect_template} ]]; do
+          echo -e '.'; sleep 1;
+        done; newline;
         check_status;
-      };
-    [[ ${start_machine} == 'true' ]] && {
-        ## Starting VirtualBox Virtual Machine.
-        VBoxManage startvm ${virtual_machine};
+        if [[ ! -e ${vbox_temp}/${expect_template} ]]; then
+          newline;
+          echo -e "Warning: ${vbox_temp}/${expect_template} is missing! ";
+          newline;
+          return 8;
+        fi;
+        $(which expect) -c "$(
+            cat ${vbox_temp}/${expect_template} \
+            | sed -e "s|{{ sshkey_access }}|${sshkey_access}|g" \
+                  -e "s|{{ devops_account }}|${devops_account}|g" \
+                  -e "s|{{ network_address }}|${ipaddr}|g" \
+                  -e "s|{{ devops_password }}|${devops_password}|g"
+          )";
         check_status;
-      };
-    [[ ${delete_machine} == 'true' ]] && {
-        ## Starting VirtualBox Virtual Machine.
-        VBoxManage controlvm ${virtual_machine} acpipowerbutton;
+        ## Enabling Passwordless Access
+        sudoers_privileges;
         check_status;
-        VBoxManage unregistervm --delete ${virtual_machine};
+        sudoers_autologin;
         check_status;
-        return 9;
-      };
+        ## Remote SSH Access
+        ssh ${virtual_machine} -C \
+          "sudo systemctl status ssh" 2>/dev/null;
+        check_status;
+        # newline;
+        # echo -e "Warning: Disabling Service Account password! ";
+        # newline;
+        # ssh ${virtual_machine} -C \
+        #   "ssh sudo passwd --delete ${devops_account}";
+        # check_status;
+      fi;
+    fi;
+    if [[ ${install_packages} == 'true' ]]; then
+      ## Installing DevOps Packages.
+      preinst_packages;
+      check_status;
+      postinst_packages;
+      check_status;
+    fi;
+    if [[ ${start_machine} == 'true' ]]; then
+      ## Starting VirtualBox Virtual Machine.
+      VBoxManage startvm ${virtual_machine};
+      check_status;
+    fi;
+    if [[ ${delete_machine} == 'true' ]]; then
+      ## Starting VirtualBox Virtual Machine.
+      VBoxManage controlvm ${virtual_machine} acpipowerbutton;
+      check_status;
+      VBoxManage unregistervm --delete ${virtual_machine};
+      check_status;
+      return 9;
+    fi;
     IFS="${oIFS}";
     return 0;
   }; alias virtualbox-appliance='virtualbox_appliance';
