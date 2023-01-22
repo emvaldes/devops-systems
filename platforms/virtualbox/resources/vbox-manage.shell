@@ -16,61 +16,52 @@ function vboxmanage_configvm () {
     VBoxManage modifyvm ${virtual_machine} \
              --clipboard-mode=bidirectional \
              --drag-and-drop=bidirectional \
-    ;
-    check_status;
+    ; check_status;
     ## System -> Motherboard:
     VBoxManage modifyvm ${virtual_machine} \
              --memory ${memory_size} \
-    ;
-    check_status;
+    ; check_status;
     ## Device Order (default: dvd+disk+...)
     VBoxManage modifyvm ${virtual_machine} \
              --boot1 dvd \
              --boot2 disk \
              --boot3 none \
              --boot4 none \
-    ;
-    check_status;
+    ; check_status;
     VBoxManage modifyvm ${virtual_machine} \
              --chipset=piix3 \
              --mouse=usbmtscreenpluspad \
              --ioapic=on \
              --rtc-use-utc=on \
-    ;
-    check_status;
+    ; check_status;
     ## System -> Processor:
     VBoxManage modifyvm ${virtual_machine} \
              --cpus=${total_cpus} \
              --cpu-execution-cap=100 \
              --pae=off \
-    ;
-    check_status;
+    ; check_status;
     ## System -> Acceleration:
     VBoxManage modifyvm ${virtual_machine} \
              --paravirt-provider=default \
              --nested-paging=on \
-    ;
-    check_status;
+    ; check_status;
     ## Display -> Screen:
     VBoxManage modifyvm ${virtual_machine} \
              --vram ${vram_size} \
              --monitor-count=1 \
              --graphicscontroller=vmsvga \
              --accelerate-3d=off \
-    ;
-    check_status;
+    ; check_status;
     # ## Ports -> Serial Ports:
     # VBoxManage modifyvm ${virtual_machine} \
     #          --uart1=0x3f8 5 \
     #          --uart-mode1="/tmp/vbox--${virtual_machine}" \
     #          --uart-type1=16550a \
-    # ;
-    # check_status;
+    # ; check_status;
     ## Ports -> USB 2.0 (OHCI + EHCI) Controller
     VBoxManage modifyvm ${virtual_machine} \
              --usb-ehci=on \
-    ;
-    check_status;
+    ; check_status;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-configvm='vboxmanage_configvm';
@@ -101,16 +92,14 @@ function vboxmanage_multimedia () {
              --recording-video-fps=${frame_rate} \
              --recording-video-res=${resolution} \
              --recording-video-rate=${video_quality} \
-    ;
-    check_status;
+    ; check_status;
     ## Audio:
     VBoxManage modifyvm ${virtual_machine} \
              --audio=default \
              --audio-controller=${audio_controller} \
              --audio-in=on \
              --audio-out=on \
-    ;
-    check_status;
+    ; check_status;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-multimedia='vboxmanage_multimedia';
@@ -129,10 +118,13 @@ function vboxmanage_networking () {
       [[ ${1#*\--} = "nic-type" ]] && local nic_type="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
+    local network_tracing="/tmp/virtualbox/${virtual_machine}";
+    mkdir -p "${network_tracing}";
     [[ "${#bridged_network}" -gt 0 ]] && {
-        trace_filename="/tmp/trace--bridged-network--${virtual_machine}";
-        index="${bridged_network%%\,*}";
-        interface="${bridged_network##*\,}";
+        local trace_prefixed="${network_tracing}/trace--bridged-network";
+        local trace_filename="${trace_prefixed}--${virtual_machine}";
+        local index="${bridged_network%%\,*}";
+        local interface="${bridged_network##*\,}";
         VBoxManage modifyvm ${virtual_machine} \
                  --nic${index}=bridged \
                  --nic-type${index}=${nic_type} \
@@ -140,13 +132,13 @@ function vboxmanage_networking () {
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
                  --nic-trace-file${index}=${trace_filename} \
-        ;
-        check_status;
+        ; check_status;
       };
     [[ "${#hostonly_network}" -gt 0 ]] && {
-        trace_filename="/tmp/trace--hostonly-network--${virtual_machine}";
-        index="${hostonly_network%%\,*}";
-        interface="${hostonly_network##*\,}";
+        local trace_prefixed="${network_tracing}/trace--hostonly-network";
+        local trace_filename="${trace_prefixed}--${virtual_machine}";
+        local index="${hostonly_network%%\,*}";
+        local interface="${hostonly_network##*\,}";
         VBoxManage modifyvm ${virtual_machine} \
                  --nic${index}=hostonlynet \
                  --nic-type${index}=${nic_type} \
@@ -154,13 +146,13 @@ function vboxmanage_networking () {
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
                  --nic-trace-file${index}=${trace_filename} \
-        ;
-        check_status;
+        ; check_status;
       };
     [[ "${#nat_network}" -gt 0 ]] && {
-        trace_filename="/tmp/trace--nat-network--${virtual_machine}";
-        index="${nat_network%%\,*}";
-        interface="${nat_network##*\,}";
+        local trace_prefixed="${network_tracing}/trace--nat-network";
+        local trace_filename="${trace_prefixed}--${virtual_machine}";
+        local index="${nat_network%%\,*}";
+        local interface="${nat_network##*\,}";
         VBoxManage modifyvm ${virtual_machine} \
                  --nic${index}=natnetwork \
                  --nic-type${index}=${nic_type} \
@@ -172,16 +164,16 @@ function vboxmanage_networking () {
         check_status;
       };
     [[ ${#nat_only} -gt 0 ]] && {
-        trace_filename="/tmp/trace--nat-only--${virtual_machine}";
-        index="${nat_only%%\,*}";
+        local trace_prefixed="${network_tracing}/trace--nat-only";
+        local trace_filename="${trace_prefixed}--${virtual_machine}";
+        local index="${nat_only%%\,*}";
         VBoxManage modifyvm ${virtual_machine} \
                  --nic${index}=nat \
                  --nic-type${index}=${nic_type} \
                  --cable-connected${index}=on \
                  --nic-trace${index}=on \
                  --nic-trace-file${index}=${trace_filename} \
-        ;
-        check_status;
+        ; check_status;
       };
     IFS="${oIFS}";
     return 0;
@@ -236,44 +228,38 @@ function vboxmanage_storage () {
       };
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
-    newline;
-    echo -e "Creating Medium (Hard Drive: *.vdi)";
+    newline; echo -e "Creating Medium (Hard Drive: *.vdi)";
     VBoxManage createhd \
              --filename "${instance_location}/${virtual_machine}.vdi" \
              --size ${volume_size} \
-    ;
-    check_status;
+    ; check_status;
     newline;
     ## Create a SATA storage controller and attach the virtual hard disk.
     VBoxManage storagectl ${virtual_machine} \
              --name "SATA Controller" \
              --add sata \
              --controller IntelAHCI \
-    ;
-    check_status;
+    ; check_status;
     VBoxManage storageattach ${virtual_machine} \
              --storagectl "SATA Controller" \
              --port 0 \
              --device 0 \
              --type hdd \
              --medium "${instance_location}/${virtual_machine}.vdi" \
-    ;
-    check_status;
+    ; check_status;
     ## Create an IDE Storage Controller for a virtual DVD drive
     ## and attach a Linux installation ISO.
     VBoxManage storagectl ${virtual_machine} \
              --name "IDE Controller" \
              --add ide \
-    ;
-    check_status;
+    ; check_status;
     VBoxManage storageattach ${virtual_machine} \
              --storagectl "IDE Controller" \
              --port 1 \
              --device 0 \
              --type dvddrive \
              --medium ${iso_filename} \
-    ;
-    check_status;
+    ; check_status;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-storage='vboxmanage_storage';
