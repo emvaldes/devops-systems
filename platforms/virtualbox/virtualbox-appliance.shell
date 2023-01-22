@@ -417,9 +417,9 @@ function virtualbox_appliance () {
                 # newline; echo -e "Bridged MAC Address: ${bridged_macaddr}";
                 local bridged_interface="${bridged_network[1]%\:*}";
                 # newline; echo -e "Bridged Interface: ${bridged_interface}";
-                vboxmanage_interface --vm-name="${virtual_machine}" \
-                                     --ssh-key="${sshkey_access}" \
-                                     --mac-addr="${bridged_macaddr}" \
+                network_access --vm-name="${virtual_machine}" \
+                               --ssh-key="${sshkey_access}" \
+                               --mac-addr="${bridged_macaddr}" \
                 ; check_status;
                 # newline; echo -e "IP Address: ${ipaddr}";
                 ## -------------------------------------------------------------
@@ -441,7 +441,7 @@ function virtualbox_appliance () {
                   ssh-keygen -R ${ipaddr};
                 fi;
                 newline;
-                echo -e "Notice: Transferring SSH Access Key to Guest System ...";
+                echo -e "Notice: Copying the SSH Access Key to Guest System ...";
                 ## Configuring each target with custom settings.
                 export expect_template="ssh-copy-id.expect";
                 export remote_resource="${virtualbox_platform}/modules/${expect_template}";
