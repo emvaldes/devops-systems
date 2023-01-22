@@ -35,7 +35,7 @@ function script_helper () {
     for xitem in "${@}"; do
       IFS='='; set `echo -e "${xitem}" | sed -e '1s|^\(-\)\{1,\}||'`
       [[ ${1#*\--} = "caller" ]] && local calling_script="${2}";
-      [[ ${1#*\--} = "example" ]] && local example_mode="${2}";
+      [[ ${1#*\--} = "examples" ]] && local example_mode="${2}";
       [[ ${1#*\--} = "wizard" ]] && local wizard_mode="${2}";
       [[ ${1#*\--} = "info" ]] && local info_mode="${2}";
     done; IFS="${oIFS}";
