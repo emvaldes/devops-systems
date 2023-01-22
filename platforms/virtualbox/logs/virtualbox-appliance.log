@@ -7,7 +7,6 @@ $ ./virtualbox-appliance.shell --instance="devops-console" \
                                --iso-file="~/Downloads/ubuntu-22.04.1-desktop-amd64.iso" \
                                --patch \
                                --provision \
-                               --ssh-key="~/.ssh/devnetops.pub" \
                                --start \
 ;
 
