@@ -4,41 +4,6 @@
 ## Objective: Environment Functions
 
 ## -----------------------------------------------------------------------------
-## Objective: Printing empty lines (output)
-function newline () { echo -e; return 0; };
-
-## -----------------------------------------------------------------------------
-## Objective: Random Password Generator (32 length)
-function password () {
-    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
-    return 0;
-  };
-
-## -----------------------------------------------------------------------------
-## Objective: Identify if it's a number and within a specific range-set
-function valid_number () {
-    ## https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash
-    local range_min range_max;
-    [[ ${#1} -gt 0 ]] && selection=${1} || return 1;
-    [[ ${#2} -gt 0 ]] && range_min=${2} || range_min=1;
-    [[ ${#3} -gt 0 ]] && range_max=${3} || range_max=100;
-    abort_script='false';
-    invalid_number="\nWarning: Selection is not a valid number! \n";
-    valid_number="\nNotice: Selection is a valid number";
-    local regex='^[0-9]+$';
-    if ! [[ ${selection} =~ ${regex} ]]; then
-           abort_script='true';
-      elif (( selection < ${range_min} || selection > ${range_max} )); then
-           abort_script='true';
-    fi;
-    [[ ${abort_script} == 'true' ]] && {
-        # echo -e "${invalid_number}" >&2;
-        return 2;
-      };
-    return 0;
-  }; alias valid-digit='is_digit';
-
-## -----------------------------------------------------------------------------
 ## Objective: Identify Element's Array Index
 function array_index () {
     local oIFS="${IFS}"; IFS=$'\n';
@@ -76,6 +41,17 @@ function check_status () {
     fi;
     return 0;
   }; alias check-status='check_status';
+
+## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
+function newline () { echo -e; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Random Password Generator (32 length)
+function password () {
+    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
+    return 0;
+  };
 
 ## -----------------------------------------------------------------------------
 ## Objective: Pre-Installing Core Packages
@@ -120,6 +96,30 @@ function postinst_packages () {
   }; alias postinst-packages='postinst_packages';
 
 ## -----------------------------------------------------------------------------
+## Objective: Identify if it's a number and within a specific range-set
+function valid_number () {
+    ## https://stackoverflow.com/questions/806906/how-do-i-test-if-a-variable-is-a-number-in-bash
+    local range_min range_max;
+    [[ ${#1} -gt 0 ]] && selection=${1} || return 1;
+    [[ ${#2} -gt 0 ]] && range_min=${2} || range_min=1;
+    [[ ${#3} -gt 0 ]] && range_max=${3} || range_max=100;
+    abort_script='false';
+    invalid_number="\nWarning: Selection is not a valid number! \n";
+    valid_number="\nNotice: Selection is a valid number";
+    local regex='^[0-9]+$';
+    if ! [[ ${selection} =~ ${regex} ]]; then
+           abort_script='true';
+      elif (( selection < ${range_min} || selection > ${range_max} )); then
+           abort_script='true';
+    fi;
+    [[ ${abort_script} == 'true' ]] && {
+        # echo -e "${invalid_number}" >&2;
+        return 2;
+      };
+    return 0;
+  }; alias valid-digit='is_digit';
+
+## -----------------------------------------------------------------------------
 ## Objective: Configuring Network Interfaces
 function vboxmanage_interface () {
     local oIFS="${IFS}";
@@ -129,6 +129,7 @@ function vboxmanage_interface () {
       [[ ${1#*\--} = "interface" ]] && local interface="${2}";
       [[ ${1#*\--} = "hostname" ]] && local hostname="${2}";
       [[ ${1#*\--} = "ssh-key" ]] && local sshkey_access="${2}";
+      [[ ${1#*\--} = "mac-addr" ]] && local bridged_macaddr="${2}";
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     ## Define custom-parameter(s):
@@ -140,19 +141,19 @@ function vboxmanage_interface () {
       };
     [[ ${#interface} -eq 0 ]] && local interface="Bridged";
     [[ ${#hostname} -eq 0 ]] && local hostname="${virtual_machine}";
-    ## Identifying the VirtualBox virtual_machine's IP Address
-    declare -a showvminfo=($(
-        VBoxManage showvminfo --details ${virtual_machine} \
-        | grep bridged \
-        | sed -e "s|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\)\(.*\)\('\,.*\)$|\3\n\5|"
-      ));
-    local bridged_macaddr="$(
-        echo -e "${showvminfo[0]}" \
-           | fold -w2 \
-           | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
-           | sed -e 's|\:$||'
-      )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
-    local bridged_interface="${showvminfo[1]%\:*}";
+    # ## Identifying the VirtualBox virtual_machine's IP Address
+    # declare -a showvminfo=($(
+    #     VBoxManage showvminfo --details ${virtual_machine} \
+    #     | grep bridged \
+    #     | sed -e "s|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\)\(.*\)\('\,.*\)$|\3\n\5|"
+    #   ));
+    # local bridged_macaddr="$(
+    #     echo -e "${showvminfo[0]}" \
+    #        | fold -w2 \
+    #        | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
+    #        | sed -e 's|\:$||'
+    #   )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
+    # local bridged_interface="${showvminfo[1]%\:*}";
     local localnet="${HOME}/.localnet";
     newline;
     echo -e "Executing ARP Scanning ... -> ${localnet} : ";
@@ -164,8 +165,8 @@ function vboxmanage_interface () {
         | tr '\t' '*' | awk -F'*' '{print $1"\n"$2"\n"$3}'
       ));
     # for each in ${listed[@]}; do echo -e "${each}"; done;
-    local ipaddr="${listed[0]}";
-    local device="${listed[2]}";
+    export ipaddr="${listed[0]}";
+    export device="${listed[2]}";
     ## System Configuration files
     local etc_hosts="/etc/hosts";
     local ssh_config="${HOME}/.ssh/config";
@@ -174,20 +175,58 @@ function vboxmanage_interface () {
     if [[ ${#ipaddr} -gt 0 ]]; then
       ## Right-Padding IP Address
       local xipaddr="$( printf "% -20s" ${ipaddr})";
-      local custom_message=" Record in ${etc_hosts} file! ";
-      if [[ $( egrep -c " ${virtual_machine} " ${etc_hosts} ) -gt 0 ]]; then
-              newline;
-              echo -e "Warning: Updating ${custom_message}";
-              newline;
-              sudo sed -i '' \
-              "s|^\([0-9\.]\)\{1,\}\([[:blank:]]*\)\(${virtual_machine}.*\)$|${xipaddr}\3|" \
-              "${etc_hosts}";
+      local xdevice="$( printf "% -20s" ${virtual_machine})";
+      ## Reviewing the /etc/hosts for duplicates
+      declare -a ipaddr_exists=($(
+          egrep "^${ipaddr}.*$" ${etc_hosts}
+        ));
+      if [[ ${#ipaddr_exists[@]} -gt 1 ]]; then
+        newline;
+        echo -e "Warning: Multiple records exists! ";
+        newline;
+        for record in ${ipaddr_exists[@]}; do
+          echo -e "Record: ${record}";
+        done;
+        ## Purging existing virtual-machine record
+        ## sed -i '' "/^${ipaddr}.*${virtual_machine}.*$/d" ${etc_hosts};
+        local status=1;
+        newline; read -t 15 -p "Continue [Y/n] : " response;
+        if [[ ${#response} -gt 0 ]]; then
+          selection="$(
+              echo -e ${response} \
+                 | tr '[[:upper:]]' '[[:lower:]]'
+            )";
+          if [[ 'n' =~ "${selection:0:1}" ]]; then
+            newline;
+            exit ${status};
+          fi;
+        fi;
+      fi;
+      local custom_message="record in ${etc_hosts} file! ";
+      local update_record="$(
+          egrep -c "^.*${virtual_machine}.*$" ${etc_hosts}
+        )";
+      if [[ ${update_record} -gt 0 ]]; then
+              if [[ ${update_record} -gt 0 ]]; then
+                local regex='^';
+                regex+='\([0-9\.]\)\{1,\}\([[:blank:]]*\)';
+                regex+="\(${virtual_machine}.*\)";
+                regex+='$';
+                newline;
+                echo -e "Warning: Updating ${custom_message}";
+                sudo sed -i '' "s|${regex}|${xipaddr}\3|" "${etc_hosts}";
+              fi;
         else  newline;
               echo -e "Notice: Appending ${custom_message}";
               newline;
-              echo -e "${xipaddr}${virtual_machine}" \
-                 | sudo tee -a "${etc_hosts}";
+              echo -e "${xipaddr}${xdevice}$(
+                  echo -e "${virtual_machine#*\-}.${virtual_machine%%\-*}.local"
+                )" | sudo tee -a "${etc_hosts}";
       fi;
+      ## Listing /etc/hosts current configuration
+      newline;
+      cat "${etc_hosts}";
+      newline;
       local custom_message=" Record in ${ssh_config} file! ";
       if [[ $( egrep -c "Host ${virtual_machine}" ${ssh_config} ) -eq 0 ]]; then
               newline;
@@ -218,9 +257,9 @@ function vboxmanage_interface () {
             "Host ${virtual_machine}" ${ssh_config};
     fi;
     ## Removing/Purging host's legacy entries
-    sed -i '' /^$(
-        grep 'ubuntu-desktop' ${etc_hosts} | cut -d' ' -f1
-      ).*/d ${known_hosts} ;
+    # sed -i '' /^$(
+    #     grep "^.*${virtual_machine}.*$" ${etc_hosts} | cut -d' ' -f1
+    #   ).*/d ${known_hosts} ;
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-interface='vboxmanage_interface';
