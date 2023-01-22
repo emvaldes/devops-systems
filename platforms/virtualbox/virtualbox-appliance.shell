@@ -359,8 +359,9 @@ function virtualbox_appliance () {
                     -e "s|^\(.*${target_entry}\)\(.*\)$|\1\"{{ service-account }}\"|" \
                     ${system_configuration};
                 ## Patching Deployment Configurations:
-                ## Warning: Reversed (or previously applied) patch detected!
-                ##          Assume -R? [y] y
+                ##  Warning: Reversed (or previously applied) patch detected!
+                ##           Assume -R? [y] y
+                ## Solution: --batch suppresses questions and some assumptions.
                 patch --batch \
                       ${system_configuration} < ${vbox_temp}/${patch_template};
                 check_status;
@@ -434,7 +435,7 @@ function virtualbox_appliance () {
                 declare -a check_hostexist=($(
                     ssh-keygen -H -F ${ipaddr}
                   ));
-                if [[ ${#check_hostexist} -gt 0 ]]; then
+                if [[ ${#check_hostexist[@]} -gt 0 ]]; then
                   ## -H -R hostname : Removes all hashed hosts (keys) belonging to
                   ## hostname from a known_hosts file.
                   ssh-keygen -R ${ipaddr};
