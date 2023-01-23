@@ -1,0 +1,46 @@
+
+$ ./virtualbox-appliance.shell --wizard ;
+
+Please, answer the following questions:
+
+1 -) VirtualBox Appliance name: devops-console
+     --instance="devops-console"
+
+2 -) Service Account Username:
+
+3 -) Service Account Password:
+
+4 -) Service Account Password File:
+
+5 -) Local Cache location:
+
+6 -) Include 'configure' [Y/n] :
+
+7 -) Include 'create' [Y/n] :
+
+8 -) Include 'delete' [Y/n] :
+
+9 -) Include 'deploy' [Y/n] :
+
+10 -) Include 'install' [Y/n] : y
+     --install
+
+11 -) Installation ISO file location:
+
+12 -) Install Custom Packages:
+
+13 -) Include 'patch' [Y/n] :
+
+14 -) VBox projects location:
+
+15 -) Include 'provision' [Y/n] :
+
+16 -) SSH Access Public Key:
+
+17 -) Include 'start' [Y/n] :
+
+> ./virtualbox-appliance.shell --instance="devops-console" \
+                               --install \
+;
+
+Execute ? [Y/n] :

@@ -1,0 +1,63 @@
+
+$ ./virtualbox-appliance.shell --wizard ;
+
+Please, answer the following questions:
+
+1 -) VirtualBox Appliance name: devops-console
+     --instance="devops-console"
+
+2 -) Service Account Username: devops
+     --account="devops"
+
+3 -) Service Account Password:
+
+4 -) Service Account Password File: ~/.secrets/devops.secret
+     --secret="~/.secrets/devops.secret"
+
+5 -) Local Cache location:
+
+6 -) Include 'configure' [Y/n] :
+
+7 -) Include 'create' [Y/n] : y
+     --create
+
+8 -) Include 'delete' [Y/n] :
+
+9 -) Include 'deploy' [Y/n] : y
+     --deploy
+
+10 -) Include 'install' [Y/n] :
+
+11 -) Installation ISO file location: ~/Downloads/ubuntu-22.04.1-desktop-amd64.iso
+     --iso-file="~/Downloads/ubuntu-22.04.1-desktop-amd64.iso"
+
+12 -) Install Custom Packages:
+
+13 -) Include 'patch' [Y/n] : y
+     --patch
+
+14 -) VBox projects location:
+
+15 -) Include 'provision' [Y/n] : y
+     --provision
+
+16 -) SSH Access Public Key: ~/.ssh/devnetops.pub
+     --ssh-key="~/.ssh/devnetops.pub"
+
+17 -) Include 'start' [Y/n] : y
+     --start
+
+
+> ./virtualbox-appliance.shell --instance="devops-console" \
+                               --account="devops" \
+                               --secret="~/.secrets/devops.secret" \
+                               --create \
+                               --deploy \
+                               --iso-file="~/Downloads/ubuntu-22.04.1-desktop-amd64.iso" \
+                               --patch \
+                               --provision \
+                               --ssh-key="~/.ssh/devnetops.pub" \
+                               --start \
+;
+
+Execute ? [Y/n] :
