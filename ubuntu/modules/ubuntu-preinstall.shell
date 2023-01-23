@@ -8,11 +8,18 @@ function newline () { echo -e; return 0; };
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
-newline; echo -e "Warning: APT Updating System! " \
+echo -e "Warning: APT Updating System! " \
 | tee -a "${autologin_logfile}";
 newline;
 
 sudo apt update --yes \
+| tee -a "${autologin_logfile}";
+
+newline; echo -e "Warning: APT Listing Upgradable Packages! " \
+| tee -a "${autologin_logfile}";
+newline;
+
+apt list --upgradable \
 | tee -a "${autologin_logfile}";
 
 newline; echo -e "Warning: APT Upgrading System! " \
