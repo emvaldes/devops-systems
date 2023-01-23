@@ -1,0 +1,50 @@
+
+$ virtualbox-appliance.shell --help ;
+
+Required    --instance          VirtualBox appliance name and hostname
+            --account           Service Account (username: devops)
+            --password          Service Account (password: devops)
+            --secret            Secrets Password File (disable --password)
+
+Optional    --cache             Deployment resources location
+            --configure         Deploy Configuration Management
+            --create            Create VBox appliance (hardware only)
+            --delete            Shutdown & Destroy VBox appliance
+            --deploy            Generate Auto-Install (unattended)
+            --install           Install Default DevOps Packages
+            --iso-file          Installation ISO file location
+            --packages          Install Custom DevOps Packages
+            --patch             Patching Unattended installation
+            --projects          Provides VBox projects location
+            --provision         Infrastructure Provisioning (IaC)
+            --ssh-key           Profile Auto-Login via SSH Public Key
+            --start             Requesting to launch VBox Appliance
+            --examples          Display script's execution options
+            --wizard            Parse user-input to execute command
+            --info              Project credits and online references
+            --help              Show this help message and exits
+
+Usage:
+
+virtualbox-appliance.shell --instance="ubuntu-desktop" \
+                           --account="devops" \
+                           --secret="~/.secrets/devops.secret" \
+                           --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
+                           --provision \
+                           --deploy \
+                           --patch \
+                           --start \
+;
+
+virtualbox-appliance.shell --instance="ubuntu-desktop" \
+                           --account="devops" \
+                           --secret="~/.secrets/devops.secret" \
+                           --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+                           --configure \
+                           --install \
+;
+
+virtualbox-appliance.shell --instance="ubuntu-desktop" \
+                           --install \
+                           --packages="/tmp/packages.list" \
+;
