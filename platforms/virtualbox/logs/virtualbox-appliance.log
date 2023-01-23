@@ -13,11 +13,11 @@ $ ./virtualbox-appliance.shell --instance="devops-console" \
 Creating Medium (Hard Drive: *.vdi)
 
 0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
-Medium created. UUID: f37205f9-1a3b-4576-8439-fb644b3940d0
+Medium created. UUID: 6dd78090-0257-4c9a-94d2-d04dbc1d452a
 
 Generating VirtualBox Un-Attended Installation
 
-VBoxManage: info: Preparing unattended installation of Ubuntu22_LTS_64 in machine 'devops-console' (70723acc-1d93-491c-a655-57d2636c66dc).
+VBoxManage: info: Preparing unattended installation of Ubuntu22_LTS_64 in machine 'devops-console' (002f7efb-3b5a-43dd-8c94-6d38b32acd69).
 VBoxManage: info: Using values:
                            isoPath = /Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
                               user = devops
@@ -34,7 +34,7 @@ VBoxManage: info: Using values:
                              proxy =
                           hostname = devops-console.local
        packageSelectionAdjustments =
-                 auxiliaryBasePath = /Users/emvaldes/.virtualization/virtualbox/devops-console/Unattended-70723acc-1d93-491c-a655-57d2636c66dc-
+                 auxiliaryBasePath = /Users/emvaldes/.virtualization/virtualbox/devops-console/Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-
                         imageIndex = 1
                 scriptTemplatePath = /Applications/VirtualBox.app/Contents/MacOS/UnattendedTemplates/ubuntu_preseed.cfg
      postInstallScriptTemplatePath = /Applications/VirtualBox.app/Contents/MacOS/UnattendedTemplates/debian_postinstall.sh
@@ -46,7 +46,7 @@ VBoxManage: info: Using values:
                   detectedOSFlavor = Ubuntu
                detectedOSLanguages = en-US
                    detectedOSHints =
-VBoxManage: info: VM 'devops-console' (70723acc-1d93-491c-a655-57d2636c66dc) is ready to be started (e.g. VBoxManage startvm).
+VBoxManage: info: VM 'devops-console' (002f7efb-3b5a-43dd-8c94-6d38b32acd69) is ready to be started (e.g. VBoxManage startvm).
 
 Notice: Listing modifications (patch-preseed.cfg)
 
@@ -63,7 +63,7 @@ d-i passwd/user-default-groups string sudo
 
 # Grub
 
-patching file '/Users/emvaldes/.virtualization/virtualbox/devops-console/Unattended-70723acc-1d93-491c-a655-57d2636c66dc-vboxpostinstall.sh'
+patching file '/Users/emvaldes/.virtualization/virtualbox/devops-console/Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-vboxpostinstall.sh'
 
 Notice: Listing modifications (patch-vboxpostinstall.sh)
 
@@ -94,14 +94,14 @@ log_command_in_target usermod -a -G vboxsf "devops"
 ## emvaldes@hotmail.com
 log_command_in_target usermod -a -G sudo "devops"
 
-./patch-preseed.cfg -> ./Unattended-70723acc-1d93-491c-a655-57d2636c66dc-preseed.cfg
-./patch-vboxpostinstall.sh -> ./Unattended-70723acc-1d93-491c-a655-57d2636c66dc-vboxpostinstall.sh
+./patch-preseed.cfg -> ./Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-preseed.cfg
+./patch-vboxpostinstall.sh -> ./Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-vboxpostinstall.sh
 
 Warning: Removing patched-file duplicates (e.g.: *.orig) ...
 
-./Unattended-70723acc-1d93-491c-a655-57d2636c66dc-vboxpostinstall.sh.orig
+./Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-vboxpostinstall.sh.orig
+
+Completed!
 
 Waiting for VM "devops-console" to power on...
 VM "devops-console" has been successfully started.
-
-Completed!
