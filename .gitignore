@@ -1,4 +1,4 @@
-ubuntu/packages/*
+# ubuntu/reports/*
 *.swp
 
 # Byte-compiled / optimized / DLL files
