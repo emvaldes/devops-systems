@@ -465,6 +465,7 @@ function virtualbox_appliance () {
           newline;
           ssh-keygen -R ${ipaddr};
         fi;
+        newline;
         echo -e "Notice: Copying the SSH Access Key to Guest System ...";
         ## Configuring each target with custom settings.
         export expect_template="ssh-copy-id.expect";
