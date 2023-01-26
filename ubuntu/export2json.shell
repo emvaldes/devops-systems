@@ -4,6 +4,35 @@
 ## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
 function export2json () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -22,11 +51,11 @@ function export2json () {
     fi;
     ## Script configuration
     local script_path=$( dirname ${0} );
-    ## echo -e "Module Path: ${script_path}";
+    ## message "Module Path: ${script_path}";
     local script_name="export2json";
-    ## echo -e "Module Name: ${script_name}";
+    ## message "Module Name: ${script_name}";
     local script_type="shell";
-    ## echo -e "Module Type: ${script_type}";
+    ## message "Module Type: ${script_type}";
     ## Define custom-parameter(s)
     ## ...
     ## -------------------------------------------------------------------------
@@ -42,11 +71,11 @@ function export2json () {
             ## Removing multiple spacing in a single entry.
             [[ ${#apropos_listing[@]} -eq 1 ]] && {
                   apropos_listing="$(
-                  echo -e "${apropos_listing[@]}" | sed -e 's|\([[:blank:]]\)\{1,\}| |g'
+                  message "${apropos_listing[@]}" | sed -e 's|\([[:blank:]]\)\{1,\}| |g'
                 )"
               }
             apropos_block="$(
-                echo -e ${apropos_listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
+                message ${apropos_listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
               )";
     fi;
     declare -a listing=();
@@ -64,7 +93,7 @@ function export2json () {
               -e 's|\([[:blank:]]\)\{1,\}$||' \
         | tr ' ' '\n'
       ));
-    # echo -e "Time-Stamp: '${timestamp[*]}'";
+    # message "Time-Stamp: '${timestamp[*]}'";
     declare -a headers=();
     headers+=("^APT-Manual-Installed: ");
     headers+=("^APT-Sources: ");
@@ -137,17 +166,17 @@ function export2json () {
               -e 's|^\(.*"\)\( ,\*\)$|\1|' \
         | sed -e 's|^\(.*\)$|\1, "Apropos": [ '${apropos_block}' ]|' \
         | sed -e 's|^\(.*\)$|\1, "Listing": [ '$(
-                echo -e ${listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
+                message ${listing[@]} | sed -e 's|@$||' -e 's|@|,|g'
               )' ]|' \
         | sed -e 's|^\(.*\)$|\1, "Timestamp": { "date": "'${timestamp[0]}'", "time": "'${timestamp[1]}'" }|' \
         | sed -e 's|^\(.*\)$|\1 }|'
       )"; \
     ## Processing and formatting the collected output into a JSON file.
-    ## echo -e "${json_object}" | python -m json.tool; break ;
+    ## message "${json_object}" | python -m json.tool; break ;
     # newline;
-    echo -e "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
+    message "${json_object}" | python -m json.tool | tee "${xpath}/${package}.json";
     ## -------------------------------------------------------------------------
-    # newline; echo -e "Done."; newline;
+    # message "Done.";
     IFS="${oIFS}";
     return 0;
   };

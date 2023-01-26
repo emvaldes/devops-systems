@@ -5,38 +5,67 @@
 ## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
 export preinstall_logfile="/tmp/preinstall.log";
 cat /dev/null > ${preinstall_logfile};
 
-echo -e "Warning: APT Updating System! " \
+warning "APT Updating System" \
 | tee -a "${autologin_logfile}";
 newline;
 
 sudo apt update --yes \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Warning: APT Listing Upgradable Packages! " \
+warning "APT Listing Upgradable Packages" \
 | tee -a "${autologin_logfile}";
 newline;
 
 apt list --upgradable \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Warning: APT Upgrading System! " \
+warning "APT Upgrading System" \
 | tee -a "${autologin_logfile}";
 newline;
 
 sudo apt upgrade --yes \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Warning: APT Autoremove Packages! " \
+warning "APT Autoremove Packages" \
 | tee -a "${autologin_logfile}";
 newline;
 
 sudo apt autoremove --yes \
 | tee -a "${autologin_logfile}";
 
-echo -e "Notice: Starting Pre-Install ..." \
+comment "Starting Pre-Install" \
 | tee -a "${preinstall_logfile}";
 
 declare -a packages=(
@@ -48,7 +77,7 @@ declare -a packages=(
 
 for package in ${packages[@]}; do
 
-  newline; echo -e "Notice: Installing ${package} package ..." \
+  comment "Installing ${package} package" \
   | tee -a "${preinstall_logfile}";
   newline;
 
@@ -57,5 +86,5 @@ for package in ${packages[@]}; do
 
 done;
 
-newline; echo -e "Notice: Completed Pre-Install! " \
+comment "Completed Pre-Install" \
 | tee -a "${preinstall_logfile}";

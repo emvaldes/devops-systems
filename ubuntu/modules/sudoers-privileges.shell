@@ -5,12 +5,41 @@
 ## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
 ## {{ placeholder }}
 
 export privileges_logfile="/tmp/sudoers-privileges.log";
 cat /dev/null > ${privileges_logfile};
 
-echo -e "Notice: Starting Sudoers Privileges ..." \
+comment "Starting Sudoers Privileges" \
 | tee -a "${privileges_logfile}";
 
 ## DevOps - Service Account
@@ -19,7 +48,7 @@ export devops_account='{{ service-account }}';
 ## Configuring Service Account passwordless access to sudo-requests
 if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
 
-        newline; echo -e "Warning: Granting un-restricted execution rights ..." \
+        warning "Granting un-restricted execution rights" \
         | tee -a "${privileges_logfile}";
 
         ## Injecting Passwordless Configuration
@@ -29,7 +58,7 @@ if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
         echo "${devops_account}  ALL=(ALL)  NOPASSWD: ALL" \
         | sudo tee /etc/sudoers.d/${devops_account};
 
-        newline; echo -e "Warning: Correcting ${devops_account} file permissions! " \
+        warning "Correcting ${devops_account} file permissions" \
         | tee -a "${privileges_logfile}";
 
         ## Service Account /etc/sudoers.d/ file-permissions
@@ -38,17 +67,17 @@ if [[ ! -e /etc/sudoers.d/${devops_account} ]]; then
         ## mode of '/etc/sudoers.d/devops' changed
         ## from 0644 (rw-r--r--) to 0440 (r--r-----)
 
-  else  newline; echo -e "Warning: Sudoers Privileges already enabled! " \
+  else  warning "Sudoers Privileges already enabled" \
         | tee -a "${privileges_logfile}";
         return 0;
 
 fi;
 
-newline; echo -e "Notice: Listing ${devops_account} file permissions! " \
+comment "Listing ${devops_account} file permissions! " \
 | tee -a "${privileges_logfile}";
 
 sudo ls -al /etc/sudoers.d/${devops_account}\
 | tee -a "${privileges_logfile}";
 
-newline; echo -e "Notice: Completed Sudoers Privileges! " \
+comment "Completed Sudoers Privileges! " \
 | tee -a "${privileges_logfile}";

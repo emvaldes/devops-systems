@@ -5,16 +5,45 @@
 ## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
 export autologin_logfile="/tmp/sudoers-autologin.log";
 cat /dev/null > ${autologin_logfile};
 
-echo -e "Notice: Starting Sudoers Auto-Login ..." \
+comment "Starting Sudoers Auto-Login" \
 | tee -a "${autologin_logfile}";
 
 ## DevOps - Service Account
 export devops_account='{{ service-account }}';
 
-newline; echo -e "Warning: Selectively Installing SSH Pass! " \
+warning "Selectively Installing SSH Pass" \
 | tee -a "${autologin_logfile}";
 newline;
 
@@ -27,8 +56,7 @@ newline;
 
 sudo apt install sshpass --yes | tee -a "${autologin_logfile}";
 
-newline;
-echo -e "Notice: Auto-Generating SSH Access Keys! " \
+comment "Auto-Generating SSH Access Keys" \
 | tee -a "${autologin_logfile}";
 newline;
 
@@ -40,14 +68,14 @@ ssh-keygen -t rsa \
            -N '' <<<y \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Notice: Copying SSH ID to authorized-keys file! " \
+comment "Copying SSH ID to authorized-keys file" \
 | tee -a "${autologin_logfile}";
 
 ## Removing all keys beloging to the localhost
 ssh-keygen -R localhost;
 
 ## Copying the SSH Access Key to itself (testing)
-echo -e "${devops_account}" \
+message "${devops_account}" \
    | sshpass ssh-copy-id -i ${sshkey_fileset} \
                          -o StrictHostKeyChecking=no \
                             localhost \
@@ -57,7 +85,7 @@ echo -e "${devops_account}" \
 rm -rfv ${HOME}/.ssh/ssh-copy-id* \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Notice: Removing SSH Pass tool! " \
+warning "Removing SSH Pass tool" \
 | tee -a "${autologin_logfile}";
 newline;
 
@@ -65,7 +93,7 @@ newline;
 sudo apt remove sshpass --yes \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Notice: Perfoming Auto-Remove operations! " \
+comment "Perfoming Auto-Remove operations" \
 | tee -a "${autologin_logfile}";
 newline;
 
@@ -76,7 +104,7 @@ newline;
 sudo apt autoremove --yes \
 | tee -a "${autologin_logfile}";
 
-newline; echo -e "Warning: Disabling Service Account password! ";
+warning "Disabling Service Account password";
 | tee -a "${autologin_logfile}";
 newline;
 
@@ -86,5 +114,5 @@ sudo passwd --delete ${devops_account} \
 | tee -a "${autologin_logfile}";
 ## passwd: password expiry information changed.
 
-newline; echo -e "Notice: Completed Sudoers Auto-Login! " \
+comment "Completed Sudoers Auto-Login! " \
 | tee -a "${autologin_logfile}";

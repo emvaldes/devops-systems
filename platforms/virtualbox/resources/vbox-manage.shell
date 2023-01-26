@@ -95,7 +95,7 @@ function vboxmanage_multimedia () {
     ; check_status;
     ## Audio:
     VBoxManage modifyvm ${virtual_machine} \
-             --audio=default \
+             --audio-driver=default \
              --audio-controller=${audio_controller} \
              --audio-in=on \
              --audio-out=on \
@@ -200,9 +200,7 @@ function vboxmanage_sharedfolders () {
                                   --auto-mount-point=${guest_path} \
             ; check_status;
             sleep 1;
-      else  newline;
-            echo -e "Warning: Host-Path does not exist! ";
-            newline;
+      else  warning "Host-Path does not exist";
             return 6;
     fi;
     return 0;
@@ -221,16 +219,12 @@ function vboxmanage_storage () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     [[ ${#instance_location} -eq 0 ]] && {
-        newline;
-        echo -e "Warning: No Virtual Machine Location was provided! ";
-        newline;
+        warning "No Virtual Machine Location was provided! ";
         exit 1;
       };
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
-    newline;
-    echo -e "Creating Medium (Hard Drive: *.vdi)";
-    newline;
+    comment "Creating Medium (Hard Drive: *.vdi)";
     VBoxManage createhd \
              --filename "${instance_location}/${virtual_machine}.vdi" \
              --size ${volume_size} \

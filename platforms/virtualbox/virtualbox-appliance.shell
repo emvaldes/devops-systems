@@ -10,7 +10,7 @@ function load_modules () {
     for xfile in "${xfiles[@]}"; do
       target="${resources}${xfile}";
       if [[ -e ${target} ]]; then source ${target};
-        else  echo -e "Warning: [${target}] was not found! ";
+        else  warning "[${target}] was not found";
               exit 1;
       fi;
     done;
@@ -36,7 +36,7 @@ function virtualbox_appliance () {
       fi;
       if [[ ${1#*\--} = "secret" ]]; then
         local devops_passwdfile="$(
-            echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+            message "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
           )";
         if [[ -e "${devops_passwdfile}" ]]; then
                 local devops_password="$(
@@ -45,9 +45,7 @@ function virtualbox_appliance () {
                 local password_option="--password-file=";
                 password_option+="${devops_passwdfile}";
                 ignore_password='true';
-          else  newline;
-                echo -e "Warning: Password File was not found! ";
-                newline;
+          else  warning "Password File was not found";
         fi;
       fi;
       ## Optional Parameters:
@@ -60,7 +58,7 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "install" ]] && local install_packages='true';
       if [[ ${1#*\--} = "iso-file" ]]; then
         local iso_filename="$(
-            echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+            message "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
           )";
         [[ ! -e ${iso_filename} ]] && unset iso_filename;
       fi;
@@ -70,7 +68,7 @@ function virtualbox_appliance () {
       [[ ${1#*\--} = "provision" ]] && local provisioning='true';
       if [[ ${1#*\--} = "ssh-key" ]]; then
         local sshkey_access="$(
-            echo -e "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+            message "${2}" | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
           )";
       fi;
       [[ ${1#*\--} = "start" ]] && local start_machine='true';
@@ -97,9 +95,7 @@ function virtualbox_appliance () {
                             --info=${info_mode} \
               ;
               return 1;
-        else  newline;
-              echo -e "Warning: Script Helper was not found ! ";
-              newline;
+        else  warning "Script Helper was not found";
               return 2;
       fi;
     fi;
@@ -119,6 +115,7 @@ function virtualbox_appliance () {
     if [[ ${#virtualbox_projects} -eq 0 ]]; then
       export virtualbox_projects="${HOME}/.virtualization/virtualbox";
       mkdir -p "${virtualbox_projects}";
+      vboxmanage setproperty machinefolder ${virtualbox_projects};
     fi;
     ## -------------------------------------------------------------------------
     ## Processing Function Input Parameters
@@ -127,13 +124,11 @@ function virtualbox_appliance () {
       newline; read -p "${user_input}" response;
       if [[ ${#response} -gt 0 ]]; then
               export virtual_machine="$(
-                  echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                  message ${response} | tr '[[:upper:]]' '[[:lower:]]'
                 )";
         else  ## Generating devops-(timestamp) name
               local virtual_machine="devops-${timestamp}";
-              newline;
-              echo -e "Warning: Appliance's name [${virtual_machine}] timestamp-based! ";
-              newline;
+              warning "Appliance's name [${virtual_machine}] timestamp-based";
       fi;
     fi;
     ## Virtual Machine hostname
@@ -142,77 +137,63 @@ function virtualbox_appliance () {
     ## e.g.: ubuntu-22.04.1-desktop-amd64.iso
     if [[ ${unattended_install} == 'true' ]]; then
       ## Processing ISO filename (location)
-      local missing_isofile="Warning: No Installation ISO file was provided! ";
+      local missing_isofile="No Installation ISO file was provided! ";
       if [[ ${#iso_filename} -eq 0 ]]; then
-        echo -e "${missing_isofile}";
+        warning "${missing_isofile}";
         ## Installation media (DVD ISO):
         user_input="Installation ISO location: ";
         newline; read -p "${user_input}" iso_filename;
         local fixing_filepath="$(
-            echo -e "${iso_filename}" \
-               | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+            message "${iso_filename}" \
+            | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
           )";
         iso_filename="${fixing_filepath}";
         if [[ ${#iso_filename} -eq 0 ]]; then
-          newline;
-          echo -e "Warning: Unable to continue! ";
-          newline;
+          warning "Unable to continue";
           return 3;
         fi;
       fi;
       if [[ ! -e ${iso_filename} ]]; then
-        newline;
-        echo -e "${missing_isofile}";
+        warning "${missing_isofile}";
         return 4;
       fi;
     fi;
     if [[ ${#devops_account} -eq 0 ]]; then
       export devops_account='devops';
-      newline;
-      echo -en "Warning: Using default ";
-      echo -e  "'${devops_account}' service account! ";
-      newline;
+      local using="'${devops_account}' service account";
+      warning "Using default ${using}";
     fi;
     if [[ ${#devops_password} -eq 0 ]]; then
       export devops_password="$(password)";
-      newline;
-      echo -en "Warning: Using custom ";
-      echo -e  "'${devops_password}' account password! ";
-      newline;
+      local using="'${devops_password}' account password";
+      warning "Using custom ${using}";
     fi;
     if [[ ${#configuration} -eq 0 ]]; then
             export configuration='false';
-            ## newline;
-            ## echo -en "Warning: Configuration ${provisioning} ! ";
-            ## newline;
-      else  local missing_sshkey="Warning: SSH Access Key (file) was not found! ";
+            ## warning "Configuration ${provisioning}";
+      else  local missing_sshkey="SSH Access Key (file) was not found! ";
             if [[ ${#sshkey_access} -eq 0 ]]; then
-              echo -e "${missing_sshkey}";
+              warning "${missing_sshkey}";
               ## Processing SSH Access Key file
               user_input="SSH Access Key (file): ";
               newline; read -p "${user_input}" response;
               local fixing_filepath="$(
-                  echo -e "${response}" \
-                     | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
+                  message "${response}" \
+                  | sed -e "s|^\(~\)\(.*\)|${HOME}\2|"
                 )";
               sshkey_access="${fixing_filepath}";
             fi;
             if [[ ! -e ${sshkey_access} ]]; then
-                    newline;
-                    echo -e "${missing_sshkey}";
+                    warning "${missing_sshkey}";
                     return 5;
-              else  newline;
-                    echo -e "Notice: Listing '${sshkey_access}' fingerprint ...";
-                    newline;
+              else  comment "Listing '${sshkey_access}' fingerprint";
                     ssh-keygen -l -E md5 -f "${sshkey_access}" ;
                     ssh-keygen -l -v -f "${sshkey_access}" ;
             fi;
     fi;
     if [[ ${#provisioning} -eq 0 ]]; then
       export provisioning='false';
-      # newline;
-      # echo -en "Warning: Provisioning ${provisioning} ! ";
-      # newline;
+      # warning "Provisioning ${provisioning} ! ";
     fi;
     local instance_location="";
     if [[ ${unattended_install} == 'true' ]]; then
@@ -235,7 +216,7 @@ function virtualbox_appliance () {
             instance_uuid="${response[1]/UUID: /}";
             ## Settings file: '${virttualbox}/***/***.vbox'
             instance_settings="$(
-                echo -e ${response[2]} \
+                message ${response[2]} \
                 | sed -e "s|^\(Settings file: '\)\(.*\)\(\'\)$|\2|"
               )";
             ## Extracting Virtual Machine Location and VBox-file:
@@ -276,7 +257,7 @@ function virtualbox_appliance () {
       ##            A manual step to be performed by the end-user at the Host
       # ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
       vboxmanage_sharedfolders --name="shared" \
-                               --host-path="/tmp/shared" \
+                               --host-path="${vbox_shared}" \
                                --guest-path="/shared";
       # # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /deploy)
       # vboxmanage_sharedfolders --name="deploy" \
@@ -286,11 +267,12 @@ function virtualbox_appliance () {
     ## Unattended Installation
     if [[ ${unattended_install} == 'true' ]]; then
       ## Listing any existing Unattended* files
-      ls -al ${instance_location}/Unattended-* 2>/dev/null;
+      # comment "Listing Unattended configuration files ...";
+      # ls -al ${instance_location}/Unattended-* 2>/dev/null;
       ## Removing any existing Unattended* files
+      warning "Removing Unattended configuration files ...";
       rm -fv ${instance_location}/Unattended-* 2>/dev/null;
-      echo -e "Generating VirtualBox Un-Attended Installation";
-      newline;
+      comment "Generating VirtualBox Un-Attended Installation";
       VBoxManage unattended install ${virtual_machine} \
                --iso="${iso_filename}" \
                --user="${devops_account}" \
@@ -316,6 +298,7 @@ function virtualbox_appliance () {
           ## Configuring each target with custom settings.
           export patch_template="patch-${target}";
           export remote_resource="${virtualbox_platform}/modules/${patch_template}";
+          warning "Purging any existing ${vbox_temp}/${patch_template}";
           rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
           # check_status;
           curl --silent \
@@ -323,14 +306,12 @@ function virtualbox_appliance () {
                https://${github_content}/${github_repo}/${remote_resource};
           check_status;
           while [[ ! -e ${vbox_temp}/${patch_template} ]]; do
-            echo -e '.'; sleep 1;
+            progress; sleep 1;
           done;
           check_status;
           newline;
           if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
-            newline;
-            echo -e "Warning: ${vbox_temp}/${patch_template} is missing! ";
-            newline;
+            warning "${vbox_temp}/${patch_template} is missing";
             return 6;
           fi;
           local system_configuration="${instance_location}/Unattended-*-${target}";
@@ -355,7 +336,7 @@ function virtualbox_appliance () {
                 -e "s|{{ root-password }}|${root_password}|g" \
                 ${system_configuration};
             check_status;
-            echo -e "Notice: Listing modifications (${patch_template})";
+            comment "Listing modifications (${patch_template})";
             egrep --before-context=2 \
                   --after-context=2 \
             "^d-i passwd/.*$" ${system_configuration} \
@@ -378,9 +359,7 @@ function virtualbox_appliance () {
                 -e "s|{{ service-account }}|${devops_account}|g" \
                 ${system_configuration};
             check_status;
-            newline;
-            echo -e "Notice: Listing modifications (${patch_template})";
-            newline;
+            comment "Listing modifications (${patch_template})";
             egrep --before-context=22 \
                   --after-context=4 \
             "^.*usermod -a -G vboxsf .*$" ${system_configuration};
@@ -390,16 +369,15 @@ function virtualbox_appliance () {
         for target in ${targets[@]}; do
           ## Warning: The creation of this local symlink has to occur after
           ##          patching is performed. Otherwise it seems to break.
+          comment "Linking Unattended patch-target file ...";
           ln -fsv ./Unattended-*-${target} ./patch-${target};
         done;
-        newline;
-        echo -e "Warning: Removing patched-file duplicates (e.g.: *.orig) ...";
-        newline;
+        warning "Removing patched-file duplicates (e.g.: *.orig)";
         rm -fv ./Unattended-*-${target}.orig 2>/dev/null;
         newline;
         cd "${active_location}" 2>/dev/null;
       fi;
-      echo -e "Completed! ";
+      message "Completed! ";
       newline;
     fi;
     if [[ ${configuration} == 'true' ]]; then
@@ -412,11 +390,9 @@ function virtualbox_appliance () {
           | grep bridged;
           echo -e ${?};
         ));
-      # newline; echo -e "Bridged Network:\n${machine_details[@]}";
+      # message "Bridged Network:\n${machine_details[@]}";
       if [[ ${machine_details[-1]} -gt 0 ]]; then
-        newline;
-        echo -e "Warning: Virtual Machine is invalid! ";
-        newline;
+        warning "Virtual Machine is invalid";
         return 7;
       fi;
       if [[ ${machine_details[-1]} -eq 0 ]]; then
@@ -428,23 +404,23 @@ function virtualbox_appliance () {
         regex+="\(\'\,.*\)";
         regex+='$';
         declare -a bridged_network=($(
-            echo -e "${machine_details[@]}" \
-               | sed -e "s|${regex}|\3\n\5|"
+            message "${machine_details[@]}" \
+            | sed -e "s|${regex}|\3\n\5|"
           ));
         local bridged_macaddr="$(
-            echo -e "${bridged_network[0]}" \
-               | fold -w2 \
-               | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
-               | sed -e 's|\:$||'
+            message "${bridged_network[0]}" \
+            | fold -w2 \
+            | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
+            | sed -e 's|\:$||'
           )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
-        # newline; echo -e "Bridged MAC Address: ${bridged_macaddr}";
+        # message "Bridged MAC Address: ${bridged_macaddr}";
         local bridged_interface="${bridged_network[1]%\:*}";
-        # newline; echo -e "Bridged Interface: ${bridged_interface}";
+        # message "Bridged Interface: ${bridged_interface}";
         network_access --vm-name="${virtual_machine}" \
                        --ssh-key="${sshkey_access}" \
                        --mac-addr="${bridged_macaddr}" \
         ; check_status;
-        # newline; echo -e "IP Address: ${ipaddr}";
+        # message "IP Address: ${ipaddr}";
         ## -------------------------------------------------------------
         ## Note: I have hashed my ~/.ssh/known_hosts file.
         #        $ ssh-keygen -H ;
@@ -461,12 +437,10 @@ function virtualbox_appliance () {
         if [[ ${#check_hostexist[@]} -gt 0 ]]; then
           ## -H -R hostname : Removes all hashed hosts (keys) belonging to
           ## hostname from a known_hosts file.
-          echo -e "Warning: Purging any ${ipaddr} existing records ...";
-          newline;
+          warning "Purging any ${ipaddr} existing records";
           ssh-keygen -R ${ipaddr};
         fi;
-        newline;
-        echo -e "Notice: Copying the SSH Access Key to Guest System ...";
+        comment "Copying the SSH Access Key to Guest System";
         ## Configuring each target with custom settings.
         export expect_template="ssh-copy-id.expect";
         export remote_resource="${virtualbox_platform}/modules/${expect_template}";
@@ -477,14 +451,12 @@ function virtualbox_appliance () {
              https://${github_content}/${github_repo}/${remote_resource};
         check_status;
         while [[ ! -e ${vbox_temp}/${expect_template} ]]; do
-          echo -e '.'; sleep 1;
+          progress; sleep 1;
         done;
         check_status;
         newline;
         if [[ ! -e ${vbox_temp}/${expect_template} ]]; then
-          newline;
-          echo -e "Warning: ${vbox_temp}/${expect_template} is missing! ";
-          newline;
+          warning "${vbox_temp}/${expect_template} is missing";
           return 8;
         fi;
         $(which expect) -c "$(

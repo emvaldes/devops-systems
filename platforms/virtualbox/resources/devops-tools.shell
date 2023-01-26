@@ -4,15 +4,55 @@
 ## Objective: Environment Functions
 
 ## -----------------------------------------------------------------------------
+## Objective: Printing empty lines (output)
+function newline () { echo -e; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Random Password Generator (32 length)
+function password () {
+    inline $( date +%s | sha256sum | base64 | head -c 32 );
+    return 0;
+  };
+
+## -----------------------------------------------------------------------------
 ## Objective: Identify Element's Array Index
 function array_index () {
     local oIFS="${IFS}"; IFS=$'\n';
-    declare -a array=($( echo -e "${1}" | tr ' ' '\n' ));
+    declare -a array=($( message "${1}" | tr ' ' '\n' ));
     local value="${2}";
-    # echo -e "Array: ${array[@]}";
+    # message "Array: ${array[@]}";
     for index in "${!array[@]}"; do
       [[ "${array[$index]}" == "${value}" ]] && {
-          echo -e "${index}"; break;
+          message "${index}"; break;
         } || { continue; };
     done;
     IFS="${oIFS}";
@@ -23,35 +63,26 @@ function array_index () {
 ## Objective: Parsing operational status for each event
 function check_status () {
     status=${1};
+    exit_message="Aborting execution on $(date +"%y%m%d%H%M%S")";
     if [[ ${status} -ne 0 ]]; then
             user_input="$((counter++)) = Error was found. Continue [N/y]: ";
             newline; read -t 15 -p "${user_input}" response;
             if [[ ${#response} -gt 0 ]]; then
                     selection="$(
-                        echo -e ${response} \
-                           | tr '[[:upper:]]' '[[:lower:]]'
+                        message ${response} | tr '[[:upper:]]' '[[:lower:]]'
                       )";
                     if [[ 'n' =~ "${selection:0:1}" ]]; then
+                            warning "${exit_message}";
                             exit ${status};
-                      else  return 1;
+                      else  return 0;
                     fi;
-              else  exit ${status};
+              else  warning "${exit_message}";
+                    exit ${status};
             fi;
-      else  return 2;
+      else  return 0;
     fi;
     return 0;
   }; alias check-status='check_status';
-
-## -----------------------------------------------------------------------------
-## Objective: Printing empty lines (output)
-function newline () { echo -e; return 0; };
-
-## -----------------------------------------------------------------------------
-## Objective: Random Password Generator (32 length)
-function password () {
-    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
-    return 0;
-  };
 
 ## -----------------------------------------------------------------------------
 ## Objective: Pre-Installing Core Packages
@@ -65,7 +96,7 @@ function preinst_packages () {
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
-      echo -e '.'; sleep 1;
+      progress; sleep 1;
     done; newline;
     check_status $?;
     ssh ${virtual_machine} -C 'bash -s' \
@@ -86,7 +117,7 @@ function postinst_packages () {
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vbox_temp}/${script_filename} ]]; do
-      echo -e '.'; sleep 1;
+      progress; sleep 1;
     done; newline;
     check_status $?;
     ssh ${virtual_machine} -C 'bash -s' \
@@ -113,7 +144,7 @@ function valid_number () {
            abort_script='true';
     fi;
     [[ ${abort_script} == 'true' ]] && {
-        # echo -e "${invalid_number}" >&2;
+        # message "${invalid_number}" >&2;
         return 2;
       };
     return 0;
@@ -134,9 +165,7 @@ function network_access () {
     local oIFS="${IFS}"; IFS=$'\n';
     ## Define custom-parameter(s):
     [[ ${#virtual_machine} -eq 0 ]] && {
-        newline;
-        echo -e "Warning: Missing VirtualBox Appliance Name! ";
-        newline;
+        warning "Missing VirtualBox Appliance Name";
         return 3;
       };
     [[ ${#interface} -eq 0 ]] && local interface="Bridged";
@@ -148,16 +177,14 @@ function network_access () {
     #     | sed -e "s|^\(NIC.*\)\(MAC\:\ \)\([a-zA-Z0-9]*\)\(\,.*Bridged.*'\)\(.*\)\('\,.*\)$|\3\n\5|"
     #   ));
     # local bridged_macaddr="$(
-    #     echo -e "${showvminfo[0]}" \
+    #     message "${showvminfo[0]}" \
     #        | fold -w2 \
     #        | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
     #        | sed -e 's|\:$||'
     #   )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
     # local bridged_interface="${showvminfo[1]%\:*}";
     local localnet="${HOME}/.localnet";
-    newline;
-    echo -e "Executing ARP Scanning ... -> ${localnet} : ";
-    newline;
+    comment "Executing ARP Scanning ... -> ${localnet} : ";
     ## Required to avoid any manual scanning
     sudo arp-scan --localnet | tee ${localnet};
     declare -a listed=($(
@@ -165,7 +192,7 @@ function network_access () {
         | sed -e "s|${bridged_macaddr}|${virtual_machine}|" \
         | tr '\t' '*' | awk -F'*' '{print $1"\n"$2"\n"$3}'
       ));
-    # for each in ${listed[@]}; do echo -e "${each}"; done;
+    # for each in ${listed[@]}; do message "${each}"; done;
     export ipaddr="${listed[0]}";
     export device="${listed[2]}";
     ## System Configuration files
@@ -182,11 +209,9 @@ function network_access () {
           egrep "^${ipaddr}.*$" ${etc_hosts}
         ));
       if [[ ${#ipaddr_exists[@]} -gt 1 ]]; then
-        newline;
-        echo -e "Warning: Multiple records exists! ";
-        newline;
+        warning "Warning: Multiple records exists";
         for record in ${ipaddr_exists[@]}; do
-          echo -e "Record: ${record}";
+          message "Record: ${record}";
         done;
         ## Purging existing virtual-machine record
         ## sed -i '' "/^${ipaddr}.*${virtual_machine}.*$/d" ${etc_hosts};
@@ -194,8 +219,7 @@ function network_access () {
         newline; read -t 15 -p "Continue [Y/n] : " response;
         if [[ ${#response} -gt 0 ]]; then
           selection="$(
-              echo -e ${response} \
-                 | tr '[[:upper:]]' '[[:lower:]]'
+              message ${response} | tr '[[:upper:]]' '[[:lower:]]'
             )";
           if [[ 'n' =~ "${selection:0:1}" ]]; then
             newline;
@@ -216,15 +240,12 @@ function network_access () {
                 regex+='\([0-9\.]\)\{1,\}\([[:blank:]]*\)';
                 regex+="\(${virtual_machine}.*\)";
                 regex+='$';
-                newline;
-                echo -e "Warning: Updating ${custom_message}";
+                warning "Updating ${custom_message}";
                 sudo sed -i '' "s|${regex}|${xipaddr}\3|" "${etc_hosts}";
               fi;
-        else  newline;
-              echo -e "Notice: Appending ${custom_message}";
-              newline;
-              echo -e "${xipaddr}${xdevice}$(
-                  echo -e "${virtual_machine#*\-}.${virtual_machine%%\-*}.local"
+        else  comment "Appending ${custom_message}";
+              message "${xipaddr}${xdevice}$(
+                  message "${virtual_machine#*\-}.${virtual_machine%%\-*}.local"
                 )" | sudo tee -a "${etc_hosts}";
       fi;
       ## Listing /etc/hosts current configuration
@@ -232,8 +253,7 @@ function network_access () {
       cat "${etc_hosts}";
       local custom_message=" Record in ${ssh_config} file! ";
       if [[ $( egrep -c "Host ${virtual_machine}" ${ssh_config} ) -eq 0 ]]; then
-              newline;
-              echo -e "Updating ${custom_message}";
+              comment "Updating ${custom_message}";
               declare -a config_block=();
               config_block+=("\nHost ${virtual_machine}");
               config_block+=("  AddKeysToAgent yes");
@@ -242,11 +262,10 @@ function network_access () {
               config_block+=("  StrictHostKeyChecking no");
               config_block+=("  IdentityFile ${sshkey_access}");
               for each in ${config_block[@]}; do
-                echo -e "${each}" >> ${ssh_config};
+                message "${each}" >> ${ssh_config};
               done;
         else  ## Updating configuration block
-              newline;
-              echo -e "Updating ${custom_message}";
+              comment "Updating ${custom_message}";
               local header="Host ${virtual_machine}";
               local footer="IdentityFile .*";
               sed -i '' \

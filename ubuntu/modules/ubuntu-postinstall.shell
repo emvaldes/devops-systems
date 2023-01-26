@@ -5,13 +5,42 @@
 ## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
 export postinstall_logfile="/tmp/postinstall.log";
 cat /dev/null > ${postinstall_logfile};
 
-echo -e "Notice: Starting Framework Deployment ..." \
+comment "Starting Framework Deployment" \
 | tee -a "${postinstall_logfile}";
 
-newline; echo -e "Notice: Cloning GitHub Public Repository ..." \
+comment "Cloning GitHub Public Repository" \
 | tee -a "${postinstall_logfile}";
 
 git clone https://github.com/emvaldes/devops-systems.git /tmp/devops-systems;
@@ -22,11 +51,11 @@ cd /tmp/devops-systems/ubuntu && ls -al ./packages.shell;
 ## Notice: Unless the --install parameter is provided
 ##         there will be no package installed.
 
-newline; echo -e "Notice: Executing Packages Installation ..." \
+comment "Executing Packages Installation ..." \
 | tee -a "${postinstall_logfile}";
 
 bash ./packages.shell --install | tee ./packages.log;
 
-echo -e "Notice: Completed Framework Deployment! " \
+comment "Completed Framework Deployment! " \
 | tee -a "${postinstall_logfile}";
 newline;

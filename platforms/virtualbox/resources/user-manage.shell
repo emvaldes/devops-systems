@@ -5,6 +5,35 @@
 function newline () { echo -e; return 0; };
 
 ## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; ## newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
 ## Objective: Configuring Auto-Login Capabilities
 function sudoers_autologin () {
     local autlogin_script="sudoers-autologin.shell";
@@ -16,7 +45,7 @@ function sudoers_autologin () {
          https://${github_content}/${github_repo}/${remote_module};
     check_status;
     while [[ ! -e ${vbox_temp}/${autlogin_script} ]]; do
-      echo -e '.'; sleep 1;
+      progress; sleep 1;
     done; newline;
     check_status;
     if [[ -e ${vbox_temp}/${autlogin_script} ]]; then
@@ -28,18 +57,13 @@ function sudoers_autologin () {
             sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                       ${vbox_temp}/${autlogin_script};
             check_status;
-            echo -e "Listing ${autlogin_script} configurations ...";
-            newline;
+            comment "Listing ${autlogin_script} configurations";
             cat  ${vbox_temp}/${autlogin_script};
-            newline;
-            echo -e "Executing the ${autlogin_script} script ...";
-            newline;
+            comment "Executing the ${autlogin_script} script";
             ssh ${virtual_machine} -C 'bash -s' \
               < ${vbox_temp}/${autlogin_script} 2>/dev/null;
             check_status;
-      else  newline;
-            echo -e "Warning: ${vbox_temp}/${autlogin_script} is missing! ";
-            newline;
+      else  warning "${vbox_temp}/${autlogin_script} is missing";
             return 5;
     fi;
     return 0;
@@ -58,19 +82,19 @@ function sudoers_privileges () {
          https://${github_content}/${github_repo}/${remote_module};
     check_status;
     while [[ ! -e ${vbox_temp}/${privileges_script} ]]; do
-      echo -e '.'; sleep 1;
+      progress; sleep 1;
     done; newline;
     check_status;
     if [[ -e ${vbox_temp}/${privileges_script} ]]; then
             insert_lines="${vbox_temp}/insert-lines.file";
             ## Creating a temporary file and adding these hacking-lines
-            echo -e "## Provisioning auto-configuration for passwordless sudo." \
+            message "## Provisioning auto-configuration for passwordless sudo." \
                   > ${insert_lines};
             check_status;
-            echo -en 'echo -e "'${devops_password}'\\n" ' \
+            inline 'echo -e "'${devops_password}'\\n" ' \
                   >> ${insert_lines};
             check_status;
-            echo -e  '| sudo -S systemctl status ssh 2>&1>/dev/null' \
+            message '| sudo -S systemctl status ssh 2>&1>/dev/null' \
                   >> ${insert_lines};
             check_status;
             ## Inserting into the sudoers-privileges.shell file
@@ -85,18 +109,13 @@ function sudoers_privileges () {
             sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                       ${vbox_temp}/${privileges_script};
             check_status;
-            echo -e "Listing ${privileges_script} configurations ...";
-            newline;
+            comment "Listing ${privileges_script} configurations";
             cat  ${vbox_temp}/${privileges_script};
-            newline;
-            echo -e "Executing the ${privileges_script} script ...";
-            newline;
+            comment "Executing the ${privileges_script} script";
             ssh ${virtual_machine} -C 'bash -s' \
               < ${vbox_temp}/${privileges_script} 2>/dev/null;
             check_status;
-      else  newline;
-            echo -e "Warning: ${vbox_temp}/${privileges_script} is missing! ";
-            newline;
+      else  warning "${vbox_temp}/${privileges_script} is missing";
             return 4;
     fi;
     return 0;

@@ -70,9 +70,38 @@ mkdir -p "${user_local}";
 ## Objective: Printing empty lines (output)
 function newline () { echo -e; return 0; };
 
+## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
 ## Random Password:
 function password () {
-    echo -en $( date +%s | sha256sum | base64 | head -c 32 );
+    inline $( date +%s | sha256sum | base64 | head -c 32 );
     return 0;
   };
 
@@ -96,30 +125,35 @@ export counter=0;
 ## Objective: Parsing operational status for each event
 function check_status () {
     status=${1};
+    exit_message="Aborting execution on $(date +"%y%m%d%H%M%S")";
     if [[ ${status} -ne 0 ]]; then
             user_input="$((counter++)) = Error was found. Continue [N/y]: ";
             newline; read -t 15 -p "${user_input}" response;
             if [[ ${#response} -gt 0 ]]; then
                     selection="$(
-                        echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                        message ${response} | tr '[[:upper:]]' '[[:lower:]]'
                       )";
                     if [[ 'n' =~ "${selection:0:1}" ]]; then
+                            warning "${exit_message}";
                             exit ${status};
                       else  return 0;
                     fi;
-              else  exit ${status};
+              else  warning "${exit_message}";
+                    exit ${status};
             fi;
       else  return 0;
     fi;
-    # return 0;
+    return 0;
   }; alias check-status='check_status';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Reviewing existing Vagrant Infrastructure
 function vagrant_review () {
     local index=0;
+    comment "Listing Vagrant Projects ...";
     tree -a ${vagrant_projects};
     check_status $?;
+    comment "Listing existing VagrantBoxes ...";
     vagrant box list;
     check_status $?;
     local existing="$(
@@ -129,137 +163,144 @@ function vagrant_review () {
       user_input="$((index++)) = ${vagrant_boxset} was found. Destroy [N/y]: ";
       newline; read -t 15 -p "${user_input}" response;
       if [[ ${#response} -gt 0 ]]; then
-              newline; read -t 30 -p "${user_input}" response;
-              if [[ ${#response} -gt 0 ]]; then
-                      selection="$(
-                          echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
-                        )";
-                      if [[ 'n' =~ "${selection:0:1}" ]]; then
-                              return 0;
-                        else  cd ${vagrant_location};
-                              vagrant destroy --graceful;
-                              vagrant box remove "${vagrant_boxset}" \
-                                      --provider virtualbox \
-                                      --force \
-                                      --all;
-                      fi;
-                else  exit ${status};
+              selection="$(
+                  message ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                )";
+              if [[ 'n' =~ "${selection:0:1}" ]]; then
+                      return 0;
+                else  cd ${vagrant_location};
+                      warning "Destroying '${existing}' VagrantBox";
+                      vagrant destroy --graceful;
+                      vagrant box remove "${vagrant_boxset}" \
+                              --provider virtualbox \
+                              --force \
+                              --all;
               fi;
-        else  return 0;
+        else  warning "Aborting VagrantBox removal";
+              exit ${status};
       fi;
     fi;
     return 0;
   }; alias vagrant-review='vagrant_review';
 
 ## -----------------------------------------------------------------------------
-## Objective: Adding Vagrant Box (bento/ubuntu-22.04)
+## Objective: Adding VagrantBox (bento/ubuntu-22.04)
 function vagrant_addbox () {
+    comment "Adding VagrantBox '${vagrant_boxset}' ...";
     vagrant box add ${vagrant_boxset} \
           --force \
           --provider virtualbox;
     check_status $?;
+    comment "Vagrant Project Boxes ${vagrant_projects}/boxes ...";
     tree -a ${vagrant_projects}/boxes;
     check_status $?;
+    comment "Enabled VagrantBoxes (listing)";
     vagrant box list;
     check_status $?;
     return 0;
   }; alias vagrant-addbox='vagrant_addbox';
 
 ## -----------------------------------------------------------------------------
-## Objective: Initializing Vagrant Box (review)
+## Objective: Initializing VagrantBox (review)
 function vagrant_initbox () {
     cd ${vagrant_location};
-    mkdir -p ${vagrant_location} && cd $_;
-    if [[ -e ./Vagrantfile ]]; then
-      newline;
-      echo -e "Warning: Vagrantfile already exists! ";
-      newline;
-      rm -fv ./Vagrantfile 2>/dev/null;
+    vagrantfile="${vagrant_location}";
+    if [[ -e ${vagrantfile} ]]; then
+      warning "Removing '${vagrantfile}' vagrant file";
+      rm -fv ${vagrantfile} 2>/dev/null;
     fi;
     check_status $?;
+    comment "Initializing '${vagrant_boxset}' ...";
     vagrant init ${vagrant_boxset};
     check_status $?;
+    comment "Listing '${vagrantfile}' content ...";
+    cat ${vagrantfile} \
+      | egrep -v "^([[:blank:]]*)\#.*$" \
+      | sed -e '/^\([[:blank:]]*\)$/d';
+    comment "Listing Vagrant Projects ...";
     tree -a ${vagrant_projects};
     check_status $?;
     return 0;
   }; alias vagrant-initbox='vagrant_initbox';
 
 ## -----------------------------------------------------------------------------
-## Objective: Patching Vagrant Box (Vagrantfile)
+## Objective: Patching VagrantBox (Vagrantfile)
 ## Create Patch-file:
 ## diff -u ./Vagrantfile ./custom.configs > ./patch-vagrantfile;
 function patch_vagrantfile () {
     cd ${vagrant_location};
+    local vagrantfile="${vagrant_location}/Vagrantfile";
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="${vagrant_platform}/${patch_vagrantfile}";
+    warning "Removing '${patch_vagrantfile}' patch-file";
     rm -fv ${vagrant_temp}/${patch_vagrantfile} 2>/dev/null;
     # check_status $?;
+    comment "Downloading '${patch_vagrantfile}' patch-file ...";
     curl --silent \
          --output ${vagrant_temp}/${patch_vagrantfile} \
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${patch_vagrantfile} ]]; do
-      echo -e '.'; sleep 1;
-    done; newline;
+      progress; sleep 1;
+    done;
     check_status $?;
-    # cat ${vagrant_temp}/${patch_vagrantfile};
-    # --- ./Vagrantfile         2023-01-08 15:16:11
-    # +++ ./custom.vagrantfile  2023-01-08 15:30:15
-    # @@ -67,4 +67,11 @@
-    #    #   apt-get update
-    #    #   apt-get install -y apache2
-    #    # SHELL
-    # +
-    # +  config.vm.synced_folder "{{ vagrant-shared }}", "/shared"
-    # +  config.vm.hostname = "{{ virtual-machine }}"
-    # +  config.vm.provider "virtualbox" do |console|
-    # +    console.name = "{{ virtual-machine }}"
-    # +  end
-    # +
-    #  end
+    comment "Listing '${patch_vagrantfile}' content ...";
+    cat ${vagrant_temp}/${patch_vagrantfile};
+    comment "Transforming '${patch_vagrantfile}' ( vagrant-shared ) ...";
     ## Updating the vagrant-shared placeholder
     sed -i '' -e "s|{{ vagrant-shared }}|${vagrant_shared}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
+    comment "Transforming '${patch_vagrantfile}' ( virtual-machine ) ...";
     ## Updating the virtual-machine placeholder
     sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
+    comment "Listing transformed '${patch_vagrantfile}' ...";
     cat -n ${vagrant_temp}/${patch_vagrantfile};
-    patch ${vagrant_location}/Vagrantfile < ${vagrant_temp}/${patch_vagrantfile};
+    comment "Patching '${vagrantfile}' vagrant file ...";
+    patch ${vagrantfile} < ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
+    comment "Validating '${vagrantfile}' ...";
     vagrant validate;
     check_status $?;
     return 0;
   }; alias patch-vagrantfile='patch_vagrantfile';
 
 ## -----------------------------------------------------------------------------
-## Objective: Deploying Vagrant Box Appliance
+## Objective: Deploying VagrantBox Appliance
 function vagrant_deploy () {
     cd ${vagrant_location};
+    comment "Starting up ${vagrant_boxset} ...";
     vagrant up;
     check_status $?;
+    comment "Listing Vagrant Projects ...";
     tree ${vagrant_projects}/boxes/;
     check_status $?;
     return 0;
   }; alias vagrant-deploy='vagrant_deploy';
 
 ## -----------------------------------------------------------------------------
-## Objective: Reviewing Vagrant Box Configuration
+## Objective: Reviewing VagrantBox Configuration
 function vagrant_config () {
     cd ${vagrant_location};
+    comment "Listing Vagrant Status ...";
     vagrant status;
     check_status $?;
+    comment "Reviewing Vagrant SSH Configuration ...";
     vagrant ssh-config;
     check_status $?;
     return 0;
   }; alias vagrant-config='vagrant_config';
 
 ## -----------------------------------------------------------------------------
-## Objective: Validating Vagrant Box Credentials
+## Objective: Validating VagrantBox Credentials
 function vagrant_access () {
     local machine_configs=".vagrant/machines/default/virtualbox";
-    cat ${vagrant_location}/${machine_configs}/private_key;
+    local private_sshkey="${vagrant_location}/${machine_configs}/private_key";
+    comment "Listing ${private_sshkey} SSH Access Key ...";
+    cat ${private_sshkey};
+    comment "Fetching SSH Authorized Access Keys ...";
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     check_status $?;
@@ -270,23 +311,29 @@ function vagrant_access () {
 ## Objective: Creating Service Account Script
 function service_account () {
     cd ${vagrant_location};
-    local script_filename="service-account.shell";
-    local remote_resource="${vagrant_platform}/${script_filename}";
-    rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
+    local account_script="service-account.shell";
+    local remote_resource="${vagrant_platform}/${account_script}";
+    warning "Removing '${account_script}' script file";
+    rm -fv ${vagrant_temp}/${account_script} 2>/dev/null;
     # check_status $?;
+    comment "Downloading '${account_script}' script file ...";
     curl --silent \
-         --output ${vagrant_temp}/${script_filename} \
+         --output ${vagrant_temp}/${account_script} \
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
-    while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
-      echo -e '.'; sleep 1;
-    done; newline;
+    while [[ ! -e ${vagrant_temp}/${account_script} ]]; do
+      progress; sleep 1;
+    done;
     check_status $?;
+    comment "Listing '${account_script}' content ...";
+    cat ${vagrant_temp}/${account_script};
+    comment "Transforming '${account_script}' ( service-account ) ...";
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
-                 ${vagrant_temp}/${script_filename};
+                 ${vagrant_temp}/${account_script};
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
+    comment "Executing '${account_script}' in remote system ...";
+    vagrant ssh -c 'bash -' < ${vagrant_temp}/${account_script};
     check_status $?;
     return 0;
   }; alias service-account='service_account';
@@ -297,20 +344,26 @@ function sudoers_privileges () {
     cd ${vagrant_location};
     local privileges_script="sudoers-privileges.shell";
     local remote_resource="${ubuntu_modules}/${privileges_script}";
+    warning "Removing '${privileges_script}' script file";
     rm -fv ${vagrant_temp}/${privileges_script} 2>/dev/null;
     # check_status $?;
+    comment "Downloading '${privileges_script}' script file ...";
     curl --silent \
          --output ${vagrant_temp}/${privileges_script} \
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${privileges_script} ]]; do
-      echo -e '.'; sleep 1;
-    done; newline;
+      progress; sleep 1;
+    done;
     check_status $?;
+    comment "Listing '${privileges_script}' content ...";
+    cat ${vagrant_temp}/${privileges_script};
+    comment "Transforming '${privileges_script}' ( service-account ) ...";
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                  ${vagrant_temp}/${privileges_script};
     check_status $?;
+    comment "Executing '${privileges_script}' in remote system ...";
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${privileges_script};
     check_status $?;
     return 0;
@@ -320,16 +373,21 @@ function sudoers_privileges () {
 ## Objective: Transferring Access Credentials
 function transfer_credentials () {
     cd ${vagrant_location};
+    comment "Listing SSH Authorized Access Keys";
     fold -b -w 70 ${devops_sshkey};
+    comment "Publishing '${devops_sshkey}' ( shared-folders )";
     cp -v ${devops_sshkey} ${vagrant_shared};
     check_status $?;
     local sshkey_filename="$( basename ${devops_sshkey} )";
+    comment "Displaying '${sshkey_filename}' from remote system ...";
     vagrant ssh -c \
             "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
     check_status $?;
+    comment "Applying '${authorized_keys}' to remote system ...";
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
+    warning "Removing '${sshkey_filename}' ssh-key file";
     rm -v ${vagrant_shared}/${sshkey_filename};
     check_status $?;
     return 0;
@@ -341,24 +399,31 @@ function sudoers_autologin () {
     cd ${vagrant_location};
     local autologin_script="sudoers-autologin.shell";
     local remote_resource="${ubuntu_modules}/${autologin_script}";
+    warning "Removing '${autologin_script}' script file";
     rm -fv ${vagrant_temp}/${autologin_script} 2>/dev/null;
     # check_status $?;
+    comment "Downloading '${autologin_script}' script file ...";
     curl --silent \
          --output ${vagrant_temp}/${autologin_script} \
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${autologin_script} ]]; do
-      echo -e '.'; sleep 1;
-    done; newline;
+      progress; sleep 1;
+    done;
     check_status $?;
+    comment "Listing '${autologin_script}' content ...";
+    cat ${vagrant_temp}/${autologin_script};
+    comment "Transforming '${autologin_script}' ( service-account ) ...";
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                  ${vagrant_temp}/${autologin_script};
     check_status $?;
+    comment "Transforming '${autologin_script}' ( virtual-machine ) ...";
     ## Updating the virtual-machine placeholder
     sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                  ${vagrant_temp}/${autologin_script};
     check_status $?;
+    comment "Executing '${autologin_script}' in remote system ...";
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${autologin_script};
     check_status $?;
     return 0;
@@ -368,17 +433,22 @@ function sudoers_autologin () {
 ## Objective: Transferring SSH Access Credentials
 function service_access () {
     cd ${vagrant_location};
+    comment "Listing '${devops_sshkey}' content ...";
     cat ${devops_sshkey};
     check_status $?;
+    comment "Publishing '${devops_sshkey}' ( shared-folders )";
     cp -v ${devops_sshkey} ${vagrant_shared};
     check_status $?;
     local sshkey_filename="$( basename ${devops_sshkey} )";
+    comment "Injecting '${sshkey_filename}' into remote system ...";
     vagrant ssh -c \
             "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
     check_status $?;
+    comment "Displaying '${authorized_keys}' from remote system ...";
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
+    warning "Removing '${vagrant_shared}/${sshkey_filename}' vagrant file";
     rm -v ${vagrant_shared}/${sshkey_filename};
     check_status $?;
     return 0;
@@ -390,17 +460,22 @@ function config_section () {
     cd ${vagrant_location};
     local private_sshkey="${devops_sshkey/.pub/}";
     ## Purging configuration block if it already exists
-    local section_header="/Host ${virtual_machine}";
-    sed -i '' "${section_header}/,/LogLevel FATAL/d" ${HOME}/.ssh/config;
-    sed -i '' '/^$/N;/^\n$/D' ~/.ssh/config;
+    local section_header="Host ${virtual_machine}";
+    local ssh_config="${HOME}/.ssh/config";
+    warning "Removing SSH Configuration from '${ssh_config}'";
+    sed -i '' "/${section_header}/,/LogLevel FATAL/d" ${ssh_config};
+    comment "Removing all empty lines from '${ssh_config}' ...";
+    sed -i '' '/^$/N;/^\n$/D' ${ssh_config};
     check_status $?;
+    comment "Capturing Vagrant SSH Configuration ...";
     vagrant ssh-config \
           | sed -e "s|Host default|Host ${virtual_machine}|g" \
                 -e "s|\(User \)\(.*\)|\1${devops_account}|g" \
                 -e "s|\( IdentityFile \)\(.*\)|\1${private_sshkey}|g" \
-    >> ${HOME}/.ssh/config;
+    >> ${ssh_config};
     check_status $?;
-    egrep -A12 "^Host ${virtual_machine}" ${HOME}/.ssh/config;
+    messaage "Listing Host Configuration in ${ssh_config}";
+    egrep -A12 "^Host ${virtual_machine}" ${ssh_config};
     check_status $?;
     return 0;
   }; alias config-section='config_section';
@@ -418,7 +493,7 @@ function preinst_packages () {
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
-      echo -e '.'; sleep 1;
+      progress; sleep 1;
     done; newline;
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
@@ -439,7 +514,7 @@ function postinst_packages () {
          https://${github_content}/${github_repo}/${remote_resource};
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
-      echo -e '.'; sleep 1;
+      progress; sleep 1;
     done; newline;
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
@@ -448,7 +523,7 @@ function postinst_packages () {
   }; alias postinst-packages='postinst_packages';
 
 ## -----------------------------------------------------------------------------
-## Objective: Destroying Vagrant Box (ubuntu)
+## Objective: Destroying VagrantBox (ubuntu)
 function destroy_appliance () {
     cd ${vagrant_location};
     vagrant destroy;
@@ -496,9 +571,7 @@ function vagrant_appliance () {
                             --info=${info_mode} \
               ;
               return 6;
-        else  newline;
-              echo -e "Warning: Script Helper was not found! ";
-              newline;
+        else  warning "Script Helper was not found";
               return 7;
       fi;
     fi;
@@ -511,14 +584,13 @@ function vagrant_appliance () {
         newline; read -t 15 -p "${user_input}" response;
         if [[ ${#response} -gt 0 ]]; then
                 export vagrant_boxset="$(
-                    echo -e ${response} | tr '[[:upper:]]' '[[:lower:]]'
+                    message ${response} | tr '[[:upper:]]' '[[:lower:]]'
                   )";
-          else  newline;
-                echo -e "Warning: Unable to continue! ";
-                newline;
+          else  warning "Unable to continue";
                 return 1;
         fi;
       };
+    ## Vagrant Cloud modules. e.g.: bento/ubuntu-22.04
     export vagrant_cloudset="${vagrant_boxset%%\/*}";
     export vagrant_instance="${vagrant_boxset##*\/}";
     ## Virtual Machine hostname
@@ -550,21 +622,22 @@ function vagrant_appliance () {
       };
     export vagrant_sources="${vagrant_projects}/sources";
     ## Target Vagrant Instance Location:
-    export vagrant_location="${vagrant_sources}/${vagrant_instance}/${virtual_machine}";
+    [[ ${#vagrant_location} -eq 0 ]] && \
+      export vagrant_location="${vagrant_sources}/${vagrant_instance}/${virtual_machine}";
     mkdir -p "${vagrant_location}";
     ## -------------------------------------------------------------------------
     ## Objective: Initialization modules
     vagrant_review;             ## Reviewing existing Vagrant Infrastructure
-    vagrant_addbox;             ## Adding Vagrant Box (e.g.: bento/ubuntu-22.04)
-    vagrant_initbox;            ## Initializing Vagrant Box (review)
+    vagrant_addbox;             ## Adding VagrantBox (e.g.: bento/ubuntu-22.04)
+    vagrant_initbox;            ## Initializing VagrantBox (review)
     ## -------------------------------------------------------------------------
     ## Objective: Infrastructure Deployment modules
-    patch_vagrantfile;          ## Patching Vagrant Box (Vagrantfile)
-    vagrant_deploy;             ## Deploying Vagrant Box Appliance
+    patch_vagrantfile;          ## Patching VagrantBox (Vagrantfile)
+    vagrant_deploy;             ## Deploying VagrantBox Appliance
     ## -------------------------------------------------------------------------
     ## Objective: Accessibility Configuration modules
-    vagrant_config;             ## Reviewing Vagrant Box Configuration
-    vagrant_access;             ## Validating Vagrant Box Credentials
+    vagrant_config;             ## Reviewing VagrantBox Configuration
+    vagrant_access;             ## Validating VagrantBox Credentials
     ## -------------------------------------------------------------------------
     ## Objective: User Account modules
     service_account;            ## Creating Service Account Script

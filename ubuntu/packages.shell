@@ -16,6 +16,35 @@
 function newline () { echo -e; return 0; };
 
 ## -----------------------------------------------------------------------------
+## Objective: Printing (output) without terminating newline
+function inline ()  { echo -en "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (formatting is provided)
+function display () {
+    message="${1}";
+    [[ ${#message} -gt 0 ]] && {
+      newline; echo -e "${message}"; newline;
+    }; return 0;
+  };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing inline to simulate progress (output)
+function progress () { inline '.'; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing warning messages (output)
+function warning ()  { display "Warning: ${@}! "; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing comment messages (output)
+function comment ()  { display "Comment: ${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
+## Objective: Printing custom messages (output)
+function message ()  { echo -e "${@}"; return 0; };
+
+## -----------------------------------------------------------------------------
 function packages_ubuntu () {
     local oIFS="${IFS}";
     for xitem in "${@}"; do
@@ -25,7 +54,7 @@ function packages_ubuntu () {
       [[ ${1#*\--} = "json-file" ]] && local json_filename="${2}";
       [[ ${1#*\--} = "log-file" ]] && local log_filename="${2}";
       [[ ${1#*\--} = "pkgs-list" ]] && {
-          declare -a pkgs_listing=($( echo -e ${2} | tr ',' '\n' ));
+          declare -a pkgs_listing=($( message ${2} | tr ',' '\n' ));
         };
       [[ ${1#*\--} = "report-file" ]] && local report_filename="${2}";
       [[ ${1#*\--} = "help" ]] && local assistance='true';
@@ -48,53 +77,52 @@ function packages_ubuntu () {
       );
     for module in ${modules[@]}; do
       if [[ -e $(pwd)/${module} ]]; then
-              echo -e "Loading: '${module}' module! ";
+              message "Loading: '${module}' module! ";
               newline;
               source $(pwd)/${module};
-        else  newline;
-              echo -e "Warning: Module '${module}' is not found! ";
+        else  warning "Module '${module}' is not found";
               return 99;
       fi;
     done;
     ## Script configuration
     local script_path=$( dirname ${0} );
-    ## echo -e "Script Path: ${script_path}";
+    ## message "Script Path: ${script_path}";
     local script_name=$( basename ${0%\.*} );
-    ## echo -e "Script Name: ${script_name}";
+    ## message "Script Name: ${script_name}";
     local script_type=$( basename ${0##*\.} );
-    ## echo -e "Script Type: ${script_type}";
+    ## message "Script Type: ${script_type}";
     ## Define custom-parameter(s)
     if [[ ${#pkgs_listing} -eq 0 ]]; then
             local pkgs_listing='packages.list';
             ## Loading Packages Listing
-            echo -e "Loading: '${pkgs_listing}' Default Packages List! ";
+            message "Loading: '${pkgs_listing}' Default Packages List! ";
             newline;
             source "${script_path}/${pkgs_listing}";
-      else  echo -e "Loading: Custom Packages List! ";
+      else  message "Loading: Custom Packages List! ";
             newline;
             declare -a packages=( ${pkgs_listing[@]} );
-            for package in ${packages[@]}; do echo -e "${package}"; done;
+            for package in ${packages[@]}; do message "${package}"; done;
     fi;
     [[ ${#log_filename} -eq 0 ]] && {
         log_filename='packages.log';
-        echo -e "Using: '${log_filename}' default Log file! ";
+        message "Using: '${log_filename}' default Log file! ";
       };
     [[ ${#json_filename} -eq 0 ]] && {
         json_filename='packages.json';
-        echo -e "Using: '${json_filename}' default JSON file! ";
+        message "Using: '${json_filename}' default JSON file! ";
       };
     [[ ${#report_filename} -eq 0 ]] && {
         report_filename='packages.report';
-        echo -e "Using: '${report_filename}' default Report file! ";
+        message "Using: '${report_filename}' default Report file! ";
       };
     if [[ ${install_packages} == 'true' ]]; then
             newline;
-            echo -e "Installing: Marked Packages! ";
+            message "Installing: Marked Packages! ";
       else  install_packages='false';
     fi;
     if [[ ${#import_filename} -gt 0 ]]; then
             newline;
-            echo -e "Importing: '${import_filename}' custom file! ";
+            message "Importing: '${import_filename}' custom file! ";
             import_report='true';
       else  import_report='false';
     fi;
@@ -124,15 +152,15 @@ function packages_ubuntu () {
     ## Processing Listed Packages:
     for xitem in ${packages[@]}; do
       # if [[ ${import_report} == 'true' ]]; then
-      #         echo -e "Processing APT Show Configuration report...";
+      #         message "Processing APT Show Configuration report...";
       #         return 10;
-      #   else  echo -e "Processing default workflow...";
+      #   else  message "Processing default workflow...";
       # fi;
       ## Options: apt, snap
       local installer=;
       local package=;
       if [[ ${xitem} =~ ':' ]]; then
-              declare -a request=($( echo -e "${xitem}" | tr ':' '\n' ));
+              declare -a request=($( message "${xitem}" | tr ':' '\n' ));
               package="${request[0]}";
               ## Removes first elemnent in array
               request=("${request[@]:1}");
@@ -165,10 +193,10 @@ function packages_ubuntu () {
       ## Evaluating APT Installed output
       if [[ $result == 'absent' ]]; then
               ## Package is not installed.
-              echo -e "--------------------------------------------------------------------------------";
-              echo -e "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
-              echo -e "   Warning: ${package} package is not installed! ";
-              echo -e "--------------------------------------------------------------------------------";
+              message "--------------------------------------------------------------------------------";
+              message "Installing: ${result} = $(( counter++ )) -> $(( count_miss++ ))";
+              message "   Warning: ${package} package is not installed! ";
+              message "--------------------------------------------------------------------------------";
               newline;
 	            ## Conditioning Package Installation based on explicit request
               if [[ ${install_packages} == 'true' ]]; then
@@ -229,7 +257,7 @@ function packages_ubuntu () {
               #   )";
               # ## Processing Pre-Installed Packages
               for xitem in ${preinstalled[@]}; do
-                ## echo -e "Pre-Installed: ${xitem} -> ${package}";
+                ## message "Pre-Installed: ${xitem} -> ${package}";
                 [[ ${xitem} == ${package} ]] && {
                     xpath="${default_packages}/native";
                     mkdir -p "${xpath}" 2>/dev/null ;
@@ -239,7 +267,7 @@ function packages_ubuntu () {
               done;
               ## Processing Post-Installed Packages
               for xitem in ${postinstalled[@]}; do
-                ## echo -e "Post-Installed: ${xitem} -> ${package}";
+                ## message "Post-Installed: ${xitem} -> ${package}";
                 [[ ${xitem} == ${package} ]] && {
                     xpath="${default_packages}/devops";
                     mkdir -p "${xpath}" 2>/dev/null ;
@@ -251,12 +279,12 @@ function packages_ubuntu () {
       ## Determine if processing package-report
       if [[ ${skip_report} == 'false' ]]; then
         newline;
-        echo -e "--------------------------------------------------------------------------------";
-        echo -e " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
-        echo -e "   Package: ${package_status}";
-        echo -e "--------------------------------------------------------------------------------";
+        message "--------------------------------------------------------------------------------";
+        message " Installed: ${result} = $(( counter++ )) -> $(( count_inst++ ))";
+        message "   Package: ${package_status}";
+        message "--------------------------------------------------------------------------------";
         newline;
-        # echo -e "${package}" >> ${installed};
+        # message "${package}" >> ${installed};
         case "${installer}" in
            apt ) ## Processing APT-Installed Packages:
                  export2json --package="${package}" \
@@ -279,7 +307,7 @@ function packages_ubuntu () {
     rm -rf ${reports_cache} 2>/dev/null;
     ## Exporting Installed Packages (name, version) ino LIST file.
     jq '.[] | "\(.Package) -> \(.Version)"' --raw-output ${jsonfile} > ${reportfile};
-    newline; echo -e "Done!"; newline;
+    newline; message "Done!"; newline;
     IFS="${oIFS}";
     return 0;
   }; alias packages-ubuntu='packages_ubuntu';
@@ -294,7 +322,7 @@ function packages_ubuntu.help () {
     done; IFS="${oIFS}";
     local oIFS="${IFS}"; IFS=$'\n';
     [[ ${#example} -eq 0 ]] && { local example='false'; };
-    # echo -e "Example: ${example}";
+    # message "Example: ${example}";
     spanwidth="${#help_caller}";
     local spacer="$( printf "% $(echo "${#help_caller} + 1" | bc)s" )";
     local spanner="$( printf "% 10s" )";
@@ -317,10 +345,10 @@ function packages_ubuntu.help () {
             declare -a required=();
             required+=("--install\t: Install Packages List.");
             newline;
-            echo -e "Required: ${required[0]}";
+            message "Required: ${required[0]}";
             required=("${required[@]:1}");
             for xline in ${required[@]}; do
-              echo -e "${spanner}${xline}";
+              message "${spanner}${xline}";
             done;
             ## -------------------------------------------------------------------------
             declare -a optional=();
@@ -330,45 +358,45 @@ function packages_ubuntu.help () {
             optional+=("--pkgs-list\t: Custom Packages List.");
             optional+=("--report-file\t: Installed Packages report file.");
             newline;
-            echo -e "Optional: ${optional[0]}";
+            message "Optional: ${optional[0]}";
             optional=("${optional[@]:1}");
             for xline in ${optional[@]}; do
-              echo -e "$( printf "% 10s" )${xline}";
+              message "$( printf "% 10s" )${xline}";
             done;
             ## -----------------------------------------------------------------
             newline;
-            echo -en "Usage:";
-            newline; newline;
-            echo -en "${help_caller/_/-} ";
+            message "Usage:";
+            newline;
+            inline "${help_caller/_/-} ";
             counter=0; aligned='';
             for xline in ${usage[@]}; do
               stubset='false';
               [[ ${counter} -gt 0 ]] && aligned="${spacer}";
               for xitem in ${patterns[@]}; do
-                declare -a replace=($( echo -e "${xitem}" | tr '\t' '\n' ));
+                declare -a replace=($( message "${xitem}" | tr '\t' '\n' ));
                 if [[ "${xline}" =~ "{{ ${replace[0]} }}" ]]; then
-                   echo -e "${aligned}${xline}" \
+                   message "${aligned}${xline}" \
                   | sed -e "s|{{ ${replace[0]} }}|${replace[1]}|"
                   stubset='true'; break;
                 fi;
               done;
-              [[ ${stubset} == 'false' ]] && echo -e "${aligned}${xline}";
+              [[ ${stubset} == 'false' ]] && message "${aligned}${xline}";
               ((counter++));
             done;
-            echo -e ";";
+            message ";";
             newline;
       else  ## Listing command example:
             newline;
-            echo -en "${help_caller/_/-} ";
-            echo -e "${usage[*]}" | sed -e 's/\ \\$//g' | tr '\n' ' ';
-            echo -e ";";
+            inline "${help_caller/_/-} ";
+            message "${usage[*]}" | sed -e 's/\ \\$//g' | tr '\n' ' ';
+            message ";";
             newline;
     fi;
     ## -------------------------------------------------------------------------
     # local script_location="blob/${virtualbox_platform}";
     # script_location+="/${help_caller/_/-}.shell";
-    # echo -e "GitHub Project: ${github_repo}";
-    # echo -e "        Source: ${script_location}";
+    # message "GitHub Project: ${github_repo}";
+    # message "        Source: ${script_location}";
     return 0;
   }; alias packages-ubuntu.help='packages_ubuntu.help';
 
