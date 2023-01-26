@@ -10,7 +10,7 @@ function load_modules () {
     for xfile in "${xfiles[@]}"; do
       target="${resources}${xfile}";
       if [[ -e ${target} ]]; then source ${target};
-        else  warning "[${target}] was not found";
+        else  echo -e  "[${target}] was not found";
               exit 1;
       fi;
     done;
