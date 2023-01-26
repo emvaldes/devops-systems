@@ -266,7 +266,7 @@ function virtualbox_appliance () {
       ## Processing Virtual Machine Networking Configurations:
       vboxmanage_networking --vm-name="${virtual_machine}" \
                             --nic-type='82545EM' \
-                            --bridged='1,en0: Ethernet' \
+                            --bridged='1,en0: Wi-Fi' \
                             --hostonly-network='2,HostNetwork' \
                             --nat-network='3,NatNetwork' \
                             --nat-only='4' \
