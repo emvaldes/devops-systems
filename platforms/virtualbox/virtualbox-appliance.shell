@@ -270,7 +270,7 @@ function virtualbox_appliance () {
         # message "Bridged Configuration:";
         # message "${bridged_configuration}";
       fi;
-      comment "Listing DHCP Servers";
+      comment "Listing DHCP Servers configurations";
       vboxmanage list --long --sorted dhcpservers ;
       vboxmanage_networking --vm-name="${virtual_machine}" \
                             --nic-type='82545EM' \
