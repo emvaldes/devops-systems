@@ -250,11 +250,28 @@ function virtualbox_appliance () {
       primary_interface;
       if [[ ( ${#INTF_NAME} -gt 0 ) && \
             ( ${#INTF_DESC} -gt 0 ) ]]; then
-        bridged_configuration="--bridged=$(( ++counter ))";
-        bridged_configuration+=",${INTF_NAME}: ${INTF_DESC}";
+        networksetup -getinfo "${INT_DESC}";
+        # DHCP Configuration
+        # IP address: 192.168.0.182
+        # Subnet mask: 255.255.255.0
+        # Router: 192.168.0.1
+        # Client ID:
+        # IPv6: Automatic
+        # IPv6 IP address: none
+        # IPv6 Router: none
+        # Ethernet Address: 58:ef:68:7d:93:31
+        # Wi-Fi ID: 88:66:5a:04:b6:21
+        comment "Listing routing configuration";
+        ip route get google.com; status=$?;
+        if [[ ${status} -eq 0 ]]; then
+          bridged_configuration="--bridged=$(( ++counter ))";
+          bridged_configuration+=",${INTF_NAME}: ${INTF_DESC}";
+        fi;
         # message "Bridged Configuration:";
         # message "${bridged_configuration}";
       fi;
+      comment "Listing DHCP Servers";
+      vboxmanage list --long --sorted dhcpservers ;
       vboxmanage_networking --vm-name="${virtual_machine}" \
                             --nic-type='82545EM' \
                             ${bridged_configuration} \
