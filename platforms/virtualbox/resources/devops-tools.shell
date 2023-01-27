@@ -34,7 +34,7 @@ function comment ()  { display "Comment: ${@}"; return 0; };
 
 ## -----------------------------------------------------------------------------
 ## Objective: Printing custom messages (output)
-function message ()  { echo -e "${@}"; return 0; };
+function message ()  { echo -e "${@}"; return 0; }; alias print='message';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Random Password Generator (32 length)
@@ -125,6 +125,38 @@ function postinst_packages () {
     check_status $?;
     return 0;
   }; alias postinst-packages='postinst_packages';
+
+## -----------------------------------------------------------------------------
+## Objective: Identify Network Active Interface
+function primary_interface () {
+    oIFS="${IFS}"; IFS=$'\n';
+    [[ "${OSTYPE}" =~ "darwin" ]] && export os_release='darwin';
+    if [[ "${os_release}" == "darwin" ]]; then
+      local interface="$(
+          route get google.com | grep interface | awk '{print $2}'
+        )";
+      declare -a active_interface=($(
+          networksetup -listallhardwareports \
+          | egrep -B1 -A1 ${interface} \
+          | awk -F': ' '{print $2}'
+        ));
+      export INTF_DESC="${active_interface[0]}";
+      export INTF_NAME="${active_interface[1]}";
+      export INTF_MAC="${active_interface[2]}";
+    fi;
+    if [[ ${#INTF_NAME} -gt 0 ]]; then
+      export INTF_ADDR="$(
+          /sbin/ifconfig ${INTF_NAME} 2>/dev/null \
+          | grep 'inet ' | awk '{print $2}'
+        )";
+    fi;
+    # message "Interface Description: ${INTF_DESC}";
+    # message "Interface Name: ${INTF_NAME}";
+    # message "Interface MAC: ${INTF_MAC}";
+    # message "Interface Address: ${INTF_ADDR}";
+    IFS="${oIFS}";
+    return 0;
+  }; alias primary-interface='primary_interface';
 
 ## -----------------------------------------------------------------------------
 ## Objective: Identify if it's a number and within a specific range-set
