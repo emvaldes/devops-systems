@@ -110,11 +110,13 @@ function virtualbox_appliance () {
     export vbox_temp="${local_temp}/vbox";
     export vbox_shared="${vbox_temp}/shared";
     ## Constructing a Vagrant Shared folder to exchange content
+    comment "Enforcing VBox Shared folder [${vbox_shared}]";
     mkdir -p "${vbox_shared}";
     ## Target VirtualBox Home folder:
     if [[ ${#virtualbox_projects} -eq 0 ]]; then
       export virtualbox_projects="${HOME}/.virtualization/virtualbox";
       mkdir -p "${virtualbox_projects}";
+      message "Configuring Machine Folder [${virtualbox_projects}]";
       vboxmanage setproperty machinefolder ${virtualbox_projects};
     fi;
     ## -------------------------------------------------------------------------
@@ -160,13 +162,13 @@ function virtualbox_appliance () {
     fi;
     if [[ ${#devops_account} -eq 0 ]]; then
       export devops_account='devops';
-      local using="'${devops_account}' service account";
-      warning "Using default ${using}";
+      local default_account="'${devops_account}' service account";
+      warning "Using default ${default_account}";
     fi;
     if [[ ${#devops_password} -eq 0 ]]; then
       export devops_password="$(password)";
-      local using="'${devops_password}' account password";
-      warning "Using custom ${using}";
+      local default_password="'${devops_password}' account password";
+      warning "Using custom ${default_password}";
     fi;
     if [[ ${#configuration} -eq 0 ]]; then
             export configuration='false';
@@ -197,13 +199,13 @@ function virtualbox_appliance () {
     fi;
     local instance_location="";
     if [[ ${unattended_install} == 'true' ]]; then
-            ## Collecting Virtual Machinen OS Type:
             declare -a instance_ostype="$(
                 VBoxManage list ostypes \
                 | egrep "^(ID:)([[:blank:]]*)(Ubuntu22.*)(LTS).*(64)$" \
                 | awk '{print $2}'
               )";
-            ## Create the virtual machine.
+            comment "Virtual Machine OS Type [$instance_ostype]";
+            comment "Creating virtual machine [${virtual_machine}]";
             declare -a response=($(
                 VBoxManage createvm \
                          --name "${virtual_machine}" \
@@ -224,22 +226,24 @@ function virtualbox_appliance () {
             instance_vboxfile="$( basename "${instance_settings}" )";
       else  instance_location="${virtualbox_projects}/${virtual_machine}";
     fi;
+    comment "Virtual Machine location [${instance_location}]";
+    comment "Virtual Machine vbox-file [${instance_vboxfile}]";
     local instance_vboxfile="${instance_location}/${virtual_machine}.vbox";
     if [[ ${provisioning} == 'true' ]]; then
-      ## Processing Virtual Machine Storage:
+      comment "Creating Virtual Machine Storage";
       vboxmanage_storage --vm-name="${virtual_machine}" \
                          --location="${instance_location}" \
                          --iso-file="${iso_filename}" \
       ; check_status;
       sleep 1;
-      ## Processing Virtual Machine Aditional Configurations
+      comment "Processing Aditional Configurations";
       vboxmanage_configvm --vm-name="${virtual_machine}" \
                           --memory='4096' \
                           --cpus='4' \
                           --vram='128' \
       ; check_status;
       sleep 1;
-      ## Processing Virtual Machine Multimedia Configurations
+      comment "Processing Multimedia Configurations"
       vboxmanage_multimedia --vm-name="${virtual_machine}" \
                             --resolution='1920x1080' \
       ; check_status;
@@ -250,6 +254,7 @@ function virtualbox_appliance () {
       primary_interface;
       if [[ ( ${#INTF_NAME} -gt 0 ) && \
             ( ${#INTF_DESC} -gt 0 ) ]]; then
+        comment "Listing active network configuration";
         networksetup -getinfo "${INT_DESC}";
         # DHCP Configuration
         # IP address: 192.168.0.182
@@ -261,12 +266,13 @@ function virtualbox_appliance () {
         # IPv6 Router: none
         # Ethernet Address: 58:ef:68:7d:93:31
         # Wi-Fi ID: 88:66:5a:04:b6:21
-        comment "Listing routing configuration";
+        comment "Listing internet routing configuration";
         ip route get google.com; status=$?;
-        if [[ ${status} -eq 0 ]]; then
+        ## Note:
+        # if [[ ${status} -eq 0 ]]; then
           bridged_configuration="--bridged=$(( ++counter ))";
           bridged_configuration+=",${INTF_NAME}: ${INTF_DESC}";
-        fi;
+        # fi;
         # message "Bridged Configuration:";
         # message "${bridged_configuration}";
       fi;
@@ -280,16 +286,12 @@ function virtualbox_appliance () {
                             --nat-only="$(( ++counter ))" \
       ; check_status;
       sleep 1;
-      ## Objective: Provision a deployment repository (Guest)
-      ##            A manual step to be performed by the end-user at the Host
-      # ## Create Shared Folder: (Host: /tmp/shared) + (Guest: /shared)
+      ## Warning: A deployment repository (Guest) needs to be provisioned
+      ##          A manual step to be performed by the end-user at the Host level
+      comment "Creating Shared Folder [${vbox_shared}] -> [/shared]";
       vboxmanage_sharedfolders --name="shared" \
                                --host-path="${vbox_shared}" \
                                --guest-path="/shared";
-      # # ## Create Shared Folder: (Host: /tmp/deploy) + (Guest: /deploy)
-      # vboxmanage_sharedfolders --name="deploy" \
-      #                          --host-path="/tmp/deploy" \
-      #                          --guest-path="/deploy";
     fi;
     ## Unattended Installation
     if [[ ${unattended_install} == 'true' ]]; then
@@ -297,7 +299,7 @@ function virtualbox_appliance () {
       # comment "Listing Unattended configuration files ...";
       # ls -al ${instance_location}/Unattended-* 2>/dev/null;
       ## Removing any existing Unattended* files
-      warning "Removing Unattended configuration files ...";
+      warning "Removing Unattended configuration files";
       rm -fv ${instance_location}/Unattended-* 2>/dev/null;
       comment "Generating VirtualBox Un-Attended Installation";
       VBoxManage unattended install ${virtual_machine} \
@@ -350,6 +352,7 @@ function virtualbox_appliance () {
             user_passwd="user-password.*password";
             root_passwd="root-password.*password";
             user_defaults="user-default-groups string";
+            comment "Correcting settings the ${patch_template} template file";
             sed -i '' \
                 -e "s|^\(.*/${user_string} \)\(.*\)$|\1{{ service-account }}|g" \
                 -e "s|^\(.*/${user_passwd} \)\(.*\)$|\1{{ devops-password }}|g" \
@@ -357,13 +360,14 @@ function virtualbox_appliance () {
                 -e "s|^\(.*/${user_defaults} \)\(.*\)$|\1sudo|g" \
                 ${system_configuration};
             check_status;
+            comment "Injecting credentials in ${patch_template} template file";
             sed -i '' \
                 -e "s|{{ service-account }}|${devops_account}|g" \
                 -e "s|{{ devops-password }}|${devops_password}|g" \
                 -e "s|{{ root-password }}|${root_password}|g" \
                 ${system_configuration};
             check_status;
-            comment "Listing modifications (${patch_template})";
+            comment "Listing performed ${patch_template} modifications";
             egrep --before-context=2 \
                   --after-context=2 \
             "^d-i passwd/.*$" ${system_configuration} \
@@ -372,6 +376,7 @@ function virtualbox_appliance () {
           fi;
           if [[ ${patch_template} == 'patch-vboxpostinstall.sh' ]]; then
             local target_entry="usermod -a -G vboxsf ";
+            comment "Correcting settings the ${patch_template} template file";
             sed -i '' \
                 -e "s|^\(.*${target_entry}\)\(.*\)$|\1\"{{ service-account }}\"|" \
                 ${system_configuration};
@@ -379,14 +384,16 @@ function virtualbox_appliance () {
             ##  Warning: Reversed (or previously applied) patch detected!
             ##           Assume -R? [y] y
             ## Solution: --batch suppresses questions and some assumptions.
+            comment "Patching ${system_configuration} file";
             patch --batch \
                   ${system_configuration} < ${vbox_temp}/${patch_template};
             check_status;
+            comment "Correcting settings ${system_configuration} file";
             sed -i '' \
                 -e "s|{{ service-account }}|${devops_account}|g" \
                 ${system_configuration};
             check_status;
-            comment "Listing modifications (${patch_template})";
+            comment "Listing performed ${patch_template} modifications";
             egrep --before-context=22 \
                   --after-context=4 \
             "^.*usermod -a -G vboxsf .*$" ${system_configuration};
@@ -412,6 +419,7 @@ function virtualbox_appliance () {
       ## Warning: If Virtual Machine name is not valid this will fail.
       ##          VBoxManage: error: Could not find a registered machine named ...
       local status=0;
+      comment "Obtaining Virtual Machine details";
       declare -a machine_details=($(
           VBoxManage showvminfo --details ${virtual_machine} \
           | grep bridged;
@@ -430,6 +438,7 @@ function virtualbox_appliance () {
         regex+='\(.*\)';
         regex+="\(\'\,.*\)";
         regex+='$';
+        comment "Extracting Bridged Network configurations";
         declare -a bridged_network=($(
             message "${machine_details[@]}" \
             | sed -e "s|${regex}|\3\n\5|"
@@ -440,9 +449,9 @@ function virtualbox_appliance () {
             | tr '\n' ':' | tr '[[:upper:]]' '[[:lower:]]' \
             | sed -e 's|\:$||'
           )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
-        # message "Bridged MAC Address: ${bridged_macaddr}";
+        message "Bridged MAC Address: ${bridged_macaddr}";
         local bridged_interface="${bridged_network[1]%\:*}";
-        # message "Bridged Interface: ${bridged_interface}";
+        message "Bridged Interface: ${bridged_interface}";
         network_access --vm-name="${virtual_machine}" \
                        --ssh-key="${sshkey_access}" \
                        --mac-addr="${bridged_macaddr}" \
@@ -458,6 +467,7 @@ function virtualbox_appliance () {
         ## -------------------------------------------------------------
         ## -H -F hostname : Search for the hashed specified hostname in
         ## a known_hosts file, listing any occurrences found.
+        comment "Identifying ${ipaddr} in ${HOME}/.ssh/known_hosts file";
         declare -a check_hostexist=($(
             ssh-keygen -H -F ${ipaddr}
           ));
@@ -486,6 +496,7 @@ function virtualbox_appliance () {
           warning "${vbox_temp}/${expect_template} is missing";
           return 8;
         fi;
+        comment "Executing ${expect_template} expect-template"
         $(which expect) -c "$(
             cat ${vbox_temp}/${expect_template} \
             | sed -e "s|{{ sshkey_access }}|${sshkey_access}|g" \
