@@ -16,7 +16,7 @@ function inline ()  { echo -en "${@}"; return 0; };
 function display () {
     message="${1}";
     [[ ${#message} -gt 0 ]] && {
-      newline; echo -e "${message}"; newline;
+      newline; echo -e "${message}"; ## newline;
     }; return 0;
   };
 
