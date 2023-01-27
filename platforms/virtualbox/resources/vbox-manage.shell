@@ -139,6 +139,15 @@ function vboxmanage_networking () {
         local trace_filename="${trace_prefixed}--${virtual_machine}";
         local index="${hostonly_network%%\,*}";
         local interface="${hostonly_network##*\,}";
+        comment "Listing Host-Only Networks configuration";
+        vboxmanage list --long --sorted hostonlynets ;
+        # Name:            HostNetwork
+        # GUID:            5092d947-1190-48a3-af62-b3eacc2bb68c
+        # State:           Enabled
+        # NetworkMask:     255.255.255.0
+        # LowerIP:         192.168.56.1
+        # UpperIP:         192.168.56.199
+        # VBoxNetworkName: hostonly-HostNetwork
         VBoxManage modifyvm ${virtual_machine} \
                  --nic${index}=hostonlynet \
                  --nic-type${index}=${nic_type} \
@@ -153,6 +162,18 @@ function vboxmanage_networking () {
         local trace_filename="${trace_prefixed}--${virtual_machine}";
         local index="${nat_network%%\,*}";
         local interface="${nat_network##*\,}";
+        comment "Listing NAT Networks configuration";
+        vboxmanage list --long --sorted natnets;
+        # Name:         NatNetwork
+        # Enabled:      Yes
+        # Network:      10.0.2.0/24
+        # Gateway:      10.0.2.1
+        # DHCP Server:  Yes
+        # IPv6:         No
+        # IPv6 Prefix:  fd17:625c:f037:2::/64
+        # IPv6 Default: No
+        # loopback mappings (ipv4)
+        #          127.0.0.1=2
         VBoxManage modifyvm ${virtual_machine} \
                  --nic${index}=natnetwork \
                  --nic-type${index}=${nic_type} \
@@ -259,3 +280,37 @@ function vboxmanage_storage () {
     IFS="${oIFS}";
     return 0;
   }; alias vboxmanage-storage='vboxmanage_storage';
+
+# NetworkName:    HostInterfaceNetworking-vboxnet0
+# Dhcpd IP:       192.168.56.100
+# LowerIPAddress: 192.168.56.101
+# UpperIPAddress: 192.168.56.254
+# NetworkMask:    255.255.255.0
+# Enabled:        Yes
+# Global Configuration:
+#     minLeaseTime:     default
+#     defaultLeaseTime: default
+#     maxLeaseTime:     default
+#     Forced options:   None
+#     Suppressed opts.: None
+#         1/legacy: 255.255.255.0
+# Groups:               None
+# Individual Configs:   None
+#
+# NetworkName:    NatNetwork
+# Dhcpd IP:       10.0.2.3
+# LowerIPAddress: 10.0.2.4
+# UpperIPAddress: 10.0.2.254
+# NetworkMask:    255.255.255.0
+# Enabled:        Yes
+# Global Configuration:
+#     minLeaseTime:     default
+#     defaultLeaseTime: default
+#     maxLeaseTime:     default
+#     Forced options:   None
+#     Suppressed opts.: None
+#         1/legacy: 255.255.255.0
+#         3/legacy: 10.0.2.1
+#         6/legacy: 68.105.29.11 68.105.28.12
+# Groups:               None
+# Individual Configs:   None
