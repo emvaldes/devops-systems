@@ -32,7 +32,7 @@ function comment ()  { display "Comment: ${@}"; return 0; };
 
 ## -----------------------------------------------------------------------------
 ## Objective: Printing custom messages (output)
-function message ()  { echo -e "${@}"; return 0; };
+function message ()  { echo -e "${@}"; return 0; }; alias print='message';
 
 export autologin_logfile="/tmp/sudoers-autologin.log";
 cat /dev/null > ${autologin_logfile};
