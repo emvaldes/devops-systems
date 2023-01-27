@@ -140,6 +140,7 @@ function vboxmanage_networking () {
         local index="${hostonly_network%%\,*}";
         local interface="${hostonly_network##*\,}";
         comment "Listing Host-Only Networks configuration";
+        newline;
         vboxmanage list --long --sorted hostonlynets ;
         # Name:            HostNetwork
         # GUID:            5092d947-1190-48a3-af62-b3eacc2bb68c
@@ -163,6 +164,7 @@ function vboxmanage_networking () {
         local index="${nat_network%%\,*}";
         local interface="${nat_network##*\,}";
         comment "Listing NAT Networks configuration";
+        newline;
         vboxmanage list --long --sorted natnets;
         # Name:         NatNetwork
         # Enabled:      Yes
@@ -246,11 +248,11 @@ function vboxmanage_storage () {
     [[ ${#volume_size} -eq 0 ]] && volume_size='25000';
     ## Create a virtual hard disk and storage devices for the Virtual Machine.
     comment "Creating Medium (Hard Drive: *.vdi)";
+    newline;
     VBoxManage createhd \
              --filename "${instance_location}/${virtual_machine}.vdi" \
              --size ${volume_size} \
     ; check_status;
-    newline;
     ## Create a SATA storage controller and attach the virtual hard disk.
     VBoxManage storagectl ${virtual_machine} \
              --name "SATA Controller" \

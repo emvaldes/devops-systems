@@ -116,7 +116,7 @@ function virtualbox_appliance () {
     if [[ ${#virtualbox_projects} -eq 0 ]]; then
       export virtualbox_projects="${HOME}/.virtualization/virtualbox";
       mkdir -p "${virtualbox_projects}";
-      message "Configuring Machine Folder [${virtualbox_projects}]";
+      comment "Configuring Machine Folder [${virtualbox_projects}]";
       vboxmanage setproperty machinefolder ${virtualbox_projects};
     fi;
     ## -------------------------------------------------------------------------
@@ -255,7 +255,8 @@ function virtualbox_appliance () {
       if [[ ( ${#INTF_NAME} -gt 0 ) && \
             ( ${#INTF_DESC} -gt 0 ) ]]; then
         comment "Listing active network configuration";
-        networksetup -getinfo "${INT_DESC}";
+        newline;
+        networksetup -getinfo "${INTF_DESC}";
         # DHCP Configuration
         # IP address: 192.168.0.182
         # Subnet mask: 255.255.255.0
@@ -267,6 +268,7 @@ function virtualbox_appliance () {
         # Ethernet Address: 58:ef:68:7d:93:31
         # Wi-Fi ID: 88:66:5a:04:b6:21
         comment "Listing internet routing configuration";
+        newline;
         ip route get google.com; status=$?;
         ## Note:
         # if [[ ${status} -eq 0 ]]; then
@@ -277,6 +279,7 @@ function virtualbox_appliance () {
         # message "${bridged_configuration}";
       fi;
       comment "Listing DHCP Servers configurations";
+      newline;
       vboxmanage list --long --sorted dhcpservers ;
       vboxmanage_networking --vm-name="${virtual_machine}" \
                             --nic-type='82545EM' \
@@ -302,6 +305,7 @@ function virtualbox_appliance () {
       warning "Removing Unattended configuration files";
       rm -fv ${instance_location}/Unattended-* 2>/dev/null;
       comment "Generating VirtualBox Un-Attended Installation";
+      newline;
       VBoxManage unattended install ${virtual_machine} \
                --iso="${iso_filename}" \
                --user="${devops_account}" \
@@ -330,6 +334,7 @@ function virtualbox_appliance () {
           warning "Purging any existing ${vbox_temp}/${patch_template}";
           rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
           # check_status;
+          comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
           curl --silent \
                --output ${vbox_temp}/${patch_template} \
                https://${github_content}/${github_repo}/${remote_resource};
@@ -338,7 +343,6 @@ function virtualbox_appliance () {
             progress; sleep 1;
           done;
           check_status;
-          newline;
           if [[ ! -e ${vbox_temp}/${patch_template} ]]; then
             warning "${vbox_temp}/${patch_template} is missing";
             return 6;
@@ -367,7 +371,8 @@ function virtualbox_appliance () {
                 -e "s|{{ root-password }}|${root_password}|g" \
                 ${system_configuration};
             check_status;
-            comment "Listing performed ${patch_template} modifications";
+            comment "Listing modifications performed to [${patch_template}] file";
+            newline;
             egrep --before-context=2 \
                   --after-context=2 \
             "^d-i passwd/.*$" ${system_configuration} \
@@ -385,6 +390,7 @@ function virtualbox_appliance () {
             ##           Assume -R? [y] y
             ## Solution: --batch suppresses questions and some assumptions.
             comment "Patching ${system_configuration} file";
+            newline;
             patch --batch \
                   ${system_configuration} < ${vbox_temp}/${patch_template};
             check_status;
@@ -394,6 +400,7 @@ function virtualbox_appliance () {
                 ${system_configuration};
             check_status;
             comment "Listing performed ${patch_template} modifications";
+            newline;
             egrep --before-context=22 \
                   --after-context=4 \
             "^.*usermod -a -G vboxsf .*$" ${system_configuration};
@@ -404,9 +411,11 @@ function virtualbox_appliance () {
           ## Warning: The creation of this local symlink has to occur after
           ##          patching is performed. Otherwise it seems to break.
           comment "Linking Unattended patch-target file ...";
+          newline;
           ln -fsv ./Unattended-*-${target} ./patch-${target};
         done;
         warning "Removing patched-file duplicates (e.g.: *.orig)";
+        newline;
         rm -fv ./Unattended-*-${target}.orig 2>/dev/null;
         newline;
         cd "${active_location}" 2>/dev/null;
@@ -483,6 +492,7 @@ function virtualbox_appliance () {
         export remote_resource="${virtualbox_platform}/modules/${expect_template}";
         rm -fv ${vbox_temp}/${expect_template} 2>/dev/null;
         # check_status;
+        comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
         curl --silent \
              --output ${vbox_temp}/${expect_template} \
              https://${github_content}/${github_repo}/${remote_resource};
