@@ -11296,3 +11296,6 @@ removed directory '/home/vagrant/reports/ubuntu22.04.1lts/packages/.cache'
 Done!
 
 Comment: Completed Framework Deployment!
+
+$ vagrant halt ;
+==> default: Attempting graceful shutdown of VM...
