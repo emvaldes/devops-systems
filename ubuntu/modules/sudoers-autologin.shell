@@ -104,15 +104,15 @@ newline;
 sudo apt autoremove --yes \
 | tee -a "${autologin_logfile}";
 
-warning "Disabling Service Account password";
-| tee -a "${autologin_logfile}";
-newline;
-
 ## Removing Service Account password
 ## Warning: This will disable the GUI login's behavior (passwordless)
 sudo passwd --delete ${devops_account} \
 | tee -a "${autologin_logfile}";
 ## passwd: password expiry information changed.
+
+warning "Disabled Service Account password";
+| tee -a "${autologin_logfile}";
+newline;
 
 comment "Completed Sudoers Auto-Login! " \
 | tee -a "${autologin_logfile}";

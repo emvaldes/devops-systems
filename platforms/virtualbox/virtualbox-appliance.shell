@@ -189,6 +189,7 @@ function virtualbox_appliance () {
                     warning "${missing_sshkey}";
                     return 5;
               else  comment "Listing '${sshkey_access}' fingerprint";
+                    newline;
                     ssh-keygen -l -E md5 -f "${sshkey_access}" ;
                     ssh-keygen -l -v -f "${sshkey_access}" ;
             fi;
@@ -448,6 +449,7 @@ function virtualbox_appliance () {
         regex+="\(\'\,.*\)";
         regex+='$';
         comment "Extracting Bridged Network configurations";
+        newline;
         declare -a bridged_network=($(
             message "${machine_details[@]}" \
             | sed -e "s|${regex}|\3\n\5|"
@@ -460,7 +462,7 @@ function virtualbox_appliance () {
           )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
         message "Bridged MAC Address: ${bridged_macaddr}";
         local bridged_interface="${bridged_network[1]%\:*}";
-        message "Bridged Interface: ${bridged_interface}";
+        message "Bridged Interface:   ${bridged_interface}";
         network_access --vm-name="${virtual_machine}" \
                        --ssh-key="${sshkey_access}" \
                        --mac-addr="${bridged_macaddr}" \
@@ -484,6 +486,7 @@ function virtualbox_appliance () {
           ## -H -R hostname : Removes all hashed hosts (keys) belonging to
           ## hostname from a known_hosts file.
           warning "Purging any ${ipaddr} existing records";
+          newline;
           ssh-keygen -R ${ipaddr};
         fi;
         comment "Copying the SSH Access Key to Guest System";
@@ -501,12 +504,12 @@ function virtualbox_appliance () {
           progress; sleep 1;
         done;
         check_status;
-        newline;
         if [[ ! -e ${vbox_temp}/${expect_template} ]]; then
           warning "${vbox_temp}/${expect_template} is missing";
           return 8;
         fi;
-        comment "Executing ${expect_template} expect-template"
+        comment "Executing ${expect_template} expect-template";
+        newline;
         $(which expect) -c "$(
             cat ${vbox_temp}/${expect_template} \
             | sed -e "s|{{ sshkey_access }}|${sshkey_access}|g" \

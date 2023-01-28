@@ -216,7 +216,8 @@ function network_access () {
     #   )";  ## -e 's|00|0|g' -e 's|\(0\)\([0-9]\)|\2|g'
     # local bridged_interface="${showvminfo[1]%\:*}";
     local localnet="${HOME}/.localnet";
-    comment "Executing ARP Scanning ... -> ${localnet} : ";
+    comment "Executing ARP Scanning -> ${localnet} : ";
+    newline;
     ## Required to avoid any manual scanning
     sudo arp-scan --localnet | tee ${localnet};
     declare -a listed=($(
