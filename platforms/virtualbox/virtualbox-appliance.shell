@@ -225,10 +225,10 @@ function virtualbox_appliance () {
             ## Extracting Virtual Machine Location and VBox-file:
             instance_location="$( dirname "${instance_settings}" )";
             instance_vboxfile="$( basename "${instance_settings}" )";
+            comment "Virtual Machine vbox-file [${instance_vboxfile}]";
       else  instance_location="${virtualbox_projects}/${virtual_machine}";
     fi;
     comment "Virtual Machine location [${instance_location}]";
-    comment "Virtual Machine vbox-file [${instance_vboxfile}]";
     local instance_vboxfile="${instance_location}/${virtual_machine}.vbox";
     if [[ ${provisioning} == 'true' ]]; then
       comment "Creating Virtual Machine Storage";
@@ -493,7 +493,6 @@ function virtualbox_appliance () {
         export expect_template="ssh-copy-id.expect";
         export remote_resource="${virtualbox_platform}/modules/${expect_template}";
         warning "Removing any existing '${vbox_temp}/${expect_template}' file";
-        newline;
         rm -fv ${vbox_temp}/${expect_template} 2>/dev/null;
         # check_status;
         comment "Fetching ${github_content}/${github_repo}/${remote_resource}";

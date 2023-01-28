@@ -39,7 +39,6 @@ function sudoers_autologin () {
     local autologin_script="sudoers-autologin.shell";
     local remote_module="${ubuntu_modules}/${autologin_script}";
     warning "Removing any existing '${vbox_temp}/${autologin_script}' file";
-    newline;
     rm -fv ${vbox_temp}/${autologin_script} 2>/dev/null;
     # check_status;
     comment "Fetching ${github_content}/${github_repo}/${remote_module}";
@@ -61,9 +60,9 @@ function sudoers_autologin () {
                       ${vbox_temp}/${autologin_script};
             check_status;
             comment "Listing '${autologin_script}' configurations";
+            newline;
             cat  ${vbox_temp}/${autologin_script};
             comment "Executing the '${autologin_script}' script";
-            newline;
             ssh ${virtual_machine} -C 'bash -s' \
               < ${vbox_temp}/${autologin_script} 2>/dev/null;
             check_status;
@@ -80,7 +79,6 @@ function sudoers_privileges () {
     local privileges_script="sudoers-privileges.shell";
     local remote_module="${ubuntu_modules}/${privileges_script}";
     warning "Removing any existing '${vbox_temp}/${privileges_script}' file";
-    newline;
     rm -fv ${vbox_temp}/${privileges_script} 2>/dev/null;
     # check_status;
     comment "Fetching ${github_content}/${github_repo}/${remote_module}";
