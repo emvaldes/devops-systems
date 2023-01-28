@@ -1,23 +1,172 @@
 
-$ ./virtualbox-appliance.shell --instance="devops-console" \
+$ ./virtualbox-appliance.shell --help ;
+
+Required    --instance          VirtualBox appliance name and hostname
+            --account           Service Account (username: devops)
+            --password          Service Account (password: devops)
+            --secret            Secrets Password File (disable --password)
+
+Optional    --cache             Deployment resources location
+            --configure         Deploy Configuration Management
+            --create            Create VBox appliance (hardware only)
+            --delete            Shutdown & Destroy VBox appliance
+            --deploy            Generate Auto-Install (unattended)
+            --install           Install Default DevOps Packages
+            --iso-file          Installation ISO file location
+            --packages          Install Custom DevOps Packages
+            --patch             Patching Unattended installation
+            --projects          Provides VBox projects location
+            --provision         Infrastructure Provisioning (IaC)
+            --ssh-key           Profile Auto-Login via SSH Public Key
+            --start             Requesting to launch VBox Appliance
+            --examples          Display script's execution options
+            --wizard            Parse user-input to execute command
+            --info              Project credits and online references
+            --help              Show this help message and exits
+
+Usage:
+
+virtualbox-appliance.shell --instance="ubuntu-desktop" \
+                           --account="devops" \
+                           --secret="~/.secrets/devops.secret" \
+                           --iso-file="ubuntu-22.04.1-desktop-amd64.iso" \
+                           --provision \
+                           --deploy \
+                           --patch \
+                           --start \
+;
+
+virtualbox-appliance.shell --instance="ubuntu-desktop" \
+                           --account="devops" \
+                           --secret="~/.secrets/devops.secret" \
+                           --ssh-key="${HOME}/.ssh/id_rsa.pub" \
+                           --configure \
+                           --install \
+;
+
+virtualbox-appliance.shell --instance="ubuntu-desktop" \
+                           --install \
+                           --packages="/tmp/packages.list" \
+;
+
+$ ./virtualbox-appliance.shell --instance="ubuntu-desktop" \
                                --account="devops" \
                                --secret="~/.secrets/devops.secret" \
-                               --create \
-                               --deploy \
                                --iso-file="~/Downloads/ubuntu-22.04.1-desktop-amd64.iso" \
-                               --patch \
                                --provision \
+                               --deploy \
+                               --patch \
                                --start \
 ;
 
-Creating Medium (Hard Drive: *.vdi)
+Comment: Enforcing VBox Shared folder [/Users/emvaldes/.local/tmp/vbox/shared]
+
+Comment: Configuring Machine Folder [/Users/emvaldes/.virtualization/virtualbox]
+
+Comment: Virtual Machine OS Type [Ubuntu22_LTS_64]
+
+Comment: Creating virtual machine [ubuntu-desktop]
+
+Comment: Virtual Machine vbox-file [ubuntu-desktop.vbox]
+
+Comment: Virtual Machine location [/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop]
+
+Comment: Creating Virtual Machine Storage
+
+Comment: Creating Medium (Hard Drive: *.vdi)
 
 0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
-Medium created. UUID: 6dd78090-0257-4c9a-94d2-d04dbc1d452a
+Medium created. UUID: 3e4f6d3b-ee62-4af2-8ed1-d9df218bf094
 
-Generating VirtualBox Un-Attended Installation
+Comment: Processing Aditional Configurations
 
-VBoxManage: info: Preparing unattended installation of Ubuntu22_LTS_64 in machine 'devops-console' (002f7efb-3b5a-43dd-8c94-6d38b32acd69).
+Comment: Processing Multimedia Configurations
+
+Comment: Listing active network configuration
+
+DHCP Configuration
+IP address: 192.168.0.182
+Subnet mask: 255.255.255.0
+Router: 192.168.0.1
+Client ID:
+IPv6: Automatic
+IPv6 IP address: none
+IPv6 Router: none
+Ethernet Address: 58:ef:68:7d:93:31
+
+Comment: Listing internet routing configuration
+
+142.250.188.238 via 192.168.0.1 dev en5  src 192.168.0.182
+
+Comment: Listing DHCP Servers configurations
+
+NetworkName:    HostInterfaceNetworking-vboxnet0
+Dhcpd IP:       192.168.56.100
+LowerIPAddress: 192.168.56.101
+UpperIPAddress: 192.168.56.254
+NetworkMask:    255.255.255.0
+Enabled:        Yes
+Global Configuration:
+    minLeaseTime:     default
+    defaultLeaseTime: default
+    maxLeaseTime:     default
+    Forced options:   None
+    Suppressed opts.: None
+        1/legacy: 255.255.255.0
+Groups:               None
+Individual Configs:   None
+
+NetworkName:    NatNetwork
+Dhcpd IP:       10.0.2.3
+LowerIPAddress: 10.0.2.4
+UpperIPAddress: 10.0.2.254
+NetworkMask:    255.255.255.0
+Enabled:        Yes
+Global Configuration:
+    minLeaseTime:     default
+    defaultLeaseTime: default
+    maxLeaseTime:     default
+    Forced options:   None
+    Suppressed opts.: None
+        1/legacy: 255.255.255.0
+        3/legacy: 10.0.2.1
+        6/legacy: 68.105.29.11 68.105.28.12
+Groups:               None
+Individual Configs:   None
+
+Comment: Listing Host-Only Networks configuration
+
+Name:            HostNetwork
+GUID:            5092d947-1190-48a3-af62-b3eacc2bb68c
+
+State:           Enabled
+NetworkMask:     255.255.255.0
+LowerIP:         192.168.56.1
+UpperIP:         192.168.56.199
+VBoxNetworkName: hostonly-HostNetwork
+
+
+Comment: Listing NAT Networks configuration
+
+Name:         NatNetwork
+Enabled:      Yes
+Network:      10.0.2.0/24
+Gateway:      10.0.2.1
+DHCP Server:  Yes
+IPv6:         No
+IPv6 Prefix:  fd17:625c:f037:2::/64
+IPv6 Default: No
+loopback mappings (ipv4)
+        127.0.0.1=2
+
+
+Comment: Creating Shared Folder [/Users/emvaldes/.local/tmp/vbox/shared] -> [/shared]
+
+Warning: Removing Unattended configuration files!
+
+Comment: Generating VirtualBox Un-Attended Installation
+
+VBoxManage: info: Preparing unattended installation of Ubuntu22_LTS_64 in machine 'ubuntu-desktop' (4f882e42-08e3-4549-a2fc-1210c0a0876e).
 VBoxManage: info: Using values:
                            isoPath = /Users/emvaldes/Downloads/ubuntu-22.04.1-desktop-amd64.iso
                               user = devops
@@ -32,9 +181,9 @@ VBoxManage: info: Using values:
                            country = US
                           timeZone = utc
                              proxy =
-                          hostname = devops-console.local
+                          hostname = ubuntu-desktop.local
        packageSelectionAdjustments =
-                 auxiliaryBasePath = /Users/emvaldes/.virtualization/virtualbox/devops-console/Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-
+                 auxiliaryBasePath = /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-4f882e42-08e3-4549-a2fc-1210c0a0876e-
                         imageIndex = 1
                 scriptTemplatePath = /Applications/VirtualBox.app/Contents/MacOS/UnattendedTemplates/ubuntu_preseed.cfg
      postInstallScriptTemplatePath = /Applications/VirtualBox.app/Contents/MacOS/UnattendedTemplates/debian_postinstall.sh
@@ -46,9 +195,17 @@ VBoxManage: info: Using values:
                   detectedOSFlavor = Ubuntu
                detectedOSLanguages = en-US
                    detectedOSHints =
-VBoxManage: info: VM 'devops-console' (002f7efb-3b5a-43dd-8c94-6d38b32acd69) is ready to be started (e.g. VBoxManage startvm).
+VBoxManage: info: VM 'ubuntu-desktop' (4f882e42-08e3-4549-a2fc-1210c0a0876e) is ready to be started (e.g. VBoxManage startvm).
 
-Notice: Listing modifications (patch-preseed.cfg)
+Warning: Removing any existing '/Users/emvaldes/.local/tmp/vbox/patch-preseed.cfg' file!
+
+Comment: Fetching raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/virtualbox/modules/patch-preseed.cfg
+
+Comment: Correcting settings the patch-preseed.cfg template file
+
+Comment: Injecting credentials in patch-preseed.cfg template file
+
+Comment: Listing modifications performed to 'patch-preseed.cfg' file
 
 # Users
 d-i passwd/user-fullname string DevOps Engineer
@@ -63,9 +220,19 @@ d-i passwd/user-default-groups string sudo
 
 # Grub
 
-patching file '/Users/emvaldes/.virtualization/virtualbox/devops-console/Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-vboxpostinstall.sh'
+Warning: Removing any existing '/Users/emvaldes/.local/tmp/vbox/patch-vboxpostinstall.sh' file!
 
-Notice: Listing modifications (patch-vboxpostinstall.sh)
+Comment: Fetching raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/virtualbox/modules/patch-vboxpostinstall.sh
+
+Comment: Correcting settings the patch-vboxpostinstall.sh template file
+
+Comment: Patching /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-*-vboxpostinstall.sh file
+
+patching file '/Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-4f882e42-08e3-4549-a2fc-1210c0a0876e-vboxpostinstall.sh'
+
+Comment: Correcting settings /Users/emvaldes/.virtualization/virtualbox/ubuntu-desktop/Unattended-*-vboxpostinstall.sh file
+
+Comment: Listing modifications performed to 'patch-vboxpostinstall.sh' file
 
 ## emvaldes@hotmail.com
 log_command_in_target apt-get install curl --yes;
@@ -94,14 +261,19 @@ log_command_in_target usermod -a -G vboxsf "devops"
 ## emvaldes@hotmail.com
 log_command_in_target usermod -a -G sudo "devops"
 
-./patch-preseed.cfg -> ./Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-preseed.cfg
-./patch-vboxpostinstall.sh -> ./Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-vboxpostinstall.sh
+Comment: Linking Unattended patch-target file ...
 
-Warning: Removing patched-file duplicates (e.g.: *.orig) ...
+./patch-preseed.cfg -> ./Unattended-4f882e42-08e3-4549-a2fc-1210c0a0876e-preseed.cfg
 
-./Unattended-002f7efb-3b5a-43dd-8c94-6d38b32acd69-vboxpostinstall.sh.orig
+Comment: Linking Unattended patch-target file ...
+
+./patch-vboxpostinstall.sh -> ./Unattended-4f882e42-08e3-4549-a2fc-1210c0a0876e-vboxpostinstall.sh
+
+Warning: Removing patched-file duplicates (e.g.: *.orig)!
+
+./Unattended-4f882e42-08e3-4549-a2fc-1210c0a0876e-vboxpostinstall.sh.orig
 
 Completed!
 
-Waiting for VM "devops-console" to power on...
-VM "devops-console" has been successfully started.
+Waiting for VM "ubuntu-desktop" to power on...
+VM "ubuntu-desktop" has been successfully started.
