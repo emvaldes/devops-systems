@@ -242,6 +242,7 @@ function patch_vagrantfile () {
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="${vagrant_platform}/${patch_vagrantfile}";
     warning "Removing '${patch_vagrantfile}' file";
+    newline;
     rm -fv ${vagrant_temp}/${patch_vagrantfile} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -315,7 +316,7 @@ function vagrant_config () {
 function vagrant_access () {
     local machine_configs=".vagrant/machines/default/virtualbox";
     local private_sshkey="${vagrant_location}/${machine_configs}/private_key";
-    comment "Listing ${machine_configs}/${private_sshkey}";
+    comment "Listing ${machine_configs}/private_key";
     newline;
     cat ${private_sshkey};
     comment "Retrieving Remote SSH Authorized Access Keys";
@@ -333,6 +334,7 @@ function service_account () {
     local account_script="service-account.shell";
     local remote_resource="${vagrant_platform}/${account_script}";
     warning "Removing '${account_script}' script file";
+    newline;
     rm -fv ${vagrant_temp}/${account_script} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -365,6 +367,7 @@ function sudoers_privileges () {
     local privileges_script="sudoers-privileges.shell";
     local remote_resource="${ubuntu_modules}/${privileges_script}";
     warning "Removing '${privileges_script}' script file";
+    newline;
     rm -fv ${vagrant_temp}/${privileges_script} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -405,7 +408,8 @@ function transfer_credentials () {
     comment "Displaying '${sshkey_filename}' from remote system";
     newline;
     vagrant ssh -c \
-            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
+            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}" \
+    | fold -b -w 70;
     check_status $?;
     comment "Applying '${authorized_keys}' to remote system";
     newline;
@@ -426,6 +430,7 @@ function sudoers_autologin () {
     local autologin_script="sudoers-autologin.shell";
     local remote_resource="${ubuntu_modules}/${autologin_script}";
     warning "Removing '${autologin_script}' script file";
+    newline;
     rm -fv ${vagrant_temp}/${autologin_script} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -462,7 +467,7 @@ function service_access () {
     cd ${vagrant_location};
     comment "Listing '${devops_sshkey}' content";
     newline;
-    cat ${devops_sshkey};
+    cat ${devops_sshkey} | fold -b -w 70;
     check_status $?;
     comment "Publishing '${devops_sshkey}' ( shared-folders )";
     newline;
@@ -472,7 +477,8 @@ function service_access () {
     comment "Injecting '${sshkey_filename}' into remote system";
     newline;
     vagrant ssh -c \
-            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
+            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}" \
+    | fold -b -w 70;
     check_status $?;
     comment "Displaying '${authorized_keys}' from remote system";
     newline;
@@ -520,6 +526,7 @@ function preinst_packages () {
     local script_filename="ubuntu-preinstall.shell";
     local remote_resource="${ubuntu_modules}/${script_filename}";
     warning "Removing any existing '${vagrant_temp}/${script_filename}' file";
+    newline;
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
