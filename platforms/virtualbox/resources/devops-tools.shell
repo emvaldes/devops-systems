@@ -90,6 +90,7 @@ function preinst_packages () {
     local script_filename="ubuntu-preinstall.shell";
     local remote_resource="${ubuntu_modules}/${script_filename}";
     warning "Removing any existing '${vbox_temp}/${script_filename}' file";
+    newline;
     rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -113,6 +114,7 @@ function postinst_packages () {
     local script_filename="ubuntu-postinstall.shell";
     local remote_resource="${ubuntu_modules}/${script_filename}";
     warning "Removing any existing '${vbox_temp}/${script_filename}' file";
+    newline;
     rm -fv ${vbox_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
