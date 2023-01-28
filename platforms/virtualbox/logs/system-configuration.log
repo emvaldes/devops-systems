@@ -37,36 +37,34 @@ Bridged Interface:   en5
 Comment: Executing ARP Scanning -> /Users/emvaldes/.localnet :
 
 Password:
-
 Interface: en0, type: EN10MB, MAC: 88:66:5a:04:b6:21, IPv4: 192.168.0.196
 Starting arp-scan 1.10.0 with 256 hosts (https://github.com/royhills/arp-scan)
-192.168.0.4	34:98:b5:a7:86:b9	NETGEAR
 192.168.0.1	f8:79:0a:cb:5f:94	ARRIS Group, Inc.
+192.168.0.4	34:98:b5:a7:86:b9	NETGEAR
 192.168.0.2	3c:37:86:23:6d:aa	NETGEAR
 192.168.0.10	90:72:40:05:99:09	Apple, Inc.
 192.168.0.151	08:00:27:84:5f:2b	PCS Systemtechnik GmbH
-192.168.0.150	00:1a:13:9b:54:dd	Wanlida Group Co., LTD
 192.168.0.158	e0:4f:43:7a:35:87	Universal Global Scientific Industrial Co., Ltd.
 192.168.0.166	ac:e2:d3:9d:53:4b	Hewlett Packard
 192.168.0.164	00:68:eb:4b:44:9a	HP Inc.
-192.168.0.171	a4:08:01:65:f6:35	Amazon Technologies Inc.
 192.168.0.162	40:a9:cf:f7:07:66	Amazon Technologies Inc.
-192.168.0.182	58:ef:68:7d:93:31	Belkin International Inc.
 192.168.0.175	10:96:93:a9:c5:9c	Amazon Technologies Inc.
-192.168.0.184	10:09:f9:89:03:d0	Amazon Technologies Inc.
+192.168.0.182	58:ef:68:7d:93:31	Belkin International Inc.
+192.168.0.171	a4:08:01:65:f6:35	Amazon Technologies Inc.
 192.168.0.198	48:78:5e:c8:6a:0a	Amazon Technologies Inc.
+192.168.0.199	66:1a:04:15:ec:ee	(Unknown: locally administered)
 192.168.0.165	50:14:79:e0:80:c6	iRobot Corporation
-192.168.0.173	14:0a:c5:5a:8e:f2	Amazon Technologies Inc.
 192.168.0.163	50:14:79:e4:1e:b2	iRobot Corporation
+192.168.0.173	14:0a:c5:5a:8e:f2	Amazon Technologies Inc.
 192.168.0.189	44:61:32:f6:06:d2	ecobee inc
-192.168.0.197	64:1c:b0:af:0e:b2	Samsung Electronics Co.,Ltd
-192.168.0.195	92:ab:b6:60:c6:e9	(Unknown: locally administered)
+192.168.0.184	10:09:f9:89:03:d0	Amazon Technologies Inc.
 192.168.0.159	5a:97:22:04:fa:80	(Unknown: locally administered)
+192.168.0.195	92:ab:b6:60:c6:e9	(Unknown: locally administered)
+192.168.0.197	64:1c:b0:af:0e:b2	Samsung Electronics Co.,Ltd
+192.168.0.187	16:ea:b9:03:4c:bb	(Unknown: locally administered)
 
-514 packets received by filter, 0 packets dropped by kernel
-Ending arp-scan 1.10.0: 256 hosts scanned in 1.974 seconds (129.69 hosts/sec). 22 responded
-
-Warning: Updating record in /etc/hosts file! !
+513 packets received by filter, 0 packets dropped by kernel
+Ending arp-scan 1.10.0: 256 hosts scanned in 1.981 seconds (129.23 hosts/sec). 23 responded
 
 ##
 # Host Database
@@ -97,15 +95,16 @@ Comment: Identifying 192.168.0.151 in /Users/emvaldes/.ssh/known_hosts file
 
 Warning: Purging any 192.168.0.151 existing records!
 
-# Host 192.168.0.151 found: line 5
-# Host 192.168.0.151 found: line 6
-# Host 192.168.0.151 found: line 7
+# Host 192.168.0.151 found: line 37
+# Host 192.168.0.151 found: line 38
+# Host 192.168.0.151 found: line 39
 /Users/emvaldes/.ssh/known_hosts updated.
 Original contents retained as /Users/emvaldes/.ssh/known_hosts.old
 
 Comment: Copying the SSH Access Key to Guest System
 
 Warning: Removing any existing '/Users/emvaldes/.local/tmp/vbox/ssh-copy-id.expect' file!
+/Users/emvaldes/.local/tmp/vbox/ssh-copy-id.expect
 
 Comment: Fetching raw.githubusercontent.com/emvaldes/devops-systems/master/platforms/virtualbox/modules/ssh-copy-id.expect
 
@@ -123,14 +122,16 @@ Learned new hostkey: ECDSA SHA256:0sRpvsoisutK55ENSgJ2wVJ+36dJ4UkxSubbxPhrWhM
 Adding new key for 192.168.0.151 to /Users/emvaldes/.ssh/known_hosts: ssh-rsa SHA256:c0Hji3jcUocqdiWOiwerM9UyfgQ9Zemi/TkxN7ImTBg
 Adding new key for 192.168.0.151 to /Users/emvaldes/.ssh/known_hosts: ecdsa-sha2-nistp256 SHA256:0sRpvsoisutK55ENSgJ2wVJ+36dJ4UkxSubbxPhrWhM
 Transferred: sent 5000, received 4020 bytes, in 0.5 seconds
-Bytes per second: sent 9165.3, received 7368.9
+Bytes per second: sent 9325.3, received 7497.5
 
 Number of key(s) added:        1
 
 Now try logging into the machine, with:   "ssh -o 'StrictHostKeyChecking=no' 'devops@192.168.0.151'"
 and check to make sure that only the key(s) you wanted were added.
 
+
 Warning: Removing any existing '/Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell' file!
+/Users/emvaldes/.local/tmp/vbox/sudoers-privileges.shell
 
 Comment: Fetching raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-privileges.shell
 
@@ -233,11 +234,12 @@ Warning: Correcting devops file permissions!
 mode of '/etc/sudoers.d/devops' changed from 0644 (rw-r--r--) to 0440 (r--r-----)
 
 Comment: Listing devops file permissions!
--r--r----- 1 root root 33 Jan 28 02:40 /etc/sudoers.d/devops
+-r--r----- 1 root root 33 Jan 28 03:06 /etc/sudoers.d/devops
 
 Comment: Completed Sudoers Privileges!
 
 Warning: Removing any existing '/Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell' file!
+/Users/emvaldes/.local/tmp/vbox/sudoers-autologin.shell
 
 Comment: Fetching raw.githubusercontent.com/emvaldes/devops-systems/master/ubuntu/modules/sudoers-autologin.shell
 
@@ -382,7 +384,7 @@ The following NEW packages will be installed:
 Need to get 11.7 kB of archives.
 After this operation, 35.8 kB of additional disk space will be used.
 Get:1 http://us.archive.ubuntu.com/ubuntu jammy/universe amd64 sshpass amd64 1.09-1 [11.7 kB]
-Fetched 11.7 kB in 0s (51.2 kB/s)
+Fetched 11.7 kB in 0s (47.7 kB/s)
 Selecting previously unselected package sshpass.
 (Reading database ... 205251 files and directories currently installed.)
 Preparing to unpack .../sshpass_1.09-1_amd64.deb ...
@@ -396,18 +398,18 @@ Generating public/private rsa key pair.
 Your identification has been saved in /home/devops/.ssh/id_rsa
 Your public key has been saved in /home/devops/.ssh/id_rsa.pub
 The key fingerprint is:
-SHA256:gj3dyXAPfz5qo0XRs1YW3pXAUGnkFqbl3kZ05DffUU0 ubuntu-desktop
+SHA256:Vh5A9X1pSBBsmf+sTGcTSryWQLbWdgxoUe+nyYGiLQ4 ubuntu-desktop
 The key's randomart image is:
 +---[RSA 4096]----+
-|           .=Bo=E|
-|            *=+oB|
-|        . o.o+o=*|
-|     o . = =o.o=*|
-|    . + S + +.+oo|
-|       o   . +.  |
-|            . o  |
-|           .o. . |
-|          .o..   |
+|       .o.o+Oo   |
+|         . @.oo .|
+|          B *.++.|
+|         o = Bo= |
+|        S + = O.o|
+|       . o . B X.|
+|      E o . + B .|
+|       o .   o   |
+|        .        |
 +----[SHA256]-----+
 
 Comment: Copying SSH ID to authorized-keys file
@@ -416,6 +418,7 @@ Number of key(s) added: 1
 
 Now try logging into the machine, with:   "ssh -o 'StrictHostKeyChecking=no' 'localhost'"
 and check to make sure that only the key(s) you wanted were added.
+
 
 Warning: Removing SSH Pass tool!
 
