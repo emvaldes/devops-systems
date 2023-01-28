@@ -304,7 +304,7 @@ function packages_ubuntu () {
     find ${reports_cache} -type f -name '*.json' \
          | sort --numeric-sort | xargs -I {} cat {} | jq -s | python -m json.tool > ${jsonfile};
     ## Removing all .cache's content
-    rm -rf ${reports_cache} 2>/dev/null;
+    rm -fvr ${reports_cache} 2>/dev/null;
     ## Exporting Installed Packages (name, version) ino LIST file.
     jq '.[] | "\(.Package) -> \(.Version)"' --raw-output ${jsonfile} > ${reportfile};
     newline; message "Done!"; newline;

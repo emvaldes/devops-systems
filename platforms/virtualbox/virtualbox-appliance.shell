@@ -332,7 +332,7 @@ function virtualbox_appliance () {
           ## Configuring each target with custom settings.
           export patch_template="patch-${target}";
           export remote_resource="${virtualbox_platform}/modules/${patch_template}";
-          warning "Purging any existing ${vbox_temp}/${patch_template}";
+          warning "Removing any existing '${vbox_temp}/${patch_template}' file";
           rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
           # check_status;
           comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -490,9 +490,11 @@ function virtualbox_appliance () {
           ssh-keygen -R ${ipaddr};
         fi;
         comment "Copying the SSH Access Key to Guest System";
+        newline;
         ## Configuring each target with custom settings.
         export expect_template="ssh-copy-id.expect";
         export remote_resource="${virtualbox_platform}/modules/${expect_template}";
+        warning "Removing any existing '${vbox_temp}/${expect_template}' file";
         rm -fv ${vbox_temp}/${expect_template} 2>/dev/null;
         # check_status;
         comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -508,7 +510,7 @@ function virtualbox_appliance () {
           warning "${vbox_temp}/${expect_template} is missing";
           return 8;
         fi;
-        comment "Executing ${expect_template} expect-template";
+        comment "Executing '${expect_template}' template";
         newline;
         $(which expect) -c "$(
             cat ${vbox_temp}/${expect_template} \

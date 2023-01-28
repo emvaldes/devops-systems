@@ -82,7 +82,7 @@ message "${devops_account}" \
    | tee -a "${autologin_logfile}";
 
 ## Performing basic housecleaning
-rm -rfv ${HOME}/.ssh/ssh-copy-id* \
+rm -fvr ${HOME}/.ssh/ssh-copy-id* \
 | tee -a "${autologin_logfile}";
 
 warning "Removing SSH Pass tool" \
