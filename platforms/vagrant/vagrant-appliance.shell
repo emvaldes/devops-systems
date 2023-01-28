@@ -242,7 +242,6 @@ function patch_vagrantfile () {
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="${vagrant_platform}/${patch_vagrantfile}";
     warning "Removing '${patch_vagrantfile}' file";
-    newline;
     rm -fv ${vagrant_temp}/${patch_vagrantfile} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -334,7 +333,6 @@ function service_account () {
     local account_script="service-account.shell";
     local remote_resource="${vagrant_platform}/${account_script}";
     warning "Removing '${account_script}' script file";
-    newline;
     rm -fv ${vagrant_temp}/${account_script} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -367,7 +365,6 @@ function sudoers_privileges () {
     local privileges_script="sudoers-privileges.shell";
     local remote_resource="${ubuntu_modules}/${privileges_script}";
     warning "Removing '${privileges_script}' script file";
-    newline;
     rm -fv ${vagrant_temp}/${privileges_script} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -408,13 +405,11 @@ function transfer_credentials () {
     comment "Displaying '${sshkey_filename}' from remote system";
     newline;
     vagrant ssh -c \
-            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}" \
-    | fold -b -w 70;
+    "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys} | fold -b -w 70";
     check_status $?;
     comment "Applying '${authorized_keys}' to remote system";
     newline;
-    vagrant ssh -c \
-            "sudo cat ${authorized_keys} | fold -b -w 70";
+    vagrant ssh -c "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
     warning "Removing '${sshkey_filename}' ssh-key file";
     newline;
@@ -430,7 +425,6 @@ function sudoers_autologin () {
     local autologin_script="sudoers-autologin.shell";
     local remote_resource="${ubuntu_modules}/${autologin_script}";
     warning "Removing '${autologin_script}' script file";
-    newline;
     rm -fv ${vagrant_temp}/${autologin_script} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -477,13 +471,11 @@ function service_access () {
     comment "Injecting '${sshkey_filename}' into remote system";
     newline;
     vagrant ssh -c \
-            "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}" \
-    | fold -b -w 70;
+    "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys} | fold -b -w 70";
     check_status $?;
     comment "Displaying '${authorized_keys}' from remote system";
     newline;
-    vagrant ssh -c \
-            "sudo cat ${authorized_keys} | fold -b -w 70";
+    vagrant ssh -c "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
     warning "Removing '${vagrant_shared}/${sshkey_filename}' vagrant file";
     newline;
@@ -526,7 +518,6 @@ function preinst_packages () {
     local script_filename="ubuntu-preinstall.shell";
     local remote_resource="${ubuntu_modules}/${script_filename}";
     warning "Removing any existing '${vagrant_temp}/${script_filename}' file";
-    newline;
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
     comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -536,9 +527,13 @@ function preinst_packages () {
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       progress; sleep 1;
-    done; newline;
+    done;
     check_status $?;
-    vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
+    comment "Listing '${script_filename}' content";
+    newline;
+    cat ${vagrant_temp}/${script_filename};
+    vagrant ssh -c 'bash -s' \
+              < ${vagrant_temp}/${script_filename} 2>/dev/null;
     check_status $?;
     return 0;
   }; alias preinst-packages='preinst_packages';
@@ -558,7 +553,7 @@ function postinst_packages () {
     check_status $?;
     while [[ ! -e ${vagrant_temp}/${script_filename} ]]; do
       progress; sleep 1;
-    done; newline;
+    done;
     check_status $?;
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${script_filename};
     check_status $?;
