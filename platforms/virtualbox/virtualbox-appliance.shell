@@ -333,7 +333,6 @@ function virtualbox_appliance () {
           export patch_template="patch-${target}";
           export remote_resource="${virtualbox_platform}/modules/${patch_template}";
           warning "Removing any existing '${vbox_temp}/${patch_template}' file";
-          newline;
           rm -fv ${vbox_temp}/${patch_template} 2>/dev/null;
           # check_status;
           comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
@@ -374,7 +373,6 @@ function virtualbox_appliance () {
                 ${system_configuration};
             check_status;
             comment "Listing modifications performed to '${patch_template}' file";
-            newline;
             egrep --before-context=2 \
                   --after-context=2 \
             "^d-i passwd/.*$" ${system_configuration} \
@@ -401,7 +399,7 @@ function virtualbox_appliance () {
                 -e "s|{{ service-account }}|${devops_account}|g" \
                 ${system_configuration};
             check_status;
-            comment "Listing performed '${patch_template}' modifications";
+            comment "Listing modifications performed to '${patch_template}' file";
             newline;
             egrep --before-context=22 \
                   --after-context=4 \
