@@ -150,10 +150,12 @@ function check_status () {
 ## Objective: Reviewing existing Vagrant Infrastructure
 function vagrant_review () {
     local index=0;
-    comment "Listing Vagrant Projects ...";
+    comment "Listing Vagrant Projects";
+    newline;
     tree -a ${vagrant_projects};
     check_status $?;
-    comment "Listing existing VagrantBoxes ...";
+    comment "Listing existing VagrantBoxes";
+    newline;
     vagrant box list;
     check_status $?;
     local existing="$(
@@ -186,15 +188,18 @@ function vagrant_review () {
 ## -----------------------------------------------------------------------------
 ## Objective: Adding VagrantBox (bento/ubuntu-22.04)
 function vagrant_addbox () {
-    comment "Adding VagrantBox '${vagrant_boxset}' ...";
+    comment "Adding VagrantBox '${vagrant_boxset}'";
+    newline;
     vagrant box add ${vagrant_boxset} \
           --force \
           --provider virtualbox;
     check_status $?;
-    comment "Vagrant Project Boxes ${vagrant_projects}/boxes ...";
+    comment "Vagrant Project Boxes ${vagrant_projects}/boxes";
+    newline;
     tree -a ${vagrant_projects}/boxes;
     check_status $?;
     comment "Enabled VagrantBoxes (listing)";
+    newline;
     vagrant box list;
     check_status $?;
     return 0;
@@ -204,20 +209,24 @@ function vagrant_addbox () {
 ## Objective: Initializing VagrantBox (review)
 function vagrant_initbox () {
     cd ${vagrant_location};
-    vagrantfile="${vagrant_location}";
+    vagrantfile="${vagrant_location}/Vagrantfile";
     if [[ -e ${vagrantfile} ]]; then
-      warning "Removing '${vagrantfile}' vagrant file";
-      rm -fv ${vagrantfile} 2>/dev/null;
+      warning "Removing '${vagrantfile}' vagrant components";
+      newline;
+      rm -fvr ${vagrant_location}/* 2>/dev/null;
     fi;
     check_status $?;
-    comment "Initializing '${vagrant_boxset}' ...";
+    comment "Initializing '${vagrant_boxset}'";
+    newline;
     vagrant init ${vagrant_boxset};
     check_status $?;
-    comment "Listing '${vagrantfile}' content ...";
+    comment "Listing '${vagrantfile}' content";
+    newline;
     cat ${vagrantfile} \
       | egrep -v "^([[:blank:]]*)\#.*$" \
       | sed -e '/^\([[:blank:]]*\)$/d';
-    comment "Listing Vagrant Projects ...";
+    comment "Listing Vagrant Projects";
+    newline;
     tree -a ${vagrant_projects};
     check_status $?;
     return 0;
@@ -232,10 +241,10 @@ function patch_vagrantfile () {
     local vagrantfile="${vagrant_location}/Vagrantfile";
     local patch_vagrantfile="patch-vagrantfile";
     local remote_resource="${vagrant_platform}/${patch_vagrantfile}";
-    warning "Removing '${patch_vagrantfile}' patch-file";
+    warning "Removing '${patch_vagrantfile}' file";
     rm -fv ${vagrant_temp}/${patch_vagrantfile} 2>/dev/null;
     # check_status $?;
-    comment "Downloading '${patch_vagrantfile}' patch-file ...";
+    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
     curl --silent \
          --output ${vagrant_temp}/${patch_vagrantfile} \
          https://${github_content}/${github_repo}/${remote_resource};
@@ -244,24 +253,28 @@ function patch_vagrantfile () {
       progress; sleep 1;
     done;
     check_status $?;
-    comment "Listing '${patch_vagrantfile}' content ...";
+    comment "Listing '${patch_vagrantfile}' content";
+    newline;
     cat ${vagrant_temp}/${patch_vagrantfile};
-    comment "Transforming '${patch_vagrantfile}' ( vagrant-shared ) ...";
+    comment "Transforming '${patch_vagrantfile}' ( vagrant-shared )";
     ## Updating the vagrant-shared placeholder
     sed -i '' -e "s|{{ vagrant-shared }}|${vagrant_shared}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
-    comment "Transforming '${patch_vagrantfile}' ( virtual-machine ) ...";
+    comment "Transforming '${patch_vagrantfile}' ( virtual-machine )";
     ## Updating the virtual-machine placeholder
     sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                  ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
-    comment "Listing transformed '${patch_vagrantfile}' ...";
+    comment "Listing transformed '${patch_vagrantfile}'";
+    newline;
     cat -n ${vagrant_temp}/${patch_vagrantfile};
-    comment "Patching '${vagrantfile}' vagrant file ...";
+    comment "Patching '${vagrantfile}' vagrant file";
+    newline;
     patch ${vagrantfile} < ${vagrant_temp}/${patch_vagrantfile};
     check_status $?;
-    comment "Validating '${vagrantfile}' ...";
+    comment "Validating '${vagrantfile}'";
+    newline;
     vagrant validate;
     check_status $?;
     return 0;
@@ -271,10 +284,12 @@ function patch_vagrantfile () {
 ## Objective: Deploying VagrantBox Appliance
 function vagrant_deploy () {
     cd ${vagrant_location};
-    comment "Starting up ${vagrant_boxset} ...";
+    comment "Starting up '${vagrant_boxset}'";
+    newline;
     vagrant up;
     check_status $?;
-    comment "Listing Vagrant Projects ...";
+    comment "Listing Vagrant Projects";
+    newline;
     tree ${vagrant_projects}/boxes/;
     check_status $?;
     return 0;
@@ -284,11 +299,13 @@ function vagrant_deploy () {
 ## Objective: Reviewing VagrantBox Configuration
 function vagrant_config () {
     cd ${vagrant_location};
-    comment "Listing Vagrant Status ...";
+    comment "Listing Vagrant Status";
+    newline;
     vagrant status;
     check_status $?;
-    comment "Reviewing Vagrant SSH Configuration ...";
-    vagrant ssh-config;
+    comment "Reviewing Vagrant SSH Configuration";
+    newline;
+    vagrant ssh-config | sed -e "s|${HOME}/|~/|g";
     check_status $?;
     return 0;
   }; alias vagrant-config='vagrant_config';
@@ -298,9 +315,11 @@ function vagrant_config () {
 function vagrant_access () {
     local machine_configs=".vagrant/machines/default/virtualbox";
     local private_sshkey="${vagrant_location}/${machine_configs}/private_key";
-    comment "Listing ${private_sshkey} SSH Access Key";
+    comment "Listing ${machine_configs}/${private_sshkey}";
+    newline;
     cat ${private_sshkey};
     comment "Retrieving Remote SSH Authorized Access Keys";
+    newline;
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     check_status $?;
@@ -316,7 +335,7 @@ function service_account () {
     warning "Removing '${account_script}' script file";
     rm -fv ${vagrant_temp}/${account_script} 2>/dev/null;
     # check_status $?;
-    comment "Downloading '${account_script}' script file ...";
+    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
     curl --silent \
          --output ${vagrant_temp}/${account_script} \
          https://${github_content}/${github_repo}/${remote_resource};
@@ -325,14 +344,15 @@ function service_account () {
       progress; sleep 1;
     done;
     check_status $?;
-    comment "Listing '${account_script}' content ...";
+    comment "Listing '${account_script}' content";
+    newline;
     cat ${vagrant_temp}/${account_script};
-    comment "Transforming '${account_script}' ( service-account ) ...";
+    comment "Transforming '${account_script}' ( service-account )";
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                  ${vagrant_temp}/${account_script};
     check_status $?;
-    comment "Executing '${account_script}' in remote system ...";
+    comment "Executing '${account_script}' in remote system";
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${account_script};
     check_status $?;
     return 0;
@@ -347,7 +367,7 @@ function sudoers_privileges () {
     warning "Removing '${privileges_script}' script file";
     rm -fv ${vagrant_temp}/${privileges_script} 2>/dev/null;
     # check_status $?;
-    comment "Downloading '${privileges_script}' script file ...";
+    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
     curl --silent \
          --output ${vagrant_temp}/${privileges_script} \
          https://${github_content}/${github_repo}/${remote_resource};
@@ -356,14 +376,15 @@ function sudoers_privileges () {
       progress; sleep 1;
     done;
     check_status $?;
-    comment "Listing '${privileges_script}' content ...";
+    comment "Listing '${privileges_script}' content";
+    newline;
     cat ${vagrant_temp}/${privileges_script};
-    comment "Transforming '${privileges_script}' ( service-account ) ...";
+    comment "Transforming '${privileges_script}' ( service-account )";
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                  ${vagrant_temp}/${privileges_script};
     check_status $?;
-    comment "Executing '${privileges_script}' in remote system ...";
+    comment "Executing '${privileges_script}' in remote system";
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${privileges_script};
     check_status $?;
     return 0;
@@ -374,20 +395,25 @@ function sudoers_privileges () {
 function transfer_credentials () {
     cd ${vagrant_location};
     comment "Listing SSH Authorized Access Keys";
+    newline;
     fold -b -w 70 ${devops_sshkey};
     comment "Publishing '${devops_sshkey}' ( shared-folders )";
+    newline;
     cp -v ${devops_sshkey} ${vagrant_shared};
     check_status $?;
     local sshkey_filename="$( basename ${devops_sshkey} )";
-    comment "Displaying '${sshkey_filename}' from remote system ...";
+    comment "Displaying '${sshkey_filename}' from remote system";
+    newline;
     vagrant ssh -c \
             "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
     check_status $?;
-    comment "Applying '${authorized_keys}' to remote system ...";
+    comment "Applying '${authorized_keys}' to remote system";
+    newline;
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
     warning "Removing '${sshkey_filename}' ssh-key file";
+    newline;
     rm -v ${vagrant_shared}/${sshkey_filename};
     check_status $?;
     return 0;
@@ -402,7 +428,7 @@ function sudoers_autologin () {
     warning "Removing '${autologin_script}' script file";
     rm -fv ${vagrant_temp}/${autologin_script} 2>/dev/null;
     # check_status $?;
-    comment "Downloading '${autologin_script}' script file ...";
+    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
     curl --silent \
          --output ${vagrant_temp}/${autologin_script} \
          https://${github_content}/${github_repo}/${remote_resource};
@@ -411,19 +437,20 @@ function sudoers_autologin () {
       progress; sleep 1;
     done;
     check_status $?;
-    comment "Listing '${autologin_script}' content ...";
+    comment "Listing '${autologin_script}' content";
+    newline;
     cat ${vagrant_temp}/${autologin_script};
-    comment "Transforming '${autologin_script}' ( service-account ) ...";
+    comment "Transforming '${autologin_script}' ( service-account )";
     ## Updating the service-account placeholder
     sed -i '' -e "s|{{ service-account }}|${devops_account}|" \
                  ${vagrant_temp}/${autologin_script};
     check_status $?;
-    comment "Transforming '${autologin_script}' ( virtual-machine ) ...";
+    comment "Transforming '${autologin_script}' ( virtual-machine )";
     ## Updating the virtual-machine placeholder
     sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                  ${vagrant_temp}/${autologin_script};
     check_status $?;
-    comment "Executing '${autologin_script}' in remote system ...";
+    comment "Executing '${autologin_script}' in remote system";
     vagrant ssh -c 'bash -' < ${vagrant_temp}/${autologin_script};
     check_status $?;
     return 0;
@@ -433,22 +460,27 @@ function sudoers_autologin () {
 ## Objective: Transferring SSH Access Credentials
 function service_access () {
     cd ${vagrant_location};
-    comment "Listing '${devops_sshkey}' content ...";
+    comment "Listing '${devops_sshkey}' content";
+    newline;
     cat ${devops_sshkey};
     check_status $?;
     comment "Publishing '${devops_sshkey}' ( shared-folders )";
+    newline;
     cp -v ${devops_sshkey} ${vagrant_shared};
     check_status $?;
     local sshkey_filename="$( basename ${devops_sshkey} )";
-    comment "Injecting '${sshkey_filename}' into remote system ...";
+    comment "Injecting '${sshkey_filename}' into remote system";
+    newline;
     vagrant ssh -c \
             "cat /shared/${sshkey_filename} | sudo tee ${authorized_keys}";
     check_status $?;
-    comment "Displaying '${authorized_keys}' from remote system ...";
+    comment "Displaying '${authorized_keys}' from remote system";
+    newline;
     vagrant ssh -c \
             "sudo cat ${authorized_keys} | fold -b -w 70";
     check_status $?;
     warning "Removing '${vagrant_shared}/${sshkey_filename}' vagrant file";
+    newline;
     rm -v ${vagrant_shared}/${sshkey_filename};
     check_status $?;
     return 0;
@@ -467,7 +499,8 @@ function config_section () {
     comment "Removing all empty lines from '${ssh_config}' ...";
     sed -i '' '/^$/N;/^\n$/D' ${ssh_config};
     check_status $?;
-    comment "Capturing Vagrant SSH Configuration ...";
+    comment "Capturing Vagrant SSH Configuration";
+    newline;
     vagrant ssh-config \
           | sed -e "s|Host default|Host ${virtual_machine}|g" \
                 -e "s|\(User \)\(.*\)|\1${devops_account}|g" \
@@ -486,8 +519,10 @@ function preinst_packages () {
     cd ${vagrant_location};
     local script_filename="ubuntu-preinstall.shell";
     local remote_resource="${ubuntu_modules}/${script_filename}";
+    warning "Removing any existing '${vagrant_temp}/${script_filename}' file";
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
+    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
     curl --silent \
          --output ${vagrant_temp}/${script_filename} \
          https://${github_content}/${github_repo}/${remote_resource};
@@ -509,6 +544,7 @@ function postinst_packages () {
     local remote_resource="${ubuntu_modules}/${script_filename}";
     rm -fv ${vagrant_temp}/${script_filename} 2>/dev/null;
     # check_status $?;
+    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
     curl --silent \
          --output ${vagrant_temp}/${script_filename} \
          https://${github_content}/${github_repo}/${remote_resource};

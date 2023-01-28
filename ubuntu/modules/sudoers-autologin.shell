@@ -45,7 +45,6 @@ export devops_account='{{ service-account }}';
 
 warning "Selectively Installing SSH Pass" \
 | tee -a "${autologin_logfile}";
-newline;
 
 ## This allows to run SSH using the keyboard-interactive password authentication
 ## mode, but in a non-interactive way. SSH uses direct TTY access to ensure that
@@ -70,6 +69,7 @@ ssh-keygen -t rsa \
 
 comment "Copying SSH ID to authorized-keys file" \
 | tee -a "${autologin_logfile}";
+newline;
 
 ## Removing all keys beloging to the localhost
 ssh-keygen -R localhost;
@@ -87,7 +87,6 @@ rm -fvr ${HOME}/.ssh/ssh-copy-id* \
 
 warning "Removing SSH Pass tool" \
 | tee -a "${autologin_logfile}";
-newline;
 
 ## Removing this tool as mentioned before
 sudo apt remove sshpass --yes \
@@ -95,7 +94,6 @@ sudo apt remove sshpass --yes \
 
 comment "Perfoming Auto-Remove operations" \
 | tee -a "${autologin_logfile}";
-newline;
 
 ## autoremove (apt-get(8)) autoremove is used to remove packages that were
 ## automatically installed to satisfy dependencies for other packages and
