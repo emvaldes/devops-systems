@@ -39,9 +39,10 @@ function sudoers_autologin () {
     local autologin_script="sudoers-autologin.shell";
     local remote_module="${ubuntu_modules}/${autologin_script}";
     warning "Removing any existing '${vbox_temp}/${autologin_script}' file";
+    newline;
     rm -fv ${vbox_temp}/${autologin_script} 2>/dev/null;
     # check_status;
-    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
+    comment "Fetching ${github_content}/${github_repo}/${remote_module}";
     curl --silent \
          --output ${vbox_temp}/${autologin_script} \
          https://${github_content}/${github_repo}/${remote_module};
@@ -59,7 +60,7 @@ function sudoers_autologin () {
             sed -i '' -e "s|{{ virtual-machine }}|${virtual_machine}|" \
                       ${vbox_temp}/${autologin_script};
             check_status;
-            comment "Listing ${autologin_script} configurations";
+            comment "Listing '${autologin_script}' configurations";
             cat  ${vbox_temp}/${autologin_script};
             comment "Executing the '${autologin_script}' script";
             newline;
@@ -79,9 +80,10 @@ function sudoers_privileges () {
     local privileges_script="sudoers-privileges.shell";
     local remote_module="${ubuntu_modules}/${privileges_script}";
     warning "Removing any existing '${vbox_temp}/${privileges_script}' file";
+    newline;
     rm -fv ${vbox_temp}/${privileges_script} 2>/dev/null;
     # check_status;
-    comment "Fetching ${github_content}/${github_repo}/${remote_resource}";
+    comment "Fetching ${github_content}/${github_repo}/${remote_module}";
     curl --silent \
          --output ${vbox_temp}/${privileges_script} \
          https://${github_content}/${github_repo}/${remote_module};

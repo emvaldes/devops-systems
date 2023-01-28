@@ -298,9 +298,9 @@ function vagrant_config () {
 function vagrant_access () {
     local machine_configs=".vagrant/machines/default/virtualbox";
     local private_sshkey="${vagrant_location}/${machine_configs}/private_key";
-    comment "Listing ${private_sshkey} SSH Access Key ...";
+    comment "Listing ${private_sshkey} SSH Access Key";
     cat ${private_sshkey};
-    comment "Fetching SSH Authorized Access Keys ...";
+    comment "Retrieving Remote SSH Authorized Access Keys";
     vagrant ssh -c \
             "fold -b -w 70 /home/vagrant/.ssh/authorized_keys" 2>/dev/null;
     check_status $?;
