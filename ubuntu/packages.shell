@@ -400,4 +400,6 @@ function packages_ubuntu.help () {
     return 0;
   }; alias packages-ubuntu.help='packages_ubuntu.help';
 
+## Execute if not load-only instruction
+! [[ ${1#*\--} = "source-module" ]] && \
 packages_ubuntu ${@}
