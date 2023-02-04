@@ -37,11 +37,34 @@ function comment ()  { display "Comment: ${@}"; return 0; };
 function message ()  { echo -e "${@}"; return 0; }; alias print='message';
 
 ## -----------------------------------------------------------------------------
-## Objective: Random Password Generator (32 length)
-function password () {
-    inline $( date +%s | sha256sum | base64 | head -c 32 );
+## Objective: Generating Random Password:
+function random_password () {
+    [[ ${#1} -gt 0 ]] && { local length=${1}; } || { local length=16; }
+    export DEFAULT_PASSWORDLENGTH=${length};
+    export LC_CTYPE=C;
+    local random="$(
+        tr -cd "[:graph:]" < /dev/urandom \
+        | head -c ${length} \
+        | sed -e 's|\`|~|g' \
+              -e 's|\$(|\\$(|g';
+      )";
+    echo -e "${random}";
     return 0;
-  };
+  }; alias random-password='random_password';
+
+# $ random-password 32 ;
+# )W@j*deZ2#eMuhU4TODO&eu&r)&.#~3F
+
+# Warning: Do not consider these other options
+
+# date +%s | sha256sum | base64 | head -c 32 | xargs -0;
+# Output: MGFjNDlhMTE2ZWJjOTI4OGI4ZTFiZmEz
+
+# dd if=/dev/urandom count=200 bs=1 2>/dev/null \
+# | tr -cd "[:graph:]" \
+# | cut -c-${length} \
+# | xargs -0;
+# Output: AuS*D=!wkHR.4DZ_la
 
 ## -----------------------------------------------------------------------------
 ## Objective: Identify Element's Array Index
