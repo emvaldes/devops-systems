@@ -22,7 +22,7 @@ export script_name="$( basename ${script_file} )";
 export user_local="${HOME}/.local";
 mkdir -p "${user_local}";
 
-export root_password="$(password)";
+export root_password="$( random_password )";
 
 ## Events status counter:
 export counter=0;

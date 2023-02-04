@@ -166,7 +166,7 @@ function virtualbox_appliance () {
       warning "Using default ${default_account}";
     fi;
     if [[ ${#devops_password} -eq 0 ]]; then
-      export devops_password="$(password)";
+      export devops_password="$( random_password )";
       local default_password="'${devops_password}' account password";
       warning "Using custom ${default_password}";
     fi;
@@ -550,6 +550,8 @@ function virtualbox_appliance () {
     return 0;
   }; alias virtualbox-appliance='virtualbox_appliance';
 
+## Execute if not load-only instruction
+! [[ ${1#*\--} = "source-module" ]] && \
 virtualbox_appliance ${@}
 
 ## -------------------------------------------------------------------------
